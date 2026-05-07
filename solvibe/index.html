@@ -90,22 +90,21 @@
             position: absolute;
             cursor: crosshair;
             z-index: 5;
-            border: 2px solid transparent;
-            background: transparent;
-            border-radius: 8px;
+            border: 2px dashed rgba(255,0,0,0.7);
+            background: rgba(255,0,0,0.1);
             transition: all 0.3s ease-out;
         }
 
-        #hotspot-eye { left: 4%; top: 62%; width: 10%; height: 10%; }
-        #hotspot-beauty { left: 26.5%; top: 62%; width: 3.5%; height: 14%; }
-        #hotspot-massage { left: 31%; top: 62%; width: 3.5%; height: 14%; }
-        #hotspot-foot { left: 60%; top: 72%; width: 23%; height: 22%; }
+        #hotspot-eye { left: 4.5%; top: 74%; width: 11.5%; height: 11%; border-radius: 50%; transform: rotate(0deg); --anti-rot: 0deg; }
+        #hotspot-beauty { left: 26.2%; top: 67%; width: 3%; height: 16%; border-radius: 20px; transform: rotate(-12deg); --anti-rot: 12deg; }
+        #hotspot-massage { left: 30.5%; top: 68%; width: 3%; height: 16%; border-radius: 20px; transform: rotate(10deg); --anti-rot: -10deg; }
+        #hotspot-foot { left: 63%; top: 73%; width: 27%; height: 25%; border-radius: 15px; transform: rotate(-4deg); --anti-rot: 4deg; }
 
         .tech-tooltip {
             position: absolute;
             bottom: 110%;
             left: 50%;
-            transform: translateX(-50%) translateY(20px);
+            transform: translateX(-50%) translateY(20px) rotate(var(--anti-rot, 0deg)) !important;
             width: 250px;
             opacity: 0;
             visibility: hidden;
@@ -139,7 +138,7 @@
         .hotspot:hover .tech-tooltip {
             opacity: 1;
             visibility: visible;
-            transform: translateX(-50%) translateY(0);
+            transform: translateX(-50%) translateY(0) rotate(var(--anti-rot, 0deg)) !important;
         }
 
         .hotspot:hover {
