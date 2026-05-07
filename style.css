@@ -131,6 +131,34 @@ body {
     text-align: center;
 }
 
+.hero-container-wrapper {
+    position: relative;
+    width: 100%;
+    /* You mentioned 100vh for the video background. We can apply this to the wrapper if needed, but min-height handles it. We'll set height to 100vh just for the video container context if desired, or let the video cover the area. */
+    height: 100vh;
+    overflow: hidden;
+}
+
+.hero-background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* Set to 100vh to cover the whole viewport as requested */
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .hero-main-logo {
     width: 100%;
     max-width: 600px;
