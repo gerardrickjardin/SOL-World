@@ -134,8 +134,9 @@ body {
 .hero-container-wrapper {
     position: relative;
     width: 100%;
-    /* You mentioned 100vh for the video background. We can apply this to the wrapper if needed, but min-height handles it. We'll set height to 100vh just for the video container context if desired, or let the video cover the area. */
-    height: 100vh;
+    max-width: 1920px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
 }
 
@@ -144,7 +145,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh; /* Set to 100vh to cover the whole viewport as requested */
+    height: 100%;
     object-fit: cover;
     z-index: -1;
     pointer-events: none;

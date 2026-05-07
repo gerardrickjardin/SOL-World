@@ -86,6 +86,64 @@
             filter: drop-shadow(0px 15px 20px rgba(0,0,0,0.5));
             animation: dropAndWaitTv 20s ease-in-out infinite;
         }
+        .hotspot {
+            position: absolute;
+            cursor: crosshair;
+            z-index: 5;
+            border: 2px dashed rgba(255,0,0,0.7);
+            background: rgba(255,0,0,0.1);
+        }
+
+        #hotspot-eye { left: 4%; top: 62%; width: 10%; height: 10%; }
+        #hotspot-beauty { left: 26.5%; top: 62%; width: 3.5%; height: 14%; }
+        #hotspot-massage { left: 31%; top: 62%; width: 3.5%; height: 14%; }
+        #hotspot-foot { left: 60%; top: 72%; width: 23%; height: 22%; }
+
+        .tech-tooltip {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            width: 250px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-out;
+            pointer-events: none;
+            background: rgba(10, 15, 25, 0.75);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 238, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 238, 255, 0.15), inset 0 0 15px rgba(0, 238, 255, 0.05);
+            padding: 16px;
+            color: #fff;
+            text-align: left;
+            z-index: 10;
+        }
+
+        .tech-tooltip h3 {
+            color: #00eeff;
+            margin: 0 0 8px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        .tech-tooltip p {
+            color: #a0aec0;
+            margin: 0;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .hotspot:hover .tech-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .hotspot:hover {
+            border-color: #00eeff;
+            background: rgba(0, 238, 255, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -114,7 +172,35 @@
             class="hero-background-video"
         ></video>
         
-        <!-- Hotspots will be added here -->
+        <!-- Hotspots -->
+        <div class="hotspot" id="hotspot-eye">
+            <div class="tech-tooltip">
+                <h3>Galaxy G-One</h3>
+                <p>Foldable smart eye massager with PEMF tech, 7 modes, and one-button control.</p>
+            </div>
+        </div>
+
+        <div class="hotspot" id="hotspot-beauty">
+            <div class="tech-tooltip">
+                <h3>Beauty Instrument</h3>
+                <p>Hand-held facial care device with multisensory head and clear digital feedback.</p>
+            </div>
+        </div>
+
+        <div class="hotspot" id="hotspot-massage">
+            <div class="tech-tooltip">
+                <h3>Massage Instrument</h3>
+                <p>Hand-held body care device with a three-head roller for tailored comfort.</p>
+            </div>
+        </div>
+
+        <div class="hotspot" id="hotspot-foot">
+            <div class="tech-tooltip">
+                <h3>THz Tera-P90+</h3>
+                <p>All-in-one wellness device combining PEMF technology with massage tools.</p>
+            </div>
+        </div>
+        
         <img src="../assets/SOL%20ViBE%20TECH.png" alt="SOL ViBE TECH" class="tech-tv-sign">
     </header>
 
