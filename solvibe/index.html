@@ -68,11 +68,11 @@
             margin-bottom: 2rem;
         }
         @keyframes dropAndWaitTv {
-            0% { transform: translateY(-120%); }  /* Start hidden up */
-            6% { transform: translateY(0); }      /* 1s: Slide down */
-            65% { transform: translateY(0); }     /* 10s: Stay down */
-            71% { transform: translateY(-120%); } /* 1s: Slide back up */
-            100% { transform: translateY(-120%); }/* 5s: Stay hidden up */
+            0% { transform: translateY(-120%); }      /* Start hidden up */
+            12.5% { transform: translateY(0); }       /* 2.5s: Slide down slowly */
+            62.5% { transform: translateY(0); }       /* 10s: Stay down */
+            75% { transform: translateY(-120%); }     /* 2.5s: Slide back up slowly */
+            100% { transform: translateY(-120%); }    /* 5s: Stay hidden up */
         }
 
         .tech-tv-sign {
@@ -84,7 +84,7 @@
             max-width: 500px;
             z-index: 10;
             filter: drop-shadow(0px 15px 20px rgba(0,0,0,0.5));
-            animation: dropAndWaitTv 17s ease-in-out infinite;
+            animation: dropAndWaitTv 20s ease-in-out infinite;
         }
     </style>
 </head>
