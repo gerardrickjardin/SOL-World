@@ -249,16 +249,33 @@
         #hotspot-massage .tech-tooltip { transform: translateX(-50%) translateY(15px) rotate(-20deg) !important; }
 
         /* The Foot Massager is on the far right. Shift the tooltip left so it doesn't get cut off by the screen edge */
-        #hotspot-foot .tech-tooltip { 
-            left: auto; right: -20%; 
-            transform: translateY(15px) rotate(16deg) !important; 
+        #hotspot-foot .tech-tooltip {
+            /* Reset default upward positioning */
+            bottom: auto !important;
+            left: auto !important;
+            
+            /* Position to the LEFT side of the hotspot */
+            right: 95% !important; 
+            top: 10% !important; 
+            
+            /* Slide in from the left and maintain the anti-rotation */
+            transform: translateX(-20px) translateY(0) rotate(16deg) !important;
+        }
+
+        #hotspot-foot .tooltip-image {
+            height: 180px !important; /* Allow more vertical space */
+            width: 120% !important; /* Make it slightly wider than the tooltip card */
+            max-width: none !important;
+            margin-left: -10% !important; /* Keep it centered despite the wider width */
+            transform: scale(1.3) !important; /* Zoom it in so it fills the glassmorphism card */
+            margin-bottom: 20px !important;
         }
 
         /* Active Hover States */
         #hotspot-eye:hover .tech-tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) rotate(5deg) !important; }
         #hotspot-beauty:hover .tech-tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) rotate(-5deg) !important; }
         #hotspot-massage:hover .tech-tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) rotate(-20deg) !important; }
-        #hotspot-foot:hover .tech-tooltip { opacity: 1; visibility: visible; transform: translateY(0) rotate(16deg) !important; }
+        #hotspot-foot:hover .tech-tooltip { opacity: 1; visibility: visible; transform: translateX(-10px) translateY(0) rotate(16deg) !important; }
 
         .hotspot:hover {
             border-color: #00eeff;
