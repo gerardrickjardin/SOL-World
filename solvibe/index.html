@@ -86,13 +86,34 @@
             filter: drop-shadow(0px 15px 20px rgba(0,0,0,0.5));
             animation: dropAndWaitTv 20s ease-in-out infinite;
         }
+        @keyframes pulseGlow { 
+            0% { transform: scale(1); opacity: 0.8; } 
+            50% { transform: scale(1.5); opacity: 0.4; } 
+            100% { transform: scale(1); opacity: 0.8; } 
+        }
+
         .hotspot {
             position: absolute;
             cursor: crosshair;
             z-index: 5;
-            border: 2px solid transparent;
-            background: transparent;
             transition: all 0.3s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hotspot::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: rgba(0, 238, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00eeff, 0 0 20px #00eeff;
+            animation: pulseGlow 2s infinite;
+        }
+
+        .hotspot:hover::before {
+            display: none;
         }
 
         #hotspot-eye { left: 3.5%; top: 57%; width: 13%; height: 8%; border-radius: 40px; transform: rotate(-5deg); }
