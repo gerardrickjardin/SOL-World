@@ -187,7 +187,7 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.3; // Fast and fluid
+        const lerpSpeed = 0.25; // Smooth but snappy
         const container = document.querySelector('.logo-container');
         
         const eyes = [
@@ -195,13 +195,13 @@
                 dot: document.getElementById('sol-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
                 pctX: 0.495, pctY: 0.42, 
-                maxShiftPct: 0.035 // Increased significantly to use full O space
+                maxShiftPct: 0.022 // Perfect safe boundary
             },
             { 
                 dot: document.getElementById('world-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
                 pctX: 0.36, pctY: 0.61,
-                maxShiftPct: 0.045 // Increased significantly to use full O space
+                maxShiftPct: 0.026 // Perfect safe boundary
             }
         ];
 
@@ -220,33 +220,26 @@
             eyes.forEach(eye => {
                 if (!eye.dot) return;
                 
-                // Absolute center of the eye on screen
                 const eyeCenterX = rect.left + rect.width * eye.pctX;
                 const eyeCenterY = rect.top + rect.height * eye.pctY;
                 
-                // Distance from mouse to eye
                 const dx = mouseX - eyeCenterX;
                 const dy = mouseY - eyeCenterY;
                 
-                // Max allowed pixels to move (now reaches the true boundaries of the O)
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+                
                 const maxShiftPx = rect.width * eye.maxShiftPct;
                 
-                // Sensitivity allows it to float smoothly across the entire O space
-                const sensitivity = 2; 
-                let rawTargetX = (dx / window.innerWidth) * maxShiftPx * sensitivity;
-                let rawTargetY = (dy / window.innerHeight) * maxShiftPx * sensitivity;
+                // Max distance is half the screen. If the mouse is half a screen away, it hits the edge of the O.
+                const maxDistance = window.innerWidth / 2; 
+                // Smooth easing curve
+                const pull = Math.min(distance / maxDistance, 1);
+                const easePull = pull * (2 - pull); // Quadratic ease out
                 
-                // Mathematically clamp the target to a perfect circle boundary
-                const distFromCenter = Math.sqrt(rawTargetX * rawTargetX + rawTargetY * rawTargetY);
-                if (distFromCenter > maxShiftPx) {
-                    rawTargetX = (rawTargetX / distFromCenter) * maxShiftPx;
-                    rawTargetY = (rawTargetY / distFromCenter) * maxShiftPx;
-                }
+                eye.targetX = Math.cos(angle) * easePull * maxShiftPx;
+                eye.targetY = Math.sin(angle) * easePull * maxShiftPx;
 
-                eye.targetX = rawTargetX;
-                eye.targetY = rawTargetY;
-
-                // Smoothly interpolate current position to target position
                 eye.currentX += (eye.targetX - eye.currentX) * lerpSpeed;
                 eye.currentY += (eye.targetY - eye.currentY) * lerpSpeed;
 
