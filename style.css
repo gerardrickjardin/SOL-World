@@ -438,7 +438,7 @@ body {
   display: inline-block;
   max-width: 600px;
   width: 100%;
-  filter: brightness(0) invert(1);
+  filter: invert(1);
 }
 
 .base-img {
