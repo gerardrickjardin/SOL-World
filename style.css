@@ -422,13 +422,13 @@ body {
 
 /* --- ALIGNMENT CONFIGURATION --- */
 :root {
-  --sol-top: 15%;        
-  --sol-left: 20%;       
-  --sol-width: 12%;      
+  --sol-top: 28%;        
+  --sol-left: 50%;       
+  --sol-width: 16%;      
   
-  --world-top: 60%;      
-  --world-left: 35%;     
-  --world-width: 12%;    
+  --world-top: 73%;      
+  --world-left: 36%;     
+  --world-width: 16%;    
   
   --dot-width: 40%;      
 }
@@ -442,12 +442,16 @@ body {
 
 .base-img {
   filter: brightness(0) invert(1);
+  position: relative;
+  z-index: 1;
 }
 
 .socket {
   position: absolute;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
 }
 
 #sol-socket {
