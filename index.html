@@ -187,7 +187,7 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.08; // Buttery smooth lerp
+        const lerpSpeed = 0.6; // Extremely fast and responsive
         const container = document.querySelector('.logo-container');
         
         const eyes = [
@@ -233,7 +233,7 @@
                 
                 // Normalize the movement relative to screen size so it feels free and unbounded
                 // Multiplier controls how quickly it hits the edge (higher = reaches edge sooner)
-                const sensitivity = 2.5; 
+                const sensitivity = 6; // High sensitivity means it easily reaches the edges of the circle
                 let rawTargetX = (dx / window.innerWidth) * maxShiftPx * sensitivity;
                 let rawTargetY = (dy / window.innerHeight) * maxShiftPx * sensitivity;
                 
