@@ -187,19 +187,21 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.5; // Fast response
+        const lerpSpeed = 0.5; // Smooth tracking
         const container = document.querySelector('.logo-container');
         
         const eyes = [
             { 
                 dot: document.getElementById('sol-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
-                maxShiftPct: 0.022 // Perfect safe boundary
+                pctX: 0.495, pctY: 0.42, 
+                maxShiftPct: 0.022
             },
             { 
                 dot: document.getElementById('world-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
-                maxShiftPct: 0.026 // Perfect safe boundary
+                pctX: 0.36, pctY: 0.61,
+                maxShiftPct: 0.022 // Make both shifts identical so they mirror perfectly
             }
         ];
 
@@ -215,31 +217,48 @@
             if (!container) return;
             const rect = container.getBoundingClientRect();
 
-            // Calculate a single global center for the whole logo container
-            const globalCenterX = rect.left + rect.width / 2;
-            const globalCenterY = rect.top + rect.height / 2;
+            // Calculate precise centers
+            const solCenterX = rect.left + rect.width * eyes[0].pctX;
+            const solCenterY = rect.top + rect.height * eyes[0].pctY;
             
-            // Calculate mouse distance from the global center
-            const dx = mouseX - globalCenterX;
-            const dy = mouseY - globalCenterY;
+            const worldCenterX = rect.left + rect.width * eyes[1].pctX;
+            const worldCenterY = rect.top + rect.height * eyes[1].pctY;
+
+            // Distance from mouse to each eye
+            const distSol = Math.hypot(mouseX - solCenterX, mouseY - solCenterY);
+            const distWorld = Math.hypot(mouseX - worldCenterX, mouseY - worldCenterY);
             
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const angle = Math.atan2(dy, dx);
+            // Weight influence based on closeness to the mouse.
+            // If mouse is right on WORLD, weightWorld is 1, weightSol is 0.
+            const totalDist = distSol + distWorld;
+            const weightSol = totalDist === 0 ? 0.5 : distWorld / totalDist;
+            const weightWorld = totalDist === 0 ? 0.5 : distSol / totalDist;
+            
+            // Calculate raw vectors
+            const dxSol = mouseX - solCenterX;
+            const dySol = mouseY - solCenterY;
+            
+            const dxWorld = mouseX - worldCenterX;
+            const dyWorld = mouseY - worldCenterY;
+            
+            // Blend them into a SINGLE master tracking vector!
+            const finalDx = (dxSol * weightSol) + (dxWorld * weightWorld);
+            const finalDy = (dySol * weightSol) + (dyWorld * weightWorld);
+            
+            const finalDist = Math.hypot(finalDx, finalDy);
+            const finalAngle = Math.atan2(finalDy, finalDx);
 
             eyes.forEach(eye => {
                 if (!eye.dot) return;
                 
                 const maxShiftPx = rect.width * eye.maxShiftPct;
-                
-                // Sensitivity controls how quickly they hit the edge. 
-                // Using 0.2 means if you move your mouse ~100px from the center, the dots hit the edge.
-                const sensitivity = 0.2;
-                const shiftDist = Math.min(dist * sensitivity, maxShiftPx);
+                const sensitivity = 0.15;
+                const shiftDist = Math.min(finalDist * sensitivity, maxShiftPx);
 
-                // Because both eyes share the SAME angle and distance calculation,
-                // they will ALWAYS move in perfectly parallel directions together.
-                eye.targetX = Math.cos(angle) * shiftDist;
-                eye.targetY = Math.sin(angle) * shiftDist;
+                // Both eyes use the EXACT SAME blended vector.
+                // This means if you interact with WORLD, SOL flawlessly copies WORLD's exact movement!
+                eye.targetX = Math.cos(finalAngle) * shiftDist;
+                eye.targetY = Math.sin(finalAngle) * shiftDist;
 
                 eye.currentX += (eye.targetX - eye.currentX) * lerpSpeed;
                 eye.currentY += (eye.targetY - eye.currentY) * lerpSpeed;
