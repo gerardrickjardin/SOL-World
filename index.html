@@ -187,21 +187,19 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.5; // Smooth tracking
+        const lerpSpeed = 0.6; // Quick, responsive follow
         const container = document.querySelector('.logo-container');
         
         const eyes = [
             { 
                 dot: document.getElementById('sol-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
-                pctX: 0.495, pctY: 0.42, 
-                maxShiftPct: 0.022
+                maxShiftPct: 0.024 // Generous boundary to move freely
             },
             { 
                 dot: document.getElementById('world-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
-                pctX: 0.36, pctY: 0.61,
-                maxShiftPct: 0.022 // Make both shifts identical so they mirror perfectly
+                maxShiftPct: 0.024 // Exact same boundary for perfect mirroring
             }
         ];
 
@@ -217,49 +215,30 @@
             if (!container) return;
             const rect = container.getBoundingClientRect();
 
-            // Calculate precise centers
-            const solCenterX = rect.left + rect.width * eyes[0].pctX;
-            const solCenterY = rect.top + rect.height * eyes[0].pctY;
-            
-            const worldCenterX = rect.left + rect.width * eyes[1].pctX;
-            const worldCenterY = rect.top + rect.height * eyes[1].pctY;
+            // 1. Calculate mouse position as a percentage of the total screen
+            // If mouse is at top-left, normalized is (-1, -1)
+            // If mouse is at bottom-right, normalized is (1, 1)
+            let normalizedX = (mouseX / window.innerWidth) * 2 - 1;
+            let normalizedY = (mouseY / window.innerHeight) * 2 - 1;
 
-            // Distance from mouse to each eye
-            const distSol = Math.hypot(mouseX - solCenterX, mouseY - solCenterY);
-            const distWorld = Math.hypot(mouseX - worldCenterX, mouseY - worldCenterY);
-            
-            // Weight influence based on closeness to the mouse.
-            // If mouse is right on WORLD, weightWorld is 1, weightSol is 0.
-            const totalDist = distSol + distWorld;
-            const weightSol = totalDist === 0 ? 0.5 : distWorld / totalDist;
-            const weightWorld = totalDist === 0 ? 0.5 : distSol / totalDist;
-            
-            // Calculate raw vectors
-            const dxSol = mouseX - solCenterX;
-            const dySol = mouseY - solCenterY;
-            
-            const dxWorld = mouseX - worldCenterX;
-            const dyWorld = mouseY - worldCenterY;
-            
-            // Blend them into a SINGLE master tracking vector!
-            const finalDx = (dxSol * weightSol) + (dxWorld * weightWorld);
-            const finalDy = (dySol * weightSol) + (dyWorld * weightWorld);
-            
-            const finalDist = Math.hypot(finalDx, finalDy);
-            const finalAngle = Math.atan2(finalDy, finalDx);
+            // 2. Clamp it so the eyes form a perfect circle when rolling around the edges
+            const dist = Math.sqrt(normalizedX * normalizedX + normalizedY * normalizedY);
+            if (dist > 1) {
+                normalizedX /= dist;
+                normalizedY /= dist;
+            }
 
             eyes.forEach(eye => {
                 if (!eye.dot) return;
                 
                 const maxShiftPx = rect.width * eye.maxShiftPct;
-                const sensitivity = 0.15;
-                const shiftDist = Math.min(finalDist * sensitivity, maxShiftPx);
 
-                // Both eyes use the EXACT SAME blended vector.
-                // This means if you interact with WORLD, SOL flawlessly copies WORLD's exact movement!
-                eye.targetX = Math.cos(finalAngle) * shiftDist;
-                eye.targetY = Math.sin(finalAngle) * shiftDist;
+                // 3. Both eyes use the EXACT SAME normalized coordinates.
+                // This completely eliminates any cross-eyed effect. They are guaranteed perfectly parallel.
+                eye.targetX = normalizedX * maxShiftPx;
+                eye.targetY = normalizedY * maxShiftPx;
 
+                // 4. Smooth lerp for buttery responsiveness
                 eye.currentX += (eye.targetX - eye.currentX) * lerpSpeed;
                 eye.currentY += (eye.targetY - eye.currentY) * lerpSpeed;
 
