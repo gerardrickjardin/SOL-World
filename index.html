@@ -28,36 +28,13 @@
     </nav>
 
     <header class="hero">
-        <!-- LOGO CONTAINER WITH CSS VARIABLES -->
-        <div id="magic-logo-wrapper" class="logo-container hero-main-logo-anim" style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; --sx: 50; --sy: 30; --wx: 50; --wy: 70;">
-            
-            <!-- BASE IMAGE -->
+        <!-- NATIVE VANILLA COMPONENT -->
+        <div id="v4-logo" class="logo-container hero-main-logo-anim" style="position: relative; width: 100%; max-width: 600px; margin: 0 auto;">
             <img src="assets/sol-world-base.png" style="width: 100%; height: auto; display: block; pointer-events: none;" />
-            
-            <!-- WHITE DOT (For SOL) -->
-            <div id="dot-sol" style="position: absolute; left: calc(var(--sx) * 1%); top: calc(var(--sy) * 1%); width: 22px; height: 22px; background: white; border-radius: 50%; margin: -11px 0 0 -11px; will-change: transform; pointer-events: none;"></div>
-            
-            <!-- BLACK DOT (For WORLD) -->
-            <div id="dot-world" style="position: absolute; left: calc(var(--wx) * 1%); top: calc(var(--wy) * 1%); width: 34px; height: 34px; background: black; border-radius: 50%; margin: -17px 0 0 -17px; will-change: transform; pointer-events: none;"></div>
-        
-        </div>
-        
-        <!-- LIVE TUNING PANEL (Temporary) -->
-        <div id="tuner-panel" style="position: fixed; bottom: 20px; right: 20px; background: #111; color: #fff; padding: 20px; border: 2px solid #444; z-index: 99999; font-family: sans-serif; border-radius: 10px; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-            <h3 style="margin: 0 0 5px 0;">Alignment Tuner</h3>
-            <p style="font-size: 12px; margin-bottom: 15px; color: #aaa;">Keep mouse inside this box to pause movement. Drag sliders to align dots inside the 'O's.</p>
-            
-            <label style="font-size:14px; font-weight:bold;">White Dot X: <span id="val-sx">50.0</span>%</label><br>
-            <input type="range" id="inp-sx" min="0" max="100" step="0.1" value="50" style="width: 100%; margin-bottom: 10px;"><br>
-            
-            <label style="font-size:14px; font-weight:bold;">White Dot Y: <span id="val-sy">30.0</span>%</label><br>
-            <input type="range" id="inp-sy" min="0" max="100" step="0.1" value="30" style="width: 100%; margin-bottom: 15px;"><br>
-            
-            <label style="font-size:14px; font-weight:bold;">Black Dot X: <span id="val-wx">50.0</span>%</label><br>
-            <input type="range" id="inp-wx" min="0" max="100" step="0.1" value="50" style="width: 100%; margin-bottom: 10px;"><br>
-            
-            <label style="font-size:14px; font-weight:bold;">Black Dot Y: <span id="val-wy">70.0</span>%</label><br>
-            <input type="range" id="inp-wy" min="0" max="100" step="0.1" value="70" style="width: 100%; margin-bottom: 10px;">
+            <!-- White dot (SOL) - top hole -->
+            <div id="v4-sol" style="position: absolute; top: 43%; left: 50%; width: 22px; height: 22px; background: white; border-radius: 50%; margin: -11px 0 0 -11px; transition: transform 0.2s ease-out; pointer-events: none; will-change: transform;"></div>
+            <!-- Black dot (WORLD) - bottom hole -->
+            <div id="v4-world" style="position: absolute; top: 72%; left: 43.5%; width: 34px; height: 34px; background: black; border-radius: 50%; margin: -17px 0 0 -17px; transition: transform 0.2s ease-out; pointer-events: none; will-change: transform;"></div>
         </div>
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Potential.</h2>
     </header>
@@ -213,70 +190,34 @@
         draw();
         
 window.addEventListener('load', () => {
-    const wrap = document.getElementById('magic-logo-wrapper');
-    const sDot = document.getElementById('dot-sol');
-    const wDot = document.getElementById('dot-world');
-    const tuner = document.getElementById('tuner-panel');
-    if(!wrap || !sDot || !wDot || !tuner) return;
+    const sDot = document.getElementById('v4-sol');
+    const wDot = document.getElementById('v4-world');
+    const container = document.getElementById('v4-logo');
+    if (!sDot || !wDot || !container) return;
 
-    // Setup Sliders
-    const inputs = ['sx', 'sy', 'wx', 'wy'];
-    inputs.forEach(id => {
-        const inp = document.getElementById('inp-' + id);
-        const val = document.getElementById('val-' + id);
-        inp.addEventListener('input', (e) => {
-            val.innerText = e.target.value;
-            wrap.style.setProperty('--' + id, e.target.value);
-        });
+    window.addEventListener('mousemove', (e) => {
+        // Calculate mouse position relative to the center of the screen
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        // Offset normalized between -1 and 1
+        const normX = (e.clientX - centerX) / centerX;
+        const normY = (e.clientY - centerY) / centerY;
+        
+        // Clamp to max 12 pixels
+        const maxOffset = 12; 
+        const offsetX = normX * maxOffset;
+        const offsetY = normY * maxOffset;
+        
+        sDot.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        
+        // World dot moves slightly more for parallax depth
+        const worldMaxOffset = 15;
+        const wOffsetX = normX * worldMaxOffset;
+        const wOffsetY = normY * worldMaxOffset;
+        
+        wDot.style.transform = `translate(${wOffsetX}px, ${wOffsetY}px)`;
     });
-
-    // Mouse Tracking & Pausing
-    let mX = window.innerWidth/2, mY = window.innerHeight/2;
-    let isPaused = false;
-    tuner.addEventListener('mouseenter', () => isPaused = true);
-    tuner.addEventListener('mouseleave', () => isPaused = false);
-    
-    window.addEventListener('mousemove', e => {
-        if(!isPaused) { mX = e.clientX; mY = e.clientY; }
-        else { mX = window.innerWidth/2; mY = window.innerHeight/2; }
-    });
-
-    let currSX = 0, currSY = 0, currWX = 0, currWY = 0;
-
-    // Animation Loop
-    function render() {
-        const rect = wrap.getBoundingClientRect();
-        if(rect.width === 0) return requestAnimationFrame(render);
-
-        const sxPct = parseFloat(wrap.style.getPropertyValue('--sx')) || 50;
-        const syPct = parseFloat(wrap.style.getPropertyValue('--sy')) || 30;
-        const wxPct = parseFloat(wrap.style.getPropertyValue('--wx')) || 50;
-        const wyPct = parseFloat(wrap.style.getPropertyValue('--wy')) || 70;
-
-        const sOriginX = rect.left + (rect.width * (sxPct/100));
-        const sOriginY = rect.top + (rect.height * (syPct/100));
-        const wOriginX = rect.left + (rect.width * (wxPct/100));
-        const wOriginY = rect.top + (rect.height * (wyPct/100));
-
-        // White Dot Math
-        let sDx = mX - sOriginX, sDy = mY - sOriginY;
-        let sDist = Math.min(Math.sqrt(sDx*sDx + sDy*sDy), rect.width * 0.04);
-        let sAng = Math.atan2(sDy, sDx);
-        currSX += ((Math.cos(sAng)*sDist) - currSX) * 0.25;
-        currSY += ((Math.sin(sAng)*sDist) - currSY) * 0.25;
-        sDot.style.transform = `translate(${currSX}px, ${currSY}px)`;
-
-        // Black Dot Math
-        let wDx = mX - wOriginX, wDy = mY - wOriginY;
-        let wDist = Math.min(Math.sqrt(wDx*wDx + wDy*wDy), rect.width * 0.05);
-        let wAng = Math.atan2(wDy, wDx);
-        currWX += ((Math.cos(wAng)*wDist) - currWX) * 0.25;
-        currWY += ((Math.sin(wAng)*wDist) - currWY) * 0.25;
-        wDot.style.transform = `translate(${currWX}px, ${currWY}px)`;
-
-        requestAnimationFrame(render);
-    }
-    render();
 });
     </script>
 </body>
