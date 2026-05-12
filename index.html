@@ -222,38 +222,40 @@
                 
                 const rect = container.getBoundingClientRect();
 
-                // 1. Calculate mouse position as a percentage of the total screen
-                // If mouse is at top-left, normalized is (-1, -1)
-                // If mouse is at bottom-right, normalized is (1, 1)
-                let normalizedX = (mouseX / window.innerWidth) * 2 - 1;
-                let normalizedY = (mouseY / window.innerHeight) * 2 - 1;
-
-                // 2. Clamp it so the eyes form a perfect circle when rolling around the edges
-                const dist = Math.sqrt(normalizedX * normalizedX + normalizedY * normalizedY);
-                if (dist > 1) {
-                    normalizedX /= dist;
-                    normalizedY /= dist;
-                }
-
                 eyes.forEach(eye => {
                     if (!eye.dot) return;
                     
-                    let maxShiftPx = rect.width * eye.maxShiftPct;
+                    // 1. Calculate Absolute Centers (Using mathematical percentages since sockets are in the base image)
+                    const socketCenterX = rect.left + (rect.width * eye.pctX);
+                    const socketCenterY = rect.top + (rect.height * eye.pctY);
+
+                    // 2. Calculate Angle to Mouse (dy, dx as requested)
+                    const dx = mouseX - socketCenterX;
+                    const dy = mouseY - socketCenterY;
+                    const angle = Math.atan2(dy, dx);
+
+                    // 3. Calculate Distance & Constrain
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    let maxRadius = rect.width * eye.maxShiftPct;
                     
-                    // 4. NaN Math Safeguards: Fallback to 15 if rect width fails
-                    if (isNaN(maxShiftPx) || maxShiftPx <= 0) {
-                        maxShiftPx = 15;
+                    // NaN Math Safeguards
+                    if (isNaN(maxRadius) || maxRadius <= 0) {
+                        maxRadius = 15;
                     }
 
-                    // 3. Both eyes use the EXACT SAME normalized coordinates.
-                    // This completely eliminates any cross-eyed effect. They are guaranteed perfectly parallel.
-                    eye.targetX = normalizedX * maxShiftPx;
-                    eye.targetY = normalizedY * maxShiftPx;
+                    if (distance > maxRadius) {
+                        distance = maxRadius;
+                    }
 
-                    // 4. Smooth lerp for buttery responsiveness
-                    eye.currentX += (eye.targetX - eye.currentX) * lerpSpeed;
-                    eye.currentY += (eye.targetY - eye.currentY) * lerpSpeed;
+                    // 4. Calculate Target X/Y
+                    eye.targetX = Math.cos(angle) * distance;
+                    eye.targetY = Math.sin(angle) * distance;
 
+                    // 5. Apply Lerp (using 0.1 as requested for floatiness)
+                    eye.currentX += (eye.targetX - eye.currentX) * 0.1;
+                    eye.currentY += (eye.targetY - eye.currentY) * 0.1;
+
+                    // 6. Apply Transform
                     eye.dot.style.transform = `translate(${eye.currentX}px, ${eye.currentY}px)`;
                 });
 
