@@ -187,84 +187,74 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        // 1. Fix Load Timing (Crucial): Wait for images to load before bounding rect math
         window.addEventListener('load', () => {
-            const lerpSpeed = 0.6; // Quick, responsive follow
-            const container = document.querySelector('.logo-container');
+            // We wait for window.load so images have actual dimensions
+            const solDot = document.getElementById('sol-dot');
+            const worldDot = document.getElementById('world-dot');
             
-            const eyes = [
-                { 
-                    dot: document.getElementById('sol-dot'), 
-                    currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
-                    maxShiftPct: 0.024 // Generous boundary to move freely
-                },
-                { 
-                    dot: document.getElementById('world-dot'), 
-                    currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
-                    maxShiftPct: 0.024 // Exact same boundary for perfect mirroring
-                }
-            ];
+            // Fallback to parent elements if specific sockets don't have IDs
+            const solSocket = document.getElementById('sol-socket') || (solDot ? solDot.parentElement : null);
+            const worldSocket = document.getElementById('world-socket') || (worldDot ? worldDot.parentElement : null);
+
+            if (!solDot || !worldDot || !solSocket || !worldSocket) {
+                console.error("Antigravity Logo: Missing DOM elements.");
+                return;
+            }
 
             let mouseX = window.innerWidth / 2;
             let mouseY = window.innerHeight / 2;
 
-            // 3. Global Mouse Tracking
             window.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
             });
 
+            const eyes = [
+                { dot: solDot, socket: solSocket, currentX: 0, currentY: 0 },
+                { dot: worldDot, socket: worldSocket, currentX: 0, currentY: 0 }
+            ];
+
             function animateEyes() {
-                if (!container) {
-                    requestAnimationFrame(animateEyes);
-                    return;
-                }
-                
-                const rect = container.getBoundingClientRect();
-
                 eyes.forEach(eye => {
-                    if (!eye.dot) return;
-                    
-                    // 1. Calculate Absolute Centers (Using mathematical percentages since sockets are in the base image)
-                    const socketCenterX = rect.left + (rect.width * eye.pctX);
-                    const socketCenterY = rect.top + (rect.height * eye.pctY);
+                    const socketRect = eye.socket.getBoundingClientRect();
+                    const dotRect = eye.dot.getBoundingClientRect();
 
-                    // 2. Calculate Angle to Mouse (dy, dx as requested)
-                    const dx = mouseX - socketCenterX;
-                    const dy = mouseY - socketCenterY;
+                    // Find true center of the socket
+                    const centerX = socketRect.left + (socketRect.width / 2);
+                    const centerY = socketRect.top + (socketRect.height / 2);
+
+                    // Math: Distance and Angle
+                    const dx = mouseX - centerX;
+                    const dy = mouseY - centerY;
                     const angle = Math.atan2(dy, dx);
-
-                    // 3. Calculate Distance & Constrain
                     let distance = Math.sqrt(dx * dx + dy * dy);
-                    let maxRadius = rect.width * eye.maxShiftPct;
-                    
-                    // NaN Math Safeguards
-                    if (isNaN(maxRadius) || maxRadius <= 0) {
-                        maxRadius = 15;
-                    }
+
+                    // Dynamic boundary based on actual element sizes
+                    let maxRadius = (socketRect.width / 2) - (dotRect.width / 2);
+                    // Safeguard against negative radius
+                    if (maxRadius < 0 || isNaN(maxRadius)) maxRadius = 10; 
 
                     if (distance > maxRadius) {
                         distance = maxRadius;
                     }
 
-                    // 4. Calculate Target X/Y
-                    eye.targetX = Math.cos(angle) * distance;
-                    eye.targetY = Math.sin(angle) * distance;
+                    // Target coordinates
+                    const targetX = Math.cos(angle) * distance;
+                    const targetY = Math.sin(angle) * distance;
 
-                    // 5. Apply Lerp (using 0.1 as requested for floatiness)
-                    eye.currentX += (eye.targetX - eye.currentX) * 0.1;
-                    eye.currentY += (eye.targetY - eye.currentY) * 0.1;
+                    // Antigravity Lerp
+                    eye.currentX += (targetX - eye.currentX) * 0.08;
+                    eye.currentY += (targetY - eye.currentY) * 0.08;
 
-                    // 6. Apply Transform
+                    // Apply Movement
                     eye.dot.style.transform = `translate(${eye.currentX}px, ${eye.currentY}px)`;
                 });
 
-                // 5. Ensure Loop is Running
                 requestAnimationFrame(animateEyes);
             }
 
-            // 5. Ensure Loop is Running (Jumpstart)
-            requestAnimationFrame(animateEyes);
+            // Start loop
+            animateEyes();
         });
     </script>
 </body>
