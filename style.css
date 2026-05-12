@@ -460,4 +460,12 @@ body {
   will-change: transform;
   pointer-events: none; /* Prevent blocking mouse events */
   transition: none !important;
+  border: 2px solid blue !important; /* DEBUG MODE */
+}
+
+#sol-socket, #world-socket {
+  position: absolute;
+  pointer-events: none;
+  border: 2px solid red !important; /* DEBUG MODE */
+  transform: translate(-50%, -50%); /* Crucial to perfectly center the origin point over the coordinates */
 }
