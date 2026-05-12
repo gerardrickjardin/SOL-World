@@ -30,8 +30,8 @@
     <header class="hero">
         <div class="logo-container hero-main-logo-anim">
             <img src="assets/sol-world-base.png" alt="SOL World Base" class="base-img layer">
-            <img src="assets/world-dot.png" id="sol-dot" alt="SOL dot" class="dot-img layer">
-            <img src="assets/sol-dot.png" id="world-dot" alt="WORLD dot" class="dot-img layer">
+            <img src="assets/sol-dot.png" id="sol-dot" alt="SOL dot" class="dot-img layer">
+            <img src="assets/world-dot.png" id="world-dot" alt="WORLD dot" class="dot-img layer">
         </div>
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Potential.</h2>
     </header>
@@ -185,11 +185,11 @@
         }
         
         draw();
-        const lerpSpeed = 0.04;
+        const lerpSpeed = 0.15; // Increased responsiveness
         const container = document.querySelector('.logo-container');
         const eyes = [
             { dot: document.getElementById('sol-dot'), currentX: 0, currentY: 0, targetX: 0, targetY: 0, multiplier: 1 },
-            { dot: document.getElementById('world-dot'), currentX: 0, currentY: 0, targetX: 0, targetY: 0, multiplier: 1 }
+            { dot: document.getElementById('world-dot'), currentX: 0, currentY: 0, targetX: 0, targetY: 0, multiplier: 1.2 }
         ];
 
         let mouseX = window.innerWidth / 2;
@@ -207,7 +207,7 @@
             const centerY = rect.top + rect.height / 2;
 
             // Maximum pixel shift for the dots based on container size
-            const maxShift = rect.width * 0.02; 
+            const maxShift = rect.width * 0.05; // Increased distance
 
             eyes.forEach(eye => {
                 if (!eye.dot) return;
@@ -218,7 +218,7 @@
                 const distance = Math.min(Math.sqrt(dx * dx + dy * dy), window.innerWidth / 2);
                 const angle = Math.atan2(dy, dx);
                 
-                // Use a subtle curve for floating
+                // Use a curve for floating
                 const shiftAmount = (distance / (window.innerWidth / 2)) * maxShift * eye.multiplier;
 
                 eye.targetX = Math.cos(angle) * shiftAmount;
