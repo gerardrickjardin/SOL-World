@@ -28,16 +28,10 @@
     </nav>
 
     <header class="hero">
-        <div class="logo-container hero-main-logo-anim" style="pointer-events: none;">
-            <img src="assets/sol-world-base.png" alt="SOL World Base" class="base-img layer" style="pointer-events: none;">
-            
-            <!-- Invisible sockets to provide origin coordinates for the tracking math -->
-            <div id="sol-socket" style="position: absolute !important; top: 14% !important; left: 45% !important; width: 14% !important; aspect-ratio: 1/1 !important; display: flex !important; justify-content: center !important; align-items: center !important; pointer-events: none !important; transform: translate(-50%, -50%) !important;"></div>
-            <div id="world-socket" style="position: absolute !important; top: 62% !important; left: 38% !important; width: 15% !important; aspect-ratio: 1/1 !important; display: flex !important; justify-content: center !important; align-items: center !important; pointer-events: none !important; transform: translate(-50%, -50%) !important;"></div>
-
-            <!-- Absolute positioning must remain to overlay the 1920x1080 canvases perfectly -->
-            <img src="assets/sol-dot.png" id="sol-dot" alt="SOL dot" class="dot-img layer" style="position: absolute !important; top: 0 !important; left: 0 !important; transform: translate(0px, 0px); transition: none !important; pointer-events: none !important;">
-            <img src="assets/world-dot.png" id="world-dot" alt="WORLD dot" class="dot-img layer" style="position: absolute !important; top: 0 !important; left: 0 !important; transform: translate(0px, 0px); transition: none !important; pointer-events: none !important;">
+        <div id="ag-logo-wrapper" class="logo-container hero-main-logo-anim" style="position: relative; display: inline-block; width: 100%; max-width: 700px; margin: 0 auto;">
+            <img id="ag-base-img" src="assets/sol-world-base.png" style="display: block; width: 100%; height: auto; pointer-events: none;">
+            <img id="ag-sol-dot" src="assets/sol-dot.png" style="position: absolute; top: 0; left: 0; width: 6%; height: auto; pointer-events: none; will-change: transform; transition: none !important;">
+            <img id="ag-world-dot" src="assets/world-dot.png" style="position: absolute; top: 0; left: 0; width: 8%; height: auto; pointer-events: none; will-change: transform; transition: none !important;">
         </div>
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Potential.</h2>
     </header>
@@ -193,93 +187,87 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        window.addEventListener('load', () => {
-            console.log("Animation script initialized");
-            console.log("Sol Dot Element:", document.getElementById('sol-dot'));
-            
-            // We wait for window.load so images have actual dimensions
-            const solDot = document.getElementById('sol-dot');
-            const worldDot = document.getElementById('world-dot');
-            
-            // Fallback to parent elements if specific sockets don't have IDs
-            const solSocket = document.getElementById('sol-socket') || (solDot ? solDot.parentElement : null);
-            const worldSocket = document.getElementById('world-socket') || (worldDot ? worldDot.parentElement : null);
+window.addEventListener('load', () => {
+    const baseImg = document.getElementById('ag-base-img');
+    const solDot = document.getElementById('ag-sol-dot');
+    const worldDot = document.getElementById('ag-world-dot');
 
-            if (!solDot || !worldDot || !solSocket || !worldSocket) {
-                console.error("Antigravity Logo: Missing DOM elements.");
-                return;
-            }
+    if (!baseImg || !solDot || !worldDot) return;
 
-            let mouseX = window.innerWidth / 2;
-            let mouseY = window.innerHeight / 2;
+    // CONFIGURATION: Adjust these percentages (0.0 to 1.0) to perfectly align the dots over the holes
+    const CONFIG = {
+        sol: { 
+            centerX: 0.495,  // X position of the SOL hole (49.5% from left)
+            centerY: 0.280,  // Y position of the SOL hole (28% from top)
+            travelRadius: 0.035 // How far it can move (3.5% of image width)
+        },
+        world: { 
+            centerX: 0.445,  // X position of the WORLD hole
+            centerY: 0.680,  // Y position of the WORLD hole
+            travelRadius: 0.045 // How far it can move
+        },
+        speed: 0.6 // 1.0 is instant, 0.1 is very floaty
+    };
 
-            window.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
 
-            const eyes = [
-                { dot: solDot, socket: solSocket, currentX: 0, currentY: 0, centerX: 0, centerY: 0, maxRadius: 0 },
-                { dot: worldDot, socket: worldSocket, currentX: 0, currentY: 0, centerX: 0, centerY: 0, maxRadius: 0 }
-            ];
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
 
-            // 2. Optimize Performance: Calculate bounds outside the loop to avoid layout thrashing
-            function calculateBounds() {
-                eyes.forEach(eye => {
-                    const socketRect = eye.socket.getBoundingClientRect();
-                    const dotRect = eye.dot.getBoundingClientRect();
+    let solCurrentX = 0, solCurrentY = 0;
+    let worldCurrentX = 0, worldCurrentY = 0;
 
-                    eye.centerX = socketRect.left + (socketRect.width / 2);
-                    eye.centerY = socketRect.top + (socketRect.height / 2);
+    function animate() {
+        const rect = baseImg.getBoundingClientRect();
+        
+        // If image isn't visible/loaded yet, skip frame
+        if (rect.width === 0) {
+            requestAnimationFrame(animate);
+            return;
+        }
 
-                    // Calculate dynamic raw boundary based on DOM widths
-                    let rawMaxRadius = (socketRect.width / 2) - (dotRect.width / 2);
-                    
-                    // Failsafe for 1920x1080 overlay layer dimensions (dotRect is full width)
-                    if (rawMaxRadius < 0 || isNaN(rawMaxRadius)) {
-                        rawMaxRadius = socketRect.width / 2; // Full radius of the socket
-                    }
-                    
-                    // APPLY BUFFER: Multiply by 0.60 so the dot stays inside the painted edge
-                    eye.maxRadius = rawMaxRadius * 0.60;
-                });
-            }
+        // --- SOL DOT MATH ---
+        const solOriginX = rect.left + (rect.width * CONFIG.sol.centerX);
+        const solOriginY = rect.top + (rect.height * CONFIG.sol.centerY);
+        const solMaxDist = rect.width * CONFIG.sol.travelRadius;
+        
+        let sDx = mouseX - solOriginX;
+        let sDy = mouseY - solOriginY;
+        let sAngle = Math.atan2(sDy, sDx);
+        let sDist = Math.min(Math.sqrt(sDx*sDx + sDy*sDy), solMaxDist);
+        
+        let sTargetX = (rect.width * CONFIG.sol.centerX) - (solDot.offsetWidth / 2) + (Math.cos(sAngle) * sDist);
+        let sTargetY = (rect.height * CONFIG.sol.centerY) - (solDot.offsetHeight / 2) + (Math.sin(sAngle) * sDist);
 
-            // Calculate initially and update on resize/scroll
-            calculateBounds();
-            window.addEventListener('resize', calculateBounds);
-            window.addEventListener('scroll', calculateBounds);
+        solCurrentX += (sTargetX - solCurrentX) * CONFIG.speed;
+        solCurrentY += (sTargetY - solCurrentY) * CONFIG.speed;
+        solDot.style.transform = `translate(${solCurrentX}px, ${solCurrentY}px)`;
 
-            function animateEyes() {
-                eyes.forEach(eye => {
-                    // Math: Distance and Angle
-                    const dx = mouseX - eye.centerX;
-                    const dy = mouseY - eye.centerY;
-                    const angle = Math.atan2(dy, dx);
-                    let distance = Math.sqrt(dx * dx + dy * dy);
+        // --- WORLD DOT MATH ---
+        const worldOriginX = rect.left + (rect.width * CONFIG.world.centerX);
+        const worldOriginY = rect.top + (rect.height * CONFIG.world.centerY);
+        const worldMaxDist = rect.width * CONFIG.world.travelRadius;
+        
+        let wDx = mouseX - worldOriginX;
+        let wDy = mouseY - worldOriginY;
+        let wAngle = Math.atan2(wDy, wDx);
+        let wDist = Math.min(Math.sqrt(wDx*wDx + wDy*wDy), worldMaxDist);
+        
+        let wTargetX = (rect.width * CONFIG.world.centerX) - (worldDot.offsetWidth / 2) + (Math.cos(wAngle) * wDist);
+        let wTargetY = (rect.height * CONFIG.world.centerY) - (worldDot.offsetHeight / 2) + (Math.sin(wAngle) * wDist);
 
-                    if (distance > eye.maxRadius) {
-                        distance = eye.maxRadius;
-                    }
+        worldCurrentX += (wTargetX - worldCurrentX) * CONFIG.speed;
+        worldCurrentY += (wTargetY - worldCurrentY) * CONFIG.speed;
+        worldDot.style.transform = `translate(${worldCurrentX}px, ${worldCurrentY}px)`;
 
-                    // Target coordinates
-                    const targetX = Math.cos(angle) * distance;
-                    const targetY = Math.sin(angle) * distance;
+        requestAnimationFrame(animate);
+    }
 
-                    // 1. Increase Lerp Speed: Snappier tracking (cranked to 0.85)
-                    eye.currentX += (targetX - eye.currentX) * 0.85;
-                    eye.currentY += (targetY - eye.currentY) * 0.85;
-
-                    // Apply Movement
-                    eye.dot.style.transform = `translate(${eye.currentX}px, ${eye.currentY}px)`;
-                });
-
-                requestAnimationFrame(animateEyes);
-            }
-
-            // Start loop
-            animateEyes();
-        });
+    animate();
+});
     </script>
 </body>
 </html>
