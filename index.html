@@ -187,13 +187,23 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.4; // Extremely snappy responsiveness
+        const lerpSpeed = 0.4;
         const container = document.querySelector('.logo-container');
+        
+        // Define the exact center of each "O" as percentages of the container
         const eyes = [
-            // multiplier allows one eye to move slightly more/less if desired, 
-            // but we keep it close to 1 to stay inside the boundaries
-            { dot: document.getElementById('sol-dot'), currentX: 0, currentY: 0, targetX: 0, targetY: 0, multiplier: 1 },
-            { dot: document.getElementById('world-dot'), currentX: 0, currentY: 0, targetX: 0, targetY: 0, multiplier: 1.1 }
+            { 
+                dot: document.getElementById('sol-dot'), 
+                currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
+                pctX: 0.495, pctY: 0.42, 
+                maxShiftPct: 0.015 // 1.5% of container width
+            },
+            { 
+                dot: document.getElementById('world-dot'), 
+                currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
+                pctX: 0.36, pctY: 0.61,
+                maxShiftPct: 0.018 // 1.8% of container width (WORLD O is slightly larger)
+            }
         ];
 
         let mouseX = window.innerWidth / 2;
@@ -207,26 +217,28 @@
         function animateEyes() {
             if (!container) return;
             const rect = container.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            // Strictly limit the maximum pixel shift so it NEVER leaves the "O"
-            const maxShift = rect.width * 0.015; // Just 1.5% of the container width
 
             eyes.forEach(eye => {
                 if (!eye.dot) return;
-                const dx = mouseX - centerX;
-                const dy = mouseY - centerY;
                 
-                // Calculate distance from center to mouse
+                // Calculate this specific eye's absolute center position on screen
+                const eyeCenterX = rect.left + rect.width * eye.pctX;
+                const eyeCenterY = rect.top + rect.height * eye.pctY;
+                
+                const dx = mouseX - eyeCenterX;
+                const dy = mouseY - eyeCenterY;
+                
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 const angle = Math.atan2(dy, dx);
                 
-                // Make it hit the edge of the socket very quickly
-                const maxDistance = 200; // Mouse 200px away pushes it to the edge
+                // Max shift allowed for this specific eye in pixels
+                const maxShiftPx = rect.width * eye.maxShiftPct;
+                
+                // Scale distance so moving mouse 150px away pushes it to the edge
+                const maxDistance = 150; 
                 const pull = Math.min(distance / maxDistance, 1);
                 
-                const shiftAmount = pull * maxShift * eye.multiplier;
+                const shiftAmount = pull * maxShiftPx;
 
                 eye.targetX = Math.cos(angle) * shiftAmount;
                 eye.targetY = Math.sin(angle) * shiftAmount;
