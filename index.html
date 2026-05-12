@@ -28,7 +28,25 @@
     </nav>
 
     <header class="hero">
-        <img src="assets/SOL WORLD LOGO.png" alt="SOL World" class="hero-main-logo">
+        <svg class="hero-main-logo" viewBox="0 0 250 120" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="filter: none; font-family: system-ui, -apple-system, sans-serif; font-weight: 800; background: transparent;">
+          <!-- Top Line: SOL -->
+          <text x="10" y="50" font-size="48" fill="white" alignment-baseline="baseline">S</text>
+          
+          <!-- The "O" in SOL -->
+          <circle id="sol-eye" cx="62" cy="34" r="14" fill="none" stroke="white" stroke-width="4"/>
+          <circle id="sol-pupil" cx="62" cy="34" r="6" fill="white"/>
+          
+          <text x="85" y="50" font-size="48" fill="white" alignment-baseline="baseline">L</text>
+
+          <!-- Bottom Line: WORLD -->
+          <text x="10" y="100" font-size="48" fill="white" alignment-baseline="baseline">W</text>
+          
+          <!-- The "O" in WORLD -->
+          <circle id="world-eye" cx="74" cy="84" r="14" fill="white"/>
+          <circle id="world-pupil" cx="74" cy="84" r="6" fill="black"/>
+          
+          <text x="100" y="100" font-size="48" fill="white" alignment-baseline="baseline">RLD</text>
+        </svg>
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Possibilities.</h2>
     </header>
 
@@ -181,6 +199,85 @@
         }
         
         draw();
+    </script>
+    <script>
+    (function() {
+      const solEye = document.getElementById('sol-eye');
+      const solPupil = document.getElementById('sol-pupil');
+      const worldEye = document.getElementById('world-eye');
+      const worldPupil = document.getElementById('world-pupil');
+
+      if (!solEye || !solPupil || !worldEye || !worldPupil) return;
+
+      const lerpFactor = 0.06; 
+      const maxSolRadius = 6; 
+      const maxWorldRadius = 8; 
+
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+
+      let solCenter = { x: 0, y: 0 };
+      let worldCenter = { x: 0, y: 0 };
+
+      let currentSol = { x: 0, y: 0 };
+      let currentWorld = { x: 0, y: 0 };
+
+      function updateCenters() {
+        const solRect = solEye.getBoundingClientRect();
+        solCenter.x = solRect.left + solRect.width / 2;
+        solCenter.y = solRect.top + solRect.height / 2;
+
+        const worldRect = worldEye.getBoundingClientRect();
+        worldCenter.x = worldRect.left + worldRect.width / 2;
+        worldCenter.y = worldRect.top + worldRect.height / 2;
+      }
+
+      function lerp(start, end, amt) {
+        return (1 - amt) * start + amt * end;
+      }
+
+      function calculateTarget(center, maxRadius) {
+        const dx = mouseX - center.x;
+        const dy = mouseY - center.y;
+        const angle = Math.atan2(dy, dx);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const constrainedDistance = Math.min(distance, maxRadius);
+        return {
+          x: Math.cos(angle) * constrainedDistance,
+          y: Math.sin(angle) * constrainedDistance
+        };
+      }
+
+      function animate() {
+        const targetSol = calculateTarget(solCenter, maxSolRadius);
+        const targetWorld = calculateTarget(worldCenter, maxWorldRadius);
+
+        currentSol.x = lerp(currentSol.x, targetSol.x, lerpFactor);
+        currentSol.y = lerp(currentSol.y, targetSol.y, lerpFactor);
+
+        currentWorld.x = lerp(currentWorld.x, targetWorld.x, lerpFactor);
+        currentWorld.y = lerp(currentWorld.y, targetWorld.y, lerpFactor);
+
+        solPupil.style.transform = `translate(${currentSol.x}px, ${currentSol.y}px)`;
+        worldPupil.style.transform = `translate(${currentWorld.x}px, ${currentWorld.y}px)`;
+
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      window.addEventListener('resize', updateCenters);
+      window.addEventListener('scroll', updateCenters);
+
+      setTimeout(() => {
+        updateCenters();
+        animate();
+      }, 100);
+
+    })();
     </script>
 </body>
 </html>
