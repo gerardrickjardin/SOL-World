@@ -187,18 +187,20 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.8; // Extremely high lerp speed to eliminate drag/lag
+        const lerpSpeed = 0.5; // Fast response without snapping
         const container = document.querySelector('.logo-container');
         
         const eyes = [
             { 
                 dot: document.getElementById('sol-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
+                pctX: 0.495, pctY: 0.42, 
                 maxShiftPct: 0.022 // Perfect safe boundary
             },
             { 
                 dot: document.getElementById('world-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
+                pctX: 0.36, pctY: 0.61,
                 maxShiftPct: 0.026 // Perfect safe boundary
             }
         ];
@@ -215,26 +217,30 @@
             if (!container) return;
             const rect = container.getBoundingClientRect();
 
-            // Map mouse position to a -1 to 1 range across the whole screen
-            let normalizedX = (mouseX / window.innerWidth) * 2 - 1;
-            let normalizedY = (mouseY / window.innerHeight) * 2 - 1;
-            
-            // Mathematically clamp the normalized vector so it forms a perfect circle boundary
-            const dist = Math.sqrt(normalizedX * normalizedX + normalizedY * normalizedY);
-            if (dist > 1) {
-                normalizedX /= dist;
-                normalizedY /= dist;
-            }
-
             eyes.forEach(eye => {
                 if (!eye.dot) return;
                 
+                // Calculate precise center of this specific eye on the screen
+                const eyeCenterX = rect.left + rect.width * eye.pctX;
+                const eyeCenterY = rect.top + rect.height * eye.pctY;
+                
+                // Calculate mouse distance from the eye
+                const dx = mouseX - eyeCenterX;
+                const dy = mouseY - eyeCenterY;
+                
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+                
                 const maxShiftPx = rect.width * eye.maxShiftPct;
                 
-                // Both eyes use the exact same normalized direction, so they move perfectly parallel
-                // They will never look cross-eyed or look at each other
-                eye.targetX = normalizedX * maxShiftPx;
-                eye.targetY = normalizedY * maxShiftPx;
+                // The magic fix: This makes the dot track the mouse physically inside the O!
+                // A sensitivity of 0.15 means the dot hits the physical edge of the O when your mouse is ~150px away.
+                // When your mouse is directly inside the O, it follows you intimately.
+                const sensitivity = 0.15;
+                const shiftDist = Math.min(dist * sensitivity, maxShiftPx);
+
+                eye.targetX = Math.cos(angle) * shiftDist;
+                eye.targetY = Math.sin(angle) * shiftDist;
 
                 eye.currentX += (eye.targetX - eye.currentX) * lerpSpeed;
                 eye.currentY += (eye.targetY - eye.currentY) * lerpSpeed;
