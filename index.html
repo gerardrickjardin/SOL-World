@@ -28,14 +28,7 @@
     </nav>
 
     <header class="hero">
-        <div id="ag-logo-wrapper" class="logo-container hero-main-logo-anim" style="position: relative; display: inline-block; width: 100%; max-width: 800px; margin: 0 auto;">
-            <!-- BASE IMAGE -->
-            <img id="ag-base-img" src="assets/sol-world-base.png" style="display: block; width: 100%; height: auto; pointer-events: none;">
-            
-            <!-- PURE CSS DOTS (Fixes the transparent padding issue) -->
-            <div id="ag-sol-dot" style="position: absolute; top: 0; left: 0; width: 3.5%; aspect-ratio: 1/1; background-color: #ffffff; border-radius: 50%; pointer-events: none; will-change: transform;"></div>
-            <div id="ag-world-dot" style="position: absolute; top: 0; left: 0; width: 5.5%; aspect-ratio: 1/1; background-color: #050505; border-radius: 50%; pointer-events: none; will-change: transform;"></div>
-        </div>
+        <img src="assets/SOL WORLD LOGO.png" alt="SOL World Logo" class="logo-container hero-main-logo-anim" style="width: 100%; max-width: 600px; height: auto;">
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Potential.</h2>
     </header>
 
@@ -189,66 +182,7 @@
         
         draw();
         
-        // --- INTERACTIVE EYES LOGIC ---
-window.addEventListener('load', () => {
-    const base = document.getElementById('ag-base-img');
-    const solDot = document.getElementById('ag-sol-dot');
-    const worldDot = document.getElementById('ag-world-dot');
-    if (!base || !solDot || !worldDot) return;
 
-    // CONFIGURATION PANEL
-    // 'left' and 'top' control the resting center position of the dots. 
-    // 'travel' controls how far they can move (the radius).
-    const config = {
-        sol:   { left: 0.495, top: 0.420, travel: 0.035 }, 
-        world: { left: 0.442, top: 0.685, travel: 0.045 }, 
-        speed: 0.5 
-    };
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-
-    window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    let sX = 0, sY = 0, wX = 0, wY = 0;
-
-    function animate() {
-        const rect = base.getBoundingClientRect();
-        if (rect.width === 0) { requestAnimationFrame(animate); return; }
-
-        // SOL MATH
-        let sOrigX = rect.left + (rect.width * config.sol.left);
-        let sOrigY = rect.top + (rect.height * config.sol.top);
-        let sMaxDist = rect.width * config.sol.travel;
-        let sDx = mouseX - sOrigX, sDy = mouseY - sOrigY;
-        let sAngle = Math.atan2(sDy, sDx);
-        let sDist = Math.min(Math.sqrt(sDx*sDx + sDy*sDy), sMaxDist);
-        let sTargetX = (rect.width * config.sol.left) - (solDot.offsetWidth / 2) + (Math.cos(sAngle) * sDist);
-        let sTargetY = (rect.height * config.sol.top) - (solDot.offsetHeight / 2) + (Math.sin(sAngle) * sDist);
-        
-        sX += (sTargetX - sX) * config.speed; sY += (sTargetY - sY) * config.speed;
-        solDot.style.transform = `translate(${sX}px, ${sY}px)`;
-
-        // WORLD MATH
-        let wOrigX = rect.left + (rect.width * config.world.left);
-        let wOrigY = rect.top + (rect.height * config.world.top);
-        let wMaxDist = rect.width * config.world.travel;
-        let wDx = mouseX - wOrigX, wDy = mouseY - wOrigY;
-        let wAngle = Math.atan2(wDy, wDx);
-        let wDist = Math.min(Math.sqrt(wDx*wDx + wDy*wDy), wMaxDist);
-        let wTargetX = (rect.width * config.world.left) - (worldDot.offsetWidth / 2) + (Math.cos(wAngle) * wDist);
-        let wTargetY = (rect.height * config.world.top) - (worldDot.offsetHeight / 2) + (Math.sin(wAngle) * wDist);
-        
-        wX += (wTargetX - wX) * config.speed; wY += (wTargetY - wY) * config.speed;
-        worldDot.style.transform = `translate(${wX}px, ${wY}px)`;
-
-        requestAnimationFrame(animate);
-    }
-    animate();
-});
     </script>
 </body>
 </html>

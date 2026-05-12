@@ -441,29 +441,3 @@ body {
   filter: invert(1);
 }
 
-.base-img {
-  position: relative;
-  z-index: 1;
-}
-
-.layer {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.dot-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  will-change: transform;
-  pointer-events: none; /* Prevent blocking mouse events */
-  transition: none !important;
-}
-
-#sol-socket, #world-socket {
-  position: absolute;
-  pointer-events: none;
-  transform: translate(-50%, -50%); /* Crucial to perfectly center the origin point over the coordinates */
-}
