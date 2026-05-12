@@ -185,11 +185,15 @@
         }
         
         draw();
-        const lerpSpeed = 0.15; // Increased responsiveness
+        
+        // --- INTERACTIVE EYES LOGIC ---
+        const lerpSpeed = 0.4; // Extremely snappy responsiveness
         const container = document.querySelector('.logo-container');
         const eyes = [
+            // multiplier allows one eye to move slightly more/less if desired, 
+            // but we keep it close to 1 to stay inside the boundaries
             { dot: document.getElementById('sol-dot'), currentX: 0, currentY: 0, targetX: 0, targetY: 0, multiplier: 1 },
-            { dot: document.getElementById('world-dot'), currentX: 0, currentY: 0, targetX: 0, targetY: 0, multiplier: 1.2 }
+            { dot: document.getElementById('world-dot'), currentX: 0, currentY: 0, targetX: 0, targetY: 0, multiplier: 1.1 }
         ];
 
         let mouseX = window.innerWidth / 2;
@@ -206,20 +210,23 @@
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
 
-            // Maximum pixel shift for the dots based on container size
-            const maxShift = rect.width * 0.05; // Increased distance
+            // Strictly limit the maximum pixel shift so it NEVER leaves the "O"
+            const maxShift = rect.width * 0.015; // Just 1.5% of the container width
 
             eyes.forEach(eye => {
                 if (!eye.dot) return;
                 const dx = mouseX - centerX;
                 const dy = mouseY - centerY;
                 
-                // Normalize distance
-                const distance = Math.min(Math.sqrt(dx * dx + dy * dy), window.innerWidth / 2);
+                // Calculate distance from center to mouse
+                const distance = Math.sqrt(dx * dx + dy * dy);
                 const angle = Math.atan2(dy, dx);
                 
-                // Use a curve for floating
-                const shiftAmount = (distance / (window.innerWidth / 2)) * maxShift * eye.multiplier;
+                // Make it hit the edge of the socket very quickly
+                const maxDistance = 200; // Mouse 200px away pushes it to the edge
+                const pull = Math.min(distance / maxDistance, 1);
+                
+                const shiftAmount = pull * maxShift * eye.multiplier;
 
                 eye.targetX = Math.cos(angle) * shiftAmount;
                 eye.targetY = Math.sin(angle) * shiftAmount;
