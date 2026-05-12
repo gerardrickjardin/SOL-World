@@ -187,7 +187,7 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.4;
+        const lerpSpeed = 0.2; // Smooth and responsive
         const container = document.querySelector('.logo-container');
         
         // Define the exact center of each "O" as percentages of the container
@@ -234,11 +234,13 @@
                 // Max shift allowed for this specific eye in pixels
                 const maxShiftPx = rect.width * eye.maxShiftPct;
                 
-                // Scale distance so moving mouse 150px away pushes it to the edge
-                const maxDistance = 150; 
+                // Scale distance based on screen size so they move freely anywhere on screen
+                const maxDistance = Math.max(window.innerWidth, window.innerHeight) / 1.5; 
                 const pull = Math.min(distance / maxDistance, 1);
                 
-                const shiftAmount = pull * maxShiftPx;
+                // Optional: apply an easing function to 'pull' to make it feel more organic
+                const easeOutQuad = pull * (2 - pull);
+                const shiftAmount = easeOutQuad * maxShiftPx;
 
                 eye.targetX = Math.cos(angle) * shiftAmount;
                 eye.targetY = Math.sin(angle) * shiftAmount;
