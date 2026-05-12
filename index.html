@@ -28,10 +28,15 @@
     </nav>
 
     <header class="hero">
-        <div class="logo-container hero-main-logo-anim">
-            <img src="assets/sol-world-base.png" alt="SOL World Base" class="base-img layer">
-            <img src="assets/sol-dot.png" id="sol-dot" alt="SOL dot" class="dot-img layer">
-            <img src="assets/world-dot.png" id="world-dot" alt="WORLD dot" class="dot-img layer">
+        <div class="logo-container hero-main-logo-anim" style="pointer-events: none;">
+            <img src="assets/sol-world-base.png" alt="SOL World Base" class="base-img layer" style="pointer-events: none;">
+            
+            <!-- Invisible sockets to provide origin coordinates for the tracking math -->
+            <div id="sol-socket" style="position: absolute; left: 49.5%; top: 42%; width: 10px; height: 10px; pointer-events: none;"></div>
+            <div id="world-socket" style="position: absolute; left: 36%; top: 61%; width: 10px; height: 10px; pointer-events: none;"></div>
+
+            <img src="assets/sol-dot.png" id="sol-dot" alt="SOL dot" class="dot-img layer" style="pointer-events: none;">
+            <img src="assets/world-dot.png" id="world-dot" alt="WORLD dot" class="dot-img layer" style="pointer-events: none;">
         </div>
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Potential.</h2>
     </header>
@@ -188,6 +193,9 @@
         
         // --- INTERACTIVE EYES LOGIC ---
         window.addEventListener('load', () => {
+            console.log("Animation script initialized");
+            console.log("Sol Dot Element:", document.getElementById('sol-dot'));
+            
             // We wait for window.load so images have actual dimensions
             const solDot = document.getElementById('sol-dot');
             const worldDot = document.getElementById('world-dot');
