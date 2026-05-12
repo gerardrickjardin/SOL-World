@@ -218,41 +218,48 @@
             });
 
             const eyes = [
-                { dot: solDot, socket: solSocket, currentX: 0, currentY: 0 },
-                { dot: worldDot, socket: worldSocket, currentX: 0, currentY: 0 }
+                { dot: solDot, socket: solSocket, currentX: 0, currentY: 0, centerX: 0, centerY: 0, maxRadius: 0 },
+                { dot: worldDot, socket: worldSocket, currentX: 0, currentY: 0, centerX: 0, centerY: 0, maxRadius: 0 }
             ];
 
-            function animateEyes() {
+            // 2. Optimize Performance: Calculate bounds outside the loop to avoid layout thrashing
+            function calculateBounds() {
                 eyes.forEach(eye => {
                     const socketRect = eye.socket.getBoundingClientRect();
                     const dotRect = eye.dot.getBoundingClientRect();
 
-                    // Find true center of the socket
-                    const centerX = socketRect.left + (socketRect.width / 2);
-                    const centerY = socketRect.top + (socketRect.height / 2);
+                    eye.centerX = socketRect.left + (socketRect.width / 2);
+                    eye.centerY = socketRect.top + (socketRect.height / 2);
 
+                    eye.maxRadius = (socketRect.width / 2) - (dotRect.width / 2);
+                    if (eye.maxRadius < 0 || isNaN(eye.maxRadius)) eye.maxRadius = 10;
+                });
+            }
+
+            // Calculate initially and update on resize/scroll
+            calculateBounds();
+            window.addEventListener('resize', calculateBounds);
+            window.addEventListener('scroll', calculateBounds);
+
+            function animateEyes() {
+                eyes.forEach(eye => {
                     // Math: Distance and Angle
-                    const dx = mouseX - centerX;
-                    const dy = mouseY - centerY;
+                    const dx = mouseX - eye.centerX;
+                    const dy = mouseY - eye.centerY;
                     const angle = Math.atan2(dy, dx);
                     let distance = Math.sqrt(dx * dx + dy * dy);
 
-                    // Dynamic boundary based on actual element sizes
-                    let maxRadius = (socketRect.width / 2) - (dotRect.width / 2);
-                    // Safeguard against negative radius
-                    if (maxRadius < 0 || isNaN(maxRadius)) maxRadius = 10; 
-
-                    if (distance > maxRadius) {
-                        distance = maxRadius;
+                    if (distance > eye.maxRadius) {
+                        distance = eye.maxRadius;
                     }
 
                     // Target coordinates
                     const targetX = Math.cos(angle) * distance;
                     const targetY = Math.sin(angle) * distance;
 
-                    // Antigravity Lerp
-                    eye.currentX += (targetX - eye.currentX) * 0.08;
-                    eye.currentY += (targetY - eye.currentY) * 0.08;
+                    // 1. Increase Lerp Speed: Snappier tracking
+                    eye.currentX += (targetX - eye.currentX) * 0.35;
+                    eye.currentY += (targetY - eye.currentY) * 0.35;
 
                     // Apply Movement
                     eye.dot.style.transform = `translate(${eye.currentX}px, ${eye.currentY}px)`;
