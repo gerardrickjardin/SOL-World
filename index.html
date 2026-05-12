@@ -28,10 +28,10 @@
     </nav>
 
     <header class="hero">
-        <div id="ag-logo-wrapper" class="logo-container hero-main-logo-anim" style="position: relative; display: inline-block; width: 100%; max-width: 700px; margin: 0 auto;">
-            <img id="ag-base-img" src="assets/sol-world-base.png" style="display: block; width: 100%; height: auto; pointer-events: none;">
-            <img id="ag-sol-dot" src="assets/sol-dot.png" style="position: absolute; top: 0; left: 0; width: 6%; height: auto; pointer-events: none; will-change: transform; transition: none !important;">
-            <img id="ag-world-dot" src="assets/world-dot.png" style="position: absolute; top: 0; left: 0; width: 8%; height: auto; pointer-events: none; will-change: transform; transition: none !important;">
+        <div id="ag-logo-wrapper" class="logo-container hero-main-logo-anim" style="position: relative; display: inline-block; width: 100%; max-width: 800px; margin: 0 auto; line-height: 0;">
+            <img id="ag-base-img" src="assets/sol-world-base.png" style="width: 100%; height: auto; pointer-events: none;">
+            <img id="ag-sol-dot" src="assets/sol-dot.png" style="position: absolute; top: 0; left: 0; width: 12%; height: auto; border: 1px solid red; pointer-events: none; will-change: transform;">
+            <img id="ag-world-dot" src="assets/world-dot.png" style="position: absolute; top: 0; left: 0; width: 14%; height: auto; border: 1px solid red; pointer-events: none; will-change: transform;">
         </div>
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Potential.</h2>
     </header>
@@ -188,85 +188,54 @@
         
         // --- INTERACTIVE EYES LOGIC ---
 window.addEventListener('load', () => {
-    const baseImg = document.getElementById('ag-base-img');
-    const solDot = document.getElementById('ag-sol-dot');
-    const worldDot = document.getElementById('ag-world-dot');
+    const base = document.getElementById('ag-base-img');
+    const sol = document.getElementById('ag-sol-dot');
+    const world = document.getElementById('ag-world-dot');
+    if (!base || !sol || !world) return;
 
-    if (!baseImg || !solDot || !worldDot) return;
-
-    // CONFIGURATION: Adjust these percentages (0.0 to 1.0) to perfectly align the dots over the holes
+    // --- TUNING PANEL: Adjust these values if the eyes are still off-center ---
     const CONFIG = {
-        sol: { 
-            centerX: 0.495,  // X position of the SOL hole (49.5% from left)
-            centerY: 0.280,  // Y position of the SOL hole (28% from top)
-            travelRadius: 0.035 // How far it can move (3.5% of image width)
-        },
-        world: { 
-            centerX: 0.445,  // X position of the WORLD hole
-            centerY: 0.680,  // Y position of the WORLD hole
-            travelRadius: 0.045 // How far it can move
-        },
-        speed: 0.6 // 1.0 is instant, 0.1 is very floaty
+        sol:   { x: 0.50, y: 0.28, radius: 0.045 }, // Try 0.50 (X) and 0.28 (Y)
+        world: { x: 0.45, y: 0.69, radius: 0.055 }, // Try 0.45 (X) and 0.69 (Y)
+        speed: 0.7 // Snappy fluidity
     };
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
+    let mX = window.innerWidth / 2, mY = window.innerHeight / 2;
+    window.addEventListener('mousemove', (e) => { mX = e.clientX; mY = e.clientY; });
 
-    window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
+    let sX = 0, sY = 0, wX = 0, wY = 0;
 
-    let solCurrentX = 0, solCurrentY = 0;
-    let worldCurrentX = 0, worldCurrentY = 0;
+    function loop() {
+        const r = base.getBoundingClientRect();
+        if (r.width === 0) { requestAnimationFrame(loop); return; }
 
-    function animate() {
-        const rect = baseImg.getBoundingClientRect();
-        
-        // If image isn't visible/loaded yet, skip frame
-        if (rect.width === 0) {
-            requestAnimationFrame(animate);
-            return;
-        }
+        // Math for SOL
+        const sOrigX = r.left + (r.width * CONFIG.sol.x);
+        const sOrigY = r.top + (r.height * CONFIG.sol.y);
+        const sMax = r.width * CONFIG.sol.radius;
+        let sdX = mX - sOrigX, sdY = mY - sOrigY;
+        let sAngle = Math.atan2(sdY, sdX);
+        let sDist = Math.min(Math.sqrt(sdX*sdX + sdY*sdY), sMax);
+        let sTargetX = (r.width * CONFIG.sol.x) - (sol.offsetWidth / 2) + (Math.cos(sAngle) * sDist);
+        let sTargetY = (r.height * CONFIG.sol.y) - (sol.offsetHeight / 2) + (Math.sin(sAngle) * sDist);
+        sX += (sTargetX - sX) * CONFIG.speed; sY += (sTargetY - sY) * CONFIG.speed;
+        sol.style.transform = `translate(${sX}px, ${sY}px)`;
 
-        // --- SOL DOT MATH ---
-        const solOriginX = rect.left + (rect.width * CONFIG.sol.centerX);
-        const solOriginY = rect.top + (rect.height * CONFIG.sol.centerY);
-        const solMaxDist = rect.width * CONFIG.sol.travelRadius;
-        
-        let sDx = mouseX - solOriginX;
-        let sDy = mouseY - solOriginY;
-        let sAngle = Math.atan2(sDy, sDx);
-        let sDist = Math.min(Math.sqrt(sDx*sDx + sDy*sDy), solMaxDist);
-        
-        let sTargetX = (rect.width * CONFIG.sol.centerX) - (solDot.offsetWidth / 2) + (Math.cos(sAngle) * sDist);
-        let sTargetY = (rect.height * CONFIG.sol.centerY) - (solDot.offsetHeight / 2) + (Math.sin(sAngle) * sDist);
+        // Math for WORLD
+        const wOrigX = r.left + (r.width * CONFIG.world.x);
+        const wOrigY = r.top + (r.height * CONFIG.world.y);
+        const wMax = r.width * CONFIG.world.radius;
+        let wdX = mX - wOrigX, wdY = mY - wOrigY;
+        let wAngle = Math.atan2(wdY, wdX);
+        let wDist = Math.min(Math.sqrt(wdX*wdX + wdY*wdY), wMax);
+        let wTargetX = (r.width * CONFIG.world.x) - (world.offsetWidth / 2) + (Math.cos(wAngle) * wDist);
+        let wTargetY = (r.height * CONFIG.world.y) - (world.offsetHeight / 2) + (Math.sin(wAngle) * wDist);
+        wX += (wTargetX - wX) * CONFIG.speed; wY += (wTargetY - wY) * CONFIG.speed;
+        world.style.transform = `translate(${wX}px, ${wY}px)`;
 
-        solCurrentX += (sTargetX - solCurrentX) * CONFIG.speed;
-        solCurrentY += (sTargetY - solCurrentY) * CONFIG.speed;
-        solDot.style.transform = `translate(${solCurrentX}px, ${solCurrentY}px)`;
-
-        // --- WORLD DOT MATH ---
-        const worldOriginX = rect.left + (rect.width * CONFIG.world.centerX);
-        const worldOriginY = rect.top + (rect.height * CONFIG.world.centerY);
-        const worldMaxDist = rect.width * CONFIG.world.travelRadius;
-        
-        let wDx = mouseX - worldOriginX;
-        let wDy = mouseY - worldOriginY;
-        let wAngle = Math.atan2(wDy, wDx);
-        let wDist = Math.min(Math.sqrt(wDx*wDx + wDy*wDy), worldMaxDist);
-        
-        let wTargetX = (rect.width * CONFIG.world.centerX) - (worldDot.offsetWidth / 2) + (Math.cos(wAngle) * wDist);
-        let wTargetY = (rect.height * CONFIG.world.centerY) - (worldDot.offsetHeight / 2) + (Math.sin(wAngle) * wDist);
-
-        worldCurrentX += (wTargetX - worldCurrentX) * CONFIG.speed;
-        worldCurrentY += (wTargetY - worldCurrentY) * CONFIG.speed;
-        worldDot.style.transform = `translate(${worldCurrentX}px, ${worldCurrentY}px)`;
-
-        requestAnimationFrame(animate);
+        requestAnimationFrame(loop);
     }
-
-    animate();
+    loop();
 });
     </script>
 </body>
