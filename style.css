@@ -440,6 +440,10 @@ body {
   width: 100%;
 }
 
+.base-img {
+  filter: brightness(0) invert(1);
+}
+
 .socket {
   position: absolute;
   aspect-ratio: 1 / 1;
