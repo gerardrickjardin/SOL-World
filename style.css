@@ -413,3 +413,81 @@ body {
         height: 240px;
     }
 }
+
+.hero-main-logo-anim {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- CSS VARIABLES (TWEAK SIZES HERE) --- */
+:root {
+  --eye-size: clamp(40px, 8vw, 80px);
+  --pupil-size: clamp(14px, 3vw, 24px);
+  --sol-border-width: clamp(4px, 1vw, 8px);
+  --logo-font-size: clamp(48px, 10vw, 100px);
+  --logo-letter-spacing: 0.15em;
+}
+
+/* Container & Typography */
+.logo-container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: inherit;
+  font-size: var(--logo-font-size);
+  font-weight: 800;
+  letter-spacing: var(--logo-letter-spacing);
+  color: #fff;
+  line-height: 1;
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-row:first-child {
+  margin-bottom: 0.1em;
+}
+
+/* Base Eye & Pupil Styles */
+.eye {
+  position: relative;
+  width: var(--eye-size);
+  height: var(--eye-size);
+  border-radius: 50%;
+  margin: 0 0.1em;
+  box-sizing: border-box;
+}
+
+.pupil {
+  position: absolute;
+  width: var(--pupil-size);
+  height: var(--pupil-size);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/* Specific SOL Eye (Transparent with thick white border) */
+#sol-eye {
+  background-color: transparent;
+  border: var(--sol-border-width) solid #fff;
+}
+
+#sol-pupil {
+  background-color: #fff;
+}
+
+/* Specific WORLD Eye (Solid white with black pupil) */
+#world-eye {
+  background-color: #fff;
+}
+
+#world-pupil {
+  background-color: #000;
+}
