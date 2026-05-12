@@ -32,8 +32,8 @@
             <img src="assets/sol-world-base.png" alt="SOL World Base" class="base-img layer" style="pointer-events: none;">
             
             <!-- Invisible sockets to provide origin coordinates for the tracking math -->
-            <div id="sol-socket" style="left: 49.5%; top: 40%; width: 40px; height: 40px;"></div>
-            <div id="world-socket" style="left: 35%; top: 63%; width: 40px; height: 40px;"></div>
+            <div id="sol-socket" style="left: 49.5%; top: 40%; width: 14%; aspect-ratio: 1/1;"></div>
+            <div id="world-socket" style="left: 35%; top: 63%; width: 14%; aspect-ratio: 1/1;"></div>
 
             <img src="assets/sol-dot.png" id="sol-dot" alt="SOL dot" class="dot-img layer" style="pointer-events: none;">
             <img src="assets/world-dot.png" id="world-dot" alt="WORLD dot" class="dot-img layer" style="pointer-events: none;">
@@ -232,7 +232,12 @@
                     eye.centerY = socketRect.top + (socketRect.height / 2);
 
                     eye.maxRadius = (socketRect.width / 2) - (dotRect.width / 2);
-                    if (eye.maxRadius < 0 || isNaN(eye.maxRadius)) eye.maxRadius = 10;
+                    
+                    // Safeguard: Because dotRect is the 1920x1080 overlay layer (600px scaled), 
+                    // this math is always negative. Fallback to using the visual socket size!
+                    if (eye.maxRadius < 0 || isNaN(eye.maxRadius)) {
+                        eye.maxRadius = socketRect.width / 2.5;
+                    }
                 });
             }
 
@@ -257,9 +262,9 @@
                     const targetX = Math.cos(angle) * distance;
                     const targetY = Math.sin(angle) * distance;
 
-                    // 1. Increase Lerp Speed: Snappier tracking (cranked to 0.6)
-                    eye.currentX += (targetX - eye.currentX) * 0.6;
-                    eye.currentY += (targetY - eye.currentY) * 0.6;
+                    // 1. Increase Lerp Speed: Snappier tracking (cranked to 0.85)
+                    eye.currentX += (targetX - eye.currentX) * 0.85;
+                    eye.currentY += (targetY - eye.currentY) * 0.85;
 
                     // Apply Movement
                     eye.dot.style.transform = `translate(${eye.currentX}px, ${eye.currentY}px)`;
