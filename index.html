@@ -187,7 +187,7 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.25; // Smooth but snappy
+        const lerpSpeed = 0.8; // Extremely high lerp speed to eliminate drag/lag
         const container = document.querySelector('.logo-container');
         
         const eyes = [
@@ -231,14 +231,13 @@
                 
                 const maxShiftPx = rect.width * eye.maxShiftPct;
                 
-                // Max distance is half the screen. If the mouse is half a screen away, it hits the edge of the O.
-                const maxDistance = window.innerWidth / 2; 
-                // Smooth easing curve
+                // Sensitivity threshold
+                const maxDistance = window.innerWidth / 3; // Reaches edge much faster
                 const pull = Math.min(distance / maxDistance, 1);
-                const easePull = pull * (2 - pull); // Quadratic ease out
                 
-                eye.targetX = Math.cos(angle) * easePull * maxShiftPx;
-                eye.targetY = Math.sin(angle) * easePull * maxShiftPx;
+                // Direct linear mapping for instant response (no drag curve)
+                eye.targetX = Math.cos(angle) * pull * maxShiftPx;
+                eye.targetY = Math.sin(angle) * pull * maxShiftPx;
 
                 eye.currentX += (eye.targetX - eye.currentX) * lerpSpeed;
                 eye.currentY += (eye.targetY - eye.currentY) * lerpSpeed;
