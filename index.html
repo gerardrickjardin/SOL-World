@@ -187,68 +187,83 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.6; // Quick, responsive follow
-        const container = document.querySelector('.logo-container');
-        
-        const eyes = [
-            { 
-                dot: document.getElementById('sol-dot'), 
-                currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
-                maxShiftPct: 0.024 // Generous boundary to move freely
-            },
-            { 
-                dot: document.getElementById('world-dot'), 
-                currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
-                maxShiftPct: 0.024 // Exact same boundary for perfect mirroring
-            }
-        ];
+        // 1. Fix Load Timing (Crucial): Wait for images to load before bounding rect math
+        window.addEventListener('load', () => {
+            const lerpSpeed = 0.6; // Quick, responsive follow
+            const container = document.querySelector('.logo-container');
+            
+            const eyes = [
+                { 
+                    dot: document.getElementById('sol-dot'), 
+                    currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
+                    maxShiftPct: 0.024 // Generous boundary to move freely
+                },
+                { 
+                    dot: document.getElementById('world-dot'), 
+                    currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
+                    maxShiftPct: 0.024 // Exact same boundary for perfect mirroring
+                }
+            ];
 
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
 
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function animateEyes() {
-            if (!container) return;
-            const rect = container.getBoundingClientRect();
-
-            // 1. Calculate mouse position as a percentage of the total screen
-            // If mouse is at top-left, normalized is (-1, -1)
-            // If mouse is at bottom-right, normalized is (1, 1)
-            let normalizedX = (mouseX / window.innerWidth) * 2 - 1;
-            let normalizedY = (mouseY / window.innerHeight) * 2 - 1;
-
-            // 2. Clamp it so the eyes form a perfect circle when rolling around the edges
-            const dist = Math.sqrt(normalizedX * normalizedX + normalizedY * normalizedY);
-            if (dist > 1) {
-                normalizedX /= dist;
-                normalizedY /= dist;
-            }
-
-            eyes.forEach(eye => {
-                if (!eye.dot) return;
-                
-                const maxShiftPx = rect.width * eye.maxShiftPct;
-
-                // 3. Both eyes use the EXACT SAME normalized coordinates.
-                // This completely eliminates any cross-eyed effect. They are guaranteed perfectly parallel.
-                eye.targetX = normalizedX * maxShiftPx;
-                eye.targetY = normalizedY * maxShiftPx;
-
-                // 4. Smooth lerp for buttery responsiveness
-                eye.currentX += (eye.targetX - eye.currentX) * lerpSpeed;
-                eye.currentY += (eye.targetY - eye.currentY) * lerpSpeed;
-
-                eye.dot.style.transform = `translate(${eye.currentX}px, ${eye.currentY}px)`;
+            // 3. Global Mouse Tracking
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
             });
 
-            requestAnimationFrame(animateEyes);
-        }
+            function animateEyes() {
+                if (!container) {
+                    requestAnimationFrame(animateEyes);
+                    return;
+                }
+                
+                const rect = container.getBoundingClientRect();
 
-        animateEyes();
+                // 1. Calculate mouse position as a percentage of the total screen
+                // If mouse is at top-left, normalized is (-1, -1)
+                // If mouse is at bottom-right, normalized is (1, 1)
+                let normalizedX = (mouseX / window.innerWidth) * 2 - 1;
+                let normalizedY = (mouseY / window.innerHeight) * 2 - 1;
+
+                // 2. Clamp it so the eyes form a perfect circle when rolling around the edges
+                const dist = Math.sqrt(normalizedX * normalizedX + normalizedY * normalizedY);
+                if (dist > 1) {
+                    normalizedX /= dist;
+                    normalizedY /= dist;
+                }
+
+                eyes.forEach(eye => {
+                    if (!eye.dot) return;
+                    
+                    let maxShiftPx = rect.width * eye.maxShiftPct;
+                    
+                    // 4. NaN Math Safeguards: Fallback to 15 if rect width fails
+                    if (isNaN(maxShiftPx) || maxShiftPx <= 0) {
+                        maxShiftPx = 15;
+                    }
+
+                    // 3. Both eyes use the EXACT SAME normalized coordinates.
+                    // This completely eliminates any cross-eyed effect. They are guaranteed perfectly parallel.
+                    eye.targetX = normalizedX * maxShiftPx;
+                    eye.targetY = normalizedY * maxShiftPx;
+
+                    // 4. Smooth lerp for buttery responsiveness
+                    eye.currentX += (eye.targetX - eye.currentX) * lerpSpeed;
+                    eye.currentY += (eye.targetY - eye.currentY) * lerpSpeed;
+
+                    eye.dot.style.transform = `translate(${eye.currentX}px, ${eye.currentY}px)`;
+                });
+
+                // 5. Ensure Loop is Running
+                requestAnimationFrame(animateEyes);
+            }
+
+            // 5. Ensure Loop is Running (Jumpstart)
+            requestAnimationFrame(animateEyes);
+        });
     </script>
 </body>
 </html>

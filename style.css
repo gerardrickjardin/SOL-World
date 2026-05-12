@@ -458,4 +458,5 @@ body {
   left: 0;
   z-index: 2;
   will-change: transform;
+  pointer-events: none; /* Prevent blocking mouse events */
 }
