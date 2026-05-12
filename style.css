@@ -446,32 +446,15 @@ body {
   z-index: 1;
 }
 
-.socket {
-  position: absolute;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-}
-
-#sol-socket {
-  top: var(--sol-top);
-  left: var(--sol-left);
-  width: var(--sol-width);
-}
-
-#world-socket {
-  top: var(--world-top);
-  left: var(--world-left);
-  width: var(--world-width);
+.layer {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .dot-img {
   position: absolute;
-  width: var(--dot-width);
-  height: auto;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   will-change: transform;
 }
