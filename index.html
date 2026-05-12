@@ -187,7 +187,7 @@
         draw();
         
         // --- INTERACTIVE EYES LOGIC ---
-        const lerpSpeed = 0.6; // Extremely fast and responsive
+        const lerpSpeed = 0.3; // Fast and fluid
         const container = document.querySelector('.logo-container');
         
         const eyes = [
@@ -195,13 +195,13 @@
                 dot: document.getElementById('sol-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
                 pctX: 0.495, pctY: 0.42, 
-                maxShiftPct: 0.015 
+                maxShiftPct: 0.035 // Increased significantly to use full O space
             },
             { 
                 dot: document.getElementById('world-dot'), 
                 currentX: 0, currentY: 0, targetX: 0, targetY: 0, 
                 pctX: 0.36, pctY: 0.61,
-                maxShiftPct: 0.018 
+                maxShiftPct: 0.045 // Increased significantly to use full O space
             }
         ];
 
@@ -228,12 +228,11 @@
                 const dx = mouseX - eyeCenterX;
                 const dy = mouseY - eyeCenterY;
                 
-                // Max allowed pixels to move
+                // Max allowed pixels to move (now reaches the true boundaries of the O)
                 const maxShiftPx = rect.width * eye.maxShiftPct;
                 
-                // Normalize the movement relative to screen size so it feels free and unbounded
-                // Multiplier controls how quickly it hits the edge (higher = reaches edge sooner)
-                const sensitivity = 6; // High sensitivity means it easily reaches the edges of the circle
+                // Sensitivity allows it to float smoothly across the entire O space
+                const sensitivity = 2; 
                 let rawTargetX = (dx / window.innerWidth) * maxShiftPx * sensitivity;
                 let rawTargetY = (dy / window.innerHeight) * maxShiftPx * sensitivity;
                 
