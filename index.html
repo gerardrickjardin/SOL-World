@@ -28,22 +28,7 @@
     </nav>
 
     <header class="hero">
-        <div class="logo-container hero-main-logo-anim">
-            <div class="logo-row">
-                <span>S</span>
-                <div id="sol-eye" class="eye">
-                    <div id="sol-pupil" class="pupil"></div>
-                </div>
-                <span>L</span>
-            </div>
-            <div class="logo-row">
-                <span>W</span>
-                <div id="world-eye" class="eye">
-                    <div id="world-pupil" class="pupil"></div>
-                </div>
-                <span>RLD</span>
-            </div>
-        </div>
+        <img src="assets/SOL WORLD LOGO.png" alt="SOL World" class="hero-main-logo">
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Potential.</h2>
     </header>
 
@@ -196,75 +181,6 @@
         }
         
         draw();
-        const eyes = [
-            { container: document.getElementById('sol-eye'), pupil: document.getElementById('sol-pupil'), centerX: 0, centerY: 0, maxTravel: 0, currentX: 0, currentY: 0, targetX: 0, targetY: 0 },
-            { container: document.getElementById('world-eye'), pupil: document.getElementById('world-pupil'), centerX: 0, centerY: 0, maxTravel: 0, currentX: 0, currentY: 0, targetX: 0, targetY: 0 }
-        ];
-
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-
-        function updateEyeCenters() {
-            eyes.forEach(eye => {
-                if (!eye.container || !eye.pupil) return;
-                const rect = eye.container.getBoundingClientRect();
-                const style = window.getComputedStyle(eye.container);
-                
-                const borderLeft = parseFloat(style.borderLeftWidth) || 0;
-                const borderRight = parseFloat(style.borderRightWidth) || 0;
-                const borderTop = parseFloat(style.borderTopWidth) || 0;
-                const borderBottom = parseFloat(style.borderBottomWidth) || 0;
-                
-                const innerWidth = rect.width - borderLeft - borderRight;
-                const innerHeight = rect.height - borderTop - borderBottom;
-                
-                eye.centerX = rect.left + rect.width / 2;
-                eye.centerY = rect.top + rect.height / 2;
-                
-                const pupilRect = eye.pupil.getBoundingClientRect();
-                const eyeInnerRadius = Math.min(innerWidth, innerHeight) / 2;
-                const pupilRadius = pupilRect.width / 2;
-                
-                eye.maxTravel = Math.max(0, eyeInnerRadius - pupilRadius);
-            });
-        }
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        window.addEventListener('resize', updateEyeCenters);
-        setTimeout(updateEyeCenters, 100);
-
-        function animateEyes() {
-            eyes.forEach(eye => {
-                if (!eye.container || !eye.pupil) return;
-                const dx = mouseX - eye.centerX;
-                const dy = mouseY - eye.centerY;
-                const distanceToMouse = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distanceToMouse > 0) {
-                    const travelDistance = Math.min(distanceToMouse, eye.maxTravel);
-                    const angle = Math.atan2(dy, dx);
-                    
-                    eye.targetX = Math.cos(angle) * travelDistance;
-                    eye.targetY = Math.sin(angle) * travelDistance;
-                } else {
-                    eye.targetX = 0;
-                    eye.targetY = 0;
-                }
-
-                eye.currentX += (eye.targetX - eye.currentX) * 0.05;
-                eye.currentY += (eye.targetY - eye.currentY) * 0.05;
-
-                eye.pupil.style.transform = `translate(calc(-50% + ${eye.currentX}px), calc(-50% + ${eye.currentY}px))`;
-            });
-
-            requestAnimationFrame(animateEyes);
-        }
-
-        animateEyes();
     </script>
 </body>
 </html>
