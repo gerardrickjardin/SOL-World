@@ -28,7 +28,15 @@
     </nav>
 
     <header class="hero">
-        <img src="assets/SOL WORLD LOGO.png" alt="SOL World" class="hero-main-logo">
+        <div class="logo-container hero-main-logo-anim">
+            <img src="assets/SOL WORLS (Without Eyes).png" alt="SOL World Base" class="base-img" style="display: block; width: 100%; height: auto;">
+            <div id="sol-socket" class="socket">
+                <img src="assets/SOL DOT.png" id="sol-dot" alt="SOL dot" class="dot-img">
+            </div>
+            <div id="world-socket" class="socket">
+                <img src="assets/WORLD DOT.png" id="world-dot" alt="WORLD dot" class="dot-img">
+            </div>
+        </div>
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Potential.</h2>
     </header>
 
@@ -181,6 +189,69 @@
         }
         
         draw();
+        const lerpSpeed = 0.04;
+        const eyes = [
+            { socket: document.getElementById('sol-socket'), dot: document.getElementById('sol-dot'), centerX: 0, centerY: 0, maxTravel: 0, currentX: 0, currentY: 0, targetX: 0, targetY: 0 },
+            { socket: document.getElementById('world-socket'), dot: document.getElementById('world-dot'), centerX: 0, centerY: 0, maxTravel: 0, currentX: 0, currentY: 0, targetX: 0, targetY: 0 }
+        ];
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        function calculateBoundaries() {
+            eyes.forEach(eye => {
+                if (!eye.socket || !eye.dot) return;
+                const socketRect = eye.socket.getBoundingClientRect();
+                
+                eye.centerX = socketRect.left + socketRect.width / 2;
+                eye.centerY = socketRect.top + socketRect.height / 2;
+                
+                const dotRect = eye.dot.getBoundingClientRect();
+                
+                const socketRadius = socketRect.width / 2;
+                const dotRadius = dotRect.width / 2;
+                
+                eye.maxTravel = Math.max(0, socketRadius - dotRadius);
+            });
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        window.addEventListener('resize', calculateBoundaries);
+        window.addEventListener('load', calculateBoundaries);
+        setTimeout(calculateBoundaries, 150);
+
+        function animateEyes() {
+            eyes.forEach(eye => {
+                if (!eye.socket || !eye.dot) return;
+                const dx = mouseX - eye.centerX;
+                const dy = mouseY - eye.centerY;
+                const distanceToMouse = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distanceToMouse > 0) {
+                    const travelDistance = Math.min(distanceToMouse, eye.maxTravel);
+                    const angle = Math.atan2(dy, dx);
+                    
+                    eye.targetX = Math.cos(angle) * travelDistance;
+                    eye.targetY = Math.sin(angle) * travelDistance;
+                } else {
+                    eye.targetX = 0;
+                    eye.targetY = 0;
+                }
+
+                eye.currentX += (eye.targetX - eye.currentX) * lerpSpeed;
+                eye.currentY += (eye.targetY - eye.currentY) * lerpSpeed;
+
+                eye.dot.style.transform = `translate(calc(-50% + ${eye.currentX}px), calc(-50% + ${eye.currentY}px))`;
+            });
+
+            requestAnimationFrame(animateEyes);
+        }
+
+        animateEyes();
     </script>
 </body>
 </html>

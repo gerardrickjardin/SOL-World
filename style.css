@@ -413,3 +413,57 @@ body {
         height: 240px;
     }
 }
+
+.hero-main-logo-anim {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- ALIGNMENT CONFIGURATION --- */
+:root {
+  --sol-top: 15%;        
+  --sol-left: 20%;       
+  --sol-width: 12%;      
+  
+  --world-top: 60%;      
+  --world-left: 35%;     
+  --world-width: 12%;    
+  
+  --dot-width: 40%;      
+}
+
+.logo-container {
+  position: relative;
+  display: inline-block;
+  max-width: 600px;
+  width: 100%;
+}
+
+.socket {
+  position: absolute;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+#sol-socket {
+  top: var(--sol-top);
+  left: var(--sol-left);
+  width: var(--sol-width);
+}
+
+#world-socket {
+  top: var(--world-top);
+  left: var(--world-left);
+  width: var(--world-width);
+}
+
+.dot-img {
+  position: absolute;
+  width: var(--dot-width);
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
