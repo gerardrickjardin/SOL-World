@@ -199,6 +199,7 @@ body {
     animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     animation-delay: 0.2s;
     perspective: 1500px;
+    min-height: 420px;
 }
 
 .card:nth-child(2) { animation-delay: 0.4s; }
@@ -239,9 +240,20 @@ body {
     transition: var(--transition);
 }
 
-.card:hover .card-front, .card:hover .card-back {
+.card:hover .card-front {
     border-color: rgba(255, 255, 255, 0.15);
     background: rgba(255, 255, 255, 0.05);
+}
+
+.card-white .card-front {
+    background: #ffffff !important;
+    color: var(--bg-dark);
+    justify-content: center;
+    align-items: center;
+}
+
+.card-white .card-front h2 {
+    color: var(--bg-dark);
 }
 
 .card-back {
@@ -250,7 +262,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    background: #ffffff;
+    background: #ffffff !important;
     color: var(--bg-dark);
 }
 
