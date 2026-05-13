@@ -363,6 +363,29 @@ body {
     border-color: var(--text-main);
 }
 
+.btn-outline-dark {
+    display: inline-block;
+    width: 100%;
+    padding: 1.2rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--bg-dark);
+    border: 1px solid rgba(5, 5, 5, 0.2);
+    border-radius: 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    transition: var(--transition);
+    background: transparent;
+    margin-top: 1.5rem;
+}
+
+.btn-outline-dark:hover {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    border-color: var(--bg-dark);
+}
+
 /* FOOTER */
 .footer {
     text-align: center;
