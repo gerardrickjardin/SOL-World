@@ -28,7 +28,27 @@
     </nav>
 
     <header class="hero">
-        <img src="assets/SOL WORLD LOGO.png" alt="SOL World Logo" class="hero-main-logo-anim" style="max-width: 800px; width: 100%; height: auto; margin: 0 auto; display: block; filter: invert(1);" />
+        <div id="v4-logo" class="logo-container hero-main-logo-anim" style="display: grid; width: 100%; max-width: 800px; margin: 0 auto; cursor: default;">
+            <img src="assets/sol-world-base.png" alt="SOL World Base" style="grid-area: 1 / 1; width: 100%; height: auto; display: block; pointer-events: none; user-select: none;" />
+            
+            <div style="grid-area: 1 / 1; display: flex; flex-direction: column; width: 100%; height: 100%; pointer-events: none;">
+                <!-- SOL Dot Alignment -->
+                <div style="height: var(--sol-top, 28%);"></div>
+                <div style="display: flex; justify-content: center; align-items: center; height: 0; padding-right: calc(100% - (var(--sol-left, 50%) * 2));">
+                    <div style="width: var(--sol-width, 16%); aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center;">
+                        <div id="v4-sol" style="width: var(--dot-width, 40%); height: var(--dot-width, 40%); background-color: #ffffff; border-radius: 50%; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform;"></div>
+                    </div>
+                </div>
+
+                <!-- WORLD Dot Alignment -->
+                <div style="height: calc(var(--world-top, 73%) - var(--sol-top, 28%));"></div>
+                <div style="display: flex; justify-content: center; align-items: center; height: 0; padding-right: calc(100% - (var(--world-left, 36%) * 2));">
+                    <div style="width: var(--world-width, 16%); aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center;">
+                        <div id="v4-world" style="width: var(--dot-width, 40%); height: var(--dot-width, 40%); background-color: #050505; border-radius: 50%; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <h2 class="hero-subtitle">One World. Many Projects. Infinite Potential.</h2>
     </header>
 
@@ -47,7 +67,7 @@
         </div>
 
         <div class="card">
-            <div class="card-image" style="background-image: url('assets/sol_bite.png')"></div>
+            <div class="card-image"></div>
             <div class="card-content">
                 <div class="card-header">
                     <img src="assets/SOL BiTE.png" alt="SOL Bite Logo" class="card-logo">
@@ -58,7 +78,7 @@
         </div>
 
         <div class="card">
-            <div class="card-image" style="background-image: url('assets/sol_drive.png')"></div>
+            <div class="card-image"></div>
             <div class="card-content">
                 <div class="card-header">
                     <img src="assets/SOL DRiVE.png" alt="SOL Drive Logo" class="card-logo">
@@ -189,27 +209,22 @@ window.addEventListener('load', () => {
     if (!sDot || !wDot || !container) return;
 
     window.addEventListener('mousemove', (e) => {
-        // Calculate mouse position relative to the center of the screen
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
+        // Track relative to the logo container for localized tracking
+        const rect = container.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
         
-        // Offset normalized between -1 and 1
-        const normX = (e.clientX - centerX) / centerX;
-        const normY = (e.clientY - centerY) / centerY;
+        // Normalize offset (-1 to 1) using window half-width to scale the movement smoothly
+        const normX = (e.clientX - centerX) / (window.innerWidth / 2);
+        const normY = (e.clientY - centerY) / (window.innerHeight / 2);
         
-        // Clamp to max 12 pixels
-        const maxOffset = 12; 
-        const offsetX = normX * maxOffset;
-        const offsetY = normY * maxOffset;
+        // Clamp between -1 and 1
+        const clampX = Math.max(-1, Math.min(1, normX));
+        const clampY = Math.max(-1, Math.min(1, normY));
         
-        sDot.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-        
-        // World dot moves slightly more for parallax depth
-        const worldMaxOffset = 15;
-        const wOffsetX = normX * worldMaxOffset;
-        const wOffsetY = normY * worldMaxOffset;
-        
-        wDot.style.transform = `translate(${wOffsetX}px, ${wOffsetY}px)`;
+        // Responsive bounds using percentages (translates relative to dot's own size)
+        sDot.style.transform = `translate(${clampX * 50}%, ${clampY * 50}%)`;
+        wDot.style.transform = `translate(${clampX * 45}%, ${clampY * 45}%)`;
     });
 });
     </script>
