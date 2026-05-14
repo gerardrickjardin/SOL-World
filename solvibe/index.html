@@ -151,31 +151,15 @@
         }
 
         #hotspot-eye {
-            left: 3.5%;
-            top: 57%;
-            width: 13%;
-            height: 8%;
+            left: 35%;
+            top: 25%;
+            width: 30%;
+            height: 15%;
             border-radius: 40px;
-            transform: rotate(-5deg);
+            transform: rotate(0deg);
         }
 
-        #hotspot-beauty {
-            left: 27.5%;
-            top: 57%;
-            width: 3.5%;
-            height: 11%;
-            border-radius: 15px;
-            transform: rotate(5deg);
-        }
 
-        #hotspot-massage {
-            left: 30.5%;
-            top: 58.5%;
-            width: 3.5%;
-            height: 11%;
-            border-radius: 15px;
-            transform: rotate(20deg);
-        }
 
         #hotspot-foot {
             left: 56.5%;
@@ -245,8 +229,7 @@
 
         /* Default state for the tooltips (compensating for parent rotation) */
         #hotspot-eye .tech-tooltip { transform: translateX(-50%) translateY(15px) rotate(5deg) !important; }
-        #hotspot-beauty .tech-tooltip { transform: translateX(-50%) translateY(15px) rotate(-5deg) !important; }
-        #hotspot-massage .tech-tooltip { transform: translateX(-50%) translateY(15px) rotate(-20deg) !important; }
+
 
         /* Move the Foot Tooltip UP and LEFT into the safe zone */
         #hotspot-foot .tech-tooltip {
@@ -272,8 +255,7 @@
 
         /* Active Hover States */
         #hotspot-eye:hover .tech-tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) rotate(5deg) !important; }
-        #hotspot-beauty:hover .tech-tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) rotate(-5deg) !important; }
-        #hotspot-massage:hover .tech-tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) rotate(-20deg) !important; }
+
         #hotspot-foot:hover .tech-tooltip { opacity: 1; visibility: visible; transform: translateY(0) rotate(16deg) !important; }
 
         .hotspot:hover {
@@ -301,7 +283,7 @@
     </nav>
 
     <header class="hero-container-wrapper">
-        <video src="../assets/Joy%20Hero%20Animated.mp4" autoplay loop muted playsinline
+        <video src="../assets/NEW%20HERO%20IMAGES%20FOR%20SOL%20ViBE.mp4" autoplay loop muted playsinline
             class="hero-background-video"></video>
 
         <!-- Hotspots -->
@@ -313,21 +295,7 @@
             </div>
         </div>
 
-        <div class="hotspot" id="hotspot-beauty">
-            <div class="tech-tooltip">
-                <img src="../assets/beauty-photo.png" class="tooltip-image" alt="Beauty Instrument">
-                <h3>Beauty Instrument</h3>
-                <p>Hand-held facial care device with multisensory head and clear digital feedback.</p>
-            </div>
-        </div>
 
-        <div class="hotspot" id="hotspot-massage">
-            <div class="tech-tooltip">
-                <img src="../assets/massage-photo.png" class="tooltip-image" alt="Massage Instrument">
-                <h3>Massage Instrument</h3>
-                <p>Hand-held body care device with a three-head roller for tailored comfort.</p>
-            </div>
-        </div>
 
         <div class="hotspot" id="hotspot-foot">
             <div class="tech-tooltip">
