@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Monitor, Smartphone, Upload, X,
   GripVertical, Sparkles, Loader2, LogOut, LogIn,
   Maximize, Minimize, Frame, Wifi, Signal, Battery, RotateCcw, Hash,
-  Video
+  Video, UserPlus
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 import { cn } from '@/src/lib/utils';
@@ -2229,6 +2229,28 @@ const LoginView = () => {
             <LogIn className="mr-2" />
           )}
           Sign in with Google
+        </Button>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-neutral-100" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-neutral-400 font-bold tracking-widest">Or</span>
+          </div>
+        </div>
+
+        <Button 
+          onClick={handleLogin}
+          disabled={isLoading}
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white py-8 rounded-2xl font-bold text-lg shadow-xl shadow-orange-200 transition-all active:scale-95"
+        >
+          {isLoading ? (
+            <Loader2 className="animate-spin mr-2" />
+          ) : (
+            <UserPlus className="mr-2" />
+          )}
+          Sign up with Google
         </Button>
         
         <p className="mt-8 text-xs text-neutral-400 font-medium">
