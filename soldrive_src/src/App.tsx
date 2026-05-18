@@ -1,120 +1,101 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useState, useEffect, useRef } from 'react';
 import { 
-  Play, Pause, Mic, MessageCircle, Info, 
-  Notebook as Notes, ChevronLeft, ChevronRight, Volume2, 
-  Settings, Save, Image as ImageIcon, Type, 
-  Music, ExternalLink, Send, Plus, Trash2, Sliders,
-  LayoutDashboard, Monitor, Smartphone, Upload, X,
-  GripVertical, Sparkles, Loader2, LogOut, LogIn,
-  Maximize, Minimize, Frame, Wifi, Signal, Battery, RotateCcw, Hash,
-  Video, UserPlus
+  Play, 
+  Settings, 
+  X, 
+  ChevronRight, 
+  MessageSquare,
+  Sparkles,
+  RefreshCw,
+  MoreHorizontal,
+  ChevronDown,
+  LayoutDashboard,
+  Smartphone,
+  Plus,
+  Trash2,
+  Video,
+  ImageIcon,
+  GripVertical,
+  Sliders,
+  Monitor,
+  LogIn,
+  Loader2,
+  UserPlus
 } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
-import { cn } from '@/src/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { 
-  db, auth, storage, 
-  loginWithGoogle, logout, 
-  handleFirestoreError, OperationType 
-} from './firebase';
-import { 
-  doc, onSnapshot, setDoc, updateDoc, getDoc,
-  Timestamp 
-} from 'firebase/firestore';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { 
-  ref, 
-  uploadBytesResumable, 
-  getDownloadURL 
-} from 'firebase/storage';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  DndContext, 
+  DndContext,
   closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent
+  DragEndEvent,
 } from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  rectSortingStrategy,
-  useSortable
+  useSortable,
+  rectSortingStrategy
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { motion, AnimatePresence } from 'motion/react';
+import { cn } from "@/lib/utils";
+import { db, auth, loginWithGoogle, OperationType, handleFirestoreError } from './firebase';
+import { doc, onSnapshot, setDoc, getDoc } from 'firebase/firestore';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { GoogleGenerativeAI } from "@google/genai";
 
 // --- Types ---
 
 interface SlideData {
   id: string;
-  mediaType: 'image' | 'video' | 'gif';
   mediaUrl: string;
-  textContent: string;
+  mediaType: 'image' | 'video' | 'gif';
   slideType?: 'photo' | 'video';
-  aspectRatio?: '1:1' | '4:3' | '3:4' | '9:16' | '16:9';
-  audioUrl?: string;
+  aspectRatio?: '1:1' | '4:3' | '3:4' | '16:9' | '9:16';
+  textContent: string;
+  deeperDiveTitle?: string;
+  deeperDiveImageUrl?: string;
+  deeperDiveMediaType?: 'image' | 'video' | 'gif' | 'youtube';
+  deeperDiveContent?: string;
   voiceId?: string;
   stability?: number;
   similarityBoost?: number;
   style?: number;
   useSpeakerBoost?: boolean;
-  deeperDiveTitle?: string;
-  deeperDiveContent?: string;
-  deeperDiveImageUrl?: string;
-  deeperDiveMediaType?: 'image' | 'video' | 'gif' | 'youtube';
 }
 
 interface ContentData {
+  globalVoiceId: string;
   slides: SlideData[];
-  globalVoiceId?: string;
 }
 
 const DEFAULT_CONTENT: ContentData = {
-  globalVoiceId: 'F1QAmjRIjqM9llULermx',
+  globalVoiceId: '21m00Tcm4TlvDq8ikWAM', // Example ElevenLabs voice
   slides: [
     {
       id: 'slide-1',
+      mediaUrl: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=800&q=80',
       mediaType: 'image',
-      mediaUrl: 'https://picsum.photos/seed/cinema/800/600',
-      textContent: "The art of visual storytelling begins with understanding the relationship between light and shadow. In this module, we explore how cinematic lighting can evoke deep emotional responses from an audience.",
       slideType: 'photo',
-      aspectRatio: '4:3',
-      voiceId: 'F1QAmjRIjqM9llULermx',
-      stability: 0.5,
-      similarityBoost: 0.75,
-      style: 0.0,
-      useSpeakerBoost: true,
-      deeperDiveTitle: "Cinematic Lighting Basics",
-      deeperDiveContent: "Cinematic lighting isn't just about visibility; it's about mood. Key lighting techniques include Three-Point Lighting (Key, Fill, and Back light) which helps create depth and separation from the background.",
-      deeperDiveImageUrl: "https://picsum.photos/seed/lighting-detail/800/450",
-      deeperDiveMediaType: 'image'
-    },
-    {
-      id: 'slide-2',
-      mediaType: 'image',
-      mediaUrl: 'https://picsum.photos/seed/lighting/800/600',
-      textContent: "Notice how the high-contrast lighting in the image above creates a sense of mystery and tension. By scrolling through these notes, you'll learn the technical settings required to achieve this look.",
-      slideType: 'photo',
-      aspectRatio: '4:3',
-      voiceId: 'F1QAmjRIjqM9llULermx',
-      stability: 0.5,
-      similarityBoost: 0.75,
-      style: 0.0,
-      useSpeakerBoost: true,
-      deeperDiveTitle: "Technical Specs for High Contrast",
-      deeperDiveContent: "To achieve high-contrast (Chiaroscuro) lighting, you need a strong key light and minimal fill. Using a low ISO (100-200) and a wide aperture (f/2.8) helps isolate the subject and keep the shadows deep and clean.",
-      deeperDiveImageUrl: "https://picsum.photos/seed/tech-detail/800/450",
-      deeperDiveMediaType: 'image'
+      aspectRatio: '1:1',
+      textContent: 'Welcome to this interactive learning experience.',
+      deeperDiveTitle: 'Getting Started',
+      deeperDiveContent: 'This is where you can add more detailed information, links, and resources for users who want to dive deeper into the topic.'
     }
   ]
+};
+
+// Add Gemini config near the top
+const geminiConfig = {
+  apiKey: import.meta.env.VITE_GEMINI_API_KEY || ''
 };
 
 // --- Components ---
@@ -158,681 +139,41 @@ const MobileFrame = ({
           x: isLandscape ? 0 : 0
         }}
       >
-        {/* Android Status Bar */}
-        <div className="bg-neutral-900 text-white px-6 py-2 flex justify-between items-center z-50">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold">{time}</span>
-            <div className="flex gap-1 opacity-60">
-              <MessageCircle size={10} />
-              <Send size={10} />
-            </div>
-          </div>
+        {/* Hardware Elements */}
+        <div className="absolute top-0 inset-x-0 h-6 flex items-center justify-center z-50">
+          <div className="w-1/3 h-6 bg-neutral-900 rounded-b-3xl" />
+        </div>
+        
+        {/* iOS Status Bar */}
+        <div className="absolute top-0 inset-x-0 h-10 px-6 flex items-center justify-between z-40 text-neutral-900">
+          <span className="text-[11px] font-bold tracking-tight">{time}</span>
           <div className="flex items-center gap-1.5">
-            <Wifi size={10} className="opacity-80" />
-            <Signal size={10} className="opacity-80" />
-            <div className="flex items-center gap-0.5">
-              <span className="text-[8px] font-bold opacity-80">83%</span>
-              <Battery size={10} className="opacity-80" />
+            <div className="flex gap-0.5 items-end h-2.5">
+              <div className="w-0.5 h-1 bg-neutral-900 rounded-sm" />
+              <div className="w-0.5 h-1.5 bg-neutral-900 rounded-sm" />
+              <div className="w-0.5 h-2 bg-neutral-900 rounded-sm" />
+              <div className="w-0.5 h-2.5 bg-neutral-900 rounded-sm" />
+            </div>
+            <div className="w-3.5 h-2.5 border border-neutral-900 rounded-sm flex p-[1px] relative">
+              <div className="bg-neutral-900 w-full h-full rounded-sm" />
+              <div className="absolute -right-[2px] top-1/2 -translate-y-1/2 w-[2px] h-1 bg-neutral-900 rounded-r-sm" />
             </div>
           </div>
         </div>
 
-        {/* Camera Hole */}
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-2 h-2 bg-neutral-800 rounded-full z-[60] border border-white/10" />
-        
-        <div className="flex-1 relative overflow-hidden flex flex-col">
+        {/* Content Area */}
+        <div className={cn(
+          "flex-1 relative flex flex-col bg-white",
+          !isLandscape && "pt-12 pb-8" // Add padding only in portrait mode to account for status bar and home indicator
+        )}>
           {children}
         </div>
+
+        {/* Home Indicator */}
+        <div className="absolute bottom-2 inset-x-0 flex justify-center z-50 pointer-events-none">
+          <div className="w-1/3 h-1 bg-neutral-200 rounded-full" />
+        </div>
       </motion.div>
-    </div>
-  );
-};
-
-// --- Helpers ---
-
-const processTextForTTS = (text: string) => {
-  return text
-    .replace(/\n\n+/g, '<break time="3.0s" />')
-    .replace(/\n/g, '<break time="1.5s" />')
-    .replace(/\(pause\)/gi, '<break time="1.5s" />')
-    .replace(/\((\d+(\.\d+)?)\s*sec\)/gi, '<break time="$1s" />');
-};
-
-const createAlignmentMapping = (original: string, alignmentChars: string[]) => {
-  const mapping = new Array(alignmentChars.length);
-  let originalIdx = 0;
-  
-  // Character normalization helper
-  const normalize = (c: string) => {
-    if (!c) return '';
-    return c.replace(/[\u2018\u2019]/g, "'")
-            .replace(/[\u201C\u201D]/g, '"')
-            .replace(/\u2013|\u2014/g, "-")
-            .toLowerCase();
-  };
-
-  const tagRegex = /^(\([\d.]+\s*sec\)|\(pause\))/i;
-  
-  for (let i = 0; i < alignmentChars.length; i++) {
-    const spokenChar = normalize(alignmentChars[i]);
-    const isSpokenWhitespace = /\s/.test(spokenChar || ' ');
-
-    // 1. Skip tags and extra whitespace in original to get to potential next match
-    while (originalIdx < original.length) {
-      const remaining = original.slice(originalIdx);
-      const tagMatch = remaining.match(tagRegex);
-      if (tagMatch) {
-        originalIdx += tagMatch[0].length;
-      } else if (!isSpokenWhitespace && /\s/.test(original[originalIdx])) {
-        originalIdx++;
-      } else {
-        break;
-      }
-    }
-
-    // 2. Try to match the character
-    if (originalIdx < original.length) {
-      const originalChar = normalize(original[originalIdx]);
-      if (originalChar === spokenChar || (isSpokenWhitespace && /\s/.test(originalChar))) {
-        mapping[i] = originalIdx;
-        originalIdx++;
-      } else {
-        // Mismatch! Search ahead a bit
-        let searchAhead = 1;
-        let found = false;
-        while (searchAhead < 100 && originalIdx + searchAhead < original.length) {
-          const aheadChar = normalize(original[originalIdx + searchAhead]);
-          if (aheadChar === spokenChar || (isSpokenWhitespace && /\s/.test(aheadChar))) {
-            originalIdx += searchAhead;
-            mapping[i] = originalIdx;
-            originalIdx++;
-            found = true;
-            break;
-          }
-          searchAhead++;
-        }
-        
-        if (!found) {
-          mapping[i] = originalIdx;
-        }
-      }
-    } else {
-      mapping[i] = original.length > 0 ? original.length - 1 : 0;
-    }
-  }
-  return mapping;
-};
-
-const MediaSection = ({ 
-  type = 'image', 
-  src,
-  isLandscape = false,
-  onToggleLandscape,
-  forcedAspectRatio
-}: { 
-  type?: 'image' | 'video' | 'gif', 
-  src: string,
-  isLandscape?: boolean,
-  onToggleLandscape?: () => void,
-  forcedAspectRatio?: string
-}) => {
-  const [detectedAspectRatio, setDetectedAspectRatio] = useState<number | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasEnded, setHasEnded] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
-
-  const handleMediaLoad = (e: any) => {
-    if (type === 'video') {
-      const { videoWidth, videoHeight, duration } = e.target;
-      setDetectedAspectRatio(videoWidth / videoHeight);
-      setDuration(duration);
-    } else {
-      const { naturalWidth, naturalHeight } = e.target;
-      setDetectedAspectRatio(naturalWidth / naturalHeight);
-    }
-  };
-
-  const handleTimeUpdate = () => {
-    if (videoRef.current) {
-      setCurrentTime(videoRef.current.currentTime);
-    }
-  };
-
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const time = parseFloat(e.target.value);
-    if (videoRef.current) {
-      videoRef.current.currentTime = time;
-      setCurrentTime(time);
-    }
-  };
-
-  const togglePlay = () => {
-    if (videoRef.current) {
-      if (hasEnded) {
-        videoRef.current.currentTime = 0;
-        videoRef.current.play();
-        setIsPlaying(true);
-        setHasEnded(false);
-      } else {
-        if (isPlaying) {
-          videoRef.current.pause();
-        } else {
-          videoRef.current.play();
-        }
-        setIsPlaying(!isPlaying);
-      }
-    }
-  };
-
-  const handleVideoEnded = () => {
-    setIsPlaying(false);
-    setHasEnded(true);
-  };
-
-  const currentAspectRatio = forcedAspectRatio || detectedAspectRatio;
-  const aspectRatioValue = currentAspectRatio ? String(currentAspectRatio).replaceAll(':', '/') : 'auto';
-
-  return (
-    <div 
-      className={cn(
-        "w-full bg-neutral-900 relative group flex items-center justify-center transition-all duration-500 ease-in-out",
-        isLandscape ? "absolute inset-0 z-[100]" : "overflow-hidden"
-      )}
-      style={{ 
-        height: isLandscape ? '100%' : (currentAspectRatio ? 'auto' : '33.333%'),
-        aspectRatio: !isLandscape ? aspectRatioValue : 'auto',
-        maxHeight: isLandscape ? 'none' : '72%'
-      }}
-    >
-      <div 
-        className={cn(
-          "relative flex items-center justify-center transition-all duration-500 ease-in-out",
-          isLandscape ? "w-[211.11%] h-[100%] rotate-90" : "w-full h-full"
-        )}
-      >
-        {type === 'video' ? (
-          <div className="relative w-full h-full cursor-pointer flex items-center justify-center" onClick={togglePlay}>
-            <video 
-              ref={videoRef}
-              src={src} 
-              playsInline 
-              onLoadedMetadata={handleMediaLoad}
-              onTimeUpdate={handleTimeUpdate}
-              onEnded={handleVideoEnded}
-              className="w-full h-full object-contain"
-              referrerPolicy="no-referrer"
-            />
-            
-            {/* Video Controls Overlay */}
-            <div 
-              className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2 z-20"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center gap-3">
-                <input 
-                  type="range" 
-                  min="0" 
-                  max={duration || 0} 
-                  step="0.1" 
-                  value={currentTime} 
-                  onChange={handleSeek}
-                  className="flex-1 h-1 bg-white/30 rounded-lg appearance-none cursor-pointer accent-orange-500"
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <button 
-                    onClick={togglePlay}
-                    className="text-white hover:text-orange-500 transition-colors"
-                  >
-                    {hasEnded ? <RotateCcw size={18} /> : isPlaying ? <Pause size={18} /> : <Play size={18} />}
-                  </button>
-                  <span className="text-[10px] font-bold text-white tabular-nums">
-                    {formatTime(currentTime)} / {formatTime(duration)}
-                  </span>
-                </div>
-                {onToggleLandscape && (
-                  <button 
-                    onClick={onToggleLandscape}
-                    className="text-white hover:text-orange-500 transition-colors"
-                  >
-                    <Frame size={16} />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {hasEnded ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 transition-all z-10">
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-2xl transform hover:scale-110 transition-transform">
-                  <RotateCcw className="text-white" size={32} />
-                </div>
-              </div>
-            ) : !isPlaying && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all">
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-2xl transform group-hover:scale-110 transition-transform">
-                  <Play className="text-white fill-current ml-1" size={32} />
-                </div>
-              </div>
-            )}
-            {isPlaying && !hasEnded && (
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
-                  <Pause className="text-white fill-current" size={32} />
-                </div>
-              </div>
-            )}
-          </div>
-        ) : (
-          <img 
-            src={src} 
-            alt="Content media" 
-            onLoad={handleMediaLoad}
-            className="w-full h-full object-contain"
-            referrerPolicy="no-referrer"
-          />
-        )}
-      </div>
-
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-    </div>
-  );
-};
-
-const TextSection = ({ 
-  content, 
-  audioUrl, 
-  voiceId, 
-  stability, 
-  similarityBoost,
-  style,
-  useSpeakerBoost,
-  onNext,
-  showNext,
-  onPrev,
-  showPrev,
-  globalVoiceId
-}: { 
-  content: string, 
-  audioUrl?: string, 
-  voiceId?: string,
-  stability?: number,
-  similarityBoost?: number,
-  style?: number,
-  useSpeakerBoost?: boolean,
-  onNext?: () => void,
-  showNext?: boolean,
-  onPrev?: () => void,
-  showPrev?: boolean,
-  globalVoiceId?: string
-}) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isHQ, setIsHQ] = useState(false);
-  const [activeCharIndex, setActiveCharIndex] = useState(-1);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const alignmentRef = useRef<{ characters: string[], character_start_times_seconds: number[], character_end_times_seconds: number[] } | null>(null);
-  const mappingRef = useRef<number[]>([]);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const activeWordRef = useRef<HTMLSpanElement | null>(null);
-
-  // Split content into words while preserving spaces and tags
-  const words = content.split(/(\s+|\([\d.]+\s*sec\)|\(pause\))/gi);
-
-  // Reset audio when content changes
-  useEffect(() => {
-    if (isPlaying) {
-      if (audioRef.current) audioRef.current.pause();
-      window.speechSynthesis.cancel();
-      setIsPlaying(false);
-      setActiveCharIndex(-1);
-    }
-    audioRef.current = null;
-    alignmentRef.current = null;
-  }, [content]);
-
-  // Auto-scroll effect
-  useEffect(() => {
-    if (isPlaying && activeWordRef.current && scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const element = activeWordRef.current;
-      
-      const containerRect = container.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-      
-      const isVisible = (
-        elementRect.top >= containerRect.top + 100 &&
-        elementRect.bottom <= containerRect.bottom - 100
-      );
-      
-      if (!isVisible) {
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-      }
-    }
-  }, [activeCharIndex, isPlaying]);
-
-  const toggleAudio = async () => {
-    if (isPlaying) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      window.speechSynthesis.cancel();
-      setIsPlaying(false);
-      setActiveCharIndex(-1);
-      return;
-    }
-
-    // If a custom MP3 URL is provided in Admin, use it (no highlighting for external MP3s yet)
-    if (audioUrl) {
-      if (!audioRef.current) {
-        audioRef.current = new Audio(audioUrl);
-        audioRef.current.onended = () => setIsPlaying(false);
-      }
-      audioRef.current.play();
-      setIsPlaying(true);
-      setIsHQ(true);
-      return;
-    }
-
-    // Try ElevenLabs via our proxy
-    setIsLoading(true);
-    setIsHQ(false);
-    try {
-      const processedText = processTextForTTS(content);
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          text: processedText,
-          voiceId: voiceId || globalVoiceId,
-          stability: stability,
-          similarity_boost: similarityBoost,
-          style: style,
-          use_speaker_boost: useSpeakerBoost
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const audioBlob = await (await fetch(`data:audio/mpeg;base64,${data.audio_base64}`)).blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        
-        if (audioRef.current) {
-          audioRef.current.pause();
-        }
-        
-        const audio = new Audio(audioUrl);
-        audioRef.current = audio;
-        alignmentRef.current = data.alignment;
-        mappingRef.current = createAlignmentMapping(content, data.alignment.characters);
-
-        audio.ontimeupdate = () => {
-          if (alignmentRef.current) {
-            const currentTime = audio.currentTime;
-            const { character_start_times_seconds } = alignmentRef.current;
-            
-            // Find the character index that matches current time
-            let charIndex = -1;
-            for (let i = 0; i < character_start_times_seconds.length; i++) {
-              if (currentTime >= character_start_times_seconds[i]) {
-                charIndex = i;
-              } else {
-                break;
-              }
-            }
-            setActiveCharIndex(charIndex);
-          }
-        };
-
-        audio.onended = () => {
-          setIsPlaying(false);
-          setActiveCharIndex(-1);
-          URL.revokeObjectURL(audioUrl);
-        };
-
-        await audio.play();
-        setIsPlaying(true);
-        setIsHQ(true);
-      } else {
-        throw new Error('ElevenLabs failed');
-      }
-    } catch (error) {
-      console.warn('ElevenLabs failed, falling back to TTS:', error);
-      // Fallback to TTS with Highlighting and Pauses
-      const segments = content.split(/(\n+|\(pause\)|\([\d.]+\s*sec\))/i);
-      let currentSegmentIndex = 0;
-      let charOffset = 0;
-
-      const playNextSegment = () => {
-        if (currentSegmentIndex >= segments.length) {
-          setIsPlaying(false);
-          setActiveCharIndex(-1);
-          return;
-        }
-
-        const segment = segments[currentSegmentIndex];
-        const pauseMatch = segment.match(/\(([\d.]+)\s*sec\)/i);
-        
-        if (segment.startsWith('\n') || segment.toLowerCase() === '(pause)' || pauseMatch) {
-          // It's a pause
-          let pauseDuration = 1500;
-          if (pauseMatch) {
-            pauseDuration = parseFloat(pauseMatch[1]) * 1000;
-          } else if (segment.length > 1 && segment.startsWith('\n')) {
-            pauseDuration = 3000;
-          }
-          
-          setTimeout(() => {
-            charOffset += segment.length;
-            currentSegmentIndex++;
-            playNextSegment();
-          }, pauseDuration);
-        } else {
-          const utterance = new SpeechSynthesisUtterance(segment);
-          utterance.onboundary = (event) => {
-            if (event.name === 'word') {
-              setActiveCharIndex(charOffset + event.charIndex);
-            }
-          };
-          utterance.onend = () => {
-            charOffset += segment.length;
-            currentSegmentIndex++;
-            playNextSegment();
-          };
-          window.speechSynthesis.speak(utterance);
-        }
-      };
-      
-      playNextSegment();
-      setIsPlaying(true);
-      setIsHQ(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis.cancel();
-      audioRef.current?.pause();
-    };
-  }, []);
-
-  // Helper to render words with highlighting
-  const renderHighlightedText = () => {
-    let charCount = 0;
-    const mappedActiveIndex = (alignmentRef.current && activeCharIndex !== -1 && mappingRef.current && mappingRef.current[activeCharIndex] !== undefined) 
-      ? mappingRef.current[activeCharIndex] 
-      : activeCharIndex;
-
-    return words.map((word, index) => {
-      const isTag = word.toLowerCase() === '(pause)' || /^\([\d.]+\s*sec\)$/i.test(word);
-      const isHighlighted = mappedActiveIndex >= charCount && mappedActiveIndex < charCount + word.length && word.trim().length > 0;
-      charCount += word.length;
-      
-      if (isTag) return null;
-
-      return (
-        <span 
-          key={index} 
-          ref={isHighlighted ? activeWordRef : null}
-          className={cn(
-            "transition-colors duration-150 rounded-sm px-0.5 whitespace-pre-wrap",
-            isHighlighted ? "bg-sky-200 text-sky-950 shadow-[0_0_0_2px_rgba(186,230,253,0.5)]" : ""
-          )}
-        >
-          {word}
-        </span>
-      );
-    });
-  };
-
-  return (
-    <div className="flex-1 overflow-hidden flex flex-col bg-white">
-      <div className="px-6 py-3 flex justify-between items-center border-b border-neutral-100">
-        <div className="flex items-center gap-2">
-          <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400">Text</h2>
-          {isHQ && (
-            <div className="flex items-center gap-1 bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full text-[10px] font-bold animate-pulse">
-              <Volume2 size={10} />
-              HQ AUDIO
-            </div>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          {showPrev && (
-            <button 
-              onClick={onPrev}
-              className="p-2 bg-neutral-100 text-neutral-600 rounded-full hover:bg-neutral-200 transition-all active:scale-95 shadow-sm"
-            >
-              <ChevronLeft size={18} />
-            </button>
-          )}
-          
-          <button 
-            onClick={toggleAudio}
-            disabled={isLoading}
-            className={cn(
-              "p-2 rounded-full transition-all active:scale-95 disabled:opacity-50",
-              isPlaying ? "bg-orange-500 text-white shadow-lg shadow-orange-200" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
-            )}
-          >
-            {isLoading ? (
-              <div className="w-[18px] h-[18px] border-2 border-neutral-400 border-t-transparent rounded-full animate-spin" />
-            ) : isPlaying ? (
-              <Volume2 size={18} className="animate-pulse" />
-            ) : (
-              <Volume2 size={18} />
-            )}
-          </button>
-          
-          {showNext && (
-            <button 
-              onClick={onNext}
-              className="p-2 bg-neutral-900 text-white rounded-full hover:bg-neutral-800 transition-all active:scale-95 shadow-md"
-            >
-              <ChevronRight size={18} />
-            </button>
-          )}
-        </div>
-      </div>
-      <div 
-        ref={scrollContainerRef}
-        className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar scroll-smooth"
-      >
-        <div className="text-neutral-800 leading-relaxed text-lg font-medium">
-          {renderHighlightedText()}
-        </div>
-        <div className="h-20" />
-      </div>
-    </div>
-  );
-};
-
-const BottomNav = ({ activeTab, onTabChange }: { activeTab: string, onTabChange: (tab: string) => void }) => {
-  const tabs = [
-    { id: 'notes', label: 'Notes', icon: Notes },
-    { id: 'more', label: 'More', icon: Info },
-    { id: 'connect', label: 'Connect', icon: MessageCircle },
-  ];
-
-  return (
-    <div className="bg-white border-t border-neutral-100 px-6 py-2 flex justify-between items-center">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          onClick={() => onTabChange(tab.id)}
-          className={cn(
-            "flex flex-col items-center gap-1 transition-colors",
-            activeTab === tab.id ? "text-orange-500" : "text-neutral-400 hover:text-neutral-600"
-          )}
-        >
-          <tab.icon size={20} />
-          <span className="text-[10px] font-bold uppercase tracking-tighter">{tab.label}</span>
-        </button>
-      ))}
-    </div>
-  );
-};
-
-// --- Views ---
-
-const LessonHeader = ({ 
-  current, 
-  total, 
-  onLogout, 
-  onToggleLandscape 
-}: { 
-  current: number, 
-  total: number, 
-  onLogout: () => void,
-  onToggleLandscape: () => void
-}) => {
-  const progress = ((current + 1) / total) * 100;
-
-  return (
-    <div className="bg-white border-b border-neutral-100 px-6 py-1.5 flex items-center justify-between z-[110] shadow-sm relative">
-      {/* Logout Button (Left) */}
-      <button 
-        onClick={onLogout}
-        className="p-2 text-neutral-400 hover:text-neutral-900 transition-colors active:scale-90 flex items-center gap-1"
-        title="Logout"
-      >
-        <LogOut size={18} strokeWidth={2.5} />
-      </button>
-
-      {/* Progress Bar (Center) */}
-      <div className="flex-1 max-w-[150px] mx-4">
-        <div className="h-2 bg-white rounded-full border-1.5 border-neutral-200 p-[1px] relative overflow-hidden">
-          <motion.div 
-            className="h-full bg-neutral-900 rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5, ease: "circOut" }}
-          />
-        </div>
-      </div>
-
-      {/* Landscape Toggle (Right) */}
-      <button 
-        onClick={onToggleLandscape}
-        className="p-2 text-neutral-400 hover:text-orange-500 transition-colors active:scale-90"
-        title="Landscape View"
-      >
-        <Frame size={18} strokeWidth={2} />
-      </button>
     </div>
   );
 };
@@ -847,340 +188,415 @@ const LessonView = ({
   setCurrentSlideIndex
 }: { 
   content: ContentData, 
-  onNavigate: (view: string) => void, 
+  onNavigate: (view: string) => void,
   user: User | null,
   isLandscape: boolean,
   onToggleLandscape: () => void,
   currentSlideIndex: number,
-  setCurrentSlideIndex: React.Dispatch<React.SetStateAction<number>>
+  setCurrentSlideIndex: (index: number) => void
 }) => {
-  const currentSlide = content.slides[currentSlideIndex];
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [showFullText, setShowFullText] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  const nextSlide = () => {
+  const slide = content.slides[currentSlideIndex];
+  const isVideo = slide?.mediaType === 'video';
+  const isPhoto = slide?.slideType === 'photo';
+
+  const getAspectRatioClass = () => {
+    if (!slide) return 'aspect-square';
+    if (slide.slideType === 'video') return 'aspect-[9/16]'; // Video is always full bleed
+    
+    switch (slide.aspectRatio) {
+      case '4:3': return 'aspect-[4/3]';
+      case '3:4': return 'aspect-[3/4]';
+      case '16:9': return 'aspect-video';
+      case '9:16': return 'aspect-[9/16]';
+      case '1:1': 
+      default: return 'aspect-square';
+    }
+  };
+
+  useEffect(() => {
+    setAudioUrl(null);
+    setIsPlaying(false);
+    setShowFullText(false);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.pause();
+    }
+  }, [currentSlideIndex]);
+
+  const generateAudio = async () => {
+    if (!slide) return;
+    setIsGeneratingAudio(true);
+    
+    try {
+      const voiceId = slide.voiceId || content.globalVoiceId;
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'xi-api-key': import.meta.env.VITE_ELEVENLABS_API_KEY
+        },
+        body: JSON.stringify({
+          text: slide.textContent,
+          model_id: "eleven_monolingual_v1",
+          voice_settings: {
+            stability: slide.stability || 0.5,
+            similarity_boost: slide.similarityBoost || 0.75,
+            style: slide.style || 0.0,
+            use_speaker_boost: slide.useSpeakerBoost !== false
+          }
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to generate audio');
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setAudioUrl(url);
+      setIsPlaying(true);
+      if (videoRef.current) videoRef.current.play();
+    } catch (error) {
+      console.error("Error generating audio:", error);
+      // Fallback
+      setIsPlaying(true);
+      if (videoRef.current) videoRef.current.play();
+    } finally {
+      setIsGeneratingAudio(false);
+    }
+  };
+
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+      audioRef.current?.pause();
+      videoRef.current?.pause();
+    } else {
+      if (!audioUrl && slide) {
+        generateAudio();
+      } else {
+        setIsPlaying(true);
+        audioRef.current?.play();
+        videoRef.current?.play();
+      }
+    }
+  };
+
+  const handleNext = () => {
     if (currentSlideIndex < content.slides.length - 1) {
-      setCurrentSlideIndex(prev => prev + 1);
-      if (isLandscape) onToggleLandscape();
+      setCurrentSlideIndex(currentSlideIndex + 1);
+    } else {
+      // End of story
+      setCurrentSlideIndex(0); // Loop for now
     }
   };
 
-  const prevSlide = () => {
+  const handlePrev = () => {
     if (currentSlideIndex > 0) {
-      setCurrentSlideIndex(prev => prev - 1);
-      if (isLandscape) onToggleLandscape();
+      setCurrentSlideIndex(currentSlideIndex - 1);
     }
   };
 
-  return (
-    <div className="flex flex-col h-full relative">
-      <LessonHeader 
-        current={currentSlideIndex}
-        total={content.slides.length}
-        onLogout={() => logout()}
-        onToggleLandscape={onToggleLandscape}
-      />
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentSlideIndex}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
-          className="flex flex-col flex-1 overflow-hidden"
-          drag={isLandscape ? false : "x"}
-          dragConstraints={{ left: 0, right: 0 }}
-          onDragEnd={(_, info) => {
-            if (info.offset.x < -50) nextSlide();
-            if (info.offset.x > 50) prevSlide();
-          }}
+  if (!slide) return null;
+
+  if (isLandscape) {
+    return (
+      <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center z-[100]">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="absolute top-6 left-6 z-50 text-white/50 hover:text-white bg-black/20 hover:bg-black/40 rounded-full"
+          onClick={onToggleLandscape}
         >
-          <MediaSection 
-            type={currentSlide.mediaType} 
-            src={currentSlide.mediaUrl} 
-            isLandscape={isLandscape}
-            onToggleLandscape={onToggleLandscape}
-            forcedAspectRatio={currentSlide.aspectRatio}
+          <X size={24} />
+        </Button>
+        {isVideo ? (
+          <video 
+            ref={videoRef}
+            src={slide.mediaUrl} 
+            className="w-full h-full object-cover"
+            playsInline
+            loop
           />
-          
-          {!isLandscape && (
-            <>
-              <TextSection 
-                content={currentSlide.textContent} 
-                audioUrl={currentSlide.audioUrl} 
-                voiceId={currentSlide.voiceId}
-                stability={currentSlide.stability}
-                similarityBoost={currentSlide.similarityBoost}
-                style={currentSlide.style}
-                useSpeakerBoost={currentSlide.useSpeakerBoost}
-                onNext={() => {
-                  if (currentSlideIndex < content.slides.length - 1) {
-                    nextSlide();
-                  } else {
-                    setCurrentSlideIndex(0);
-                    if (isLandscape) onToggleLandscape();
-                  }
-                }}
-                showNext={content.slides.length > 1}
-                onPrev={() => {
-                  if (currentSlideIndex > 0) {
-                    prevSlide();
-                  } else {
-                    setCurrentSlideIndex(content.slides.length - 1);
-                    if (isLandscape) onToggleLandscape();
-                  }
-                }}
-                showPrev={content.slides.length > 1}
-                globalVoiceId={content.globalVoiceId}
-              />
-            </>
-          )}
-        </motion.div>
-      </AnimatePresence>
-      {!isLandscape && <BottomNav activeTab="lesson" onTabChange={onNavigate} />}
-    </div>
-  );
-};
-
-const SubView = ({ 
-  title, 
-  children, 
-  onBack,
-  onToggleLandscape,
-  isLandscape,
-  current,
-  total
-}: { 
-  title: string, 
-  children: React.ReactNode, 
-  onBack: () => void,
-  onToggleLandscape?: () => void,
-  isLandscape?: boolean,
-  current?: number,
-  total?: number
-}) => {
-  const progress = current !== undefined && total !== undefined ? ((current + 1) / total) * 100 : 0;
+        ) : (
+          <img 
+            src={slide.mediaUrl} 
+            alt="Content" 
+            className="w-full h-full object-contain"
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
-    <motion.div 
-      initial={{ x: '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: '100%' }}
-      transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-      className={cn(
-        "absolute inset-0 bg-white flex flex-col pt-8",
-        isLandscape ? "z-[200]" : "z-40"
-      )}
-    >
-      <div className={cn(
-        "p-6 flex items-center justify-between border-b border-neutral-100 relative bg-white",
-        isLandscape ? "z-[210] py-4" : "z-10"
-      )}>
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="p-2 hover:bg-neutral-100 rounded-full transition-colors">
-            <ChevronLeft size={24} />
-          </button>
-          {!isLandscape && <h1 className="text-xl font-bold text-neutral-900">{title}</h1>}
+    <div className="h-full flex flex-col bg-white overflow-hidden relative">
+      {/* Dynamic Header */}
+      <div className="absolute top-0 inset-x-0 p-6 z-20 flex justify-between items-start pointer-events-none">
+        <div className="flex gap-2 pointer-events-auto">
+          {content.slides.map((_, idx) => (
+            <div 
+              key={idx} 
+              className={cn(
+                "h-1.5 rounded-full transition-all duration-300 backdrop-blur-sm",
+                idx === currentSlideIndex 
+                  ? "w-8 bg-white/90 shadow-sm" 
+                  : idx < currentSlideIndex
+                    ? "w-4 bg-white/60"
+                    : "w-2 bg-black/20"
+              )}
+            />
+          ))}
         </div>
-
-        {isLandscape && current !== undefined && total !== undefined && (
-          <div className="flex-1 max-w-[180px] mx-4">
-            <div className="h-3 bg-white rounded-full border-2 border-neutral-200 p-[2px] relative overflow-hidden">
-              <motion.div 
-                className="h-full bg-neutral-900 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.5, ease: "circOut" }}
-              />
-            </div>
+        {user && (
+          <div className="flex items-center gap-2 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm pointer-events-auto">
+            <span className="text-[10px] font-bold text-neutral-600 truncate max-w-[80px]">
+              {user.displayName?.split(' ')[0] || user.email?.split('@')[0]}
+            </span>
+            {user.photoURL ? (
+              <img src={user.photoURL} alt="Profile" className="w-5 h-5 rounded-full" />
+            ) : (
+              <div className="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center">
+                <span className="text-[8px] font-bold text-orange-600">
+                  {user.displayName?.[0] || user.email?.[0] || '?'}
+                </span>
+              </div>
+            )}
           </div>
         )}
+      </div>
 
-        {onToggleLandscape && (
-          <button 
-            onClick={onToggleLandscape}
-            className={cn(
-              "p-2 rounded-full transition-all active:scale-95",
-              isLandscape ? "bg-orange-500 text-white shadow-lg" : "bg-neutral-100 text-neutral-400 hover:bg-neutral-200"
+      {/* Media Section */}
+      <div className="relative w-full bg-neutral-100 flex-shrink-0 group">
+        <div className={cn(
+          "w-full overflow-hidden flex items-center justify-center transition-all duration-500",
+          getAspectRatioClass()
+        )}>
+          {isVideo ? (
+            <video 
+              ref={videoRef}
+              src={slide.mediaUrl} 
+              className="w-full h-full object-cover"
+              playsInline
+              loop
+            />
+          ) : (
+            <img 
+              src={slide.mediaUrl} 
+              alt="Content" 
+              className="w-full h-full object-cover"
+            />
+          )}
+          
+          {/* Media Overlay Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/20 pointer-events-none" />
+          
+          {/* Main Play Button Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <AnimatePresence>
+              {!isPlaying && !isGeneratingAudio && (
+                <motion.button 
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  onClick={handlePlayPause}
+                  className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all pointer-events-auto shadow-2xl border border-white/30"
+                >
+                  <Play size={32} className="ml-2 fill-current" />
+                </motion.button>
+              )}
+              {isGeneratingAudio && (
+                <motion.div 
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-2xl border border-white/30"
+                >
+                  <RefreshCw className="animate-spin" size={32} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="flex-1 flex flex-col bg-white relative -mt-6 rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.12)] z-10">
+        
+        {/* Navigation Overlays (Invisible click areas) */}
+        <div className="absolute inset-y-0 left-0 w-1/4 z-20" onClick={handlePrev} />
+        <div className="absolute inset-y-0 right-0 w-1/4 z-20" onClick={handleNext} />
+
+        {/* Text Content */}
+        <div className="p-8 pb-4 relative z-30 pointer-events-none">
+          <div className={cn(
+            "relative",
+            !showFullText && "max-h-[160px] overflow-hidden"
+          )}>
+            <p className="text-xl leading-relaxed text-neutral-800 font-medium">
+              {slide.textContent}
+            </p>
+            {!showFullText && slide.textContent.length > 150 && (
+              <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-white to-transparent" />
             )}
-          >
-            {isLandscape ? <RotateCcw size={20} /> : <Hash size={20} />}
-          </button>
+          </div>
+          
+          {slide.textContent.length > 150 && (
+            <button 
+              onClick={() => setShowFullText(!showFullText)}
+              className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider mt-2 hover:text-neutral-600 transition-colors pointer-events-auto flex items-center gap-1"
+            >
+              {showFullText ? 'Show Less' : 'Read More'}
+              <ChevronDown size={14} className={cn("transition-transform", showFullText && "rotate-180")} />
+            </button>
+          )}
+        </div>
+
+        {/* Bottom Actions Bar */}
+        <div className="mt-auto p-6 flex flex-col gap-4 relative z-30 pointer-events-none">
+          {/* Contextual Actions */}
+          <div className="flex gap-2 w-full pointer-events-auto">
+            {slide.deeperDiveTitle && (
+              <Button 
+                onClick={(e) => { e.stopPropagation(); onNavigate('more'); }}
+                className="flex-1 bg-neutral-900 text-white rounded-2xl h-14 font-bold text-sm shadow-xl shadow-neutral-200 hover:scale-[1.02] transition-transform active:scale-95"
+              >
+                <Sparkles className="mr-2 h-5 w-5 text-orange-400" />
+                {slide.deeperDiveTitle}
+              </Button>
+            )}
+          </div>
+          
+          {/* Navigation/Tools */}
+          <div className="flex items-center justify-between pointer-events-auto">
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={(e) => { e.stopPropagation(); onNavigate('notes'); }}
+                className="rounded-full h-12 w-12 border-neutral-200 text-neutral-600 shadow-sm"
+              >
+                <MessageSquare size={20} />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={(e) => { e.stopPropagation(); onNavigate('connect'); }}
+                className="rounded-full h-12 w-12 border-neutral-200 text-neutral-600 shadow-sm"
+              >
+                <MoreHorizontal size={20} />
+              </Button>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <span className="text-[10px] font-bold uppercase text-neutral-400 tracking-widest">
+                {currentSlideIndex + 1} of {content.slides.length}
+              </span>
+              <Button 
+                onClick={handleNext}
+                className="rounded-full h-12 w-12 bg-orange-50 text-orange-600 hover:bg-orange-100"
+              >
+                <ChevronRight size={24} />
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {audioUrl && (
+          <audio 
+            ref={audioRef} 
+            src={audioUrl} 
+            onEnded={() => setIsPlaying(false)}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            className="hidden" 
+          />
         )}
       </div>
-      <div className="flex-1 overflow-y-auto p-6 relative">
-        {children}
-      </div>
-    </motion.div>
+    </div>
   );
 };
 
 const NotesView = ({ onBack, user }: { onBack: () => void, user: User | null }) => {
   const [note, setNote] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
-  const [isCleaning, setIsCleaning] = useState(false);
-  const recognitionRef = useRef<any>(null);
-  
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedStatus, setSavedStatus] = useState<'idle' | 'saved'>('idle');
+
   useEffect(() => {
     if (!user) return;
-
-    const path = `users/${user.uid}/notes/main`;
-    const unsubscribe = onSnapshot(doc(db, path), (docSnap) => {
+    const loadNote = async () => {
+      const docRef = doc(db, `users/${user.uid}/notes/main`);
+      const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setNote(docSnap.data().content || '');
       }
-    }, (error) => {
-      handleFirestoreError(error, OperationType.GET, path);
-    });
-
-    return () => unsubscribe();
+    };
+    loadNote();
   }, [user]);
 
-  const saveNote = async (newContent: string) => {
+  const handleSave = async () => {
     if (!user) return;
-    const path = `users/${user.uid}/notes/main`;
+    setIsSaving(true);
     try {
-      await setDoc(doc(db, path), {
-        content: newContent,
+      await setDoc(doc(db, `users/${user.uid}/notes/main`), {
+        content: note,
         updatedAt: new Date().toISOString()
       });
+      setSavedStatus('saved');
+      setTimeout(() => setSavedStatus('idle'), 2000);
     } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, path);
-    }
-  };
-
-  const toggleRecording = () => {
-    if (isRecording) {
-      recognitionRef.current?.stop();
-      setIsRecording(false);
-      return;
-    }
-
-    // @ts-ignore
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("Speech recognition is not supported in this browser. Try using Chrome.");
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    recognition.continuous = true;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-
-    recognition.onstart = () => {
-      setIsRecording(true);
-    };
-
-    recognition.onresult = (event: any) => {
-      const transcript = event.results[event.results.length - 1][0].transcript;
-      const updatedNote = note + (note ? " " : "") + transcript;
-      setNote(updatedNote);
-      saveNote(updatedNote);
-    };
-
-    recognition.onerror = (event: any) => {
-      console.error("Speech recognition error:", event.error);
-      setIsRecording(false);
-    };
-
-    recognition.onend = () => {
-      setIsRecording(false);
-    };
-
-    try {
-      recognition.start();
-    } catch (err) {
-      console.error("Failed to start recognition:", err);
-      setIsRecording(false);
-    }
-  };
-
-  const handleCleanup = async () => {
-    if (!note.trim()) return;
-    
-    setIsCleaning(true);
-    try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: `Clean up and organize these rambling notes. 
-        Follow this EXACT format:
-        1. A short, one-sentence summary of the main point.
-        2. A few bullet point highlights of the key details.
-        
-        Keep it professional and "tw" (tight and well-written). Do not provide multiple options or meta-commentary, just the final cleaned-up text.
-        
-        Notes:
-        ${note}`,
-      });
-
-      if (response.text) {
-        setNote(response.text);
-        saveNote(response.text);
-      }
-    } catch (error) {
-      console.error("AI Cleanup failed:", error);
+      console.error("Failed to save note:", error);
     } finally {
-      setIsCleaning(false);
+      setIsSaving(false);
     }
   };
 
   return (
-    <SubView title="My Notes" onBack={onBack}>
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-sm text-neutral-500 italic">Capture your "Aha!" moments here.</p>
-        <button 
-          onClick={onBack}
-          className="p-2 bg-neutral-100 text-neutral-600 rounded-full hover:bg-neutral-200 transition-all active:scale-95 shadow-sm"
-          title="Back to Lesson"
-        >
-          <ChevronLeft size={20} />
-        </button>
-      </div>
-      <div className="relative">
-        <textarea 
-          value={note}
-          onChange={(e) => {
-            setNote(e.target.value);
-            saveNote(e.target.value);
-          }}
-          placeholder="Start typing or tap the mic..."
-          className="w-full h-80 p-4 bg-neutral-50 rounded-2xl border-none focus:ring-2 focus:ring-orange-500 transition-all resize-none text-neutral-800 font-medium leading-relaxed"
-        />
-        {isCleaning && (
-          <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] rounded-2xl flex items-center justify-center z-10">
-            <div className="flex flex-col items-center gap-2">
-              <Loader2 className="animate-spin text-orange-500" size={32} />
-              <span className="text-xs font-bold text-orange-600 uppercase tracking-widest">AI Polishing...</span>
-            </div>
-          </div>
-        )}
+    <motion.div 
+      initial={{ y: "100%" }}
+      animate={{ y: 0 }}
+      exit={{ y: "100%" }}
+      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+      className="absolute inset-0 bg-white z-50 flex flex-col"
+    >
+      <div className="flex items-center justify-between p-6 pb-2">
+        <div>
+          <h2 className="text-xl font-bold text-neutral-900">Your Journal</h2>
+          <p className="text-xs text-neutral-500 font-medium mt-1">Private space for your thoughts</p>
+        </div>
+        <Button variant="ghost" size="icon" onClick={onBack} className="rounded-full bg-neutral-100 text-neutral-600 hover:bg-neutral-200">
+          <ChevronDown size={20} />
+        </Button>
       </div>
       
-      <div className="mt-6 flex items-center gap-3">
-        <button 
-          onClick={toggleRecording}
-          className={cn(
-            "flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-bold text-sm transition-all shadow-md active:scale-95",
-            isRecording 
-              ? "bg-red-500 text-white animate-pulse" 
-              : "bg-neutral-900 text-white hover:bg-neutral-800"
-          )}
-        >
-          <Mic size={18} className={isRecording ? "animate-bounce" : ""} />
-          {isRecording ? "Listening..." : "Voice Note"}
-        </button>
-
-        <button 
-          onClick={handleCleanup}
-          disabled={isCleaning || !note.trim()}
-          className="flex-1 flex items-center justify-center gap-2 bg-orange-500 text-white px-6 py-4 rounded-2xl font-bold text-sm hover:bg-orange-600 transition-all shadow-md shadow-orange-100 disabled:opacity-50 disabled:shadow-none active:scale-95"
-        >
-          <Sparkles size={18} />
-          Clean Up
-        </button>
+      <div className="flex-1 p-6 pt-2 flex flex-col relative">
+        <Textarea 
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="What's on your mind? Capture your insights here..."
+          className="flex-1 resize-none bg-neutral-50 border-none rounded-3xl p-6 text-base leading-relaxed text-neutral-700 focus-visible:ring-1 focus-visible:ring-neutral-200 focus-visible:bg-white transition-colors"
+        />
+        
+        <div className="absolute bottom-10 right-10">
+          <Button 
+            onClick={handleSave} 
+            disabled={isSaving}
+            className={cn(
+              "rounded-full px-6 py-6 shadow-xl font-bold transition-all",
+              savedStatus === 'saved' ? "bg-green-500 hover:bg-green-600" : "bg-neutral-900 hover:bg-neutral-800"
+            )}
+          >
+            {isSaving ? <RefreshCw className="animate-spin mr-2 h-4 w-4" /> : null}
+            {savedStatus === 'saved' ? 'Saved!' : 'Save Entry'}
+          </Button>
+        </div>
       </div>
-    </SubView>
+    </motion.div>
   );
 };
 
@@ -1194,408 +610,520 @@ const MoreView = ({
   totalSlides
 }: { 
   onBack: () => void, 
-  slide?: SlideData,
+  slide: SlideData,
   isLandscape: boolean,
   onToggleLandscape: () => void,
-  globalVoiceId?: string,
-  currentSlideIndex?: number,
-  totalSlides?: number
+  globalVoiceId: string,
+  currentSlideIndex: number,
+  totalSlides: number
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [activeTab, setActiveTab] = useState<'content' | 'chat'>('content');
+  const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
+  const [chatInput, setChatInput] = useState('');
+  const [isChatLoading, setIsChatLoading] = useState(false);
+  
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
 
-  const getYouTubeId = (url: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const isVideo = slide.deeperDiveMediaType === 'video';
+  const isYoutube = slide.deeperDiveMediaType === 'youtube';
+
+  const getYoutubeVideoId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  const toggleAudio = async () => {
-    if (!slide?.deeperDiveContent) return;
+  const handleChatSubmit = async () => {
+    if (!chatInput.trim() || !geminiConfig.apiKey) return;
 
-    if (isPlaying) {
-      if (audioRef.current) audioRef.current.pause();
-      window.speechSynthesis.cancel();
-      setIsPlaying(false);
-      return;
-    }
+    const newUserMsg = chatInput.trim();
+    setChatInput('');
+    setChatMessages(prev => [...prev, { role: 'user', content: newUserMsg }]);
+    setIsChatLoading(true);
 
-    setIsLoading(true);
     try {
-      const processedText = processTextForTTS(slide.deeperDiveContent);
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          text: processedText,
-          voiceId: slide.voiceId || globalVoiceId,
-          stability: slide.stability,
-          similarity_boost: slide.similarityBoost,
-          style: slide.style,
-          use_speaker_boost: slide.useSpeakerBoost
-        }),
-      });
+      const genAI = new GoogleGenerativeAI(geminiConfig.apiKey);
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-      if (response.ok) {
-        const data = await response.json();
-        const audioBlob = await (await fetch(`data:audio/mpeg;base64,${data.audio_base64}`)).blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        
-        if (audioRef.current) audioRef.current.pause();
-        const audio = new Audio(audioUrl);
-        audioRef.current = audio;
-        audio.onended = () => {
-          setIsPlaying(false);
-          URL.revokeObjectURL(audioUrl);
-        };
-        await audio.play();
-        setIsPlaying(true);
-      } else {
-        throw new Error('ElevenLabs failed');
-      }
-    } catch (error) {
-      console.warn('ElevenLabs failed, falling back to TTS:', error);
-      // Fallback with pauses
-      const segments = slide.deeperDiveContent.split(/(\n+|\(pause\)|\([\d.]+\s*sec\))/i);
-      let currentSegmentIndex = 0;
-
-      const playNextSegment = () => {
-        if (currentSegmentIndex >= segments.length) {
-          setIsPlaying(false);
-          return;
-        }
-
-        const segment = segments[currentSegmentIndex];
-        const pauseMatch = segment.match(/\(([\d.]+)\s*sec\)/i);
-
-        if (segment.startsWith('\n') || segment.toLowerCase() === '(pause)' || pauseMatch) {
-          let pauseDuration = 1500;
-          if (pauseMatch) {
-            pauseDuration = parseFloat(pauseMatch[1]) * 1000;
-          } else if (segment.length > 1 && segment.startsWith('\n')) {
-            pauseDuration = 3000;
-          }
-          
-          setTimeout(() => {
-            currentSegmentIndex++;
-            playNextSegment();
-          }, pauseDuration);
-        } else {
-          const utterance = new SpeechSynthesisUtterance(segment);
-          utterance.onend = () => {
-            currentSegmentIndex++;
-            playNextSegment();
-          };
-          window.speechSynthesis.speak(utterance);
-        }
-      };
+      const prompt = `You are a helpful, encouraging assistant for an interactive learning app called SOL DRiVE. 
+      The user is currently viewing a section titled "${slide.deeperDiveTitle || 'Deeper Dive'}".
+      Context from this section: "${slide.deeperDiveContent || 'No context provided.'}"
       
-      playNextSegment();
-      setIsPlaying(true);
+      User's question: "${newUserMsg}"
+      
+      Please provide a concise, helpful answer based on the context provided. If the answer isn't in the context, give a general helpful response related to the topic. Keep the tone friendly and supportive.`;
+
+      const result = await model.generateContent(prompt);
+      const responseText = result.response.text();
+      
+      setChatMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
+    } catch (error) {
+      console.error("Error calling Gemini:", error);
+      setChatMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: "Sorry, I'm having trouble thinking right now. Please try again later!" 
+      }]);
     } finally {
-      setIsLoading(false);
+      setIsChatLoading(false);
     }
   };
 
   useEffect(() => {
+    if (chatScrollRef.current) {
+      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+    }
+  }, [chatMessages, isChatLoading]);
+
+  // Clean up audio on unmount or slide change
+  useEffect(() => {
     return () => {
-      window.speechSynthesis.cancel();
-      audioRef.current?.pause();
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
     };
-  }, []);
+  }, [slide.id, audioUrl]);
 
-  const renderMedia = () => {
-    if (!slide?.deeperDiveImageUrl) return null;
+  const generateAudio = async () => {
+    if (!slide.deeperDiveContent) return;
+    setIsGeneratingAudio(true);
+    
+    try {
+      const voiceId = slide.voiceId || globalVoiceId;
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'xi-api-key': import.meta.env.VITE_ELEVENLABS_API_KEY
+        },
+        body: JSON.stringify({
+          text: slide.deeperDiveContent,
+          model_id: "eleven_monolingual_v1",
+          voice_settings: {
+            stability: slide.stability || 0.5,
+            similarity_boost: slide.similarityBoost || 0.75,
+            style: slide.style || 0.0,
+            use_speaker_boost: slide.useSpeakerBoost !== false
+          }
+        })
+      });
 
-    return (
-      <div className={cn(
-        "bg-neutral-100 rounded-2xl overflow-hidden relative group",
-        isLandscape ? "absolute inset-0 z-[100] rounded-none bg-black" : "aspect-video"
-      )}>
-        <div className={cn(
-          "w-full h-full flex items-center justify-center",
-          isLandscape && "rotate-90 scale-[1.77]"
-        )}>
-          {slide.deeperDiveMediaType === 'youtube' ? (
-            <iframe
-              className="w-full h-full"
-              src={`https://www.youtube.com/embed/${getYouTubeId(slide.deeperDiveImageUrl)}`}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : slide.deeperDiveMediaType === 'video' ? (
-            <video 
-              src={slide.deeperDiveImageUrl} 
-              controls={!isLandscape}
-              className="w-full h-full object-contain"
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            <img 
-              src={slide.deeperDiveImageUrl} 
-              alt="Detail" 
-              className="w-full h-full object-contain" 
-              referrerPolicy="no-referrer" 
-            />
-          )}
-        </div>
-      </div>
-    );
+      if (!response.ok) throw new Error('Failed to generate audio');
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setAudioUrl(url);
+      setIsPlaying(true);
+      if (videoRef.current) videoRef.current.play();
+    } catch (error) {
+      console.error("Error generating audio:", error);
+      setIsPlaying(true); // Fallback to just playing video if audio fails
+      if (videoRef.current) videoRef.current.play();
+    } finally {
+      setIsGeneratingAudio(false);
+    }
   };
 
-  return (
-    <SubView 
-      title="Deeper Dive" 
-      onBack={onBack}
-      onToggleLandscape={onToggleLandscape}
-      isLandscape={isLandscape}
-      current={currentSlideIndex}
-      total={totalSlides}
-    >
-      <div className="space-y-6">
-        {renderMedia()}
-        
-        {!isLandscape && (
-          <>
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold">{slide?.deeperDiveTitle || "Deeper Dive"}</h3>
-              <div className="flex items-center gap-2">
-                <button 
-                  onClick={onBack}
-                  className="p-3 bg-neutral-100 text-neutral-600 rounded-full hover:bg-neutral-200 transition-all active:scale-95 shadow-md"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button 
-                  onClick={toggleAudio}
-                  disabled={isLoading}
-                  className={cn(
-                    "p-3 rounded-full transition-all active:scale-95 disabled:opacity-50 shadow-md",
-                    isPlaying ? "bg-orange-500 text-white animate-pulse" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
-                  )}
-                >
-                  {isLoading ? (
-                    <Loader2 size={20} className="animate-spin" />
-                  ) : isPlaying ? (
-                    <Volume2 size={20} />
-                  ) : (
-                    <Mic size={20} />
-                  )}
-                </button>
-              </div>
-            </div>
-            <p className="text-neutral-700 leading-relaxed">
-              {slide?.deeperDiveContent || "No additional content available for this slide."}
-            </p>
-          </>
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+      audioRef.current?.pause();
+      videoRef.current?.pause();
+    } else {
+      // If a custom MP3 URL is provided in Admin, use it (no highlighting for external MP3s yet)
+      if (!audioUrl && slide.deeperDiveContent) {
+        generateAudio();
+      } else {
+        setIsPlaying(true);
+        audioRef.current?.play();
+        videoRef.current?.play();
+      }
+    }
+  };
+
+  if (isLandscape && slide.deeperDiveImageUrl) {
+    return (
+      <div className="absolute inset-0 bg-black flex items-center justify-center z-[100]">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="absolute top-6 left-6 z-50 text-white/50 hover:text-white bg-black/20 hover:bg-black/40 rounded-full"
+          onClick={onToggleLandscape}
+        >
+          <X size={24} />
+        </Button>
+        {isYoutube ? (
+          <iframe 
+            src={`https://www.youtube.com/embed/${getYoutubeVideoId(slide.deeperDiveImageUrl)}?autoplay=1&rel=0`}
+            className="w-full h-full border-0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : isVideo ? (
+          <video 
+            ref={videoRef}
+            src={slide.deeperDiveImageUrl} 
+            className="w-full h-full object-cover"
+            playsInline
+            loop
+          />
+        ) : (
+          <img 
+            src={slide.deeperDiveImageUrl} 
+            alt="Deeper Dive Media" 
+            className="w-full h-full object-contain"
+          />
         )}
       </div>
-    </SubView>
+    );
+  }
+
+  return (
+    <motion.div 
+      initial={{ x: "100%" }}
+      animate={{ x: 0 }}
+      exit={{ x: "100%" }}
+      transition={{ type: "spring", damping: 30, stiffness: 300 }}
+      className="absolute inset-0 bg-neutral-50 z-40 flex flex-col"
+    >
+      {/* Header */}
+      <div className="bg-white px-4 py-3 flex items-center gap-3 border-b border-neutral-100 shrink-0 shadow-sm relative z-20">
+        <Button variant="ghost" size="icon" onClick={onBack} className="rounded-full shrink-0">
+          <ChevronRight className="rotate-180" size={24} />
+        </Button>
+        <div className="flex-1 min-w-0">
+          <h2 className="text-sm font-bold text-neutral-900 truncate">
+            {slide.deeperDiveTitle || 'Deeper Dive'}
+          </h2>
+          <p className="text-[10px] text-neutral-400 font-medium uppercase tracking-wider">
+            Slide {currentSlideIndex + 1} of {totalSlides}
+          </p>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex border-b border-neutral-200 bg-white shrink-0">
+        <button 
+          onClick={() => setActiveTab('content')}
+          className={cn(
+            "flex-1 py-3 text-[11px] font-bold tracking-wider uppercase transition-colors relative",
+            activeTab === 'content' ? "text-orange-500" : "text-neutral-400 hover:text-neutral-600"
+          )}
+        >
+          Learn More
+          {activeTab === 'content' && (
+            <motion.div layoutId="activeTab" className="absolute bottom-0 inset-x-4 h-0.5 bg-orange-500 rounded-t-full" />
+          )}
+        </button>
+        <button 
+          onClick={() => setActiveTab('chat')}
+          className={cn(
+            "flex-1 py-3 text-[11px] font-bold tracking-wider uppercase transition-colors relative",
+            activeTab === 'chat' ? "text-orange-500" : "text-neutral-400 hover:text-neutral-600"
+          )}
+        >
+          Ask Coach
+          {activeTab === 'chat' && (
+            <motion.div layoutId="activeTab" className="absolute bottom-0 inset-x-4 h-0.5 bg-orange-500 rounded-t-full" />
+          )}
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-hidden relative">
+        <AnimatePresence mode="wait">
+          {activeTab === 'content' ? (
+            <motion.div 
+              key="content"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="absolute inset-0 flex flex-col overflow-y-auto"
+            >
+              {slide.deeperDiveImageUrl && (
+                <div className="w-full aspect-video bg-neutral-900 relative shrink-0">
+                  {isYoutube ? (
+                    <iframe 
+                      src={`https://www.youtube.com/embed/${getYoutubeVideoId(slide.deeperDiveImageUrl)}?rel=0`}
+                      className="w-full h-full border-0 absolute inset-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : isVideo ? (
+                    <video 
+                      ref={videoRef}
+                      src={slide.deeperDiveImageUrl} 
+                      className="w-full h-full object-cover"
+                      playsInline
+                      loop
+                    />
+                  ) : (
+                    <img 
+                      src={slide.deeperDiveImageUrl} 
+                      alt="Deeper Dive" 
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                  
+                  {!isYoutube && (
+                    <>
+                      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <AnimatePresence>
+                          {!isPlaying && !isGeneratingAudio && slide.deeperDiveContent && (
+                            <motion.button 
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0.8, opacity: 0 }}
+                              onClick={handlePlayPause}
+                              className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all pointer-events-auto shadow-xl"
+                            >
+                              <Play size={24} className="ml-1 fill-current" />
+                            </motion.button>
+                          )}
+                          {isGeneratingAudio && (
+                            <motion.div 
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0.8, opacity: 0 }}
+                              className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-xl"
+                            >
+                              <RefreshCw className="animate-spin" size={24} />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <div className="p-6 pb-20">
+                {slide.deeperDiveContent ? (
+                  <div className="prose prose-sm prose-neutral max-w-none">
+                    {slide.deeperDiveContent.split('\n').map((paragraph, idx) => (
+                      <p key={idx} className="text-neutral-700 leading-relaxed text-[15px] mb-4">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-12 text-center text-neutral-400">
+                    <Sparkles size={32} className="mb-4 opacity-50" />
+                    <p>No additional content provided for this section.</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="chat"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="absolute inset-0 flex flex-col bg-white"
+            >
+              <div ref={chatScrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+                {chatMessages.length === 0 && (
+                  <div className="h-full flex flex-col items-center justify-center text-center px-6">
+                    <div className="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mb-4 text-orange-500">
+                      <Sparkles size={24} />
+                    </div>
+                    <h3 className="font-bold text-neutral-900 mb-2">Ask the AI Coach</h3>
+                    <p className="text-sm text-neutral-500 max-w-[250px]">
+                      Have questions about this specific slide or topic? Ask here for personalized insights.
+                    </p>
+                  </div>
+                )}
+                {chatMessages.map((msg, i) => (
+                  <div key={i} className={cn("flex w-full", msg.role === 'user' ? "justify-end" : "justify-start")}>
+                    <div className={cn(
+                      "max-w-[85%] rounded-2xl px-4 py-3 text-[13px] leading-relaxed",
+                      msg.role === 'user' 
+                        ? "bg-orange-500 text-white rounded-tr-sm" 
+                        : "bg-neutral-100 text-neutral-800 rounded-tl-sm"
+                    )}>
+                      {msg.content}
+                    </div>
+                  </div>
+                ))}
+                {isChatLoading && (
+                  <div className="flex justify-start w-full">
+                    <div className="bg-neutral-100 text-neutral-800 rounded-2xl rounded-tl-sm px-4 py-3">
+                      <Loader2 className="animate-spin w-4 h-4 text-neutral-500" />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="p-3 border-t border-neutral-100 bg-white">
+                <div className="flex gap-2">
+                  <Input 
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleChatSubmit()}
+                    placeholder="Ask a question..."
+                    className="bg-neutral-50 border-none rounded-xl"
+                  />
+                  <Button 
+                    onClick={handleChatSubmit}
+                    disabled={isChatLoading || !chatInput.trim() || !geminiConfig.apiKey}
+                    className="bg-orange-500 hover:bg-orange-600 rounded-xl px-4 shrink-0"
+                  >
+                    Send
+                  </Button>
+                </div>
+                {!geminiConfig.apiKey && (
+                  <p className="text-[10px] text-red-500 mt-2 text-center">Gemini API Key missing in environment.</p>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {audioUrl && activeTab === 'content' && (
+        <audio 
+          ref={audioRef} 
+          src={audioUrl} 
+          onEnded={() => setIsPlaying(false)}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          className="hidden" 
+        />
+      )}
+    </motion.div>
   );
 };
 
 const ConnectView = ({ onBack }: { onBack: () => void }) => {
-  const externalLinks = [
-    { name: 'WhatsApp Group', icon: MessageCircle, url: 'https://wa.me/1234567890', color: 'bg-green-500' },
-    { name: 'Telegram Channel', icon: Send, url: 'https://t.me/example', color: 'bg-blue-500' },
-    { name: 'Mighty Networks', icon: ExternalLink, url: 'https://mightynetworks.com', color: 'bg-purple-600' },
-  ];
-
   return (
-    <SubView title="Connect" onBack={onBack}>
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-sm text-neutral-500 italic">Join the conversation.</p>
-        <button 
-          onClick={onBack}
-          className="p-2 bg-neutral-100 text-neutral-600 rounded-full hover:bg-neutral-200 transition-all active:scale-95 shadow-sm"
-          title="Back to Lesson"
-        >
-          <ChevronLeft size={20} />
-        </button>
+    <motion.div 
+      initial={{ y: "100%" }}
+      animate={{ y: 0 }}
+      exit={{ y: "100%" }}
+      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+      className="absolute inset-0 bg-neutral-900 text-white z-50 flex flex-col"
+    >
+      <div className="flex items-center justify-between p-6 pb-2">
+        <div>
+          <h2 className="text-xl font-bold">Community</h2>
+          <p className="text-xs text-neutral-400 font-medium mt-1">Connect with others</p>
+        </div>
+        <Button variant="ghost" size="icon" onClick={onBack} className="rounded-full bg-white/10 text-white hover:bg-white/20">
+          <ChevronDown size={20} />
+        </Button>
       </div>
-      <div className="space-y-6">
-        <p className="text-neutral-600 leading-relaxed">
-          Choose your preferred platform to connect and share insights with other players.
+      
+      <div className="flex-1 p-6 pt-12 flex flex-col items-center text-center">
+        <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-8 border border-white/10">
+          <MessageSquare size={40} className="text-orange-400" />
+        </div>
+        <h3 className="text-2xl font-bold mb-4 tracking-tight">Join the Discussion</h3>
+        <p className="text-neutral-400 mb-12 max-w-[280px] leading-relaxed">
+          Connect with peers, share your journey, and learn from others in our exclusive community space.
         </p>
         
-        <div className="grid gap-4">
-          {externalLinks.map((link) => (
-            <a 
-              key={link.name}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white border border-neutral-100 rounded-2xl shadow-sm hover:shadow-md transition-all group"
-            >
-              <div className="flex items-center gap-4">
-                <div className={cn("p-3 rounded-xl text-white", link.color)}>
-                  <link.icon size={20} />
-                </div>
-                <span className="font-bold text-neutral-900">{link.name}</span>
-              </div>
-              <ChevronLeft size={20} className="rotate-180 text-neutral-300 group-hover:text-neutral-900 transition-colors" />
-            </a>
-          ))}
-        </div>
-
-        <div className="p-6 bg-orange-50 rounded-3xl border border-orange-100">
-          <h4 className="font-bold text-orange-900 mb-2">Weekly Live Q&A</h4>
-          <p className="text-sm text-orange-800 mb-4">Every Thursday at 6:00 PM EST. Join us live on Zoom!</p>
-          <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-full font-bold">
-            Add to Calendar
+        <div className="w-full space-y-4">
+          <Button className="w-full h-14 rounded-2xl bg-orange-500 hover:bg-orange-600 font-bold text-base shadow-lg shadow-orange-500/20 transition-transform active:scale-95">
+            Open Community Portal
+          </Button>
+          <Button variant="outline" className="w-full h-14 rounded-2xl border-white/20 hover:bg-white/10 font-bold text-base transition-transform active:scale-95">
+            Share Your Journey
           </Button>
         </div>
       </div>
-    </SubView>
+    </motion.div>
   );
 };
 
-const MediaDropzone = ({ 
-  url, 
-  type, 
-  onUpdate 
-}: { 
-  url: string, 
-  type: 'image' | 'video' | 'gif', 
-  onUpdate: (url: string, type: 'image' | 'video' | 'gif') => void 
-}) => {
-  const [isDragging, setIsDragging] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
+// --- Admin Components ---
+
+const MediaDropzone = ({ url, type, onUpdate }: { url: string, type: string, onUpdate: (url: string, type: 'image'|'video'|'gif'|'youtube') => void }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const handleFile = async (file: File) => {
-    if (!auth.currentUser) {
-      alert("You must be logged in to upload media.");
-      return;
-    }
-
-    setIsUploading(true);
-    setUploadProgress(0);
-    
-    try {
-      const storageRef = ref(storage, `media/${Date.now()}_${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on('state_changed', 
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadProgress(progress);
-        }, 
-        (error: any) => {
-          console.error("Upload failed. Code:", error.code, "Message:", error.message);
-          alert(`Upload failed: ${error.message} (Code: ${error.code}). Please check your Firebase Storage rules.`);
-          setIsUploading(false);
-        }, 
-        async () => {
-          const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-          
-          let detectedType: 'image' | 'video' | 'gif' = 'image';
-          const fileExt = file.name.split('.').pop()?.toLowerCase();
-          const isVideo = file.type.includes('video') || ['mp4', 'webm', 'ogg', 'mov'].includes(fileExt || '');
-          const isGif = file.type.includes('gif') || fileExt === 'gif';
-
-          if (isVideo) detectedType = 'video';
-          else if (isGif) detectedType = 'gif';
-          
-          onUpdate(downloadUrl, detectedType);
-          setIsUploading(false);
-        }
-      );
-    } catch (error) {
-      console.error("Setup failed:", error);
-      setIsUploading(false);
-    }
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
   };
 
-  const onDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    // In a real app, upload to Firebase Storage here and get URL
+    // For now, we simulate an upload and use an object URL locally (ephemeral)
+    setTimeout(() => {
+      const objUrl = URL.createObjectURL(file);
+      let mediaType: 'image' | 'video' | 'gif' = 'image';
+      if (file.type.startsWith('video/')) mediaType = 'video';
+      if (file.type === 'image/gif') mediaType = 'gif';
+      onUpdate(objUrl, mediaType);
+      setIsUploading(false);
+    }, 1000);
   };
 
   return (
     <div 
-      className={cn(
-        "relative aspect-video rounded-xl overflow-hidden border-2 border-dashed transition-all group",
-        isDragging ? "border-orange-500 bg-orange-50" : "border-neutral-200 bg-neutral-50 hover:border-neutral-300"
-      )}
-      onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-      onDragLeave={() => setIsDragging(false)}
-      onDrop={onDrop}
-      onClick={() => fileInputRef.current?.click()}
+      className="relative w-full aspect-video bg-neutral-50 rounded-xl border-2 border-dashed border-neutral-200 overflow-hidden group cursor-pointer hover:border-orange-300 hover:bg-orange-50/30 transition-colors flex items-center justify-center"
+      onClick={handleUploadClick}
     >
-      <input 
-        type="file" 
-        ref={fileInputRef} 
-        className="hidden" 
-        accept="image/*,video/*" 
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleFile(file);
-        }}
-      />
-      
       {url ? (
         <>
           {type === 'video' ? (
-            <video src={url} className="w-full h-full object-cover" muted loop autoPlay playsInline />
+            <video src={url} className="w-full h-full object-cover opacity-50 group-hover:opacity-30 transition-opacity" />
+          ) : type === 'youtube' ? (
+             <div className="w-full h-full bg-neutral-200 flex items-center justify-center text-neutral-500">
+               <Play size={32} />
+               <span className="ml-2 font-bold text-sm uppercase tracking-wider">YouTube Video</span>
+             </div>
           ) : (
-            <img src={url} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <img src={url} alt="Preview" className="w-full h-full object-cover opacity-50 group-hover:opacity-30 transition-opacity" />
           )}
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-            <div className="text-white text-xs font-bold flex items-center gap-2">
-              <Upload size={16} />
-              Change Media
+          <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="bg-white/90 p-3 rounded-full shadow-sm mb-2">
+              <RefreshCw size={20} className="text-orange-500" />
             </div>
+            <span className="text-xs font-bold text-neutral-900">Replace Media</span>
           </div>
         </>
       ) : (
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-400 gap-2">
-          <Upload size={24} />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Drag & Drop or Click</span>
+        <div className="flex flex-col items-center text-neutral-400">
+          <Plus size={32} className="mb-2 group-hover:text-orange-500 transition-colors" />
+          <span className="text-xs font-medium">Click to upload media</span>
         </div>
       )}
-
+      
       {isUploading && (
-        <div className="absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-20">
-          <div className="relative w-16 h-16 flex items-center justify-center">
-            <Loader2 className="animate-spin text-orange-500 w-full h-full" size={32} />
-            <span className="absolute text-[10px] font-bold text-orange-600">
-              {Math.round(uploadProgress)}%
-            </span>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-[10px] font-bold text-orange-600 uppercase tracking-widest">Uploading...</span>
-            <div className="w-32 h-1 bg-neutral-100 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-orange-500 transition-all duration-300" 
-                style={{ width: `${uploadProgress}%` }}
-              />
-            </div>
-          </div>
+        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center">
+          <Loader2 className="animate-spin text-orange-500" size={32} />
         </div>
       )}
+      
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handleFileChange} 
+        className="hidden" 
+        accept="image/*,video/*" 
+      />
     </div>
   );
 };
 
-const SortableSlide: React.FC<{ 
-  slide: SlideData, 
-  index: number, 
-  onUpdate: (data: Partial<SlideData>) => void, 
-  onRemove: () => void,
-  isOnlySlide: boolean
-}> = ({ 
+const SortableSlide = ({ 
   slide, 
   index, 
   onUpdate, 
   onRemove, 
   isOnlySlide 
+}: { 
+  slide: SlideData, 
+  index: number, 
+  onUpdate: (data: Partial<SlideData>) => void, 
+  onRemove: () => void,
+  isOnlySlide: boolean
 }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const {
@@ -2274,30 +1802,35 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
-      if (user) {
-        // Fetch user role
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          // Force existing users to be admin as well
-          setUserRole('admin');
-          setIsAdminMode(true);
+      try {
+        if (user) {
+          // Fetch user role
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            // Force existing users to be admin as well
+            setUserRole('admin');
+            setIsAdminMode(true);
+          } else {
+            // Make all new users admin to access the dashboard
+            const role = 'admin';
+            await setDoc(doc(db, 'users', user.uid), {
+              email: user.email,
+              role: role,
+              displayName: user.displayName,
+              photoURL: user.photoURL
+            });
+            setUserRole(role);
+            setIsAdminMode(true);
+          }
         } else {
-          // Make all new users admin to access the dashboard
-          const role = 'admin';
-          await setDoc(doc(db, 'users', user.uid), {
-            email: user.email,
-            role: role,
-            displayName: user.displayName,
-            photoURL: user.photoURL
-          });
-          setUserRole(role);
-          setIsAdminMode(true);
+          setUserRole(null);
+          setIsAdminMode(false);
         }
-      } else {
-        setUserRole(null);
-        setIsAdminMode(false);
+      } catch (error) {
+        console.error("Error setting up user profile or role:", error);
+      } finally {
+        setIsAuthLoading(false);
       }
-      setIsAuthLoading(false);
     });
     return () => unsubscribe();
   }, []);
