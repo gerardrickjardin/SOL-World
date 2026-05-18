@@ -25,6 +25,11 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Fix App.tsx Imports
+        working-directory: ./soldrive_src
+        run: |
+          sed -i 's/"@google\/genai"/"@google\/generative-ai"/g' src/App.tsx
+
       - name: Install dependencies
         working-directory: ./soldrive_src
         run: npm install
@@ -42,6 +47,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add soldrive/
-          git commit -m "Auto-build SOL DRiVE [skip ci]" || echo "No changes to commit"
+          git add soldrive/ soldrive_src/src/App.tsx
+          git commit -m "Auto-build SOL DRiVE and fix imports [skip ci]" || echo "No changes to commit"
           git push
