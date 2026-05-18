@@ -50,7 +50,7 @@ import { cn } from "@/lib/utils";
 import { db, auth, loginWithGoogle, OperationType, handleFirestoreError } from './firebase';
 import { doc, onSnapshot, setDoc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { GoogleGenerativeAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // --- Types ---
 
