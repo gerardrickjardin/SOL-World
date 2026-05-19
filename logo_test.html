@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Render</title>
+    <style>
+      /* General text styling with Sofia Soft Pro */
+      body {
+        margin: 0;
+        background-color: #000;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo-container {
+        font-family: 'Sofia Soft Pro', sans-serif;
+        font-size: 8rem;
+        font-weight: bold;
+        color: white; 
+        text-align: center;
+        line-height: 1.1;
+        padding: 50px;
+      }
+
+      .word {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      /* Base Eye Setup */
+      .eye {
+        position: relative;
+        display: inline-block;
+        width: 0.9em; 
+        height: 0.9em;
+        border-radius: 50%;
+      }
+
+      /* The wrapper that Javascript will rotate */
+      .pupil-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Base Pupil Setup */
+      .pupil {
+        position: absolute;
+        top: 50%;
+        right: 15%;
+        transform: translateY(-50%);
+        border-radius: 50%;
+      }
+
+      /* Specific Styles for the "SOL" Eye (Outlined) */
+      .sol-eye {
+        border: 0.12em solid white; 
+        box-sizing: border-box;
+      }
+
+      .sol-eye .pupil {
+        width: 0.25em;
+        height: 0.25em;
+        background-color: white;
+      }
+
+      /* Specific Styles for the "WORLD" Eye (Solid) */
+      .world-eye {
+        background-color: white;
+      }
+
+      .world-eye .pupil {
+        width: 0.25em;
+        height: 0.25em;
+        background-color: #000; 
+        right: 10%; 
+      }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+      <div class="word">
+        <span>S</span>
+        <div class="eye sol-eye">
+          <div class="pupil-wrapper">
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <span>L</span>
+      </div>
+
+      <div class="word">
+        <span>W</span>
+        <div class="eye world-eye">
+          <div class="pupil-wrapper">
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <span>R</span>
+        <span>L</span>
+        <span>D</span>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('mousemove', (event) => {
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+        const eyes = document.querySelectorAll('.eye');
+
+        eyes.forEach(eye => {
+          const wrapper = eye.querySelector('.pupil-wrapper');
+          const rect = eye.getBoundingClientRect();
+          const eyeCenterX = rect.left + (rect.width / 2);
+          const eyeCenterY = rect.top + (rect.height / 2);
+
+          const deltaX = mouseX - eyeCenterX;
+          const deltaY = mouseY - eyeCenterY;
+          const angleRadians = Math.atan2(deltaY, deltaX);
+          const angleDegrees = angleRadians * (180 / Math.PI);
+
+          wrapper.style.transform = `rotate(${angleDegrees}deg)`;
+        });
+      });
+    </script>
+</body>
+</html>
