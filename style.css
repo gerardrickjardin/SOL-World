@@ -530,3 +530,56 @@ body {
   width: 100%;
   filter: invert(1);
 }
+
+/* SOL REViBE Logo Looping Animation */
+.logo-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+
+.plasma-container {
+  position: absolute;
+  left: 50%;
+  top: 30.1%;
+  width: 13.5%;
+  height: 24%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.plasma-glow {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  left: -50%;
+  top: -50%;
+  background: conic-gradient(from 0deg, transparent, rgba(168, 85, 247, 0.4), transparent, rgba(59, 130, 246, 0.4), transparent);
+  animation: rotatePlasma 4s linear infinite;
+  mix-blend-mode: screen;
+}
+
+.plasma-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26%;
+  height: 26%;
+  background: radial-gradient(circle, #f472b6 0%, #d946ef 60%, #a21caf 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 10px #d946ef, 0 0 20px #a21caf, inset 0 1px 2px rgba(255,255,255,0.8);
+  animation: orbitCore 3s ease-in-out infinite;
+}
+
+@keyframes rotatePlasma {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbitCore {
+  0% { transform: translate(-50%, -50%) rotate(0deg) translateX(15%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg) translateX(15%) rotate(-360deg); }
+}
+
