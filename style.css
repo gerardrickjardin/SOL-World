@@ -556,21 +556,53 @@ body {
   height: 200%;
   left: -50%;
   top: -50%;
-  background: conic-gradient(from 0deg, transparent, rgba(168, 85, 247, 0.4), transparent, rgba(59, 130, 246, 0.4), transparent);
-  animation: rotatePlasma 4s linear infinite;
+  background: conic-gradient(from 0deg, transparent, rgba(168, 85, 247, 0.45), transparent, rgba(59, 130, 246, 0.45), transparent);
+  animation: rotatePlasma 2s linear infinite;
+  mix-blend-mode: color-dodge;
+}
+
+/* Morphing Electrical Charges (Sparks) */
+.spark {
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  box-sizing: border-box;
+  pointer-events: none;
   mix-blend-mode: screen;
 }
 
+.spark-1 {
+  border: 1px solid rgba(0, 238, 255, 0.85); /* Cyan electrical charge */
+  box-shadow: 0 0 8px rgba(0, 238, 255, 0.6), inset 0 0 8px rgba(0, 238, 255, 0.6);
+  animation: crackleSpark1 0.4s steps(4) infinite;
+}
+
+.spark-2 {
+  border: 1px dashed rgba(217, 70, 239, 0.9); /* Neon Purple electrical charge */
+  box-shadow: 0 0 10px rgba(217, 70, 239, 0.7), inset 0 0 6px rgba(217, 70, 239, 0.7);
+  animation: crackleSpark2 0.3s steps(3) infinite;
+}
+
+.spark-3 {
+  border: 1.5px solid rgba(59, 130, 246, 0.75); /* Neon Blue electrical charge */
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+  animation: crackleSpark3 0.5s steps(5) infinite;
+}
+
+/* Erratic Vibrating Core */
 .plasma-core {
   position: absolute;
   left: 50%;
   top: 50%;
   width: 26%;
   height: 26%;
-  background: radial-gradient(circle, #f472b6 0%, #d946ef 60%, #a21caf 100%);
+  background: radial-gradient(circle, #ffffff 0%, #f472b6 40%, #d946ef 75%, #a21caf 100%);
   border-radius: 50%;
-  box-shadow: 0 0 10px #d946ef, 0 0 20px #a21caf, inset 0 1px 2px rgba(255,255,255,0.8);
-  animation: orbitCore 3s ease-in-out infinite;
+  box-shadow: 0 0 12px #d946ef, 0 0 24px #a21caf, 0 0 35px rgba(217, 70, 239, 0.5), inset 0 1px 2px rgba(255,255,255,0.9);
+  animation: crackleCore 0.25s steps(4) infinite;
 }
 
 @keyframes rotatePlasma {
@@ -578,8 +610,91 @@ body {
   to { transform: rotate(360deg); }
 }
 
-@keyframes orbitCore {
-  0% { transform: translate(-50%, -50%) rotate(0deg) translateX(15%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg) translateX(15%) rotate(-360deg); }
+@keyframes crackleCore {
+  0%, 100% {
+    transform: translate(-50%, -50%) translate(-1px, 2px) scale(0.95);
+    filter: brightness(1.25);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(2px, -1px) scale(1.05);
+    filter: brightness(0.9);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(-2px, -2px) scale(0.9);
+    filter: brightness(1.35);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(1px, 1px) scale(1.1);
+    filter: brightness(1.0);
+  }
+}
+
+@keyframes crackleSpark1 {
+  0%, 100% {
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    transform: rotate(0deg) scale(0.95);
+    opacity: 0.9;
+  }
+  25% {
+    border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%;
+    transform: rotate(90deg) scale(1.05);
+    opacity: 0.75;
+  }
+  50% {
+    border-radius: 30% 70% 40% 60% / 50% 60% 40% 50%;
+    transform: rotate(180deg) scale(0.9);
+    opacity: 1;
+  }
+  75% {
+    border-radius: 55% 45% 65% 35% / 40% 55% 45% 60%;
+    transform: rotate(270deg) scale(1.1);
+    opacity: 0.65;
+  }
+}
+
+@keyframes crackleSpark2 {
+  0%, 100% {
+    border-radius: 50% 45% 60% 40% / 40% 55% 45% 60%;
+    transform: rotate(120deg) scale(1.05);
+    opacity: 0.8;
+  }
+  33% {
+    border-radius: 40% 60% 35% 65% / 60% 40% 65% 35%;
+    transform: rotate(240deg) scale(0.9);
+    opacity: 1;
+  }
+  66% {
+    border-radius: 65% 35% 55% 45% / 45% 65% 35% 55%;
+    transform: rotate(0deg) scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes crackleSpark3 {
+  0%, 100% {
+    border-radius: 35% 65% 45% 55% / 55% 45% 65% 35%;
+    transform: rotate(270deg) scale(0.9);
+    opacity: 0.7;
+  }
+  20% {
+    border-radius: 60% 40% 70% 30% / 40% 70% 30% 60%;
+    transform: rotate(90deg) scale(1.05);
+    opacity: 0.95;
+  }
+  40% {
+    border-radius: 45% 55% 35% 65% / 50% 35% 65% 50%;
+    transform: rotate(180deg) scale(0.85);
+    opacity: 0.6;
+  }
+  60% {
+    border-radius: 65% 35% 60% 40% / 60% 50% 40% 60%;
+    transform: rotate(0deg) scale(1.15);
+    opacity: 0.9;
+  }
+  80% {
+    border-radius: 50% 50% 50% 50% / 45% 55% 45% 55%;
+    transform: rotate(120deg) scale(0.95);
+    opacity: 0.75;
+  }
 }
 
