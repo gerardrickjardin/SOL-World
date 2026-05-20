@@ -561,36 +561,74 @@ body {
   mix-blend-mode: color-dodge;
 }
 
-/* Morphing Electrical Charges (Sparks) */
-.spark {
+/* High-Fidelity SVG Electrical Charges (Sparks) */
+.electric-sparks-svg {
   position: absolute;
-  left: 10%;
-  top: 10%;
-  width: 80%;
-  height: 80%;
-  border-radius: 50%;
-  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
   pointer-events: none;
-  mix-blend-mode: screen;
+  overflow: visible;
 }
 
-.spark-1 {
-  border: 1px solid rgba(0, 238, 255, 0.85); /* Cyan electrical charge */
-  box-shadow: 0 0 8px rgba(0, 238, 255, 0.6), inset 0 0 8px rgba(0, 238, 255, 0.6);
-  animation: crackleSpark1 0.4s steps(4) infinite;
+.spark-ring {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 25 75;
+  transform-origin: center;
 }
 
-.spark-2 {
-  border: 1px dashed rgba(217, 70, 239, 0.9); /* Neon Purple electrical charge */
-  box-shadow: 0 0 10px rgba(217, 70, 239, 0.7), inset 0 0 6px rgba(217, 70, 239, 0.7);
-  animation: crackleSpark2 0.3s steps(3) infinite;
+.ring-cyan {
+  stroke: rgba(0, 238, 255, 0.95);
+  stroke-width: 1.5px;
+  filter: drop-shadow(0 0 4px #00e5ff);
+  animation: spinRing1 0.4s steps(6) infinite;
 }
 
-.spark-3 {
-  border: 1.5px solid rgba(59, 130, 246, 0.75); /* Neon Blue electrical charge */
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
-  animation: crackleSpark3 0.5s steps(5) infinite;
+.ring-purple {
+  stroke: rgba(217, 70, 239, 0.95);
+  stroke-width: 1.2px;
+  filter: drop-shadow(0 0 5px #d946ef);
+  animation: spinRing2 0.3s steps(5) infinite;
 }
+
+.ring-blue {
+  stroke: rgba(59, 130, 246, 0.9);
+  stroke-width: 1px;
+  filter: drop-shadow(0 0 4px #3b82f6);
+  animation: spinRing3 0.5s steps(7) infinite;
+}
+
+/* Lightning Bolts */
+.spark-bolt {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 30 70;
+  stroke-width: 1.2px;
+  transform-origin: center;
+  opacity: 0;
+}
+
+.bolt-1, .bolt-3, .bolt-5, .bolt-7 {
+  stroke: rgba(0, 238, 255, 0.9);
+  filter: drop-shadow(0 0 3px #00e5ff);
+}
+
+.bolt-2, .bolt-4, .bolt-6, .bolt-8 {
+  stroke: rgba(217, 70, 239, 0.9);
+  filter: drop-shadow(0 0 4px #d946ef);
+}
+
+/* Individual Staggered Electrical Crashing Animations */
+.bolt-1 { animation: flashBolt1 0.28s steps(3) infinite; }
+.bolt-2 { animation: flashBolt2 0.32s steps(3) infinite; }
+.bolt-3 { animation: flashBolt3 0.24s steps(2) infinite; }
+.bolt-4 { animation: flashBolt4 0.36s steps(3) infinite; }
+.bolt-5 { animation: flashBolt1 0.3s steps(3) infinite; }
+.bolt-6 { animation: flashBolt2 0.26s steps(2) infinite; }
+.bolt-7 { animation: flashBolt3 0.34s steps(3) infinite; }
+.bolt-8 { animation: flashBolt4 0.22s steps(2) infinite; }
 
 /* Erratic Vibrating Core */
 .plasma-core {
@@ -629,72 +667,52 @@ body {
   }
 }
 
-@keyframes crackleSpark1 {
-  0%, 100% {
-    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-    transform: rotate(0deg) scale(0.95);
-    opacity: 0.9;
-  }
-  25% {
-    border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%;
-    transform: rotate(90deg) scale(1.05);
-    opacity: 0.75;
-  }
-  50% {
-    border-radius: 30% 70% 40% 60% / 50% 60% 40% 50%;
-    transform: rotate(180deg) scale(0.9);
-    opacity: 1;
-  }
-  75% {
-    border-radius: 55% 45% 65% 35% / 40% 55% 45% 60%;
-    transform: rotate(270deg) scale(1.1);
-    opacity: 0.65;
-  }
+@keyframes spinRing1 {
+  0% { transform: rotate(0deg) scale(1); opacity: 0.95; }
+  50% { transform: rotate(180deg) scale(0.95); opacity: 0.75; }
+  100% { transform: rotate(360deg) scale(1); opacity: 0.95; }
 }
 
-@keyframes crackleSpark2 {
-  0%, 100% {
-    border-radius: 50% 45% 60% 40% / 40% 55% 45% 60%;
-    transform: rotate(120deg) scale(1.05);
-    opacity: 0.8;
-  }
-  33% {
-    border-radius: 40% 60% 35% 65% / 60% 40% 65% 35%;
-    transform: rotate(240deg) scale(0.9);
-    opacity: 1;
-  }
-  66% {
-    border-radius: 65% 35% 55% 45% / 45% 65% 35% 55%;
-    transform: rotate(0deg) scale(1.1);
-    opacity: 0.6;
-  }
+@keyframes spinRing2 {
+  0% { transform: rotate(120deg) scale(0.95); opacity: 0.8; }
+  50% { transform: rotate(-60deg) scale(1.05); opacity: 0.95; }
+  100% { transform: rotate(-240deg) scale(0.95); opacity: 0.8; }
 }
 
-@keyframes crackleSpark3 {
-  0%, 100% {
-    border-radius: 35% 65% 45% 55% / 55% 45% 65% 35%;
-    transform: rotate(270deg) scale(0.9);
-    opacity: 0.7;
-  }
-  20% {
-    border-radius: 60% 40% 70% 30% / 40% 70% 30% 60%;
-    transform: rotate(90deg) scale(1.05);
-    opacity: 0.95;
-  }
-  40% {
-    border-radius: 45% 55% 35% 65% / 50% 35% 65% 50%;
-    transform: rotate(180deg) scale(0.85);
-    opacity: 0.6;
-  }
-  60% {
-    border-radius: 65% 35% 60% 40% / 60% 50% 40% 60%;
-    transform: rotate(0deg) scale(1.15);
-    opacity: 0.9;
-  }
-  80% {
-    border-radius: 50% 50% 50% 50% / 45% 55% 45% 55%;
-    transform: rotate(120deg) scale(0.95);
-    opacity: 0.75;
-  }
+@keyframes spinRing3 {
+  0% { transform: rotate(270deg) scale(1.02); opacity: 0.75; }
+  50% { transform: rotate(90deg) scale(0.9); opacity: 0.9; }
+  100% { transform: rotate(-90deg) scale(1.02); opacity: 0.75; }
+}
+
+@keyframes flashBolt1 {
+  0%, 100% { opacity: 0; stroke-dashoffset: 50; }
+  15% { opacity: 0.95; stroke-dashoffset: 10; }
+  30% { opacity: 0; stroke-dashoffset: 80; }
+  45% { opacity: 0.85; stroke-dashoffset: 0; }
+  60% { opacity: 0; stroke-dashoffset: 40; }
+  75% { opacity: 1; stroke-dashoffset: 20; }
+}
+
+@keyframes flashBolt2 {
+  0%, 100% { opacity: 0; stroke-dashoffset: 80; }
+  20% { opacity: 0.9; stroke-dashoffset: 20; }
+  40% { opacity: 0; stroke-dashoffset: 60; }
+  60% { opacity: 1; stroke-dashoffset: 0; }
+  80% { opacity: 0; stroke-dashoffset: 40; }
+}
+
+@keyframes flashBolt3 {
+  0%, 100% { opacity: 0; stroke-dashoffset: 40; }
+  25% { opacity: 1; stroke-dashoffset: 0; }
+  50% { opacity: 0; stroke-dashoffset: 70; }
+  75% { opacity: 0.8; stroke-dashoffset: 15; }
+}
+
+@keyframes flashBolt4 {
+  0%, 100% { opacity: 0; stroke-dashoffset: 60; }
+  30% { opacity: 0.95; stroke-dashoffset: 10; }
+  60% { opacity: 0; stroke-dashoffset: 80; }
+  90% { opacity: 1; stroke-dashoffset: 0; }
 }
 

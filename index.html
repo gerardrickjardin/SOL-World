@@ -60,9 +60,38 @@
                         <img src="assets/SOL REViBE Logo.png" alt="SOL REViBE Logo" style="width: 100%; height: 100%; display: block; pointer-events: none; user-select: none;">
                         <div class="plasma-container">
                             <div class="plasma-glow"></div>
-                            <div class="spark spark-1"></div>
-                            <div class="spark spark-2"></div>
-                            <div class="spark spark-3"></div>
+                            
+                            <!-- High-Fidelity SVG Electric Charge Simulator -->
+                            <svg class="electric-sparks-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <filter id="electric-discharge" x="-30%" y="-30%" width="160%" height="160%">
+                                        <feTurbulence type="fractalNoise" baseFrequency="0.13" numOctaves="4" result="noise">
+                                            <animate attributeName="seed" values="1;4;8;2;9;5;3;7;10;6" dur="0.4s" repeatCount="indefinite" />
+                                        </feTurbulence>
+                                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="22" xChannelSelector="R" yChannelSelector="G" />
+                                    </filter>
+                                </defs>
+                                
+                                <g filter="url(#electric-discharge)">
+                                    <!-- Concentric Electric Rings -->
+                                    <circle class="spark-ring ring-cyan" cx="50" cy="50" r="38" />
+                                    <circle class="spark-ring ring-purple" cx="50" cy="50" r="30" />
+                                    <circle class="spark-ring ring-blue" cx="50" cy="50" r="22" />
+                                    
+                                    <!-- Radial Lightning Bolts (Shooting out from core) -->
+                                    <line class="spark-bolt bolt-1" x1="50" y1="50" x2="50" y2="12" />
+                                    <line class="spark-bolt bolt-2" x1="50" y1="50" x2="88" y2="50" />
+                                    <line class="spark-bolt bolt-3" x1="50" y1="50" x2="50" y2="88" />
+                                    <line class="spark-bolt bolt-4" x1="50" y1="50" x2="12" y2="50" />
+                                    
+                                    <!-- Diagonal Branching Bolts -->
+                                    <line class="spark-bolt bolt-5" x1="50" y1="50" x2="77" y2="23" />
+                                    <line class="spark-bolt bolt-6" x1="50" y1="50" x2="77" y2="77" />
+                                    <line class="spark-bolt bolt-7" x1="50" y1="50" x2="23" y2="77" />
+                                    <line class="spark-bolt bolt-8" x1="50" y1="50" x2="23" y2="23" />
+                                </g>
+                            </svg>
+                            
                             <div class="plasma-core"></div>
                         </div>
                     </div>
