@@ -221,12 +221,13 @@
             background: #000;
         }
 
-        .map-image-container img {
+        .map-image-container iframe {
             width: 100%;
-            height: auto;
+            height: 400px;
             display: block;
-            opacity: 0.9;
-            filter: contrast(1.1) brightness(0.9);
+            border: none;
+            /* Sleek dark mode filter for the map */
+            filter: invert(100%) hue-rotate(180deg) brightness(90%) contrast(110%) grayscale(20%);
         }
         
         .scanning-bar {
@@ -462,7 +463,7 @@
             <h3 class="map-modal-title">Experience Stations</h3>
             <p class="map-modal-subtitle" id="map-modal-subtitle">Connecting to SOL Network...</p>
             <div class="map-image-container">
-                <img src="../assets/map_mockup.png" alt="Map Mockup">
+                <iframe id="dynamic-map" src="" title="Station Map"></iframe>
                 <div class="scanning-bar"></div>
             </div>
             <a href="#" class="btn-outline" style="margin-top: 2rem; display: inline-block;">View Full Directory</a>
@@ -552,6 +553,11 @@
             if (email && city) {
                 const modal = document.getElementById('map-modal');
                 const subtitle = document.getElementById('map-modal-subtitle');
+                const mapIframe = document.getElementById('dynamic-map');
+                
+                // Dynamically update the map to show the user's city
+                const encodedCity = encodeURIComponent(city);
+                mapIframe.src = `https://maps.google.com/maps?q=${encodedCity}&t=m&z=12&output=embed&iwloc=near`;
                 
                 // Simulate loading state
                 subtitle.innerHTML = 'Connecting to SOL Network...';
@@ -569,8 +575,11 @@
             document.getElementById('map-modal').classList.remove('active');
             
             // Reset form for demo purposes
-            document.getElementById('search-email').value = '';
-            document.getElementById('search-city').value = '';
+            setTimeout(() => {
+                document.getElementById('search-email').value = '';
+                document.getElementById('search-city').value = '';
+                document.getElementById('dynamic-map').src = '';
+            }, 400); // wait for fade out
         }
     </script>
 </body>
