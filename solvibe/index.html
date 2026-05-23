@@ -240,6 +240,8 @@
             box-shadow: 0 0 20px #d946ef, 0 0 40px #0ea5e9;
             animation: scan 3s ease-in-out infinite alternate;
             opacity: 0;
+            z-index: 10;
+            pointer-events: none;
         }
         
         .map-modal-overlay.active .scanning-bar {
@@ -249,6 +251,27 @@
         @keyframes scan {
             0% { top: 0; }
             100% { top: 100%; }
+        }
+
+        .mockup-marker {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #d946ef;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 15px #d946ef, 0 0 30px #d946ef;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.4s ease-in;
+            z-index: 20;
+            pointer-events: none; /* Let users click the map beneath */
+            animation: pulse-marker 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-marker {
+            0% { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 10px #d946ef; }
+            100% { transform: translate(-50%, -50%) scale(1.2); box-shadow: 0 0 25px #d946ef, 0 0 40px #a855f7; }
         }
 
         .callout-form-container {
@@ -565,8 +588,31 @@
                 
                 // Simulate found stations after scan animation starts
                 setTimeout(() => {
-                    const count = Math.floor(Math.random() * 5) + 2; // random number 2-6
+                    const count = Math.floor(Math.random() * 5) + 3; // random number 3-7
                     subtitle.innerHTML = `Found <strong style="color:#ffffff">${count} active stations</strong> near ${city}`;
+                    
+                    // Generate violet mockup markers over the iframe
+                    const mapContainer = document.querySelector('.map-image-container');
+                    document.querySelectorAll('.mockup-marker').forEach(el => el.remove()); // clear old
+                    
+                    for (let i = 0; i < count; i++) {
+                        const marker = document.createElement('div');
+                        marker.className = 'mockup-marker';
+                        
+                        // Scatter markers mostly in the central 60% of the map view
+                        const top = 20 + Math.random() * 60;
+                        const left = 20 + Math.random() * 60;
+                        
+                        marker.style.top = `${top}%`;
+                        marker.style.left = `${left}%`;
+                        
+                        // Stagger the fade-in for a cool effect
+                        setTimeout(() => {
+                            marker.style.opacity = '1';
+                        }, i * 300);
+                        
+                        mapContainer.appendChild(marker);
+                    }
                 }, 1500);
             }
         }
@@ -579,6 +625,7 @@
                 document.getElementById('search-email').value = '';
                 document.getElementById('search-city').value = '';
                 document.getElementById('dynamic-map').src = '';
+                document.querySelectorAll('.mockup-marker').forEach(el => el.remove());
             }, 400); // wait for fade out
         }
     </script>
