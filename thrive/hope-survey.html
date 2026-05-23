@@ -305,136 +305,8 @@ const surveyQuestions = [
     }
 ];
 
-const App = () => {
-    const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results'
-    const [currentQIndex, setCurrentQIndex] = useState(0);
-    const [answers, setAnswers] = useState({}); // { id: score }
-    const [currentSelection, setCurrentSelection] = useState(null);
 
-    const handleNextQ = () => {
-        const qId = surveyQuestions[currentQIndex].id;
-        const newAnswers = { ...answers, [qId]: currentSelection !== null ? currentSelection : 2.5 };
-        setAnswers(newAnswers);
-        
-        if (currentQIndex < surveyQuestions.length - 1) {
-            setCurrentQIndex(currentQIndex + 1);
-            setCurrentSelection(newAnswers[surveyQuestions[currentQIndex + 1].id] ?? 2.5);
-            window.scrollTo(0,0);
-        } else {
-            setStep('results');
-            window.scrollTo(0,0);
-        }
-    };
-
-    const handlePrevQ = () => {
-        if (currentQIndex > 0) {
-            setCurrentQIndex(currentQIndex - 1);
-            setCurrentSelection(answers[surveyQuestions[currentQIndex - 1].id] ?? 2.5);
-            window.scrollTo(0,0);
-        } else {
-            setStep('intro');
-        }
-    };
-
-    // --- RATING COMPONENT ---
-    const renderRater = () => {
-        const values = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
-        
-        return (
-            <div className="mt-8">
-                <div className="flex justify-between px-2 mb-2 text-xs font-bold text-slate-400">
-                    <span>0.0 (Suboptimal)</span>
-                    <span>2.5 (Neutral)</span>
-                    <span>5.0 (Optimal)</span>
-                </div>
-                
-                {/* Visual Anchor Descriptions */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-red-50 border border-red-100 p-4 rounded-xl text-[13px] text-red-800 shadow-sm leading-relaxed">
-                        <span className="font-bold block mb-1">⭐ 0.0 Stars</span>
-                        {surveyQuestions[currentQIndex].anchors[0.0]}
-                    </div>
-                    <div className="bg-amber-50 border border-amber-100 p-4 rounded-xl text-[13px] text-amber-800 shadow-sm leading-relaxed">
-                        <span className="font-bold block mb-1">⭐⭐✨ 2.5 Stars</span>
-                        {surveyQuestions[currentQIndex].anchors[2.5]}
-                    </div>
-                    <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-[13px] text-emerald-800 shadow-sm leading-relaxed">
-                        <span className="font-bold block mb-1">⭐⭐⭐⭐⭐ 5.0 Stars</span>
-                        {surveyQuestions[currentQIndex].anchors[5.0]}
-                    </div>
-                </div>
-
-                <div className="relative pt-6 pb-8 px-4 md:px-8 bg-slate-50 border border-slate-200 rounded-3xl mt-8">
-                    <input 
-                        type="range" 
-                        min="0" max="5" step="0.5"
-                        value={currentSelection !== null ? currentSelection : 2.5}
-                        onChange={(e) => setCurrentSelection(parseFloat(e.target.value))}
-                        className="w-full h-3 bg-slate-300 rounded-lg appearance-none cursor-pointer outline-none shadow-inner"
-                        style={{
-                            background: `linear-gradient(to right, #ef4444 0%, #f59e0b 50%, #10b981 100%)`
-                        }}
-                    />
-                    <div className="flex justify-between mt-5">
-                        {values.map(val => (
-                            <div 
-                                key={val} 
-                                onClick={() => setCurrentSelection(val)}
-                                className={`flex flex-col items-center cursor-pointer group`}
-                            >
-                                <div className={`w-1.5 rounded-full mb-1 ${val % 1 === 0 ? 'bg-slate-400 h-4' : 'bg-slate-300 h-2'} group-hover:bg-blue-600 transition-colors`}></div>
-                                <span className={`text-[11px] md:text-sm font-bold ${currentSelection === val ? 'text-blue-600 scale-125' : 'text-slate-500'} transition-all`}>
-                                    {val.toFixed(1)}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                    
-                    <div className="mt-8 text-center bg-white p-6 rounded-2xl border-2 border-blue-100 shadow-md transform transition-all duration-300 scale-100 max-w-sm mx-auto">
-                        <span className="text-slate-500 text-sm font-bold uppercase tracking-widest block mb-1">Your Rating</span>
-                        <span className="text-5xl font-black text-blue-600 flex items-center justify-center gap-3">
-                            {(currentSelection !== null ? currentSelection : 2.5).toFixed(1)} 
-                            <span className="text-3xl text-yellow-400" style={{ filter: 'drop-shadow(0 2px 4px rgba(250, 204, 21, 0.4))' }}>★</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
-    // --- INTRO SCREEN ---
-    if (step === 'intro') {
-        return (
-            <main className="flex-grow flex flex-col items-center justify-center p-6 mt-8">
-                <div className="bg-white max-w-3xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 text-center relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"></div>
-                    <h1 className="text-5xl font-black text-slate-800 mb-6 tracking-tight">The HoPE Index</h1>
-                    <h2 className="text-xl font-bold text-slate-500 mb-8 uppercase tracking-widest">Human Optimal Personal Experience</h2>
-                    
-                    <div className="text-left space-y-6 text-slate-600 text-lg leading-relaxed mb-10">
-                        <p>Welcome to the HoPE Index Survey. This is not a test, an academic exam, or a clinical trial designed to diagnose your flaws. It is an innovative, highly visual platform designed to map where you are today and provide a clear, actionable guide toward a life of true optimization and stability.</p>
-                        
-                        <div className="bg-blue-50 border border-blue-100 p-6 rounded-2xl shadow-sm">
-                            <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
-                                <span className="text-xl">💡</span> How to Complete this Survey
-                            </h3>
-                            <p className="text-base text-blue-800">Imagine you are a professional critic writing a review for a hotel or an app. You are not rating your worth as a human being. Instead, you are rating the quality of the experience currently provided by the different "facilities" and "services" in your life.</p>
-                        </div>
-                    </div>
-
-                    <button 
-                        onClick={() => { setStep('survey'); setCurrentSelection(answers[surveyQuestions[0].id] ?? 2.5); }}
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-5 rounded-full font-bold text-xl hover:-translate-y-1 transition-all shadow-xl hover:shadow-[0_10px_25px_rgba(79,70,229,0.4)] inline-flex items-center justify-center gap-3 w-full md:w-auto"
-                    >
-                        Begin Assessment →
-                    </button>
-                </div>
-            </main>
-        );
-    }
-
-    // --- RESULTS SCREEN ---
-    if (step === 'results') {
+const ResultsScreen = ({ answers, surveyQuestions }) => {
         const [animatedScores, setAnimatedScores] = useState({});
         const [isMounted, setIsMounted] = useState(false);
         const totalScore = Object.values(answers).reduce((a, b) => a + b, 0); // Out of 100 max
@@ -715,6 +587,140 @@ const App = () => {
                 </div>
             </main>
         );
+    
+};
+
+const App = () => {
+    const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results'
+    const [currentQIndex, setCurrentQIndex] = useState(0);
+    const [answers, setAnswers] = useState({}); // { id: score }
+    const [currentSelection, setCurrentSelection] = useState(null);
+
+    const handleNextQ = () => {
+        const qId = surveyQuestions[currentQIndex].id;
+        const newAnswers = { ...answers, [qId]: currentSelection !== null ? currentSelection : 2.5 };
+        setAnswers(newAnswers);
+        
+        if (currentQIndex < surveyQuestions.length - 1) {
+            setCurrentQIndex(currentQIndex + 1);
+            setCurrentSelection(newAnswers[surveyQuestions[currentQIndex + 1].id] ?? 2.5);
+            window.scrollTo(0,0);
+        } else {
+            setStep('results');
+            window.scrollTo(0,0);
+        }
+    };
+
+    const handlePrevQ = () => {
+        if (currentQIndex > 0) {
+            setCurrentQIndex(currentQIndex - 1);
+            setCurrentSelection(answers[surveyQuestions[currentQIndex - 1].id] ?? 2.5);
+            window.scrollTo(0,0);
+        } else {
+            setStep('intro');
+        }
+    };
+
+    // --- RATING COMPONENT ---
+    const renderRater = () => {
+        const values = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
+        
+        return (
+            <div className="mt-8">
+                <div className="flex justify-between px-2 mb-2 text-xs font-bold text-slate-400">
+                    <span>0.0 (Suboptimal)</span>
+                    <span>2.5 (Neutral)</span>
+                    <span>5.0 (Optimal)</span>
+                </div>
+                
+                {/* Visual Anchor Descriptions */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-red-50 border border-red-100 p-4 rounded-xl text-[13px] text-red-800 shadow-sm leading-relaxed">
+                        <span className="font-bold block mb-1">⭐ 0.0 Stars</span>
+                        {surveyQuestions[currentQIndex].anchors[0.0]}
+                    </div>
+                    <div className="bg-amber-50 border border-amber-100 p-4 rounded-xl text-[13px] text-amber-800 shadow-sm leading-relaxed">
+                        <span className="font-bold block mb-1">⭐⭐✨ 2.5 Stars</span>
+                        {surveyQuestions[currentQIndex].anchors[2.5]}
+                    </div>
+                    <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-[13px] text-emerald-800 shadow-sm leading-relaxed">
+                        <span className="font-bold block mb-1">⭐⭐⭐⭐⭐ 5.0 Stars</span>
+                        {surveyQuestions[currentQIndex].anchors[5.0]}
+                    </div>
+                </div>
+
+                <div className="relative pt-6 pb-8 px-4 md:px-8 bg-slate-50 border border-slate-200 rounded-3xl mt-8">
+                    <input 
+                        type="range" 
+                        min="0" max="5" step="0.5"
+                        value={currentSelection !== null ? currentSelection : 2.5}
+                        onChange={(e) => setCurrentSelection(parseFloat(e.target.value))}
+                        className="w-full h-3 bg-slate-300 rounded-lg appearance-none cursor-pointer outline-none shadow-inner"
+                        style={{
+                            background: `linear-gradient(to right, #ef4444 0%, #f59e0b 50%, #10b981 100%)`
+                        }}
+                    />
+                    <div className="flex justify-between mt-5">
+                        {values.map(val => (
+                            <div 
+                                key={val} 
+                                onClick={() => setCurrentSelection(val)}
+                                className={`flex flex-col items-center cursor-pointer group`}
+                            >
+                                <div className={`w-1.5 rounded-full mb-1 ${val % 1 === 0 ? 'bg-slate-400 h-4' : 'bg-slate-300 h-2'} group-hover:bg-blue-600 transition-colors`}></div>
+                                <span className={`text-[11px] md:text-sm font-bold ${currentSelection === val ? 'text-blue-600 scale-125' : 'text-slate-500'} transition-all`}>
+                                    {val.toFixed(1)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    <div className="mt-8 text-center bg-white p-6 rounded-2xl border-2 border-blue-100 shadow-md transform transition-all duration-300 scale-100 max-w-sm mx-auto">
+                        <span className="text-slate-500 text-sm font-bold uppercase tracking-widest block mb-1">Your Rating</span>
+                        <span className="text-5xl font-black text-blue-600 flex items-center justify-center gap-3">
+                            {(currentSelection !== null ? currentSelection : 2.5).toFixed(1)} 
+                            <span className="text-3xl text-yellow-400" style={{ filter: 'drop-shadow(0 2px 4px rgba(250, 204, 21, 0.4))' }}>★</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    // --- INTRO SCREEN ---
+    if (step === 'intro') {
+        return (
+            <main className="flex-grow flex flex-col items-center justify-center p-6 mt-8">
+                <div className="bg-white max-w-3xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 text-center relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"></div>
+                    <h1 className="text-5xl font-black text-slate-800 mb-6 tracking-tight">The HoPE Index</h1>
+                    <h2 className="text-xl font-bold text-slate-500 mb-8 uppercase tracking-widest">Human Optimal Personal Experience</h2>
+                    
+                    <div className="text-left space-y-6 text-slate-600 text-lg leading-relaxed mb-10">
+                        <p>Welcome to the HoPE Index Survey. This is not a test, an academic exam, or a clinical trial designed to diagnose your flaws. It is an innovative, highly visual platform designed to map where you are today and provide a clear, actionable guide toward a life of true optimization and stability.</p>
+                        
+                        <div className="bg-blue-50 border border-blue-100 p-6 rounded-2xl shadow-sm">
+                            <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                                <span className="text-xl">💡</span> How to Complete this Survey
+                            </h3>
+                            <p className="text-base text-blue-800">Imagine you are a professional critic writing a review for a hotel or an app. You are not rating your worth as a human being. Instead, you are rating the quality of the experience currently provided by the different "facilities" and "services" in your life.</p>
+                        </div>
+                    </div>
+
+                    <button 
+                        onClick={() => { setStep('survey'); setCurrentSelection(answers[surveyQuestions[0].id] ?? 2.5); }}
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-5 rounded-full font-bold text-xl hover:-translate-y-1 transition-all shadow-xl hover:shadow-[0_10px_25px_rgba(79,70,229,0.4)] inline-flex items-center justify-center gap-3 w-full md:w-auto"
+                    >
+                        Begin Assessment →
+                    </button>
+                </div>
+            </main>
+        );
+    }
+
+    // --- RESULTS SCREEN ---
+    if (step === 'results') {
+        return <ResultsScreen answers={answers} surveyQuestions={surveyQuestions} />;
     }
 
     // --- SURVEY SCREEN ---
