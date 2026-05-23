@@ -138,6 +138,7 @@ body {
     margin: 0 auto;
     aspect-ratio: 16 / 9;
     overflow: hidden;
+    z-index: 1; /* Establishes a local stacking context to prevent negative z-index video from rendering behind body background */
 }
 
 .hero-background-video {
@@ -147,7 +148,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -1;
+    z-index: 1; /* Changed to positive to prevent negative z-index rendering issues on various browsers */
     pointer-events: none;
 }
 
