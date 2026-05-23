@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoPE Index Survey - SOL THRiVE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Recharts for the arc map -->
+    <script src="https://unpkg.com/prop-types/prop-types.min.js"></script>
+    <script src="https://unpkg.com/recharts/umd/Recharts.js" crossorigin></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
+    
+    <!-- THRiVE Global Header -->
+    <header class="header print:hidden z-50 relative">
+        <nav class="nav-left">
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+        <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">THRiVE Coaching</a></div>
+        <div class="nav-right desktop-menu">
+            <ul>
+                <li><a href="survey.html">Flow Survey</a></li>
+                <li><a href="profile.html">THRiVE Report</a></li>
+                <li><a href="hope-survey.html" class="text-blue-600 font-bold">HoPE Survey</a></li>
+                <li><a href="approach.html">Our Approach</a></li>
+                <li class="dropdown">
+                    <a href="how-to-use.html">How To Use This Page</a>
+                    <div class="dropdown-content">
+                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
+                        <a href="employment-challenges.html">Employment Challenges</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+const { useState, useEffect, useRef } = React;
+const { PieChart, Pie, Cell, ResponsiveContainer } = window.Recharts;
+
+// --- DATA STRUCTURE ---
+const surveyQuestions = [
+    // DIMENSION 1: PLACES
+    {
+        id: "ops_home",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 1: Places",
+        title: "1.1 Home Experience",
+        concept: "Think of this as the physical \"hotel room\" you sleep in every night. Is it warm, dry, quiet, and secure? Does it provide a peaceful sanctuary where you can truly rest?",
+        anchors: {
+            5.0: "Secure, quiet, comfortable, and fully supportive of your peace of mind.",
+            2.5: "Physically intact but crowded, noisy, or lacking privacy. Feels temporary.",
+            0.0: "Unsafe, structurally compromised, unlivable, or lacking stable shelter."
+        }
+    },
+    {
+        id: "ops_neighborhood",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 1: Places",
+        title: "1.2 Neighborhood Experience",
+        concept: "Evaluate the surrounding blocks, parks, and streets outside your home. Is it clean, well-lit, and physically safe to walk through?",
+        anchors: {
+            5.0: "Calm, clean, well-lit, and physically safe to navigate at any hour.",
+            2.5: "Calm during day, but sporadic crime or unease at night. Must remain cautious.",
+            0.0: "Active danger zone; constant immediate threats of physical harm."
+        }
+    },
+    {
+        id: "ops_thirdspaces",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 1: Places",
+        title: "1.3 Third Spaces Experience",
+        concept: "Evaluate the other public physical environments you frequent (school, office, gym). Do these facilities feel welcoming, clean, and built to support you?",
+        anchors: {
+            5.0: "Premium public physical spaces that feel welcoming, clean, and highly supportive.",
+            2.5: "Accessible but sterile, institutional, or poorly maintained. No inspiration.",
+            0.0: "Completely blocked; zero access to safe, welcoming spaces outside home."
+        }
+    },
+    // DIMENSION 2: BODY
+    {
+        id: "ops_functionality",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 2: Body",
+        title: "2.1 Functionality Experience",
+        concept: "Think of your body as a car. Can you physically move, play, work, and perform daily tasks without pain or severe limitations?",
+        anchors: {
+            5.0: "Peak physical performance; fully capable and free of chronic pain or limitations.",
+            2.5: "Functions for basic tasks, but frequent fatigue, minor aches, or limitations.",
+            0.0: "Complete physical breakdown; debilitating physical crisis or acute illness."
+        }
+    },
+    {
+        id: "ops_energy",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 2: Body",
+        title: "2.2 Energy & Vitality Experience",
+        concept: "Evaluate your daily \"fuel tank.\" Do you wake up feeling recharged and have sustained vitality required to power through your day?",
+        anchors: {
+            5.0: "Abundant, clean energy; waking up completely refreshed and ready.",
+            2.5: "Highly inconsistent energy. Rely heavily on caffeine/sugar/willpower.",
+            0.0: "Complete battery depletion; profound, paralyzing physical fatigue."
+        }
+    },
+    {
+        id: "ops_bodyimage",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 2: Body",
+        title: "2.3 Body Image Experience",
+        concept: "How comfortable, confident, and accepting do you feel in your own physical skin?",
+        anchors: {
+            5.0: "High physical confidence; exceptionally comfortable, proud, and accepting.",
+            2.5: "Neutral or indifferent. You tolerate your reflection but lack confidence.",
+            0.0: "Severe self-loathing or physical shame; experiencing deep anxiety."
+        }
+    },
+    // DIMENSION 3: RESOURCES
+    {
+        id: "ops_finances",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 3: Resources",
+        title: "3.1 Finances Experience",
+        concept: "Evaluate your financial liquidity. Does your current money experience feel stable and abundant, or is it a survival struggle?",
+        anchors: {
+            5.0: "Financial abundance and security; easily covering bills and saving.",
+            2.5: "Paycheck to paycheck. Basic needs met but zero margin for error.",
+            0.0: "Absolute financial destitution; zero income, savings, or assets."
+        }
+    },
+    {
+        id: "ops_technology",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 3: Resources",
+        title: "3.2 Technology Experience",
+        concept: "Evaluate your digital toolkit. Do you have reliable access to the hardware and networks required to study, work, and build your goals?",
+        anchors: {
+            5.0: "High-speed connectivity; up-to-date devices that fully empower work.",
+            2.5: "Connection is slow/unreliable, hardware is outdated. Limits productivity.",
+            0.0: "Total digital blackout; completely disconnected from the digital economy."
+        }
+    },
+    {
+        id: "ops_essentials",
+        space: "Outer Physical Space (OPS)",
+        dimension: "Dimension 3: Resources",
+        title: "3.3 Essentials Experience",
+        concept: "Evaluate your logistical lifelines. Do you have reliable transport, working appliances, and basic physical goods to run a smooth daily routine?",
+        anchors: {
+            5.0: "Highly reliable daily logistics; dependable transportation and functioning appliances.",
+            2.5: "Highly inconvenient logistics requiring exhausting coordination and immense effort.",
+            0.0: "Absolute logistical failure; stranded, unusable appliances, no utilities."
+        }
+    },
+    // DIMENSION 4: SELF
+    {
+        id: "irs_emotions",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 4: Self",
+        title: "4.1 Emotions Experience",
+        concept: "Evaluate your internal \"dashboard.\" How well can you navigate and process intense feelings without crashing or shutting down?",
+        anchors: {
+            5.0: "Calm, clear, and resilient; processing intense feelings easily under pressure.",
+            2.5: "Externally composed, but internally emotionally fragile, anxious, or numb.",
+            0.0: "Complete emotional dysregulation or paralyzing trauma (panic, rage, numbness)."
+        }
+    },
+    {
+        id: "irs_goals",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 4: Self",
+        title: "4.2 Goals Experience",
+        concept: "Do you have exciting, structured, and achievable goals that you are actively pursuing, or are you drifting?",
+        anchors: {
+            5.0: "Crystal-clear vision; actively working an inspiring, step-by-step plan.",
+            2.5: "Vague ideas of future, but lack clear plan or discipline. Surviving day-by-day.",
+            0.0: "Absolute hopelessness; unable to envision any positive future. Zero aspiration."
+        }
+    },
+    {
+        id: "irs_identity",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 4: Self",
+        title: "4.3 Identity Experience",
+        concept: "Do you respect, trust, and feel proud of the person you are, or do you struggle with self-doubt or shame?",
+        anchors: {
+            5.0: "Unshakeable self-worth; deep pride in who you are and your unique potential.",
+            2.5: "Volatile self-esteem dependent on external validation. Easily shaken.",
+            0.0: "Profound identity crisis; carrying severe self-rejection or feeling worthless."
+        }
+    },
+    // DIMENSION 5: OTHERS
+    {
+        id: "irs_coreconnections",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 5: Others",
+        title: "5.1 Core Connections Experience",
+        concept: "Evaluate your closest circle. Do you have people who truly know you, love you, and would catch you if you fell?",
+        anchors: {
+            5.0: "Exceptional close support; multiple trusted relationships to share raw truths.",
+            2.5: "Relationships are superficial or distant. Casual company, no deep vulnerability.",
+            0.0: "Absolute relational void; abandoned or trapped in an abusive domestic dynamic."
+        }
+    },
+    {
+        id: "irs_socialnetwork",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 5: Others",
+        title: "5.2 Social Network Experience",
+        concept: "Evaluate your broader group. Do you feel a sense of positive belonging and safety within your school, workspace, or community?",
+        anchors: {
+            5.0: "Deep community belonging; feeling respected, celebrated, and integrated.",
+            2.5: "An outside observer. Fit in enough to avoid trouble, but lack shared purpose.",
+            0.0: "Extreme social ostracization; actively targeted, bullied, or completely isolated."
+        }
+    },
+    {
+        id: "irs_community",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 5: Others",
+        title: "5.3 Community Experience",
+        concept: "Do your daily interactions with the public, merchants, and strangers feel safe and cooperative, or hostile and tense?",
+        anchors: {
+            5.0: "Highly positive and cooperative public interactions; feeling safe and welcome.",
+            2.5: "Cold, transactional, distant public interactions. No warmth or mutual respect.",
+            0.0: "Systemic community warfare; public spaces feel predatory and dangerous."
+        }
+    },
+    // DIMENSION 6: LIFE
+    {
+        id: "irs_hobbies",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 6: Life",
+        title: "6.1 Hobbies Experience",
+        concept: "Evaluate your \"recharge time.\" Do you make time for activities and passions that bring you pure joy, separate from work?",
+        anchors: {
+            5.0: "Consistent creative play; regularly enjoying highly rewarding hobbies.",
+            2.5: "Occasional participation, but rushed and interrupted by stress or scrolling.",
+            0.0: "Complete lockup or anhedonia; physically blocked from any recreation or joy."
+        }
+    },
+    {
+        id: "irs_habits",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 6: Life",
+        title: "6.2 Habits Experience",
+        concept: "Evaluate your automatic daily loops. Do you maintain healthy, supportive routines or are you stuck in destructive habits?",
+        anchors: {
+            5.0: "Optimal self-discipline; daily routines are fully aligned with well-being.",
+            2.5: "Mixed bag. Some positive routines, but easily fall back into unsupportive habits under stress.",
+            0.0: "Severe, paralyzing addiction or complete routine collapse; chronic self-destruction."
+        }
+    },
+    {
+        id: "irs_havetos",
+        space: "Inner Relational Space (IRS)",
+        dimension: "Dimension 6: Life",
+        title: "6.3 Have-Tos Experience",
+        concept: "Evaluate your ability to manage your responsibilities. Do you run your schedule, or does your schedule run you?",
+        anchors: {
+            5.0: "Exceptional schedule mastery; meeting commitments with calm efficiency.",
+            2.5: "Constantly reactive last-minute scramble. Rushing with high stress.",
+            0.0: "Complete system failure; entirely buried by responsibilities, facing collapse."
+        }
+    },
+    // FLEX SLOTS
+    {
+        id: "flex_gas",
+        space: "Contextual Layering",
+        dimension: "Flex Slot 1: Gang Affinity Score (GAS)",
+        title: "Flex 1: Gang Affinity Score",
+        concept: "I am able to see a meaningful, proud, and stable future for myself that does entirely without gang participation, street hustle, or illicit group identity.",
+        anchors: {
+            5.0: "Complete freedom from gang involvement. Clear, independent path.",
+            2.5: "Not active, but social circle/safety tied to gang affiliates. Constant navigation.",
+            0.0: "Survival, identity, and social circle are entirely controlled by the gang."
+        }
+    },
+    {
+        id: "flex_psa",
+        space: "Contextual Layering",
+        dimension: "Flex Slot 2: Psychological Safety Assessment (PSA)",
+        title: "Flex 2: Psychological Safety Assessment",
+        concept: "I feel emotionally and physically safe enough in my daily life to make choices based on my long-term dreams rather than immediate physical survival.",
+        anchors: {
+            5.0: "Peace and security. Safe to explore and plan without looking over my shoulder.",
+            2.5: "Generally safe in routine, but high anxiety changing paths or after dark.",
+            0.0: "Survival mode. Constant, acute fear of immediate physical retaliation or death."
+        }
+    }
+];
+
+const App = () => {
+    const [step, setStep] = useState('intro'); // 'intro', 'survey', 'results'
+    const [currentQIndex, setCurrentQIndex] = useState(0);
+    const [answers, setAnswers] = useState({}); // { id: score }
+    const [currentSelection, setCurrentSelection] = useState(null);
+
+    const handleNextQ = () => {
+        if (currentSelection === null) return;
+        const qId = surveyQuestions[currentQIndex].id;
+        const newAnswers = { ...answers, [qId]: currentSelection };
+        setAnswers(newAnswers);
+        
+        if (currentQIndex < surveyQuestions.length - 1) {
+            setCurrentQIndex(currentQIndex + 1);
+            setCurrentSelection(newAnswers[surveyQuestions[currentQIndex + 1].id] ?? null);
+            window.scrollTo(0,0);
+        } else {
+            setStep('results');
+            window.scrollTo(0,0);
+        }
+    };
+
+    const handlePrevQ = () => {
+        if (currentQIndex > 0) {
+            setCurrentQIndex(currentQIndex - 1);
+            setCurrentSelection(answers[surveyQuestions[currentQIndex - 1].id] ?? null);
+            window.scrollTo(0,0);
+        } else {
+            setStep('intro');
+        }
+    };
+
+    // --- RATING COMPONENT ---
+    const renderRater = () => {
+        const values = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
+        
+        return (
+            <div className="mt-8">
+                <div className="flex justify-between px-2 mb-2 text-xs font-bold text-slate-400">
+                    <span>0.0 (Suboptimal)</span>
+                    <span>2.5 (Neutral)</span>
+                    <span>5.0 (Optimal)</span>
+                </div>
+                
+                {/* Visual Anchor Descriptions */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-red-50 border border-red-100 p-4 rounded-xl text-[13px] text-red-800 shadow-sm leading-relaxed">
+                        <span className="font-bold block mb-1">⭐ 0.0 Stars</span>
+                        {surveyQuestions[currentQIndex].anchors[0.0]}
+                    </div>
+                    <div className="bg-amber-50 border border-amber-100 p-4 rounded-xl text-[13px] text-amber-800 shadow-sm leading-relaxed">
+                        <span className="font-bold block mb-1">⭐⭐✨ 2.5 Stars</span>
+                        {surveyQuestions[currentQIndex].anchors[2.5]}
+                    </div>
+                    <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-[13px] text-emerald-800 shadow-sm leading-relaxed">
+                        <span className="font-bold block mb-1">⭐⭐⭐⭐⭐ 5.0 Stars</span>
+                        {surveyQuestions[currentQIndex].anchors[5.0]}
+                    </div>
+                </div>
+
+                <div className="relative pt-6 pb-8 px-4 md:px-8 bg-slate-50 border border-slate-200 rounded-3xl mt-8">
+                    <input 
+                        type="range" 
+                        min="0" max="5" step="0.5"
+                        value={currentSelection !== null ? currentSelection : 2.5}
+                        onChange={(e) => setCurrentSelection(parseFloat(e.target.value))}
+                        className="w-full h-3 bg-slate-300 rounded-lg appearance-none cursor-pointer outline-none shadow-inner"
+                        style={{
+                            background: `linear-gradient(to right, #ef4444 0%, #f59e0b 50%, #10b981 100%)`
+                        }}
+                    />
+                    <div className="flex justify-between mt-5">
+                        {values.map(val => (
+                            <div 
+                                key={val} 
+                                onClick={() => setCurrentSelection(val)}
+                                className={`flex flex-col items-center cursor-pointer group`}
+                            >
+                                <div className={`w-1.5 rounded-full mb-1 ${val % 1 === 0 ? 'bg-slate-400 h-4' : 'bg-slate-300 h-2'} group-hover:bg-blue-600 transition-colors`}></div>
+                                <span className={`text-[11px] md:text-sm font-bold ${currentSelection === val ? 'text-blue-600 scale-125' : 'text-slate-500'} transition-all`}>
+                                    {val.toFixed(1)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    {currentSelection !== null && (
+                        <div className="mt-8 text-center bg-white p-6 rounded-2xl border-2 border-blue-100 shadow-md transform transition-all duration-300 scale-100 max-w-sm mx-auto">
+                            <span className="text-slate-500 text-sm font-bold uppercase tracking-widest block mb-1">Your Rating</span>
+                            <span className="text-5xl font-black text-blue-600 flex items-center justify-center gap-3">
+                                {currentSelection.toFixed(1)} 
+                                <span className="text-3xl text-yellow-400" style={{ filter: 'drop-shadow(0 2px 4px rgba(250, 204, 21, 0.4))' }}>★</span>
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
+    // --- INTRO SCREEN ---
+    if (step === 'intro') {
+        return (
+            <main className="flex-grow flex flex-col items-center justify-center p-6 mt-8">
+                <div className="bg-white max-w-3xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 text-center relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"></div>
+                    <h1 className="text-5xl font-black text-slate-800 mb-6 tracking-tight">The HoPE Index</h1>
+                    <h2 className="text-xl font-bold text-slate-500 mb-8 uppercase tracking-widest">Human Optimal Personal Experience</h2>
+                    
+                    <div className="text-left space-y-6 text-slate-600 text-lg leading-relaxed mb-10">
+                        <p>Welcome to the HoPE Index Survey. This is not a test, an academic exam, or a clinical trial designed to diagnose your flaws. It is an innovative, highly visual platform designed to map where you are today and provide a clear, actionable guide toward a life of true optimization and stability.</p>
+                        
+                        <div className="bg-blue-50 border border-blue-100 p-6 rounded-2xl shadow-sm">
+                            <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                                <span className="text-xl">💡</span> How to Complete this Survey
+                            </h3>
+                            <p className="text-base text-blue-800">Imagine you are a professional critic writing a review for a hotel or an app. You are not rating your worth as a human being. Instead, you are rating the quality of the experience currently provided by the different "facilities" and "services" in your life.</p>
+                        </div>
+                    </div>
+
+                    <button 
+                        onClick={() => { setStep('survey'); setCurrentSelection(answers[surveyQuestions[0].id] ?? null); }}
+                        className="bg-slate-900 text-white px-10 py-5 rounded-full font-bold text-xl hover:bg-slate-800 transition-all shadow-xl hover:shadow-slate-500/30 inline-flex items-center justify-center gap-3 w-full md:w-auto"
+                    >
+                        Begin Assessment &rarr;
+                    </button>
+                </div>
+            </main>
+        );
+    }
+
+    // --- RESULTS SCREEN ---
+    if (step === 'results') {
+        const totalScore = Object.values(answers).reduce((a, b) => a + b, 0); // Out of 100 max
+        
+        // Count zones
+        let foundationCount = 0;
+        let transitionCount = 0;
+        let renovationCount = 0;
+        let traumaLockedCheck = 0; // Check Emotions, Home, Core Connections
+        
+        Object.entries(answers).forEach(([id, score]) => {
+            if (score >= 4.0) foundationCount++;
+            else if (score >= 2.5) transitionCount++;
+            else {
+                renovationCount++;
+                if (['irs_emotions', 'ops_home', 'irs_coreconnections'].includes(id)) {
+                    traumaLockedCheck++;
+                }
+            }
+        });
+
+        const isTraumaLocked = traumaLockedCheck >= 2;
+
+        // Visual Map logic (Recharts arc)
+        const gaugeData = [
+            { name: 'Renovation', value: 40, fill: '#ef4444' }, // represents 0.0 - 2.0 range visual area
+            { name: 'Transition', value: 30, fill: '#f59e0b' }, // represents 2.5 - 3.5 range visual area
+            { name: 'Foundation', value: 30, fill: '#10b981' }  // represents 4.0 - 5.0 range visual area
+        ];
+        
+        const percentage = totalScore / 100;
+        const angle = 180 - (percentage * 180);
+
+        return (
+            <main className="flex-grow p-4 md:p-8 mt-8 max-w-6xl mx-auto w-full">
+                <div className="text-center mb-8">
+                    <h1 className="text-4xl md:text-5xl font-black text-slate-800 mb-3 tracking-tight">Your HoPE Index Map</h1>
+                    <p className="text-slate-500 text-lg md:text-xl">Visualizing your current personal experience layout.</p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    
+                    {/* Visual Map Area */}
+                    <div className="lg:col-span-3 bg-slate-900 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center min-h-[450px] border border-slate-800">
+                        {/* Glowing backdrop effect */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500 rounded-full blur-[120px] opacity-20 pointer-events-none"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-500 rounded-full blur-[100px] opacity-10 pointer-events-none"></div>
+                        
+                        <div className="w-full flex justify-between px-8 absolute top-8 text-xs font-bold uppercase tracking-widest text-slate-500 z-10">
+                            <span>OPS (Outer Space)</span>
+                            <span>IRS (Inner Space)</span>
+                        </div>
+
+                        <div className="relative w-full max-w-lg h-64 mt-12 mb-8">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        dataKey="value"
+                                        startAngle={180}
+                                        endAngle={0}
+                                        data={gaugeData}
+                                        cx="50%"
+                                        cy="100%"
+                                        innerRadius="75%"
+                                        outerRadius="100%"
+                                        stroke="none"
+                                        isAnimationActive={true}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                            
+                            {/* CSS Needle */}
+                            <div className="absolute bottom-0 left-1/2 w-1.5 h-[85%] bg-white origin-bottom z-10 transition-transform duration-1000 ease-out shadow-[0_0_20px_rgba(255,255,255,1)]" 
+                                 style={{ transform: `translateX(-50%) rotate(${angle - 90}deg)`, borderRadius: '4px 4px 0 0' }}>
+                                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,1)]"></div>
+                                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-8 h-8 bg-slate-800 border-4 border-white rounded-full shadow-lg"></div>
+                            </div>
+
+                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-16 text-center text-white flex flex-col items-center">
+                                <div className="text-7xl font-black tracking-tighter" style={{ textShadow: '0 0 30px rgba(255,255,255,0.4)' }}>
+                                    {totalScore}<span className="text-3xl text-slate-400 font-bold ml-1">/100</span>
+                                </div>
+                                <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-2">Total Audit Score</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Interpretation Panel */}
+                    <div className="lg:col-span-2 space-y-6">
+                        <div className="bg-white rounded-[2rem] p-8 shadow-xl border border-slate-100">
+                            <h2 className="text-2xl font-black text-slate-800 mb-6 border-b border-slate-100 pb-4">Strategic Zones</h2>
+                            
+                            <div className="space-y-6">
+                                <div className="flex items-start gap-4 p-4 rounded-2xl bg-emerald-50 border border-emerald-100 transition-all hover:shadow-md">
+                                    <div className="w-14 h-14 rounded-2xl bg-white text-emerald-600 flex items-center justify-center font-black text-2xl shrink-0 shadow-sm">
+                                        {foundationCount}
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-emerald-900 text-lg mb-1">Foundation Zones</h3>
+                                        <p className="text-sm text-emerald-700 leading-snug">4.0 - 5.0 Stars. Validate & Celebrate. Leverage these as mental fuel to power renovations.</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex items-start gap-4 p-4 rounded-2xl bg-amber-50 border border-amber-100 transition-all hover:shadow-md">
+                                    <div className="w-14 h-14 rounded-2xl bg-white text-amber-600 flex items-center justify-center font-black text-2xl shrink-0 shadow-sm">
+                                        {transitionCount}
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-amber-900 text-lg mb-1">Transition Zones</h3>
+                                        <p className="text-sm text-amber-700 leading-snug">2.5 - 3.5 Stars. Stabilize & push upward. Prevent slippage down into renovation.</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4 p-4 rounded-2xl bg-red-50 border border-red-100 transition-all hover:shadow-md">
+                                    <div className="w-14 h-14 rounded-2xl bg-white text-red-600 flex items-center justify-center font-black text-2xl shrink-0 shadow-sm">
+                                        {renovationCount}
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-red-900 text-lg mb-1">Renovation Zones</h3>
+                                        <p className="text-sm text-red-700 leading-snug">0.0 - 2.0 Stars. Treat as physical projects to be renovated, not personal failures.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Trauma Filter Block */}
+                        <div className={`rounded-[2rem] p-8 shadow-xl border transition-all duration-500 ${isTraumaLocked ? 'bg-red-50 border-red-200' : 'bg-slate-900 border-slate-800 text-white'}`}>
+                            <h2 className={`text-xl font-black mb-3 flex items-center gap-3 ${isTraumaLocked ? 'text-red-900' : 'text-white'}`}>
+                                <span className="text-2xl">{isTraumaLocked ? '⚠️' : '🧠'}</span>
+                                {isTraumaLocked ? 'Trauma-Locked Indicator' : 'Operational Focus'}
+                            </h2>
+                            <p className={`text-[15px] leading-relaxed ${isTraumaLocked ? 'text-red-800 font-medium' : 'text-slate-300'}`}>
+                                {isTraumaLocked 
+                                    ? "Multiple foundational areas (Emotions, Home, Core Connections) are scoring in the Renovation Zone. This suggests roadblocks may be trauma-locked. Immediate referral to clinical network for Deep Trauma Therapies (RTM/AMR) is recommended."
+                                    : "Foundational areas appear stable. Your roadblocks are operational rather than trauma-locked. We will use the DRiVE system to build a 12-week action plan to systematically raise low-star experiences."}
+                            </p>
+                        </div>
+                        
+                        <div className="flex gap-4">
+                            <button onClick={() => window.print()} className="flex-1 bg-white border-2 border-slate-200 text-slate-700 font-bold py-4 rounded-full hover:bg-slate-50 transition-colors shadow-sm">
+                                Save Report
+                            </button>
+                            <button onClick={() => window.location.reload()} className="flex-1 bg-blue-600 text-white font-bold py-4 rounded-full hover:bg-blue-700 transition-colors shadow-lg">
+                                Retake Survey
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        );
+    }
+
+    // --- SURVEY SCREEN ---
+    const q = surveyQuestions[currentQIndex];
+    const progress = ((currentQIndex) / surveyQuestions.length) * 100; // Progress starts at 0
+
+    return (
+        <main className="flex-grow p-4 md:p-8 flex flex-col items-center">
+            
+            <div className="w-full max-w-4xl mb-10">
+                <div className="flex justify-between items-end text-sm font-bold text-slate-500 mb-3">
+                    <span className="uppercase tracking-widest text-xs">Survey Progress</span>
+                    <span className="bg-white px-3 py-1 rounded-full shadow-sm border border-slate-100 text-blue-600">{currentQIndex + 1} / {surveyQuestions.length}</span>
+                </div>
+                <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden shadow-inner">
+                    <div className="bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-500 h-full transition-all duration-700 ease-in-out" style={{ width: `${progress}%` }}></div>
+                </div>
+            </div>
+
+            <div className="bg-white max-w-4xl w-full p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100 relative">
+                
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 pb-6 border-b border-slate-100 gap-4">
+                    <div>
+                        <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] mb-3 border border-blue-100">{q.space}</div>
+                        <div className="text-slate-400 font-bold text-sm tracking-wide">{q.dimension}</div>
+                    </div>
+                </div>
+
+                <h2 className="text-4xl font-black text-slate-800 mb-6 tracking-tight leading-tight">{q.title}</h2>
+                <div className="bg-slate-50 border-l-4 border-blue-500 p-6 rounded-r-2xl mb-10">
+                    <p className="text-xl text-slate-700 leading-relaxed font-medium">{q.concept}</p>
+                </div>
+                
+                {renderRater()}
+
+                <div className="flex justify-between items-center mt-12 pt-8 border-t border-slate-100">
+                    <button 
+                        onClick={handlePrevQ}
+                        className={`text-slate-500 font-bold hover:text-slate-800 px-6 py-3 transition-colors ${currentQIndex === 0 ? 'invisible' : ''}`}
+                    >
+                        &larr; Back
+                    </button>
+                    <button 
+                        onClick={handleNextQ}
+                        disabled={currentSelection === null}
+                        className={`px-10 py-5 rounded-full font-bold text-lg transition-all shadow-xl flex items-center gap-3
+                            ${currentSelection !== null 
+                                ? 'bg-slate-900 text-white hover:bg-slate-800 hover:-translate-y-1 hover:shadow-slate-900/30 cursor-pointer' 
+                                : 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none'}`}
+                    >
+                        {currentQIndex === surveyQuestions.length - 1 ? 'Generate Index Map 🚀' : 'Next Question &rarr;'}
+                    </button>
+                </div>
+            </div>
+            
+        </main>
+    );
+};
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+    </script>
+</body>
+</html>
