@@ -138,6 +138,118 @@
             margin: 0;
         }
 
+        /* Map Modal */
+        .map-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .map-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .map-modal-content {
+            background: rgba(15, 8, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            transform: scale(0.95);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .map-modal-overlay.active .map-modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            line-height: 1;
+        }
+
+        .close-modal-btn:hover {
+            color: #ffffff;
+        }
+
+        .map-modal-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #fbcfe8 30%, #d946ef 70%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .map-modal-subtitle {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .map-image-container {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #000;
+        }
+
+        .map-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.9;
+            filter: contrast(1.1) brightness(0.9);
+        }
+        
+        .scanning-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #d946ef;
+            box-shadow: 0 0 20px #d946ef, 0 0 40px #0ea5e9;
+            animation: scan 3s ease-in-out infinite alternate;
+            opacity: 0;
+        }
+        
+        .map-modal-overlay.active .scanning-bar {
+            opacity: 1;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
         .callout-form-container {
             margin-top: 0.1vw;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -316,10 +428,10 @@
                 <p class="callout-form-prompt">
                     Enter your email and city to find a SOL ViBE Experience Station near you.
                 </p>
-                <form class="callout-form" action="#" method="POST">
+                <form class="callout-form" onsubmit="showMapModal(event)">
                     <div class="callout-input-group">
-                        <input type="email" placeholder="Business Email" required>
-                        <input type="text" placeholder="Your City" required>
+                        <input type="email" id="search-email" placeholder="Business Email" required>
+                        <input type="text" id="search-city" placeholder="Your City" required>
                     </div>
                     <button type="submit">Find a Station Near Me ➔</button>
                 </form>
@@ -342,6 +454,20 @@
         <h3 class="footer-subtitle">SOL WORLD <span class="fw-bold">ECOSYSTEM</span></h3>
         <p class="footer-copy">SOL WORLD ECOSYSTEM &copy; 2026 | solworld.ai</p>
     </footer>
+
+    <!-- Map Modal Overlay -->
+    <div id="map-modal" class="map-modal-overlay">
+        <div class="map-modal-content">
+            <button class="close-modal-btn" onclick="closeMapModal()">×</button>
+            <h3 class="map-modal-title">Experience Stations</h3>
+            <p class="map-modal-subtitle" id="map-modal-subtitle">Connecting to SOL Network...</p>
+            <div class="map-image-container">
+                <img src="../assets/map_mockup.png" alt="Map Mockup">
+                <div class="scanning-bar"></div>
+            </div>
+            <a href="#" class="btn-outline" style="margin-top: 2rem; display: inline-block;">View Full Directory</a>
+        </div>
+    </div>
 
     <script>
         const canvas = document.getElementById('starfield');
@@ -416,6 +542,36 @@
         }
 
         draw();
+
+        // Map Modal Logic
+        function showMapModal(event) {
+            event.preventDefault();
+            const email = document.getElementById('search-email').value;
+            const city = document.getElementById('search-city').value;
+            
+            if (email && city) {
+                const modal = document.getElementById('map-modal');
+                const subtitle = document.getElementById('map-modal-subtitle');
+                
+                // Simulate loading state
+                subtitle.innerHTML = 'Connecting to SOL Network...';
+                modal.classList.add('active');
+                
+                // Simulate found stations after scan animation starts
+                setTimeout(() => {
+                    const count = Math.floor(Math.random() * 5) + 2; // random number 2-6
+                    subtitle.innerHTML = `Found <strong style="color:#ffffff">${count} active stations</strong> near ${city}`;
+                }, 1500);
+            }
+        }
+
+        function closeMapModal() {
+            document.getElementById('map-modal').classList.remove('active');
+            
+            // Reset form for demo purposes
+            document.getElementById('search-email').value = '';
+            document.getElementById('search-city').value = '';
+        }
     </script>
 </body>
 
