@@ -115,15 +115,15 @@
         /* The Tooltip */
         .drag-tooltip {
             position: absolute;
-            top: -170px; /* Positions above the slider */
+            bottom: calc(100% + 25px); /* Positions above the slider */
             left: 50%;
             transform: translateX(-50%);
             background: #fff;
             border: 1px solid #E0E0E0;
             border-radius: 12px;
-            box-shadow: 0px 10px 25px rgba(0,0,0,0.1);
-            padding: 12px;
-            width: 280px; /* Match old width to fit placeholders */
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.15);
+            padding: 15px;
+            width: 250px; /* Slightly wider to accommodate photos */
             text-align: center;
             opacity: 0;
             visibility: hidden;
@@ -135,12 +135,24 @@
             opacity: 1;
             visibility: visible;
         }
-        .drag-tooltip img {
+        
+        /* The Photo inside the Tooltip */
+        .tooltip-img {
             width: 100%;
-            height: auto;
-            border-radius: 6px;
-            display: block;
+            height: 130px;
+            object-fit: cover; /* Ensures the photo isn't stretched */
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background-color: #f0f0f0; /* Soft background while loading */
         }
+        .drag-tooltip p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #4A4A4A;
+            font-weight: 500;
+        }
+        
         .drag-tooltip::after {
             content: '';
             position: absolute;
@@ -155,7 +167,8 @@
         /* The Draggable Slider Input */
         .slider-track-wrapper {
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            margin-top: 180px; /* Gives plenty of room for the photo above it */
         }
         
         .hope-range-slider {
@@ -175,10 +188,10 @@
         .hope-range-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            background: #2962FF; /* Blue color */
+            background: #2962FF; 
             cursor: grab;
             border: 4px solid #fff;
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
@@ -186,11 +199,11 @@
         }
         .hope-range-slider::-webkit-slider-thumb:active {
             cursor: grabbing;
-            transform: scale(1.1);
+            transform: scale(1.2);
         }
         .hope-range-slider::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             background: #2962FF;
             cursor: grab;
@@ -582,31 +595,44 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
     const min = 0;
     const max = 5;
     const percent = ((val - min) / (max - min)) * 100;
-    const thumbWidthAdjustment = 12 - (percent * 0.24); 
+    const thumbWidthAdjustment = 13 - (percent * 0.26); 
     const tooltipLeft = `calc(${percent}% + ${thumbWidthAdjustment}px)`;
 
-    let category = "optimal";
-    if (val < 2.0) category = "suboptimal";
-    else if (val < 4.0) category = "neutral";
-
-    // Get image from hopeData if it exists, otherwise fallback to placeholder
     let dataKey = currentQ.title.startsWith("Flex 1") ? "Flex1" : (currentQ.title.startsWith("Flex 2") ? "Flex2" : currentQ.title.split(' ')[0]);
+    let valStr = val.toFixed(1);
 
     // Default placeholder using the exact numerical value
-    let imgUrl = `https://placehold.co/250x150?text=${dataKey}+${val.toFixed(1)}`;
-    
-    if (hopeData[dataKey] && hopeData[dataKey].images && hopeData[dataKey].images[category]) {
-        const dataImg = hopeData[dataKey].images[category];
-        if (dataImg !== "LINK_HERE" && !dataImg.includes("via.placeholder.com")) {
-            imgUrl = dataImg;
-        } else if (dataImg.includes("via.placeholder.com")) {
-            const textMatch = dataImg.match(/text=(.*)/);
-            if (textMatch) {
-                let textContent = textMatch[1];
-                textContent = textContent.replace(/0\.0|2\.5|5\.0/, val.toFixed(1));
-                imgUrl = `https://placehold.co/250x150?text=${textContent}`;
+    let imgUrl = `https://placehold.co/250x150?text=${dataKey}+${valStr}`;
+    let tooltipText = "";
+
+    // 1. Check if hopeData has exact numeric keys (e.g., hopeData["1.1"]["0.5"])
+    if (hopeData[dataKey] && hopeData[dataKey][valStr] && hopeData[dataKey][valStr].img) {
+        imgUrl = hopeData[dataKey][valStr].img;
+        tooltipText = hopeData[dataKey][valStr].text;
+    } else {
+        // 2. Fallback to category logic if hopeData still uses old 'suboptimal', 'neutral', 'optimal' format
+        let category = "optimal";
+        if (val < 2.0) category = "suboptimal";
+        else if (val < 4.0) category = "neutral";
+        
+        if (hopeData[dataKey] && hopeData[dataKey].images && hopeData[dataKey].images[category]) {
+            const dataImg = hopeData[dataKey].images[category];
+            if (dataImg !== "LINK_HERE" && !dataImg.includes("via.placeholder.com")) {
+                imgUrl = dataImg;
+            } else if (dataImg.includes("via.placeholder.com")) {
+                const textMatch = dataImg.match(/text=(.*)/);
+                if (textMatch) {
+                    let textContent = textMatch[1];
+                    textContent = textContent.replace(/0\.0|2\.5|5\.0/, valStr);
+                    imgUrl = `https://placehold.co/250x150?text=${textContent}`;
+                }
             }
         }
+        
+        // Fallback tooltip text based on category
+        if (val < 2.0) tooltipText = currentQ.anchors[0.0];
+        else if (val < 4.0) tooltipText = currentQ.anchors[2.5];
+        else tooltipText = currentQ.anchors[5.0];
     }
 
     return (
@@ -617,6 +643,7 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
                     style={{ left: tooltipLeft }}
                 >
                     <img className="tooltip-img" src={imgUrl} alt="Guide" />
+                    <p className="tooltip-desc">{tooltipText}</p>
                 </div>
                 <input 
                     type="range" 
