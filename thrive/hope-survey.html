@@ -180,7 +180,6 @@
             width: 100%;
             height: auto;
             border-radius: 6px;
-            margin-bottom: 12px;
             background: #f4f4f4;
         }
         .hover-tooltip p {
@@ -531,29 +530,38 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
     let tooltipContent = null;
     if (hoveredVal !== null) {
         let category = "optimal";
-        let anchorText = currentQ.anchors[5.0];
         
         if (hoveredVal < 2.0) {
             category = "suboptimal";
-            anchorText = currentQ.anchors[0.0];
         } else if (hoveredVal < 4.0) {
             category = "neutral";
-            anchorText = currentQ.anchors[2.5];
         }
 
         // Get image from hopeData if it exists, otherwise fallback to placeholder
-        let imgUrl = "https://via.placeholder.com/250x150?text=" + category;
-        if (hopeData[currentQ.id] && hopeData[currentQ.id].images && hopeData[currentQ.id].images[category]) {
-            const dataImg = hopeData[currentQ.id].images[category];
-            if (dataImg !== "LINK_HERE") {
+        let dataKey = currentQ.title.startsWith("Flex 1") ? "Flex1" : (currentQ.title.startsWith("Flex 2") ? "Flex2" : currentQ.title.split(' ')[0]);
+        let categoryText = category;
+        if (category === 'suboptimal') categoryText = '0.0';
+        if (category === 'neutral') categoryText = '2.5';
+        if (category === 'optimal') categoryText = '5.0';
+
+        let imgUrl = `https://placehold.co/250x150?text=${dataKey}+${categoryText}`;
+        
+        if (hopeData[dataKey] && hopeData[dataKey].images && hopeData[dataKey].images[category]) {
+            const dataImg = hopeData[dataKey].images[category];
+            if (dataImg !== "LINK_HERE" && !dataImg.includes("via.placeholder.com")) {
                 imgUrl = dataImg;
+            } else if (dataImg.includes("via.placeholder.com")) {
+                // Map old via.placeholder.com to placehold.co
+                const textMatch = dataImg.match(/text=(.*)/);
+                if (textMatch) {
+                    imgUrl = `https://placehold.co/250x150?text=${textMatch[1]}`;
+                }
             }
         }
 
         tooltipContent = (
             <div className="hover-tooltip visible" style={{ left: `${tooltipLeft}px` }}>
                 <img className="tooltip-img" src={imgUrl} alt="Guide" />
-                <p className="tooltip-text">{anchorText}</p>
             </div>
         );
     }
