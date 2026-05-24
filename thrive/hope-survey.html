@@ -539,22 +539,22 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
 
         // Get image from hopeData if it exists, otherwise fallback to placeholder
         let dataKey = currentQ.title.startsWith("Flex 1") ? "Flex1" : (currentQ.title.startsWith("Flex 2") ? "Flex2" : currentQ.title.split(' ')[0]);
-        let categoryText = category;
-        if (category === 'suboptimal') categoryText = '0.0';
-        if (category === 'neutral') categoryText = '2.5';
-        if (category === 'optimal') categoryText = '5.0';
 
-        let imgUrl = `https://placehold.co/250x150?text=${dataKey}+${categoryText}`;
+        // Default placeholder using the exact hovered numerical value
+        let imgUrl = `https://placehold.co/250x150?text=${dataKey}+${hoveredVal.toFixed(1)}`;
         
         if (hopeData[dataKey] && hopeData[dataKey].images && hopeData[dataKey].images[category]) {
             const dataImg = hopeData[dataKey].images[category];
             if (dataImg !== "LINK_HERE" && !dataImg.includes("via.placeholder.com")) {
                 imgUrl = dataImg;
             } else if (dataImg.includes("via.placeholder.com")) {
-                // Map old via.placeholder.com to placehold.co
+                // Map old via.placeholder.com to placehold.co and inject exact hovered numerical value
                 const textMatch = dataImg.match(/text=(.*)/);
                 if (textMatch) {
-                    imgUrl = `https://placehold.co/250x150?text=${textMatch[1]}`;
+                    let textContent = textMatch[1];
+                    // Replace static '0.0', '2.5', or '5.0' with the dynamically hovered exact value
+                    textContent = textContent.replace(/0\.0|2\.5|5\.0/, hoveredVal.toFixed(1));
+                    imgUrl = `https://placehold.co/250x150?text=${textContent}`;
                 }
             }
         }
