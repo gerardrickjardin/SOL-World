@@ -99,18 +99,10 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        @keyframes avatar-talk-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); }
-            50% { box-shadow: 0 0 0 15px rgba(0, 229, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
-        }
-        @keyframes avatar-speak-bounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-4px) scale(1.02); }
-        }
         .avatar-talking {
-            animation: avatar-talk-pulse 1.5s infinite, avatar-speak-bounce 0.15s infinite alternate;
             border: 3px solid #00e5ff;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+            transition: all 0.3s ease;
         }
     </style>
 </head>
