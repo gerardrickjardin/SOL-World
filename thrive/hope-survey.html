@@ -122,8 +122,8 @@
             border: 1px solid #E0E0E0;
             border-radius: 12px;
             box-shadow: 0px 10px 25px rgba(0,0,0,0.15);
-            padding: 15px;
-            width: 250px; /* Slightly wider to accommodate photos */
+            padding: 8px;
+            width: 180px;
             text-align: center;
             opacity: 0;
             visibility: hidden;
@@ -139,18 +139,13 @@
         /* The Photo inside the Tooltip */
         .tooltip-img {
             width: 100%;
-            height: 130px;
+            height: auto;
+            aspect-ratio: 4/3;
             object-fit: cover; /* Ensures the photo isn't stretched */
-            border-radius: 8px;
-            margin-bottom: 12px;
-            background-color: #f0f0f0; /* Soft background while loading */
-        }
-        .drag-tooltip p {
+            border-radius: 6px;
+            display: block;
             margin: 0;
-            font-size: 13px;
-            line-height: 1.4;
-            color: #4A4A4A;
-            font-weight: 500;
+            background-color: #f0f0f0; /* Soft background while loading */
         }
         
         .drag-tooltip::after {
@@ -168,7 +163,7 @@
         .slider-track-wrapper {
             position: relative;
             margin-bottom: 40px;
-            margin-top: 180px; /* Gives plenty of room for the photo above it */
+            margin-top: 150px;
         }
         
         .hope-range-slider {
@@ -246,7 +241,7 @@
             padding: 20px;
             text-align: center;
             max-width: 200px;
-            margin: 40px auto 0 auto;
+            margin: 0 auto;
             background: #FAFAFA;
         }
         .rating-label {
@@ -556,40 +551,38 @@ const surveyQuestions = [
     }
 ];
 
-const hopeData = {
-    "1.1": {
-        "0.0": { img: "https://picsum.photos/seed/hope00/250/150", text: "0.0: Unsafe, structurally compromised, or unlivable." },
-        "0.5": { img: "https://picsum.photos/seed/hope05/250/150", text: "0.5: Extremely poor conditions, lacking basic shelter." },
-        "1.0": { img: "https://picsum.photos/seed/hope10/250/150", text: "1.0: Severe issues, high stress environment." },
-        "1.5": { img: "https://picsum.photos/seed/hope15/250/150", text: "1.5: Poor condition, constantly worrying about safety." },
-        "2.0": { img: "https://picsum.photos/seed/hope20/250/150", text: "2.0: Barely adequate, lacks any real comfort." },
-        "2.5": { img: "https://picsum.photos/seed/hope25/250/150", text: "2.5: Physically intact, but crowded, noisy, or temporary." },
-        "3.0": { img: "https://picsum.photos/seed/hope30/250/150", text: "3.0: Functional and okay, serves its basic purpose." },
-        "3.5": { img: "https://picsum.photos/seed/hope35/250/150", text: "3.5: Clean and good condition, generally quiet." },
-        "4.0": { img: "https://picsum.photos/seed/hope40/250/150", text: "4.0: Very comfortable space, minor things could improve." },
-        "4.5": { img: "https://picsum.photos/seed/hope45/250/150", text: "4.5: Highly supportive, warm, and secure." },
-        "5.0": { img: "https://picsum.photos/seed/hope50/250/150", text: "5.0: Secure, quiet, comfortable, a true peaceful sanctuary." }
-    },
-    "1.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "1.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "2.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "2.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "2.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "3.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "3.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "3.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "4.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "4.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "4.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "5.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "5.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "5.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "6.1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "6.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "6.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "Flex1": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
-    "Flex2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } }
+// ==========================================
+// ADD YOUR REAL WORDPRESS IMAGE LINKS HERE!
+// ==========================================
+const myRealImages = {
+    // Example of how you will add your images later:
+    // "1.1": {
+    //    "0.0": "https://yourwebsite.com/wp-content/uploads/1-1-0-0.png",
+    //    "0.5": "https://yourwebsite.com/wp-content/uploads/1-1-0-5.png",
+    //    // ...
+    // },
 };
+
+// --- AUTO-GENERATOR ---
+const allQs = ["1.1", "1.2", "1.3", "2.1", "2.2", "2.3", "3.1", "3.2", "3.3", "4.1", "4.2", "4.3", "5.1", "5.2", "5.3", "6.1", "6.2", "6.3", "Flex1", "Flex2"];
+const vals = ["0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0"];
+const generatedData = {};
+
+allQs.forEach(q => {
+    generatedData[q] = {};
+    vals.forEach(v => {
+        let color = "e85d44"; let bg = "ffdddd"; // Red for 0.0 to 1.5
+        if(parseFloat(v) >= 2.0) { color = "f1a340"; bg = "ffeecc"; } // Yellow for 2.0 to 3.5
+        if(parseFloat(v) >= 4.0) { color = "29b674"; bg = "ccffcc"; } // Green for 4.0 to 5.0
+        
+        // If you provided a real image, use it. Otherwise, use a placeholder.
+        if (myRealImages[q] && myRealImages[q][v]) {
+            generatedData[q][v] = myRealImages[q][v];
+        } else {
+            generatedData[q][v] = `https://placehold.co/300x200/${bg}/${color}?text=Q+${q}+%5Cn+Score+${v}`;
+        }
+    });
+});
 
 const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
     const scaleValues = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
@@ -607,39 +600,9 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
     let dataKey = currentQ.title.startsWith("Flex 1") ? "Flex1" : (currentQ.title.startsWith("Flex 2") ? "Flex2" : currentQ.title.split(' ')[0]);
     let valStr = val.toFixed(1);
 
-    // Default placeholder using a reliable picsum seed if no exact match is found
-    let imgUrl = `https://picsum.photos/seed/${dataKey.replace('.', '')}${valStr.replace('.', '')}/250/150`;
-    let tooltipText = "";
-
-    // 1. Check if hopeData has exact numeric keys (e.g., hopeData["1.1"]["0.5"])
-    if (hopeData[dataKey] && hopeData[dataKey][valStr] && hopeData[dataKey][valStr].img) {
-        imgUrl = hopeData[dataKey][valStr].img;
-        tooltipText = hopeData[dataKey][valStr].text;
-    } else {
-        // 2. Fallback to category logic if hopeData still uses old 'suboptimal', 'neutral', 'optimal' format
-        let category = "optimal";
-        if (val < 2.0) category = "suboptimal";
-        else if (val < 4.0) category = "neutral";
-        
-        if (hopeData[dataKey] && hopeData[dataKey].images && hopeData[dataKey].images[category]) {
-            const dataImg = hopeData[dataKey].images[category];
-            if (dataImg !== "LINK_HERE" && !dataImg.includes("via.placeholder.com")) {
-                imgUrl = dataImg;
-            } else if (dataImg.includes("via.placeholder.com")) {
-                const textMatch = dataImg.match(/text=(.*)/);
-                if (textMatch) {
-                    let textContent = textMatch[1];
-                    textContent = textContent.replace(/0\.0|2\.5|5\.0/, valStr);
-                    imgUrl = `https://placehold.co/250x150?text=${textContent}`;
-                }
-            }
-        }
-        
-        // Fallback tooltip text based on category
-        if (val < 2.0) tooltipText = currentQ.anchors[0.0];
-        else if (val < 4.0) tooltipText = currentQ.anchors[2.5];
-        else tooltipText = currentQ.anchors[5.0];
-    }
+    let imgUrl = generatedData[dataKey] && generatedData[dataKey][valStr] 
+        ? generatedData[dataKey][valStr] 
+        : `https://placehold.co/300x200/cccccc/333333?text=Error`;
 
     return (
         <div className="hope-drag-container">
@@ -649,7 +612,6 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
                     style={{ left: tooltipLeft }}
                 >
                     <img className="tooltip-img" src={imgUrl} alt="Guide" />
-                    <p className="tooltip-desc">{tooltipText}</p>
                 </div>
                 <input 
                     type="range" 
