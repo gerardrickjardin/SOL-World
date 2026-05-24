@@ -558,11 +558,17 @@ const surveyQuestions = [
 
 const hopeData = {
     "1.1": {
-      images: {
-        suboptimal: "https://via.placeholder.com/250x150?text=0.0+Trash+Street",
-        neutral: "https://via.placeholder.com/250x150?text=2.5+Basic+Room",
-        optimal: "https://via.placeholder.com/250x150?text=5.0+Luxury+Suite"
-      }
+        "0.0": { img: "https://picsum.photos/seed/hope00/250/150", text: "0.0: Unsafe, structurally compromised, or unlivable." },
+        "0.5": { img: "https://picsum.photos/seed/hope05/250/150", text: "0.5: Extremely poor conditions, lacking basic shelter." },
+        "1.0": { img: "https://picsum.photos/seed/hope10/250/150", text: "1.0: Severe issues, high stress environment." },
+        "1.5": { img: "https://picsum.photos/seed/hope15/250/150", text: "1.5: Poor condition, constantly worrying about safety." },
+        "2.0": { img: "https://picsum.photos/seed/hope20/250/150", text: "2.0: Barely adequate, lacks any real comfort." },
+        "2.5": { img: "https://picsum.photos/seed/hope25/250/150", text: "2.5: Physically intact, but crowded, noisy, or temporary." },
+        "3.0": { img: "https://picsum.photos/seed/hope30/250/150", text: "3.0: Functional and okay, serves its basic purpose." },
+        "3.5": { img: "https://picsum.photos/seed/hope35/250/150", text: "3.5: Clean and good condition, generally quiet." },
+        "4.0": { img: "https://picsum.photos/seed/hope40/250/150", text: "4.0: Very comfortable space, minor things could improve." },
+        "4.5": { img: "https://picsum.photos/seed/hope45/250/150", text: "4.5: Highly supportive, warm, and secure." },
+        "5.0": { img: "https://picsum.photos/seed/hope50/250/150", text: "5.0: Secure, quiet, comfortable, a true peaceful sanctuary." }
     },
     "1.2": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
     "1.3": { images: { suboptimal: "LINK_HERE", neutral: "LINK_HERE", optimal: "LINK_HERE" } },
@@ -601,8 +607,8 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
     let dataKey = currentQ.title.startsWith("Flex 1") ? "Flex1" : (currentQ.title.startsWith("Flex 2") ? "Flex2" : currentQ.title.split(' ')[0]);
     let valStr = val.toFixed(1);
 
-    // Default placeholder using the exact numerical value
-    let imgUrl = `https://placehold.co/250x150?text=${dataKey}+${valStr}`;
+    // Default placeholder using a reliable picsum seed if no exact match is found
+    let imgUrl = `https://picsum.photos/seed/${dataKey.replace('.', '')}${valStr.replace('.', '')}/250/150`;
     let tooltipText = "";
 
     // 1. Check if hopeData has exact numeric keys (e.g., hopeData["1.1"]["0.5"])
