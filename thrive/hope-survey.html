@@ -106,98 +106,124 @@
             box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
             transition: all 0.3s ease;
         }
-        .hope-slider {
+        .hope-drag-container {
             position: relative;
             width: 100%;
-            margin: 40px auto 60px auto;
+            margin: 60px auto 40px auto;
         }
-        .scale-track {
-            height: 12px;
-            background: linear-gradient(90deg, #E85D44 0%, #F1A340 50%, #29B674 100%);
-            border-radius: 10px;
-            position: relative;
-            margin-bottom: 20px;
-        }
-        .scale-ticks {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 5px;
-        }
-        .tick {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            width: 30px;
-        }
-        .tick-dot {
-            height: 10px;
-            width: 4px;
-            background-color: #B0BEC5;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            transition: all 0.2s ease;
-        }
-        .tick-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #546E7A;
-        }
-        .tick:hover .tick-dot {
-            background-color: #333;
-            transform: scale(1.3);
-        }
-        .tick.active .tick-dot {
-            background-color: #2962FF;
-            transform: scale(1.6);
-        }
-        .tick.active .tick-label {
-            color: #2962FF;
-        }
-        .hover-tooltip {
+
+        /* The Tooltip */
+        .drag-tooltip {
             position: absolute;
-            bottom: 70px;
+            top: -170px; /* Positions above the slider */
             left: 50%;
             transform: translateX(-50%);
             background: #fff;
             border: 1px solid #E0E0E0;
             border-radius: 12px;
-            box-shadow: 0px 15px 30px rgba(0,0,0,0.15);
-            padding: 15px;
-            width: 280px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.1);
+            padding: 12px;
+            width: 280px; /* Match old width to fit placeholders */
             text-align: center;
-            pointer-events: none;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0.2s ease;
+            transition: opacity 0.15s ease, visibility 0.15s ease;
             z-index: 100;
+            pointer-events: none;
         }
-        .hover-tooltip.visible {
+        .drag-tooltip.active {
             opacity: 1;
             visibility: visible;
         }
-        .hover-tooltip img {
+        .drag-tooltip img {
             width: 100%;
             height: auto;
             border-radius: 6px;
-            background: #f4f4f4;
+            display: block;
         }
-        .hover-tooltip p {
-            margin: 0;
-            font-size: 13px;
-            line-height: 1.4;
-            color: #333;
-            font-weight: 500;
-        }
-        .hover-tooltip::after {
+        .drag-tooltip::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            border-width: 10px 10px 0;
+            border-width: 8px 8px 0;
             border-style: solid;
             border-color: #fff transparent transparent transparent;
+        }
+
+        /* The Draggable Slider Input */
+        .slider-track-wrapper {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .hope-range-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 12px;
+            background: linear-gradient(90deg, #E85D44 0%, #F1A340 50%, #29B674 100%);
+            border-radius: 10px;
+            outline: none;
+            margin: 0;
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        /* The Drag Handle (Thumb) */
+        .hope-range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #2962FF; /* Blue color */
+            cursor: grab;
+            border: 4px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: transform 0.1s;
+        }
+        .hope-range-slider::-webkit-slider-thumb:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+        }
+        .hope-range-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #2962FF;
+            cursor: grab;
+            border: 4px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        /* The Ticks underneath the slider */
+        .ticks-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-top: 15px;
+        }
+        .tick-mark {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 20px;
+        }
+        .tick-mark::before {
+            content: '';
+            height: 8px;
+            width: 3px;
+            background-color: #B0BEC5;
+            border-radius: 2px;
+            margin-bottom: 5px;
+            margin-top: -15px; /* Pulls tick close to track */
+        }
+        .tick-mark span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #546E7A;
         }
     </style>
 </head>
@@ -517,70 +543,66 @@ const hopeData = {
 
 const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
     const scaleValues = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
-    const [hoveredVal, setHoveredVal] = useState(null);
-    const [tooltipLeft, setTooltipLeft] = useState(0);
+    const [isHovered, setIsHovered] = useState(false);
+    
+    const val = currentSelection !== null ? currentSelection : 2.5;
 
-    const handleMouseEnter = (e, val) => {
-        setHoveredVal(val);
-        const rect = e.currentTarget.getBoundingClientRect();
-        const parentRect = e.currentTarget.parentElement.getBoundingClientRect();
-        setTooltipLeft(rect.left - parentRect.left + (rect.width / 2));
-    };
+    // Calculate tooltip position
+    const min = 0;
+    const max = 5;
+    const percent = ((val - min) / (max - min)) * 100;
+    const thumbWidthAdjustment = 12 - (percent * 0.24); 
+    const tooltipLeft = `calc(${percent}% + ${thumbWidthAdjustment}px)`;
 
-    let tooltipContent = null;
-    if (hoveredVal !== null) {
-        let category = "optimal";
-        
-        if (hoveredVal < 2.0) {
-            category = "suboptimal";
-        } else if (hoveredVal < 4.0) {
-            category = "neutral";
-        }
+    let category = "optimal";
+    if (val < 2.0) category = "suboptimal";
+    else if (val < 4.0) category = "neutral";
 
-        // Get image from hopeData if it exists, otherwise fallback to placeholder
-        let dataKey = currentQ.title.startsWith("Flex 1") ? "Flex1" : (currentQ.title.startsWith("Flex 2") ? "Flex2" : currentQ.title.split(' ')[0]);
+    // Get image from hopeData if it exists, otherwise fallback to placeholder
+    let dataKey = currentQ.title.startsWith("Flex 1") ? "Flex1" : (currentQ.title.startsWith("Flex 2") ? "Flex2" : currentQ.title.split(' ')[0]);
 
-        // Default placeholder using the exact hovered numerical value
-        let imgUrl = `https://placehold.co/250x150?text=${dataKey}+${hoveredVal.toFixed(1)}`;
-        
-        if (hopeData[dataKey] && hopeData[dataKey].images && hopeData[dataKey].images[category]) {
-            const dataImg = hopeData[dataKey].images[category];
-            if (dataImg !== "LINK_HERE" && !dataImg.includes("via.placeholder.com")) {
-                imgUrl = dataImg;
-            } else if (dataImg.includes("via.placeholder.com")) {
-                // Map old via.placeholder.com to placehold.co and inject exact hovered numerical value
-                const textMatch = dataImg.match(/text=(.*)/);
-                if (textMatch) {
-                    let textContent = textMatch[1];
-                    // Replace static '0.0', '2.5', or '5.0' with the dynamically hovered exact value
-                    textContent = textContent.replace(/0\.0|2\.5|5\.0/, hoveredVal.toFixed(1));
-                    imgUrl = `https://placehold.co/250x150?text=${textContent}`;
-                }
+    // Default placeholder using the exact numerical value
+    let imgUrl = `https://placehold.co/250x150?text=${dataKey}+${val.toFixed(1)}`;
+    
+    if (hopeData[dataKey] && hopeData[dataKey].images && hopeData[dataKey].images[category]) {
+        const dataImg = hopeData[dataKey].images[category];
+        if (dataImg !== "LINK_HERE" && !dataImg.includes("via.placeholder.com")) {
+            imgUrl = dataImg;
+        } else if (dataImg.includes("via.placeholder.com")) {
+            const textMatch = dataImg.match(/text=(.*)/);
+            if (textMatch) {
+                let textContent = textMatch[1];
+                textContent = textContent.replace(/0\.0|2\.5|5\.0/, val.toFixed(1));
+                imgUrl = `https://placehold.co/250x150?text=${textContent}`;
             }
         }
-
-        tooltipContent = (
-            <div className="hover-tooltip visible" style={{ left: `${tooltipLeft}px` }}>
-                <img className="tooltip-img" src={imgUrl} alt="Guide" />
-            </div>
-        );
     }
 
     return (
-        <div className="hope-slider">
-            {tooltipContent}
-            <div className="scale-track"></div>
-            <div className="scale-ticks">
-                {scaleValues.map(val => (
-                    <div 
-                        key={val}
-                        className={`tick ${currentSelection === val ? 'active' : ''}`}
-                        onMouseEnter={(e) => handleMouseEnter(e, val)}
-                        onMouseLeave={() => setHoveredVal(null)}
-                        onClick={() => setCurrentSelection(val)}
-                    >
-                        <div className="tick-dot"></div>
-                        <div className="tick-label">{val.toFixed(1)}</div>
+        <div className="hope-drag-container">
+            <div className="slider-track-wrapper">
+                <div 
+                    className={`drag-tooltip ${isHovered ? 'active' : ''}`} 
+                    style={{ left: tooltipLeft }}
+                >
+                    <img className="tooltip-img" src={imgUrl} alt="Guide" />
+                </div>
+                <input 
+                    type="range" 
+                    className="hope-range-slider" 
+                    min="0" max="5" step="0.5" 
+                    value={val} 
+                    onChange={(e) => setCurrentSelection(parseFloat(e.target.value))}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    onTouchStart={() => setIsHovered(true)}
+                    onTouchEnd={() => setIsHovered(false)}
+                />
+            </div>
+            <div className="ticks-container">
+                {scaleValues.map(tickVal => (
+                    <div key={tickVal} className="tick-mark">
+                        <span>{tickVal.toFixed(1)}</span>
                     </div>
                 ))}
             </div>
