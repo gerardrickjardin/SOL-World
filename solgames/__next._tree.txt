@@ -1,6 +1,6 @@
 :HL["/solgames/_next/static/chunks/0dtfzkx-r0buf.css","style"]
-:HL["/solgames/_next/static/chunks/0c_k5i4rn-muz.css","style"]
+:HL["/solgames/_next/static/chunks/0hv3dywm_r.b-.css","style"]
 :HL["/solgames/logo.png","image"]
 :HL["/solgames/boxes-bg.png","image"]
 :HL["/solgames/hands.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"dO9CiLau4Nle7ObYdddwE"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"BCez-uByLUwF7yiSO8rZR"}
