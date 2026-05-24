@@ -567,6 +567,30 @@ const myRealImages = {
         "4.0": "./assets/images/home_4_0_1779652778339.png",
         "4.5": "./assets/images/home_4_5_1779652792894.png",
         "5.0": "./assets/images/home_5_0_1779652806339.png"
+    },
+    "1.2": {
+        "0.0": "./assets/images/neighborhood_0_0_1779653402809.png",
+        "0.5": "./assets/images/neighborhood_0_5_1779653416482.png",
+        "1.0": "./assets/images/neighborhood_1_0_1779653433795.png",
+        "1.5": "./assets/images/neighborhood_1_5_1779653446184.png",
+        "2.0": "./assets/images/neighborhood_2_0_1779653458844.png",
+        "2.5": "./assets/images/neighborhood_2_5_1779653473197.png",
+        "3.0": "./assets/images/neighborhood_3_0_1779653488608.png",
+        "3.5": "./assets/images/neighborhood_3_5_1779653506531.png",
+        "4.0": "./assets/images/neighborhood_4_0_1779653521257.png",
+        "4.5": "./assets/images/neighborhood_4_5_1779653537521.png",
+        "5.0": "./assets/images/neighborhood_5_0_1779653552259.png"
+    },
+    "1.3": {
+        "0.0": "./assets/images/thirdspaces_0_0_1779653568880.png",
+        "0.5": "./assets/images/thirdspaces_0_5_1779653583335.png",
+        "1.0": "./assets/images/thirdspaces_1_0_1779653597713.png",
+        "1.5": "./assets/images/thirdspaces_1_5_1779653612106.png",
+        "2.0": "./assets/images/thirdspaces_2_0_1779653626658.png",
+        "2.5": "./assets/images/thirdspaces_2_5_1779653638687.png",
+        "3.0": "./assets/images/thirdspaces_3_0_1779653651405.png",
+        "3.5": "./assets/images/thirdspaces_3_5_1779653664311.png",
+        "4.0": "./assets/images/thirdspaces_4_0_1779653677382.png"
     }
 };
 
@@ -606,6 +630,16 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ }) => {
 
     let dataKey = currentQ.title.startsWith("Flex 1") ? "Flex1" : (currentQ.title.startsWith("Flex 2") ? "Flex2" : currentQ.title.split(' ')[0]);
     let valStr = val.toFixed(1);
+
+    // PRELOADER: Smoothly fetch all 11 images for this specific question into browser cache
+    useEffect(() => {
+        if (generatedData[dataKey]) {
+            Object.values(generatedData[dataKey]).forEach(url => {
+                const img = new Image();
+                img.src = url;
+            });
+        }
+    }, [dataKey]);
 
     let imgUrl = generatedData[dataKey] && generatedData[dataKey][valStr] 
         ? generatedData[dataKey][valStr] 
