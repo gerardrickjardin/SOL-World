@@ -788,15 +788,15 @@ const App = () => {
                                 id="avatar-intro-img"
                                 src="minds-eye.png"
                                 alt="Mind's Eye"
-                                className="w-full h-full object-cover absolute top-0 left-0 transition-opacity duration-300"
+                                className="w-full h-full object-contain p-2 absolute top-0 left-0 transition-opacity duration-300"
                                 style={{ opacity: 1 }}
                             />
                             <video 
                                 id="avatar-intro-vid"
                                 src="minds-eye-animated.mp4"
                                 playsInline muted loop
-                                className="w-full h-full object-cover absolute top-0 left-0 transition-opacity duration-300 pointer-events-none"
-                                style={{ opacity: 0 }}
+                                className="w-full h-full object-contain absolute top-0 left-0 transition-opacity duration-300 pointer-events-none"
+                                style={{ opacity: 0, backgroundColor: 'white' }}
                             ></video>
                         </div>
                         <button 
@@ -868,15 +868,15 @@ const App = () => {
                                 id={`avatar-survey-${currentQIndex}-img`}
                                 src="minds-eye.png"
                                 alt="Mind's Eye"
-                                className="w-full h-full object-cover absolute top-0 left-0 transition-opacity duration-300"
+                                className="w-full h-full object-contain p-1 absolute top-0 left-0 transition-opacity duration-300"
                                 style={{ opacity: 1 }}
                             />
                             <video 
                                 id={`avatar-survey-${currentQIndex}-vid`}
                                 src="minds-eye-animated.mp4"
                                 playsInline muted loop
-                                className="w-full h-full object-cover absolute top-0 left-0 transition-opacity duration-300 pointer-events-none"
-                                style={{ opacity: 0 }}
+                                className="w-full h-full object-contain absolute top-0 left-0 transition-opacity duration-300 pointer-events-none"
+                                style={{ opacity: 0, backgroundColor: 'white' }}
                             ></video>
                         </div>
                         <button 
