@@ -31,11 +31,6 @@
             btnElement.classList.add('animate-pulse');
             btnElement.innerText = "⏳";
             if (avatarContainer) avatarContainer.classList.add('avatar-talking');
-            if (avatarImg && avatarVid) {
-                avatarImg.style.opacity = '0';
-                avatarVid.style.opacity = '1';
-                avatarVid.play().catch(e => console.error("Video play failed:", e));
-            }
 
             try {
                 const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
@@ -73,6 +68,13 @@
                         avatarVid.currentTime = 0;
                     }
                 };
+
+                if (avatarImg && avatarVid) {
+                    avatarImg.style.opacity = '0';
+                    avatarVid.style.opacity = '1';
+                    avatarVid.play().catch(e => console.error("Video play failed:", e));
+                }
+
                 currentAudio.play();
                 btnElement.innerText = "🔊";
                 btnElement.classList.remove('animate-pulse');
