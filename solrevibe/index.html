@@ -97,9 +97,9 @@
             top: 3%;
             left: 3%;
             z-index: 15;
-            width: 45%;
+            width: clamp(280px, 45%, 600px);
             text-align: left;
-            font-size: 2.2vw;
+            font-size: clamp(1.25rem, 2.2vw, 2.25rem);
             font-weight: 800;
             line-height: 1.25;
             letter-spacing: -0.02em;
@@ -440,7 +440,7 @@
                 top: 5%;
                 left: 5%;
                 width: 90%;
-                font-size: 5vw;
+                font-size: clamp(1.2rem, 5vw, 2rem);
             }
             .callout-box {
                 width: 90%;
