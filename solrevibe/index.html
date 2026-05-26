@@ -92,6 +92,28 @@
             visibility: visible !important;
         }
 
+        .hero-main-title {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 15;
+            width: 90%;
+            text-align: center;
+            font-size: 3vw;
+            font-weight: 800;
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #fbcfe8 20%, #d946ef 60%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            text-wrap: balance;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.5));
+        }
+
         /* Call Out Box */
         .callout-box {
             position: absolute;
@@ -415,6 +437,10 @@
         }
 
         @media (max-width: 768px) {
+            .hero-main-title {
+                top: 5%;
+                font-size: 5vw;
+            }
             .callout-box {
                 width: 90%;
                 bottom: -20%;
@@ -514,15 +540,17 @@
             Your browser does not support the video tag.
         </video>
         
+        <!-- Main Hero Title Overlay -->
+        <h2 class="hero-main-title">Drive More Traffic. Outshine Your Competition.<br>Create Passive Income.</h2>
+
         <!-- Call Out Box Overlay -->
         <div class="callout-box">
-            <h2 class="callout-title">Drive More Traffic. Outshine Your Competition.<br>Create Passive Income.</h2>
             <p class="callout-text">
-                SOL ViBE harmonizes physical and mental frequencies to transform standard waiting areas into an elite crowd drawing Wellness ritual. Meanwhile, our hands-free QR-code system generates a passive <strong>$300 to $500 commission</strong> on every hardware sale, transforming empty floor space into an effortless profit center.
+                SOL REViBE harmonizes physical and mental frequencies to transform standard waiting areas into an elite crowd drawing Wellness ritual. Meanwhile, our hands-free QR-code system generates a passive <strong>$300 to $500 commission</strong> on every hardware sale, transforming empty floor space into an effortless profit center.
             </p>
             <div class="callout-form-container">
                 <p class="callout-form-prompt">
-                    Enter your email and city to find a SOL ViBE Experience Station near you.
+                    Enter your email and city to find a SOL REViBE Experience Station near you.
                 </p>
                 <form class="callout-form" onsubmit="showMapModal(event)">
                     <div class="callout-input-group">
@@ -563,7 +591,7 @@
                 
                 <div id="station-tooltip" class="station-tooltip">
                     <button class="close-tooltip-btn" onclick="closeTooltip(event)">×</button>
-                    <h4 id="st-name">SOL ViBE Lounge</h4>
+                    <h4 id="st-name">SOL REViBE Lounge</h4>
                     <p id="st-address">123 Wellness Ave</p>
                     <div class="status">● AVAILABLE NOW</div>
                 </div>
