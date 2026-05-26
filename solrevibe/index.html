@@ -74,7 +74,8 @@
             position: relative;
             z-index: 10 !important;
             width: 100%;
-            height: 56.25vw !important; /* Explicitly enforce 16:9 ratio based on width */
+            height: 56.25vw !important;
+            /* Explicitly enforce 16:9 ratio based on width */
             max-height: 1080px !important;
             min-height: 350px !important;
             overflow: hidden;
@@ -116,11 +117,13 @@
         /* Call Out Box */
         .callout-box {
             position: absolute;
-            bottom: 8%; /* Pushed up slightly to fit space */
+            bottom: 8%;
+            /* Pushed up slightly to fit space */
             right: 3%;
             z-index: 15;
             width: 33.5%;
-            background: rgba(12, 6, 18, 0.85); /* Deep dark background with subtle purple/blue tint */
+            background: rgba(12, 6, 18, 0.85);
+            /* Deep dark background with subtle purple/blue tint */
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -250,7 +253,7 @@
             /* Sleek dark mode filter for the map */
             filter: invert(100%) hue-rotate(180deg) brightness(90%) contrast(110%) grayscale(20%);
         }
-        
+
         .scanning-bar {
             position: absolute;
             top: 0;
@@ -264,14 +267,19 @@
             z-index: 10;
             pointer-events: none;
         }
-        
+
         .map-modal-overlay.active .scanning-bar {
             opacity: 1;
         }
 
         @keyframes scan {
-            0% { top: 0; }
-            100% { top: 100%; }
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
         }
 
         .mockup-marker {
@@ -286,7 +294,8 @@
             opacity: 0;
             transition: opacity 0.4s ease-in;
             z-index: 20;
-            pointer-events: auto; /* Let users click the marker */
+            pointer-events: auto;
+            /* Let users click the marker */
             cursor: pointer;
             animation: pulse-marker 1.5s infinite alternate;
         }
@@ -298,8 +307,15 @@
         }
 
         @keyframes pulse-marker {
-            0% { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 10px #d946ef; }
-            100% { transform: translate(-50%, -50%) scale(1.2); box-shadow: 0 0 25px #d946ef, 0 0 40px #a855f7; }
+            0% {
+                transform: translate(-50%, -50%) scale(0.9);
+                box-shadow: 0 0 10px #d946ef;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                box-shadow: 0 0 25px #d946ef, 0 0 40px #a855f7;
+            }
         }
 
         .station-tooltip {
@@ -318,7 +334,7 @@
             transform: translate(-50%, 0) scale(0.9);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
         .station-tooltip.active {
             opacity: 1;
             visibility: visible;
@@ -442,6 +458,7 @@
                 width: 90%;
                 font-size: clamp(1.2rem, 5vw, 2rem);
             }
+
             .callout-box {
                 width: 90%;
                 bottom: -20%;
@@ -450,32 +467,40 @@
                 border-radius: 3vw;
                 gap: 2vw;
             }
+
             .callout-title {
                 font-size: 4vw;
             }
+
             .callout-text {
                 font-size: 2.5vw;
             }
+
             .callout-form-container {
                 margin-top: 2vw;
                 padding-top: 3vw;
             }
+
             .callout-form-prompt {
                 font-size: 3vw;
                 margin-bottom: 3vw;
             }
+
             .callout-form {
                 gap: 2vw;
             }
+
             .callout-input-group {
                 flex-direction: column;
                 gap: 2vw;
             }
+
             .callout-form input {
                 font-size: 2.5vw;
                 padding: 3vw;
                 border-radius: 1.5vw;
             }
+
             .callout-form button {
                 font-size: 3vw;
                 padding: 3vw;
@@ -495,6 +520,7 @@
                 max-width: 500px;
                 padding: 2rem;
             }
+
             .callout-title {
                 font-size: 1.75rem;
             }
@@ -508,9 +534,11 @@
                 max-width: calc(100% - 2rem);
                 padding: 1.5rem;
             }
+
             .callout-title {
                 font-size: 1.4rem;
             }
+
             .callout-text {
                 font-size: 0.9rem;
             }
@@ -535,19 +563,25 @@
         </div>
     </nav>
 
-    <header class="hero-container-wrapper" style="position: relative; z-index: 10; width: 100%; height: 56.25vw; max-height: 1080px; min-height: 350px; overflow: hidden; display: block;">
-        <video autoplay loop muted playsinline class="hero-background-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 11; pointer-events: none;" preload="auto">
+    <header class="hero-container-wrapper"
+        style="position: relative; z-index: 10; width: 100%; height: 56.25vw; max-height: 1080px; min-height: 350px; overflow: hidden; display: block;">
+        <video autoplay loop muted playsinline class="hero-background-video"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 11; pointer-events: none;"
+            preload="auto">
             <source src="../assets/revibe-hero-v2.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        
+
         <!-- Main Hero Title Overlay -->
         <h2 class="hero-main-title">Drive More Traffic. Outshine Your Competition.<br>Create Passive Income.</h2>
 
         <!-- Call Out Box Overlay -->
         <div class="callout-box">
             <p class="callout-text">
-                SOL REViBE harmonizes physical and mental frequencies to transform standard waiting areas into an elite crowd drawing Wellness ritual. Meanwhile, our hands-free QR-code system generates a passive <strong>$300 to $500 commission</strong> on every hardware sale, transforming empty floor space into an effortless profit center.
+                SOL REViBE harmonizes physical and mental frequencies to transform standard waiting areas into an elite
+                crowd drawing Wellness ritual. Meanwhile, our hands-free QR-code system generates a passive <strong>$300
+                    to $500 commission</strong> on every hardware sale, transforming empty floor space into an
+                effortless profit center.
             </p>
             <div class="callout-form-container">
                 <p class="callout-form-prompt">
@@ -589,7 +623,7 @@
             <div class="map-image-container">
                 <iframe id="dynamic-map" src="" title="Station Map"></iframe>
                 <div class="scanning-bar"></div>
-                
+
                 <div id="station-tooltip" class="station-tooltip">
                     <button class="close-tooltip-btn" onclick="closeTooltip(event)">×</button>
                     <h4 id="st-name">SOL REViBE Lounge</h4>
@@ -683,68 +717,68 @@
             event.preventDefault();
             const email = document.getElementById('search-email').value;
             const city = document.getElementById('search-city').value;
-            
+
             if (email && city) {
                 const modal = document.getElementById('map-modal');
                 const subtitle = document.getElementById('map-modal-subtitle');
                 const mapIframe = document.getElementById('dynamic-map');
-                
+
                 // Dynamically update the map to show the user's city
                 const encodedCity = encodeURIComponent(city);
                 mapIframe.src = `https://maps.google.com/maps?q=${encodedCity}&t=m&z=12&output=embed&iwloc=near`;
-                
+
                 // Simulate loading state
                 subtitle.innerHTML = 'Connecting to SOL Network...';
                 modal.classList.add('active');
                 closeTooltip(); // ensure tooltip is closed
-                
+
                 // Simulate found stations after scan animation starts
                 setTimeout(() => {
                     const count = Math.floor(Math.random() * 5) + 3; // random number 3-7
                     subtitle.innerHTML = `Found <strong style="color:#ffffff">${count} active stations</strong> near ${city}`;
-                    
+
                     // Generate violet mockup markers over the iframe
                     const mapContainer = document.querySelector('.map-image-container');
                     document.querySelectorAll('.mockup-marker').forEach(el => el.remove()); // clear old
-                    
+
                     for (let i = 0; i < count; i++) {
                         const marker = document.createElement('div');
                         marker.className = 'mockup-marker';
-                        
+
                         // Scatter markers mostly in the central 60% of the map view
                         const top = 20 + Math.random() * 60;
                         const left = 20 + Math.random() * 60;
-                        
+
                         marker.style.top = `${top}%`;
                         marker.style.left = `${left}%`;
-                        
+
                         // Interaction data
                         const sName = stationNames[Math.floor(Math.random() * stationNames.length)];
                         const sStreet = stationStreets[Math.floor(Math.random() * stationStreets.length)];
-                        
+
                         marker.addEventListener('click', (e) => {
                             e.stopPropagation();
                             const tooltip = document.getElementById('station-tooltip');
                             document.getElementById('st-name').innerText = sName;
                             document.getElementById('st-address').innerText = `${sStreet}, ${city}`;
-                            
+
                             // Position tooltip above the marker
                             tooltip.style.left = `${left}%`;
                             // Offset tooltip vertically to sit right above marker
-                            tooltip.style.top = `calc(${top}% - 25px)`; 
-                            
+                            tooltip.style.top = `calc(${top}% - 25px)`;
+
                             // Visual highlight
                             document.querySelectorAll('.mockup-marker').forEach(m => m.style.border = '2px solid #ffffff');
                             marker.style.border = '2px solid #0ea5e9';
-                            
+
                             tooltip.classList.add('active');
                         });
-                        
+
                         // Stagger the fade-in for a cool effect
                         setTimeout(() => {
                             marker.style.opacity = '1';
                         }, i * 300);
-                        
+
                         mapContainer.appendChild(marker);
                     }
                 }, 1500);
@@ -752,7 +786,7 @@
         }
 
         function closeTooltip(event) {
-            if(event) event.stopPropagation();
+            if (event) event.stopPropagation();
             document.getElementById('station-tooltip').classList.remove('active');
             document.querySelectorAll('.mockup-marker').forEach(m => m.style.border = '2px solid #ffffff');
         }
@@ -760,7 +794,7 @@
         function closeMapModal() {
             document.getElementById('map-modal').classList.remove('active');
             closeTooltip();
-            
+
             // Reset form for demo purposes
             setTimeout(() => {
                 document.getElementById('search-email').value = '';
