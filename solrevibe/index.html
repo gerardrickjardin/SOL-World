@@ -119,18 +119,18 @@
             bottom: 4%;
             right: 3%;
             z-index: 15;
-            width: 33%;
+            width: 35%; /* slightly wider */
             background: rgba(12, 6, 18, 0.85); /* Deep dark background with subtle purple/blue tint */
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 1vw;
-            padding: 1.2vw;
+            padding: 2vw; /* Increased padding */
             box-shadow: 0 1vw 3vw rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 0.6vw;
+            gap: 1.2vw; /* Increased gap */
             animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             animation-delay: 0.5s;
             opacity: 0;
@@ -152,7 +152,7 @@
         }
 
         .callout-text {
-            font-size: 0.65vw;
+            font-size: 1vw; /* Enlarged font */
             color: #b0b0b0;
             line-height: 1.5;
             font-weight: 400;
@@ -368,38 +368,38 @@
         }
 
         .callout-form-container {
-            margin-top: 0.1vw;
+            margin-top: 0.5vw;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 0.5vw;
+            padding-top: 1vw;
         }
 
         .callout-form-prompt {
-            font-size: 0.65vw;
+            font-size: 0.85vw;
             font-weight: 700;
             color: #ffffff;
-            margin: 0 0 0.4vw 0;
+            margin: 0 0 0.8vw 0;
             line-height: 1.3;
         }
 
         .callout-form {
             display: flex;
             flex-direction: column;
-            gap: 0.4vw;
+            gap: 0.8vw;
         }
 
         .callout-input-group {
             display: flex;
-            gap: 0.4vw;
+            gap: 0.8vw;
         }
 
         .callout-form input {
             flex: 1;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 0.3vw;
-            padding: 0.4vw 0.6vw;
+            border-radius: 0.5vw;
+            padding: 0.8vw 1vw;
             color: #ffffff;
-            font-size: 0.6vw;
+            font-size: 0.8vw;
             font-family: inherit;
             outline: none;
             transition: all 0.3s;
@@ -417,10 +417,10 @@
         .callout-form button {
             background: linear-gradient(135deg, #d946ef 0%, #3b82f6 100%);
             border: none;
-            border-radius: 0.3vw;
-            padding: 0.5vw;
+            border-radius: 0.5vw;
+            padding: 1vw;
             color: #ffffff;
-            font-size: 0.65vw;
+            font-size: 0.9vw;
             font-weight: 800;
             cursor: pointer;
             transition: opacity 0.3s, transform 0.2s;
