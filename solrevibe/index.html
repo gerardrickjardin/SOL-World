@@ -95,12 +95,12 @@
 
         .hero-main-title {
             position: absolute;
-            top: 60px;
-            left: 60px;
+            top: 3.12cqw;
+            left: 3.12cqw;
             z-index: 15;
-            width: 864px;
+            width: 45cqw;
             text-align: left;
-            font-size: 42px;
+            font-size: 2.18cqw;
             font-weight: 800;
             line-height: 1.25;
             letter-spacing: -0.02em;
@@ -117,23 +117,23 @@
         /* Call Out Box */
         .callout-box {
             position: absolute;
-            bottom: 40px;
+            bottom: 2cqw;
             /* Anchored to bottom right quadrant */
-            right: 60px;
+            right: 3.12cqw;
             z-index: 15;
-            width: 643px;
+            width: 33.5cqw;
             background: rgba(12, 6, 18, 0.85);
             /* Deep dark background with subtle purple/blue tint */
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 19px;
-            padding: 38px 25px 67px 25px;
-            box-shadow: 0 19px 57px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-radius: 1cqw;
+            padding: 2cqw 1.3cqw 3.5cqw 1.3cqw;
+            box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 19px;
+            gap: 1cqw;
             animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             animation-delay: 0.5s;
             opacity: 0;
@@ -155,7 +155,7 @@
         }
 
         .callout-text {
-            font-size: 14px;
+            font-size: 0.73cqw;
             color: #b0b0b0;
             line-height: 1.5;
             font-weight: 400;
@@ -384,38 +384,38 @@
         }
 
         .callout-form-container {
-            margin-top: 4px;
+            margin-top: 0.2cqw;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 12px;
+            padding-top: 0.6cqw;
         }
 
         .callout-form-prompt {
-            font-size: 13px;
+            font-size: 0.68cqw;
             font-weight: 700;
             color: #ffffff;
-            margin: 0 0 10px 0;
+            margin: 0 0 0.5cqw 0;
             line-height: 1.3;
         }
 
         .callout-form {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 0.5cqw;
         }
 
         .callout-input-group {
             display: flex;
-            gap: 10px;
+            gap: 0.5cqw;
         }
 
         .callout-form input {
             flex: 1;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 6px;
-            padding: 10px 12px;
+            border-radius: 0.3cqw;
+            padding: 0.5cqw 0.65cqw;
             color: #ffffff;
-            font-size: 12px;
+            font-size: 0.62cqw;
             font-family: inherit;
             outline: none;
             transition: all 0.3s;
@@ -433,10 +433,10 @@
         .callout-form button {
             background: linear-gradient(135deg, #d946ef 0%, #3b82f6 100%);
             border: none;
-            border-radius: 6px;
-            padding: 10px;
+            border-radius: 0.3cqw;
+            padding: 0.55cqw;
             color: #ffffff;
-            font-size: 13px;
+            font-size: 0.68cqw;
             font-weight: 800;
             cursor: pointer;
             transition: opacity 0.3s, transform 0.2s;
@@ -449,51 +449,6 @@
         .callout-form button:hover {
             opacity: 0.9;
             transform: translateY(-1px);
-        }
-
-        /* Intermediate breakpoints to gracefully step down the rigid px layout for smaller laptops */
-        @media (max-width: 1440px) {
-            .hero-main-title {
-                font-size: 32px;
-                width: 650px;
-                top: 40px;
-                left: 40px;
-            }
-            .callout-box {
-                width: 480px;
-                padding: 28px 18px 50px 18px;
-                right: 40px;
-                bottom: 20px;
-                gap: 14px;
-            }
-            .callout-text { font-size: 12px; }
-            .callout-form-prompt { font-size: 11px; }
-            .callout-form input, .callout-form button {
-                padding: 8px 10px;
-                font-size: 11px;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .hero-main-title {
-                font-size: 24px;
-                width: 450px;
-                top: 30px;
-                left: 30px;
-            }
-            .callout-box {
-                width: 380px;
-                padding: 20px 14px 35px 14px;
-                right: 30px;
-                bottom: 15px;
-                gap: 10px;
-            }
-            .callout-text { font-size: 10px; }
-            .callout-form-prompt { font-size: 10px; }
-            .callout-form input, .callout-form button {
-                padding: 6px 8px;
-                font-size: 10px;
-            }
         }
 
         @media (max-width: 768px) {
@@ -609,7 +564,7 @@
     </nav>
 
     <header class="hero-container-wrapper"
-        style="position: relative; z-index: 10; width: 100%; max-width: 1920px; aspect-ratio: 16 / 9; margin: 0 auto; overflow: hidden; display: block;">
+        style="container-type: inline-size; container-name: hero; position: relative; z-index: 10; width: 100%; max-width: 1920px; aspect-ratio: 16 / 9; margin: 0 auto; overflow: hidden; display: block;">
         <video autoplay loop muted playsinline class="hero-background-video"
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 11; pointer-events: none;"
             preload="auto">
