@@ -385,10 +385,14 @@
             color: #ffffff;
             margin: 0 0 1.5cqw 0;
             line-height: 1.3;
+        }
+
+        .prompt-gradient {
             background: linear-gradient(135deg, #ffffff 0%, #fbcfe8 20%, #d946ef 60%, #0ea5e9 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            display: inline-block;
         }
 
         .callout-form {
@@ -571,8 +575,8 @@
 
             <div class="callout-form-container">
                 <p class="callout-form-prompt">
-                    Enter your email and city to find a<br>
-                    <span style="white-space: nowrap;">SOL REViBE</span> Experience Station near you.
+                    Enter your email and city to find a
+                    <span class="prompt-gradient" style="white-space: nowrap;">SOL REViBE</span> Experience Station near you.
                 </p>
                 <form class="callout-form" onsubmit="showMapModal(event)">
                     <div class="callout-input-group">
