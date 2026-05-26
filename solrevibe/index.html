@@ -449,65 +449,6 @@
             transform: translateY(-1px);
         }
 
-        @media (max-width: 768px) {
-            .hero-main-title {
-                top: 5%;
-                left: 5%;
-                width: 90%;
-                font-size: clamp(1.5rem, 6vw, 2.5rem);
-            }
-
-            .callout-box {
-                width: 90%;
-                bottom: -20%;
-                right: 5%;
-                padding: 4vw;
-                border-radius: 3vw;
-                gap: 2vw;
-            }
-
-            .callout-title {
-                font-size: 4vw;
-            }
-
-
-
-            .callout-form-container {
-                /* Removed top spacing */
-            }
-
-            .callout-form-prompt {
-                font-size: 5vw;
-                margin-bottom: 5vw;
-            }
-
-            .callout-form {
-                gap: 2vw;
-            }
-
-            .callout-input-group {
-                flex-direction: column;
-                gap: 2vw;
-            }
-
-            .callout-form input {
-                font-size: 2.5vw;
-                padding: 3vw;
-                border-radius: 1.5vw;
-            }
-
-            .callout-form button {
-                font-size: 3vw;
-                padding: 3vw;
-                border-radius: 1.5vw;
-            }
-        }
-
-        .callout-text strong {
-            color: #ffffff;
-            font-weight: 700;
-        }
-
         @media (max-width: 1024px) {
             .callout-box {
                 bottom: 2rem;
@@ -515,27 +456,76 @@
                 max-width: 500px;
                 padding: 2rem;
             }
-
-            .callout-title {
-                font-size: 1.75rem;
-            }
         }
 
         @media (max-width: 768px) {
+            /* Transform the hero into a full-screen vertical layout */
+            .hero-container-wrapper {
+                min-height: 90vh !important;
+                aspect-ratio: auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-end !important;
+                padding-bottom: 0 !important;
+            }
+
+            .hero-main-title {
+                position: absolute;
+                top: 18%;
+                left: 5%;
+                width: 90%;
+                text-align: center;
+                font-size: clamp(2.2rem, 8vw, 3rem);
+                line-height: 1.15;
+            }
+
+            /* Anchor callout box to the bottom like an app bottom-sheet */
             .callout-box {
-                bottom: 1rem;
-                right: 1rem;
-                left: 1rem;
-                max-width: calc(100% - 2rem);
-                padding: 1.5rem;
+                position: relative;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                width: 100%;
+                max-width: none;
+                border-radius: 24px 24px 0 0;
+                padding: 2rem 1.5rem;
+                background: rgba(12, 6, 18, 0.95);
+                border-bottom: none;
+                border-left: none;
+                border-right: none;
             }
 
-            .callout-title {
-                font-size: 1.4rem;
+            .callout-form-prompt {
+                font-size: 1.15rem;
+                margin-bottom: 1.5rem;
+                text-align: center;
             }
 
-            .callout-text {
-                font-size: 0.9rem;
+            .callout-form {
+                gap: 1rem;
+            }
+
+            .callout-input-group {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            /* Fat-finger optimized touch targets */
+            .callout-form input {
+                font-size: 16px; /* 16px prevents iOS auto-zoom on focus */
+                padding: 1rem 1.25rem;
+                border-radius: 12px;
+                min-height: 52px;
+                width: 100%;
+            }
+
+            .callout-form button {
+                font-size: 16px;
+                padding: 1rem;
+                border-radius: 12px;
+                min-height: 52px;
+                width: 100%;
+                margin-top: 0.5rem;
             }
         }
     </style>
