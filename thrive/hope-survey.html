@@ -411,9 +411,8 @@ const surveyQuestions = [
     }
 ];
 
-const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext }) => {
+const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, hoverValue, setHoverValue }) => {
     const val = currentSelection !== null ? currentSelection : 0.0;
-    const [hoverValue, setHoverValue] = useState(null);
 
     const handleStarClick = (rating) => {
         setCurrentSelection(rating);
@@ -468,16 +467,7 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext })
                 })}
             </div>
 
-            {/* MIDDLE: Rating Display */}
-            <div className="flex-grow flex items-center justify-center my-4">
-                <div className="rating-display-box shadow-sm border border-slate-100 bg-white scale-110">
-                    <div className="rating-label text-slate-400">YOUR RATING</div>
-                    <div className="rating-value">
-                        <span className="number-val">{displayValue > 0 ? displayValue.toFixed(1) : "-.-"}</span> 
-                        <span className="star-icon text-2xl">⭐</span>
-                    </div>
-                </div>
-            </div>
+
 
             {/* BOTTOM: Text and Pill */}
             <div className="min-h-[140px] mt-2 flex flex-col items-center justify-end pointer-events-none">
@@ -789,6 +779,7 @@ const App = () => {
     const [currentQIndex, setCurrentQIndex] = useState(0);
     const [answers, setAnswers] = useState({}); // { id: score }
     const [currentSelection, setCurrentSelection] = useState(null);
+    const [hoverValue, setHoverValue] = useState(null);
 
     const handleNextQ = (val) => {
         const finalVal = val !== undefined ? val : (currentSelection !== null ? currentSelection : 0.0);
@@ -826,6 +817,8 @@ const App = () => {
                         setCurrentSelection={setCurrentSelection} 
                         currentQ={surveyQuestions[currentQIndex]}
                         onNext={handleNextQ}
+                        hoverValue={hoverValue}
+                        setHoverValue={setHoverValue}
  />
                 </div>
             </div>
@@ -900,7 +893,13 @@ const App = () => {
                         <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] mb-3 border border-blue-100">{q.space}</div>
                         <div className="text-slate-400 font-bold text-sm tracking-wide">{q.dimension}</div>
                     </div>
-                    {/* Removed avatar and audio from survey screen */}
+                    <div className="rating-display-box shadow-sm border border-slate-100 bg-white">
+                        <div className="rating-label text-slate-400">YOUR RATING</div>
+                        <div className="rating-value">
+                            <span className="number-val">{hoverValue !== null ? hoverValue.toFixed(1) : (currentSelection !== null ? currentSelection.toFixed(1) : "_._")}</span> 
+                            <span className="star-icon text-2xl">⭐</span>
+                        </div>
+                    </div>
                 </div>
 
                 <h2 className="text-4xl font-black text-slate-800 mb-6 tracking-tight leading-tight">{q.title}</h2>
