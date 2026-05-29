@@ -469,39 +469,27 @@ const HopeSlider = ({ currentSelection, setCurrentSelection, currentQ, onNext, h
 
 
 
-            {/* BOTTOM: Text and Pill */}
-            <div className="min-h-[140px] mt-2 flex flex-col items-center justify-end pointer-events-none">
-                {(() => {
-                    const dv = displayValue.toFixed(1);
-                    if (currentQ.anchors && currentQ.anchors[dv]) {
-                        const fullText = currentQ.anchors[dv];
-                        const match = fullText.match(/\(([^)]+)\)/);
-                        const mainWord = match ? match[1] : fullText.split(':')[0].replace(/\d\s*Stars?/, '').trim();
-                        const descriptionText = fullText.includes(':') ? fullText.split(':')[1].trim() : fullText;
-                        return (
-                            <div className="flex flex-col items-center w-full animate-fade-in">
-                                <div className="px-8 py-2.5 mb-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full text-lg md:text-xl text-white font-black tracking-[0.2em] shadow-[0_5px_15px_rgba(0,229,255,0.4)] uppercase whitespace-nowrap">
-                                    {mainWord}
-                                </div>
-                                <div className="text-sm md:text-base text-slate-500 font-medium italic max-w-2xl leading-relaxed text-center px-4">
-                                    "{descriptionText}"
-                                </div>
+            {/* BOTTOM: Static Anchors */}
+            <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 w-full items-start px-2 pointer-events-none">
+                {["1.0", "3.0", "5.0"].map((key) => {
+                    const fullText = currentQ.anchors && currentQ.anchors[key];
+                    if (!fullText) return <div key={key}></div>;
+                    
+                    const match = fullText.match(/\(([^)]+)\)/);
+                    const mainWord = match ? match[1] : fullText.split(':')[0].replace(/\d\s*Stars?/, '').trim();
+                    const descriptionText = fullText.includes(':') ? fullText.split(':')[1].trim() : fullText;
+                    
+                    return (
+                        <div key={key} className="flex flex-col items-center w-full">
+                            <div className="px-3 py-1.5 md:px-5 md:py-2 mb-3 bg-slate-100 text-slate-600 rounded-full text-[10px] md:text-xs font-black tracking-widest uppercase text-center border border-slate-200">
+                                {mainWord}
                             </div>
-                        );
-                    } else if (displayValue > 0) {
-                        return (
-                            <div className="flex flex-col items-center w-full animate-fade-in">
-                                <div className="px-8 py-2.5 mb-6 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full text-lg md:text-xl text-white font-black tracking-[0.2em] shadow-[0_5px_15px_rgba(168,85,247,0.4)] uppercase whitespace-nowrap">
-                                    Momentum
-                                </div>
-                                <div className="text-sm md:text-base text-slate-500 font-medium italic max-w-2xl leading-relaxed text-center px-4">
-                                    "Showing positive momentum as you work with your mentor."
-                                </div>
+                            <div className="text-[10px] md:text-xs text-slate-500 font-medium italic leading-relaxed text-center">
+                                "{descriptionText}"
                             </div>
-                        );
-                    }
-                    return null;
-                })()}
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
