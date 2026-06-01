@@ -3,294 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THRiVE Coaching</title>
-    <meta name="description" content="Reduce friction with your child. Find out what's really going on underneath.">
+    <title>SOL WORLD</title>
+    <meta name="description" content="One World. Many Projects. Infinite Possibilities.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="header">
-        <nav class="nav-left">
-            <button class="hamburger" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </nav>
-        <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">THRiVE Coaching</a></div>
-        <div class="nav-right desktop-menu">
-            <ul>
-                <li><a href="survey.html">Flow Survey</a></li>
-                <li><a href="profile.html">THRiVE Report</a></li>
-                <li><a href="hope-survey.html">HoPE Index</a></li>
-                <li><a href="approach.html">Our Approach</a></li>
-                <li class="dropdown">
-                    <a href="how-to-use.html">How To Use This Page</a>
-                    <div class="dropdown-content">
-                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
-                        <a href="employment-challenges.html">Employment Challenges</a>
-                    </div>
-                </li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#video-section">Video</a></li>
-            </ul>
-        </div>
+    <canvas id="starfield"></canvas>
+    <div class="glow-effect"></div>
+    <div class="glow-effect-2"></div>
 
-        <div class="nav-menu">
-            <div class="menu-title">FIND YOUR FLOW</div>
-            <ul>
-                <li><a href="survey.html">Flow Survey</a></li>
-                <li><a href="profile.html">THRiVE Report</a></li>
-                <li><a href="hope-survey.html">HoPE Index</a></li>
-                <li><a href="approach.html">Our Approach</a></li>
-                <li class="dropdown">
-                    <a href="how-to-use.html">How To Use This Page</a>
-                    <div class="dropdown-content">
-                        <a href="rebuilding-life-challenges.html">Rebuilding Life Challenges</a>
-                        <a href="employment-challenges.html">Employment Challenges</a>
-                    </div>
-                </li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#video-section">Video</a></li>
-            </ul>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="assets/SOL WORLD LOGO.png" alt="SOL World Logo" class="nav-logo-img">
         </div>
+        <div class="nav-links">
+            <a href="#">BRANDS</a>
+            <a href="#">PROJECTS</a>
+            <a href="#">ABOUT</a>
+            <a href="#">CONTACT</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div id="v4-logo" class="logo-container hero-main-logo-anim" style="display: grid; width: 100%; max-width: 800px; margin: 0 auto; cursor: default;">
+            <img src="assets/sol-world-base.png" alt="SOL World Base" style="grid-area: 1 / 1; width: 100%; height: auto; display: block; pointer-events: none; user-select: none;" />
+            
+            <div style="grid-area: 1 / 1; display: flex; flex-direction: column; width: 100%; height: 100%; pointer-events: none;">
+                <!-- SOL Dot Alignment -->
+                <div style="height: var(--sol-top, 28%);"></div>
+                <div style="display: flex; justify-content: center; align-items: center; height: 0; padding-right: calc(100% - (var(--sol-left, 50%) * 2));">
+                    <div style="width: var(--sol-width, 16%); aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center;">
+                        <div id="v4-sol" style="width: var(--dot-width, 40%); height: var(--dot-width, 40%); background-color: #ffffff; border-radius: 50%; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform;"></div>
+                    </div>
+                </div>
+
+                <!-- WORLD Dot Alignment -->
+                <div style="height: calc(var(--world-top, 73%) - var(--sol-top, 28%));"></div>
+                <div style="display: flex; justify-content: center; align-items: center; height: 0; padding-right: calc(100% - (var(--world-left, 36%) * 2));">
+                    <div style="width: var(--world-width, 16%); aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center;">
+                        <div id="v4-world" style="width: var(--dot-width, 40%); height: var(--dot-width, 40%); background-color: #050505; border-radius: 50%; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="hero-subtitle">One World. Many Projects. Infinite Possibilities.</h2>
     </header>
 
-    <main>
-        <section class="hero hero-image-only" style="position: relative;">
-            <a href="#video-section" class="full-hero-link" aria-label="Watch the video">
-                <img src="assets/Hero Page (1).png" alt="Hero Background" class="full-hero-img">
-            </a>
-            
-            <a href="#video-section" class="hero-content-link">
-                <div class="hero-content">
-                    <h1>Go Unstuck Yourself.</h1>
-                    <p>Unlock your potential with a partner that understands your goals.</p>
-                    <div class="cta-button secondary">Watch the video to see How he gets free.</div>
-                </div>
-            </a>
-        </section>
-
-        <section id="video-section" class="video-section">
-            <div class="video-container">
-                <h2>Here’s what's really going on and how to fix it.</h2>
-                <div class="video-placeholder">
-                    <div class="play-button"></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="offer-section" class="offer-section">
-            <div class="offer-header">
-                <span class="offer-subtitle">Want to see a change?</span>
-                <h2>Here is what <span class="highlight">we offer</span></h2>
-            </div>
-            
-            <div class="offer-grid">
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                            </div>
-                            <h3>Personos</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>Personos</h3>
-                            <p>Our proprietary AI uses psychological principles to deeply understand you and provide tailored, actionable advice for growth.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                            </div>
-                            <h3>Heart & Soul of Change</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>Heart & Soul of Change</h3>
-                            <p>We believe real transformation is relational, prioritizing your strengths and the client-coach bond to create lasting change.</p>
+    <section class="grid-section">
+        <div class="card card-white sol-vibe-card">
+            <div class="card-inner">
+                <div class="card-front" style="overflow: hidden; display: flex; justify-content: center; align-items: center; background: #ffffff; padding: 1.5rem; box-sizing: border-box;">
+                    <div class="logo-wrapper">
+                        <img src="assets/SOL REViBE Logo.png" alt="SOL REViBE Logo" style="width: 100%; height: 100%; display: block; pointer-events: none; user-select: none;">
+                        <div class="plasma-container">
+                            <div class="plasma-glow"></div>
+                            
+                            <!-- High-Fidelity SVG Electric Charge Simulator -->
+                            <svg class="electric-sparks-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <filter id="electric-discharge" x="-30%" y="-30%" width="160%" height="160%">
+                                        <feTurbulence type="fractalNoise" baseFrequency="0.13" numOctaves="4" result="noise">
+                                            <animate attributeName="seed" values="1;4;8;2;9;5;3;7;10;6" dur="0.4s" repeatCount="indefinite" />
+                                        </feTurbulence>
+                                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="22" xChannelSelector="R" yChannelSelector="G" />
+                                    </filter>
+                                </defs>
+                                
+                                <g filter="url(#electric-discharge)">
+                                    <!-- Concentric Electric Rings -->
+                                    <circle class="spark-ring ring-cyan" cx="50" cy="50" r="38" />
+                                    <circle class="spark-ring ring-purple" cx="50" cy="50" r="30" />
+                                    <circle class="spark-ring ring-blue" cx="50" cy="50" r="22" />
+                                    
+                                    <!-- Electric Signal Wavelengths (Pulsing Frequency Inside) -->
+                                    <path class="spark-signal signal-1" d="M 18,50 L 34,50 Q 38,30 42,50 T 50,50 T 58,50 L 82,50" />
+                                    <path class="spark-signal signal-2" d="M 22,78 L 36,64 Q 43,45 50,50 T 57,55 L 78,22" />
+                                    
+                                    <!-- Radial Lightning Bolts (Shooting out from core) -->
+                                    <line class="spark-bolt bolt-1" x1="50" y1="50" x2="50" y2="12" />
+                                    <line class="spark-bolt bolt-2" x1="50" y1="50" x2="88" y2="50" />
+                                    <line class="spark-bolt bolt-3" x1="50" y1="50" x2="50" y2="88" />
+                                    <line class="spark-bolt bolt-4" x1="50" y1="50" x2="12" y2="50" />
+                                    
+                                    <!-- Diagonal Branching Bolts -->
+                                    <line class="spark-bolt bolt-5" x1="50" y1="50" x2="77" y2="23" />
+                                    <line class="spark-bolt bolt-6" x1="50" y1="50" x2="77" y2="77" />
+                                    <line class="spark-bolt bolt-7" x1="50" y1="50" x2="23" y2="77" />
+                                    <line class="spark-bolt bolt-8" x1="50" y1="50" x2="23" y2="23" />
+                                </g>
+                            </svg>
+                            
+                            <div class="plasma-core"></div>
                         </div>
                     </div>
                 </div>
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                            </div>
-                            <h3>The Strengths Model</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>The Strengths Model</h3>
-                            <p>Focus on what energizes you by uncovering and leveraging your natural talents to build confidence and achieve your goals.</p>
-                        </div>
-                    </div>
+                <div class="card-back">
+                    <p>A Frequency Recharging Wellness Station</p>
+                    <a href="solrevibe/index.html" class="btn-outline-dark">LEARN MORE</a>
                 </div>
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-                            </div>
-                            <h3>CYNEFIN Framework</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>CYNEFIN Framework</h3>
-                            <p>Navigate life's complexities with clarity using a powerful sense-making tool that helps you make better decisions.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><line x1="6" y1="9" x2="6" y2="21"></line></svg>
-                            </div>
-                            <h3>Flow Survey</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>Flow Survey</h3>
-                            <p>Pinpoint precisely what's holding you back with our proprietary survey to identify obstacles and find a clear starting point.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
-                            </div>
-                            <h3>Wheel of Life</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>Wheel of Life</h3>
-                            <p>Visualize your life balance and identify areas for growth with our AI-powered tool to see where you're thriving.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
-                            </div>
-                            <h3>Action Board</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>Action Board</h3>
-                            <p>Turn your big ambitions into manageable steps with a personalized Kanban-style board generated by our AI.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
-                            </div>
-                            <h3>Applied AI</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>Applied AI</h3>
-                            <p>Leverage artificial intelligence custom-built for personal development, providing data-driven insights to support your journey.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                            </div>
-                            <h3>Data Visualization</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>Data Visualization</h3>
-                            <p>See your progress in a new light through compelling visualizations that make your journey tangible.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="offer-card" onclick="this.classList.toggle('flipped')">
-                    <div class="offer-card-inner">
-                        <div class="offer-card-front">
-                            <div class="offer-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                            </div>
-                            <h3>Community Support</h3>
-                        </div>
-                        <div class="offer-card-back">
-                            <h3>Community Support</h3>
-                            <p>Join a vibrant network of peers for encouragement, accountability, and shared learning in a supportive environment.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="testimonials" class="testimonials-section">
-            <div class="testimonials-header">
-                <h2>Don't just take <span class="highlight">our word</span> for it.</h2>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="quote-icon">
-                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                    </div>
-                    <p class="quote">"I was stuck in a rut. The ‘Wheel of Life’ and action boards helped me see the path forward. Highly recommend!"</p>
-                    <div class="author">
-                        <strong>Samantha Lee</strong>
-                        <span>Product Manager</span>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="quote-icon">
-                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                    </div>
-                    <p class="quote">"Thrive Coaching Al completely changed how I approach my goals. The clarity I've gained is invaluable."</p>
-                    <div class="author">
-                        <strong>Alex Johnson</strong>
-                        <span>Entrepreneur</span>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="quote-icon">
-                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                    </div>
-                    <p class="quote">"The perfect blend of technology and personal development. It feels like having a personal coach 24/7."</p>
-                    <div class="author">
-                        <strong>Michael Chen</strong>
-                        <span>Designer</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="survey" class="survey-section">
-            <div class="survey-content">
-                <h2>Find out what’s really causing the friction</h2>
-                <a href="#survey-link" class="cta-button secondary">Take the Flow Survey</a>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-contact">
-                <a href="mailto:team@thrivecoaching.ai">team@thrivecoaching.ai</a>
-                <span class="separator">|</span>
-                <a href="tel:7205882002">(720) 588-2002</a>
-            </div>
-            <div class="footer-copyright">
-                &copy; 2026 Thrive Coaching AI. All rights reserved.
             </div>
         </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL BiTE</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>An Interactive Story Branding Canvas</p>
+                    <a href="#" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL DRiVE</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>An Immersive Learning Content Delivery System</p>
+                    <a href="soldrive" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL INSiGHT</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>An Advanced Automated Operations Ecosystem</p>
+                    <a href="#" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL THRiVE</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>An AI Powered Interactive Coaching Platform</p>
+                    <a href="thrive/index.html" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL GaMES</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>An AI Game Creation Lab</p>
+                    <a href="solgames/index.html" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spacer card to align SOL CaRDS below SOL THRiVE in 3-column layout -->
+        <div class="spacer-card" style="visibility: hidden; pointer-events: none;"></div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL CaRDS</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>A Digital Identity Experience</p>
+                    <a href="#" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <h3 class="footer-subtitle">SOL WORLD <span class="fw-bold">ECOSYSTEM</span></h3>
+        <p class="footer-mission">Our interconnected mission to unlock infinite human potential through innovative projects</p>
+        <p class="footer-copy">SOL WORLD ECOSYSTEM &copy; 2026 | solworld.ai</p>
     </footer>
 
-    <script type="module" src="script.js"></script>
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const stars = [];
+        const numStars = 800; 
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: Math.random() * 1.2,
+                blinkSpeed: Math.random() * 0.02 + 0.005,
+                alpha: Math.random(),
+                drift: Math.random() * 0.15 + 0.05,
+                isShootingStar: Math.random() < 0.005,
+                shootingSpeedX: (Math.random() * 5 + 2) * (Math.random() > 0.5 ? 1 : -1),
+                shootingSpeedY: Math.random() * 3 + 1,
+                tailLength: Math.random() * 30 + 10
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < stars.length; i++) {
+                let s = stars[i];
+                
+                s.alpha += s.blinkSpeed;
+                if (s.alpha >= 1 || s.alpha <= 0.1) {
+                    s.blinkSpeed = -s.blinkSpeed;
+                }
+
+                if (s.isShootingStar) {
+                    s.x += s.shootingSpeedX;
+                    s.y += s.shootingSpeedY;
+
+                    if (s.x < 0 || s.x > width || s.y > height) {
+                        s.x = Math.random() * width;
+                        s.y = 0;
+                    }
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(s.x, s.y);
+                    ctx.lineTo(s.x - s.shootingSpeedX * s.tailLength, s.y - s.shootingSpeedY * s.tailLength);
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(0, s.alpha)})`;
+                    ctx.lineWidth = s.radius;
+                    ctx.stroke();
+                } else {
+                    s.y -= s.drift;
+                    if (s.y < 0) s.y = height;
+
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, s.alpha)})`;
+                    ctx.fill();
+                }
+            }
+            
+            requestAnimationFrame(draw);
+        }
+        
+        draw();
+        
+window.addEventListener('load', () => {
+    const sDot = document.getElementById('v4-sol');
+    const wDot = document.getElementById('v4-world');
+    const container = document.getElementById('v4-logo');
+    if (!sDot || !wDot || !container) return;
+
+    window.addEventListener('mousemove', (e) => {
+        // Track relative to the logo container for localized tracking
+        const rect = container.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        // Normalize offset (-1 to 1) using window half-width to scale the movement smoothly
+        const normX = (e.clientX - centerX) / (window.innerWidth / 2);
+        const normY = (e.clientY - centerY) / (window.innerHeight / 2);
+        
+        // Clamp between -1 and 1
+        const clampX = Math.max(-1, Math.min(1, normX));
+        const clampY = Math.max(-1, Math.min(1, normY));
+        
+        // Responsive bounds using percentages (translates relative to dot's own size)
+        sDot.style.transform = `translate(${clampX * 50}%, ${clampY * 50}%)`;
+        wDot.style.transform = `translate(${clampX * 45}%, ${clampY * 45}%)`;
+    });
+});
+    </script>
 </body>
 </html>
