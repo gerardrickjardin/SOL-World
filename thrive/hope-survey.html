@@ -817,7 +817,7 @@ const App = () => {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 md:gap-6 flex-grow items-stretch overflow-hidden h-full">
                 
                 {/* Left Panel - Survey Form (40%) */}
-                <div className="lg:col-span-2 flex flex-col bg-white rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden">
+                <div className="lg:col-span-2 flex flex-col bg-white rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden h-full min-h-0">
                     {/* Progress Bar */}
                     <div className="w-full bg-slate-100 h-1.5 absolute top-0 left-0 z-10">
                         <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300" style={{ width: `${progress}%` }}></div>
@@ -884,7 +884,7 @@ const App = () => {
                 </div>
 
                 {/* Right Panel - Live Visualization (60%) */}
-                <div className="lg:col-span-3 flex flex-col w-full h-full relative rounded-[2rem] shadow-2xl overflow-hidden bg-[#02050a] border border-cyan-500/20 hidden lg:flex">
+                <div className="lg:col-span-3 flex flex-col w-full h-full relative rounded-[2rem] shadow-2xl overflow-hidden bg-[#02050a] border border-cyan-500/20 hidden lg:flex min-h-0">
                     <div className="absolute inset-0 pointer-events-none" style={{
                         backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 60%), linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px)',
                         backgroundSize: '100% 100%, 30px 30px, 30px 30px',
