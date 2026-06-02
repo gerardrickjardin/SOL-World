@@ -173,7 +173,8 @@ const surveyQuestions = [
         id: "ops_home",
         space: "Outer Physical Space (OPS)",
         dimension: "Dimension 1: Places",
-        title: "🏠 1.1 Home Experience",
+        title: "🏠 1.1 Home",
+        subtitle: "the physical structure where you sleep, eat, and spend most of your time",
         concept: "How would you rate the physical safety, comfort, and peace of the place where you live?",
         anchors: {
             "5.0": "5 Stars (Sanctuary): My living space is a wonderfully quiet, clean, and safe sanctuary where I can fully rest and be happy.",
@@ -1003,7 +1004,8 @@ const App = () => {
                         {/* Title & Concept */}
                         <div className="mb-4 shrink-0 w-full">
                             <div className="text-slate-400 font-bold text-sm tracking-wide mb-3">{q.dimension}</div>
-                            <h2 className="font-black text-slate-900 text-3xl md:text-4xl tracking-tight leading-tight mb-5">{q.title}</h2>
+                            <h2 className="font-black text-slate-900 text-3xl md:text-4xl tracking-tight leading-tight mb-1">{q.title}</h2>
+                            {q.subtitle && <p className="text-slate-500 font-medium text-[15px] mb-5">{q.subtitle}</p>}
                             <div className="bg-slate-50 border-y border-r border-slate-100 border-l-[6px] border-l-blue-600 rounded-2xl p-6 md:p-8 shadow-sm w-full">
                                 <p className="text-slate-800 leading-relaxed font-bold text-lg md:text-xl">{q.concept}</p>
                             </div>
