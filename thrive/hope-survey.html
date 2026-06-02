@@ -415,26 +415,29 @@ const surveyQuestions = [
 const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
     const [hoverValue, setHoverValue] = window.React.useState(null);
     const [hoverEmoji, setHoverEmoji] = window.React.useState(null);
+    const [burstKey, setBurstKey] = window.React.useState(0);
     const [burstValue, setBurstValue] = window.React.useState(null);
     
     // Pro Slider State
     const [isDragging, setIsDragging] = window.React.useState(false);
     
-    const val = currentSelection !== null ? currentSelection : 0.0;
-    const [rawValue, setRawValue] = window.React.useState(val);
+    // Clamp the initial value to 1.0 minimum so the slider thumb never flies off-screen
+    const safeSelection = currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 1.0;
+    const [rawValue, setRawValue] = window.React.useState(safeSelection);
 
-    // Sync rawValue with val when not dragging
+    // Sync rawValue with safeSelection when not dragging
     window.React.useEffect(() => {
         if (!isDragging && hoverValue === null) {
-            setRawValue(val);
+            setRawValue(currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 1.0);
         }
-    }, [val, isDragging, hoverValue]);
+    }, [currentSelection, isDragging, hoverValue]);
 
-    const displayValue = hoverValue !== null ? hoverValue : rawValue;
+    const displayValue = hoverValue !== null ? Math.max(1.0, hoverValue) : rawValue;
     const snappedValue = Math.round(displayValue * 2) / 2;
 
     const triggerBurst = (rating) => {
         setBurstValue(rating);
+        setBurstKey(prev => prev + 1); // Force React to remount the animation spans
         setTimeout(() => setBurstValue(null), 800);
     };
 
@@ -449,7 +452,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
         const v = parseFloat(e.target.value);
         setRawValue(v);
         const snapped = Math.round(v * 2) / 2;
-        if (snapped !== val) {
+        if (snapped !== currentSelection) {
             onSelect(snapped);
         }
     };
@@ -537,11 +540,11 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
             >
                 <span className="text-2xl md:text-4xl drop-shadow-lg filter relative z-10">{emojiStr}</span>
                 {isBursting && (
-                    <div className="absolute top-1/2 left-1/2 w-0 h-0 z-0 pointer-events-none">
-                        <span className="absolute text-xl" style={{ animation: 'burst1 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards' }}>{emojiStr}</span>
-                        <span className="absolute text-xl" style={{ animation: 'burst2 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards' }}>{emojiStr}</span>
-                        <span className="absolute text-xl" style={{ animation: 'burst3 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards' }}>{emojiStr}</span>
-                        <span className="absolute text-xl" style={{ animation: 'burst4 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards' }}>{emojiStr}</span>
+                    <div key={burstKey} className="absolute top-1/2 left-1/2 w-0 h-0 z-30 pointer-events-none">
+                        <span className="absolute text-2xl drop-shadow-md" style={{ animation: 'burst1 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards' }}>{emojiStr}</span>
+                        <span className="absolute text-2xl drop-shadow-md" style={{ animation: 'burst2 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards' }}>{emojiStr}</span>
+                        <span className="absolute text-2xl drop-shadow-md" style={{ animation: 'burst3 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards' }}>{emojiStr}</span>
+                        <span className="absolute text-2xl drop-shadow-md" style={{ animation: 'burst4 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards' }}>{emojiStr}</span>
                     </div>
                 )}
             </div>
@@ -553,10 +556,10 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
     return (
         <div className="w-full flex flex-col gap-10 bg-[#15191e] p-8 md:p-10 rounded-3xl mb-6 shadow-2xl border border-slate-800 relative">
             <style dangerouslySetInnerHTML={{__html: `
-                @keyframes burst1 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-40px, -80px) scale(1.5) rotate(-25deg); opacity: 0; } }
-                @keyframes burst2 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-10px, -100px) scale(1.8) rotate(-10deg); opacity: 0; } }
-                @keyframes burst3 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(20px, -90px) scale(1.6) rotate(15deg); opacity: 0; } }
-                @keyframes burst4 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(50px, -70px) scale(1.4) rotate(30deg); opacity: 0; } }
+                @keyframes burst1 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-50px, -90px) scale(1.5) rotate(-35deg); opacity: 0; } }
+                @keyframes burst2 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-15px, -110px) scale(1.8) rotate(-15deg); opacity: 0; } }
+                @keyframes burst3 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(15px, -100px) scale(1.6) rotate(15deg); opacity: 0; } }
+                @keyframes burst4 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(50px, -80px) scale(1.4) rotate(35deg); opacity: 0; } }
             `}} />
 
             <h3 className="text-emerald-400/90 text-2xl font-medium text-center mb-4 relative z-10">
@@ -623,7 +626,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                         onMouseUp={handleDragEnd}
                         onTouchStart={handleDragStart}
                         onTouchEnd={handleDragEnd}
-                        onMouseEnter={() => setHoverValue(val)}
+                        onMouseEnter={() => setHoverValue(safeSelection)}
                         onMouseLeave={() => setHoverValue(null)}
                         className="absolute w-full h-full opacity-0 cursor-pointer z-30"
                         style={{ top: 0, left: 0 }}
