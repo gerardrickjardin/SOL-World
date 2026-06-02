@@ -843,17 +843,6 @@ const App = () => {
                             currentSelection={currentSelection} 
                             onSelect={(val) => {
                                 setCurrentSelection(val);
-                                // Auto advance slightly delayed
-                                setTimeout(() => {
-                                    const newAnswers = { ...answers, [q.id]: val };
-                                    setAnswers(newAnswers);
-                                    if (currentQIndex < surveyQuestions.length - 1) {
-                                        setCurrentQIndex(currentQIndex + 1);
-                                        setCurrentSelection(newAnswers[surveyQuestions[currentQIndex + 1].id] ?? null);
-                                    } else {
-                                        setStep('results');
-                                    }
-                                }, 400);
                             }} 
                             anchors={q.anchors} 
                         />
