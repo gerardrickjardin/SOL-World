@@ -485,13 +485,13 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
 
     const getGlowStyles = (zone) => {
         if (zone === 1) {
-            return snappedValue >= 1.0 && snappedValue <= 2.0 ? "border-blue-500/30" : "opacity-50 grayscale border-transparent";
+            return snappedValue >= 1.0 && snappedValue <= 2.0 ? "opacity-100 border-transparent" : "opacity-50 grayscale border-transparent";
         }
         if (zone === 3) {
-            return snappedValue >= 2.5 && snappedValue <= 3.5 ? "border-white/20" : "opacity-50 grayscale border-transparent";
+            return snappedValue >= 2.5 && snappedValue <= 3.5 ? "opacity-100 border-transparent" : "opacity-50 grayscale border-transparent";
         }
         if (zone === 5) {
-            return snappedValue >= 4.0 && snappedValue <= 5.0 ? "border-purple-500/30" : "opacity-50 grayscale border-transparent";
+            return snappedValue >= 4.0 && snappedValue <= 5.0 ? "opacity-100 border-transparent" : "opacity-50 grayscale border-transparent";
         }
         return "";
     };
@@ -551,34 +551,12 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
     const thumbBgColor = snappedValue > 3 ? '#a855f7' : snappedValue < 3 ? '#3b82f6' : '#64748b';
 
     return (
-        <div className="w-full flex flex-col gap-10 bg-[#15191e] p-8 md:p-10 rounded-3xl mb-6 shadow-2xl border border-slate-800 relative overflow-hidden">
+        <div className="w-full flex flex-col gap-10 bg-[#15191e] p-8 md:p-10 rounded-3xl mb-6 shadow-2xl border border-slate-800 relative">
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes burst1 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-40px, -80px) scale(1.5) rotate(-25deg); opacity: 0; } }
                 @keyframes burst2 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-10px, -100px) scale(1.8) rotate(-10deg); opacity: 0; } }
                 @keyframes burst3 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(20px, -90px) scale(1.6) rotate(15deg); opacity: 0; } }
                 @keyframes burst4 { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(50px, -70px) scale(1.4) rotate(30deg); opacity: 0; } }
-                
-                input[type='range']::-webkit-slider-thumb {
-                    -webkit-appearance: none;
-                    width: 36px;
-                    height: 36px;
-                    background: transparent;
-                    border: none;
-                    cursor: grab;
-                }
-                input[type='range']:active::-webkit-slider-thumb {
-                    cursor: grabbing;
-                }
-                input[type='range']::-moz-range-thumb {
-                    width: 36px;
-                    height: 36px;
-                    background: transparent;
-                    border: none;
-                    cursor: grab;
-                }
-                input[type='range']:active::-moz-range-thumb {
-                    cursor: grabbing;
-                }
             `}} />
 
             <h3 className="text-emerald-400/90 text-2xl font-medium text-center mb-4 relative z-10">
@@ -591,7 +569,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                     <p className={`text-[12px] md:text-sm h-12 leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 1.0 && snappedValue <= 2.0 ? "text-blue-200" : "text-slate-400"}`}>
                         "...{shitholeData.desc.replace(/My .*? is /, '')}"
                     </p>
-                    <div className={`flex items-center justify-center gap-1 md:gap-2 bg-[#1e2532] rounded-full px-2 md:px-4 py-2 border transition-all duration-500 w-full ${getGlowStyles(1)}`}>
+                    <div className={`flex items-center justify-center gap-1 md:gap-2 bg-[#1e2532] rounded-full px-2 md:px-4 py-2 transition-all duration-500 w-full ${getGlowStyles(1)}`}>
                         {renderEmoji(1, 0, emojis["1.0"][0], 1.0)}
                         {renderEmoji(1, 1, emojis["1.0"][1], 1.5)}
                         {renderEmoji(1, 2, emojis["1.0"][2], 2.0)}
@@ -604,7 +582,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                     <p className={`text-[12px] md:text-sm h-12 leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 2.5 && snappedValue <= 3.5 ? "text-slate-200" : "text-slate-400"}`}>
                         "...{stableData.desc.replace(/My .*? is /, '')}"
                     </p>
-                    <div className={`flex items-center justify-center gap-1 md:gap-2 bg-[#2a2e35] rounded-full px-2 md:px-4 py-2 border transition-all duration-500 w-full ${getGlowStyles(3)}`}>
+                    <div className={`flex items-center justify-center gap-1 md:gap-2 bg-[#2a2e35] rounded-full px-2 md:px-4 py-2 transition-all duration-500 w-full ${getGlowStyles(3)}`}>
                         {renderEmoji(3, 0, emojis["3.0"][0], 2.5)}
                         {renderEmoji(3, 1, emojis["3.0"][1], 3.0)}
                         {renderEmoji(3, 2, emojis["3.0"][2], 3.5)}
@@ -617,7 +595,7 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                     <p className={`text-[12px] md:text-sm h-12 leading-relaxed max-w-[200px] transition-colors duration-300 ${snappedValue >= 4.0 && snappedValue <= 5.0 ? "text-purple-200" : "text-slate-400"}`}>
                         "...{sanctuaryData.desc.replace(/My .*? is /, '')}"
                     </p>
-                    <div className={`flex items-center justify-center gap-1 md:gap-2 bg-[#2a1b3d] rounded-full px-2 md:px-4 py-2 border transition-all duration-500 w-full ${getGlowStyles(5)}`}>
+                    <div className={`flex items-center justify-center gap-1 md:gap-2 bg-[#2a1b3d] rounded-full px-2 md:px-4 py-2 transition-all duration-500 w-full ${getGlowStyles(5)}`}>
                         {renderEmoji(5, 0, emojis["5.0"][0], 4.0)}
                         {renderEmoji(5, 1, emojis["5.0"][1], 4.5)}
                         {renderEmoji(5, 2, emojis["5.0"][2], 5.0)}
@@ -627,9 +605,13 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
             </div>
 
             {/* Range Slider */}
-            <div className="mt-10 mb-2 px-2 w-full flex flex-col gap-4 relative z-10">
-                <div className="relative w-full h-1.5">
-                    {/* The native input covers the whole bar and acts as the interaction layer */}
+            <div className="mt-10 mb-2 px-2 w-full relative z-10">
+                <div className="relative w-full h-12">
+                    
+                    {/* The Track */}
+                    <div className="absolute w-full h-1.5 bg-gradient-to-r from-blue-600 via-slate-500 to-purple-600 rounded-lg pointer-events-none z-10" style={{ top: '50%', marginTop: '-3px' }}></div>
+                    
+                    {/* The Native Invisible Slider */}
                     <input 
                         type="range" 
                         min="1" 
@@ -643,17 +625,20 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                         onTouchEnd={handleDragEnd}
                         onMouseEnter={() => setHoverValue(val)}
                         onMouseLeave={() => setHoverValue(null)}
-                        className="w-full h-1.5 bg-gradient-to-r from-blue-600 via-slate-500 to-purple-600 rounded-lg appearance-none outline-none absolute top-0 left-0 z-30"
+                        className="absolute w-full h-full opacity-0 cursor-pointer z-30"
+                        style={{ top: 0, left: 0 }}
                     />
                     
-                    {/* The Gliding Visual Thumb */}
+                    {/* The Gliding Thumb Overlay */}
                     <div 
-                        className={`absolute top-1/2 -translate-y-1/2 -ml-4 w-9 h-9 rounded-full border-[3px] border-white flex items-center justify-center text-white text-[12px] font-bold pointer-events-none z-20 ${isDragging ? '' : 'transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]'}`}
+                        className={`absolute w-9 h-9 rounded-full border-[3px] border-white flex items-center justify-center text-white text-[12px] font-bold pointer-events-none z-20 ${isDragging ? '' : 'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]'}`}
                         style={{ 
-                            left: `calc(0.5rem + ${((displayValue - 1) / 4) * 100}% - ${((displayValue - 1) / 4) * 1}rem)`,
+                            top: '50%',
+                            marginTop: '-18px',
+                            left: `calc(${((displayValue - 1) / 4) * 100}% - ${((displayValue - 1) / 4) * 36}px)`,
                             backgroundColor: thumbBgColor,
                             boxShadow: `0 0 20px ${thumbBgColor}`,
-                            transform: isDragging ? 'translateY(-50%) scale(1.15)' : 'translateY(-50%) scale(1)'
+                            transform: isDragging ? 'scale(1.15)' : 'scale(1)'
                         }}
                     >
                         {snappedValue.toFixed(1)}
