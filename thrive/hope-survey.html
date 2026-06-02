@@ -439,7 +439,7 @@ const HopeCardSelector = ({ currentSelection, onSelect, anchors }) => {
     };
 
     return (
-        <div className="flex-grow flex flex-col justify-start gap-3 overflow-y-auto custom-scrollbar pr-2 mt-4">
+        <div className="flex-grow flex flex-col justify-start gap-3 overflow-y-auto custom-scrollbar mt-4">
             {["5.0", "3.0", "1.0"].map((scoreKey) => {
                 const fullText = anchors && anchors[scoreKey];
                 if (!fullText) return null;
@@ -836,11 +836,11 @@ const App = () => {
                         </div>
 
                         {/* Title & Concept */}
-                        <div className="mb-4 shrink-0 w-full pr-2">
+                        <div className="mb-4 shrink-0 w-full">
                             <div className="text-slate-400 font-bold text-sm tracking-wide mb-1">{q.dimension}</div>
                             <h2 className="font-black text-slate-900 text-3xl md:text-4xl tracking-tight leading-tight mb-5">{q.title}</h2>
-                            <div className="bg-slate-50 border-l-[6px] border-blue-600 rounded-r-2xl p-5 md:p-6 shadow-sm w-full">
-                                <p className="text-slate-800 leading-relaxed font-bold text-base md:text-lg">{q.concept}</p>
+                            <div className="bg-slate-50 border-y border-r border-slate-100 border-l-[6px] border-l-blue-600 rounded-2xl p-6 md:p-8 shadow-sm w-full">
+                                <p className="text-slate-800 leading-relaxed font-bold text-lg md:text-xl">{q.concept}</p>
                             </div>
                         </div>
 
@@ -865,7 +865,7 @@ const App = () => {
                         />
 
                         {/* Navigation Footer */}
-                        <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-100 shrink-0 pr-2">
+                        <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-100 shrink-0">
                             <button 
                                 onClick={handlePrevQ}
                                 className={`text-slate-500 font-bold hover:text-slate-800 px-6 py-2 transition-colors flex items-center gap-2 ${currentQIndex === 0 ? 'invisible' : ''}`}
