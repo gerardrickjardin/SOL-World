@@ -413,7 +413,6 @@ const surveyQuestions = [
 
 
 const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
-    const [hoverValue, setHoverValue] = window.React.useState(null);
     const [hoverEmoji, setHoverEmoji] = window.React.useState(null);
     const [burstKey, setBurstKey] = window.React.useState(0);
     const [burstValue, setBurstValue] = window.React.useState(null);
@@ -427,12 +426,12 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
 
     // Sync rawValue with safeSelection when not dragging
     window.React.useEffect(() => {
-        if (!isDragging && hoverValue === null) {
+        if (!isDragging) {
             setRawValue(currentSelection !== null && currentSelection >= 1.0 ? currentSelection : 1.0);
         }
-    }, [currentSelection, isDragging, hoverValue]);
+    }, [currentSelection, isDragging]);
 
-    const displayValue = hoverValue !== null ? Math.max(1.0, hoverValue) : rawValue;
+    const displayValue = rawValue;
     const snappedValue = Math.round(displayValue * 2) / 2;
 
     const triggerBurst = (rating) => {
@@ -626,8 +625,6 @@ const HopeEmojiSlider = ({ currentSelection, onSelect, anchors, currentQ }) => {
                         onMouseUp={handleDragEnd}
                         onTouchStart={handleDragStart}
                         onTouchEnd={handleDragEnd}
-                        onMouseEnter={() => setHoverValue(safeSelection)}
-                        onMouseLeave={() => setHoverValue(null)}
                         className="absolute w-full h-full opacity-0 cursor-pointer z-30"
                         style={{ top: 0, left: 0 }}
                     />
