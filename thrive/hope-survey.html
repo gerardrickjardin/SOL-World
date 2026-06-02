@@ -818,10 +818,7 @@ const App = () => {
                 
                 {/* Left Panel - Survey Form (50%) */}
                 <div className="flex flex-col bg-white rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden h-full min-h-0" style={{ transform: 'translateZ(0)' }}>
-                    {/* Progress Bar */}
-                    <div className="w-full bg-slate-100 h-1.5 absolute top-0 left-0 z-10">
-                        <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300" style={{ width: `${progress}%` }}></div>
-                    </div>
+
                     
                     <div className="p-6 md:p-8 pt-10 flex-grow flex flex-col h-full overflow-hidden">
                         
@@ -829,9 +826,6 @@ const App = () => {
                         <div className="flex justify-between items-center mb-6 shrink-0">
                             <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold uppercase tracking-widest text-[10px] border border-blue-100">
                                 {q.space}
-                            </div>
-                            <div className="text-slate-400 font-bold text-xs tracking-wider">
-                                Question {currentQIndex + 1} of {surveyQuestions.length} ({Math.round(progress)}%)
                             </div>
                         </div>
 
