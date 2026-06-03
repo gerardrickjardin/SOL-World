@@ -74,11 +74,12 @@
             position: relative;
             z-index: 10 !important;
             width: 100%;
-            height: 56.25vw !important;
+            aspect-ratio: 16 / 9 !important;
             /* Explicitly enforce 16:9 ratio based on width */
             max-height: 1080px !important;
             min-height: 350px !important;
             overflow: hidden;
+            background-color: #000;
         }
 
         .hero-background-video {
@@ -91,6 +92,10 @@
             z-index: 11 !important;
             opacity: 1 !important;
             visibility: visible !important;
+            -webkit-transform-style: preserve-3d;
+            -webkit-backface-visibility: hidden;
+            transform: translateZ(0);
+            will-change: transform;
         }
 
         .hero-main-title {
