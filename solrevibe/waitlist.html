@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SOL REViBE | Reserve Your Spot</title>
+    <meta name="description" content="Join the waitlist for SOL REViBE - The Frequency Awakening Wellness Experience.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        :root {
+            --brand-green: #10b981;
+            --brand-green-hover: #059669;
+            --brand-green-glow: rgba(16, 185, 129, 0.4);
+        }
+
+        body {
+            background-color: #050505;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.03), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(217, 70, 239, 0.03), transparent 25%);
+        }
+
+        .waitlist-nav {
+            padding: 2rem 5rem;
+            position: relative;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .waitlist-nav { padding: 2rem; }
+        }
+
+        .waitlist-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        @media (max-width: 992px) {
+            .waitlist-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                padding: 1rem 1.5rem 4rem;
+            }
+        }
+
+        /* Hero / Value Prop Left Side */
+        .waitlist-content {
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .waitlist-title {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, var(--brand-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .waitlist-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .benefits-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.25rem;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(16, 185, 129, 0.2);
+            transform: translateX(5px);
+        }
+
+        .benefit-icon {
+            color: var(--brand-green);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-top: 2px;
+        }
+
+        .benefit-text h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .benefit-text p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Form Right Side */
+        .form-wrapper {
+            background: rgba(12, 6, 18, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .form-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 640px) {
+            .form-row { grid-template-columns: 1fr; gap: 1.25rem; }
+            .form-wrapper { padding: 2rem 1.5rem; }
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-label .optional {
+            color: #64748b;
+            font-weight: 400;
+            font-size: 0.75rem;
+            margin-left: 0.25rem;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--brand-green);
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 0 3px var(--brand-green-glow);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-size: 0.75rem;
+            margin-top: 0.35rem;
+            display: none;
+        }
+        
+        .form-input.error {
+            border-color: #ef4444;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--brand-green);
+            color: #000000;
+            border: none;
+            border-radius: 12px;
+            padding: 1.15rem;
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 20px -5px var(--brand-green-glow);
+        }
+
+        .submit-btn:hover {
+            background: var(--brand-green-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(16, 185, 129, 0.5);
+        }
+
+        .submit-btn:disabled {
+            background: #334155;
+            color: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Spinner for loading state */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-left-color: #000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .trust-section {
+            margin-top: 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .trust-icon {
+            color: #64748b;
+        }
+
+        .trust-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            line-height: 1.5;
+            max-width: 90%;
+        }
+
+        /* Success State */
+        .success-state {
+            display: none;
+            text-align: center;
+            padding: 2rem 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--brand-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 30px var(--brand-green-glow);
+        }
+        
+        .success-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+        
+        .success-text {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        .share-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .share-btn:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <div class="glow-effect"></div>
+    <div class="glow-effect-2"></div>
+
+    <nav class="waitlist-nav">
+        <a href="index.html" class="logo" style="text-decoration: none; color: inherit;">
+            <img src="../assets/SOL WORLD LOGO.png" alt="SOL World Logo" class="nav-logo-img">
+        </a>
+    </nav>
+
+    <main class="waitlist-container">
+        <!-- Value Proposition Section -->
+        <div class="waitlist-content">
+            <h1 class="waitlist-title">Reserve Your Place in the Future of Wellness.</h1>
+            <p class="waitlist-subtitle">SOL REViBE is a next-generation wellness experience designed to help calm the body, replenish energy, and quiet the mind through innovative wellness technologies and guided experiences.</p>
+            
+            <ul class="benefits-list">
+                <li class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </div>
+                    <div class="benefit-text">
+                        <h4>Early Access</h4>
+                        <p>Be among the first to experience SOL REViBE locations before public launch.</p>
+                    </div>
+                </li>
+                <li class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    </div>
+                    <div class="benefit-text">
+                        <h4>Founding Member Benefits</h4>
+                        <p>Unlock exclusive launch incentives and permanent founding member status.</p>
+                    </div>
+                </li>
+                <li class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </div>
+                    <div class="benefit-text">
+                        <h4>Priority Notifications</h4>
+                        <p>Get alerted immediately when a new wellness station opens near your city.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Lead Capture Form Section -->
+        <div class="form-wrapper">
+            <div id="form-container">
+                <div class="form-header">
+                    <h3>Join the Priority Waitlist</h3>
+                </div>
+                
+                <form id="waitlist-form" novalidate>
+                    <div class="form-group">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" id="fullName" class="form-input" placeholder="Jane Doe" required>
+                        <div class="error-message" id="error-fullName">Please enter your full name.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" class="form-input" placeholder="jane@example.com" required>
+                        <div class="error-message" id="error-email">Please enter a valid email address.</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" id="city" class="form-input" placeholder="e.g. Austin" required>
+                            <div class="error-message" id="error-city">Please enter your city.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number <span class="optional">(Optional)</span></label>
+                            <input type="tel" id="phone" class="form-input" placeholder="(555) 000-0000">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="business" class="form-label">Business Name <span class="optional">(Optional)</span></label>
+                        <input type="text" id="business" class="form-input" placeholder="Company Name">
+                    </div>
+                    
+                    <button type="submit" id="submit-btn" class="submit-btn">
+                        <span id="btn-text">Reserve My Spot</span>
+                        <div id="btn-spinner" class="spinner"></div>
+                    </button>
+                </form>
+
+                <div class="trust-section">
+                    <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <p class="trust-text">We respect your privacy. Your information will only be used to provide updates about SOL REViBE launches, experiences, and opportunities relevant to your area.</p>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <div id="success-state" class="success-state">
+                <div class="success-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <h3 class="success-title">You're officially on the list.</h3>
+                <p class="success-text">We'll notify you when SOL REViBE launches in or near your area and share exclusive early-access opportunities before the public.</p>
+                
+                <button class="share-btn" onclick="shareWithFriend()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                    Share with a Friend
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Background Starfield Script -->
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const stars = [];
+        const numStars = 400;
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: Math.random() * 1.2,
+                blinkSpeed: Math.random() * 0.02 + 0.005,
+                alpha: Math.random(),
+                drift: Math.random() * 0.15 + 0.05
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < stars.length; i++) {
+                let s = stars[i];
+                s.alpha += s.blinkSpeed;
+                if (s.alpha >= 1 || s.alpha <= 0.1) s.blinkSpeed = -s.blinkSpeed;
+                s.y -= s.drift;
+                if (s.y < 0) s.y = height;
+
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, s.alpha)})`;
+                ctx.fill();
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+
+    <!-- Form Validation and Submission Script -->
+    <script>
+        const form = document.getElementById('waitlist-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnSpinner = document.getElementById('btn-spinner');
+        
+        function validateEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.form-input').forEach(el => el.classList.remove('error'));
+        }
+
+        function showError(fieldId) {
+            document.getElementById(fieldId).classList.add('error');
+            document.getElementById('error-' + fieldId).style.display = 'block';
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+            let isValid = true;
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const city = document.getElementById('city').value.trim();
+
+            if (!fullName) {
+                showError('fullName');
+                isValid = false;
+            }
+            
+            if (!email || !validateEmail(email)) {
+                showError('email');
+                isValid = false;
+            }
+            
+            if (!city) {
+                showError('city');
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Simulate loading state
+                submitBtn.disabled = true;
+                btnText.innerText = "Securing Spot...";
+                btnSpinner.style.display = "block";
+
+                // Simulate API call delay
+                setTimeout(() => {
+                    document.getElementById('form-container').style.display = 'none';
+                    document.getElementById('success-state').style.display = 'block';
+                }, 1500);
+            }
+        });
+
+        function shareWithFriend() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'SOL REViBE Waitlist',
+                    text: 'Join me on the waitlist for the future of wellness!',
+                    url: window.location.href,
+                });
+            } else {
+                alert("Share link copied to clipboard!");
+            }
+        }
+    </script>
+    
+    <!-- Aggressive Zoom Lock Script -->
+    <script>
+        document.addEventListener('wheel', function(e) { if (e.ctrlKey || e.metaKey) e.preventDefault(); }, { passive: false });
+        document.addEventListener('keydown', function(e) { if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '-' || e.key === '0' || e.key === '+' || e.code === 'NumpadAdd' || e.code === 'NumpadSubtract')) e.preventDefault(); });
+        document.addEventListener('touchmove', function(e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+        document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
+        document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
+    </script>
+</body>
+</html>
