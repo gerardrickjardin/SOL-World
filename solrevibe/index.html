@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SOL REViBE | Frequency Recharging Wellness Station</title>
     <meta name="description" content="A Frequency Recharging Wellness Station">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -812,6 +812,33 @@
                 document.querySelectorAll('.mockup-marker').forEach(el => el.remove());
             }, 400); // wait for fade out
         }
+    </script>
+    <!-- Aggressive Zoom Lock Script -->
+    <script>
+        // Prevent scaling on trackpad / mouse wheel
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Prevent scaling via keyboard shortcuts (+, -, 0, =)
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '-' || e.key === '0' || e.key === '+' || e.code === 'NumpadAdd' || e.code === 'NumpadSubtract')) {
+                e.preventDefault();
+            }
+        });
+
+        // Prevent multi-touch pinch to zoom on trackpads / touchscreens
+        document.addEventListener('touchmove', function(e) {
+            if (e.touches && e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Safari specific gesture events
+        document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
+        document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
     </script>
 </body>
 
