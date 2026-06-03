@@ -103,7 +103,7 @@
             top: 3.12cqw;
             left: 3.12cqw;
             z-index: 15;
-            width: 50cqw;
+            width: 80cqw;
             text-align: left;
             font-size: 3cqw;
             font-weight: 800;
@@ -114,7 +114,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin: 0;
-            text-wrap: balance;
             animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.5));
         }
@@ -500,6 +499,10 @@
                 margin-top: 0 !important;
             }
 
+            .hero-main-title span {
+                white-space: normal !important;
+            }
+
             /* Center callout box naturally without overlapping */
             .callout-box {
                 position: relative !important;
@@ -578,7 +581,7 @@
         </video>
 
         <!-- Main Hero Title Overlay -->
-        <h2 class="hero-main-title">More Customers through Your Door<br>and More Money in Your Pocket</h2>
+        <h2 class="hero-main-title"><span style="white-space: nowrap;">More Customers through Your Door</span><br><span style="white-space: nowrap;">and More Money in Your Pocket</span></h2>
 
         <!-- Call Out Box Overlay -->
         <div class="callout-box">
