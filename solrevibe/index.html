@@ -975,9 +975,43 @@
             el.classList.toggle('expanded');
         }
 
+        function findStation() {
+            var city = document.getElementById('finder-city').value.trim();
+            var mapWrapper = document.querySelector('.map-wrapper');
+            var iframe = mapWrapper.querySelector('iframe');
+            var hotspots = document.querySelectorAll('.hotspot');
+
+            // Default to US view if no city
+            var query = city || 'United States';
+
+            // Zoom Google Maps to the city
+            iframe.src = 'https://maps.google.com/maps?q=' + encodeURIComponent(query + ', USA') + '&t=&z=10&ie=UTF8&iwloc=&output=embed';
+
+            // Animate: hide all hotspots first
+            hotspots.forEach(function(h) {
+                h.style.opacity = '0';
+                h.style.transform = 'scale(0)';
+                h.classList.remove('expanded');
+            });
+
+            // Scroll map into view
+            mapWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // After map loads, animate hotspots in one by one
+            setTimeout(function() {
+                hotspots.forEach(function(h, i) {
+                    setTimeout(function() {
+                        h.style.transition = 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+                        h.style.opacity = '1';
+                        h.style.transform = 'scale(1)';
+                    }, i * 120);
+                });
+            }, 800);
+        }
+
         // Close expanded hotspots when clicking outside
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.hotspot')) {
+            if (!e.target.closest('.hotspot') && !e.target.closest('.finder-form')) {
                 document.querySelectorAll('.hotspot.expanded').forEach(function(h) {
                     h.classList.remove('expanded');
                 });
@@ -1074,9 +1108,9 @@
             </h2>
 
             <div class="finder-form">
-                <input type="email" placeholder="Business Email">
-                <input type="text" placeholder="Your City">
-                <button>Find a Station Near Me →</button>
+                <input type="email" id="finder-email" placeholder="Business Email">
+                <input type="text" id="finder-city" placeholder="Your City">
+                <button onclick="findStation()">Find a Station Near Me →</button>
             </div>
         </div>
 
