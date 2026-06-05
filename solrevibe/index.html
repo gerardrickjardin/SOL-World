@@ -711,23 +711,61 @@
         </div>
 
         <!-- Call Out Box Overlay -->
-        <div class="callout-box">
+    </header>
 
-            <div class="callout-form-container">
-                <p class="callout-form-prompt">
-                    Enter your email and city to find a
-                    <span class="prompt-gradient" style="white-space: nowrap;">SOL REViBE</span> Experience Station near you.
-                </p>
-                <form class="callout-form" onsubmit="showMapModal(event)">
-                    <div class="callout-input-group">
-                        <input type="email" id="search-email" placeholder="Business Email" required>
-                        <input type="text" id="search-city" placeholder="Your City" required>
-                    </div>
-                    <button type="submit">Find a Station Near Me ➔</button>
-                </form>
+    <!-- Find a Station Section -->
+    <section id="find-station" style="max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; font-family: 'Gotham', sans-serif;">
+        
+        <!-- Form -->
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <p style="font-size: 1.8rem; font-weight: 700; color: #1f2937; margin: 0 0 1.5rem 0; line-height: 1.3;">
+                Enter your email and city to find a
+                <span style="background: linear-gradient(135deg, #d946ef 0%, #a855f7 50%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; white-space: nowrap;">SOL REViBE</span> Experience Station near you.
+            </p>
+            <form onsubmit="filterMap(event)" style="display: flex; gap: 0.75rem; max-width: 700px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
+                <input type="email" id="section-email" placeholder="Business Email" required
+                    style="flex: 1; min-width: 200px; padding: 0.85rem 1.2rem; border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; font-size: 1rem; font-family: inherit; background: rgba(255,255,255,0.8); color: #1f2937; outline: none; transition: border-color 0.3s;">
+                <input type="text" id="section-city" placeholder="Your City" required
+                    style="flex: 1; min-width: 200px; padding: 0.85rem 1.2rem; border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; font-size: 1rem; font-family: inherit; background: rgba(255,255,255,0.8); color: #1f2937; outline: none; transition: border-color 0.3s;">
+                <button type="submit"
+                    style="padding: 0.85rem 2rem; background: linear-gradient(135deg, #d946ef 0%, #3b82f6 100%); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; transition: opacity 0.3s;">
+                    Find a Station Near Me ➔
+                </button>
+            </form>
+        </div>
+
+        <!-- Map -->
+        <div style="width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 8px 32px rgba(0,0,0,0.08); background: #fff;">
+            <iframe 
+                id="inline-map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.086280870397!2d-122.4194!3d37.7749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064e2ddd29b%3A0x7f0c5e3b0fce2a0a!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1700000000000" 
+                style="width: 100%; height: 450px; border: none; display: block;"
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade"
+                title="SOL REViBE Station Locations">
+            </iframe>
+        </div>
+
+        <!-- Mock Station Cards -->
+        <div style="display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
+            <div style="flex: 1; min-width: 250px; max-width: 350px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+                <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Lounge</h4>
+                <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #555;">123 Wellness Ave, San Francisco, CA</p>
+                <span style="display: inline-block; font-size: 0.75rem; color: #10b981; background: rgba(16,185,129,0.1); padding: 0.3rem 0.6rem; border-radius: 6px; font-weight: 700; letter-spacing: 0.05em;">● AVAILABLE NOW</span>
+            </div>
+            <div style="flex: 1; min-width: 250px; max-width: 350px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+                <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Studio</h4>
+                <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #555;">456 Recovery Blvd, Los Angeles, CA</p>
+                <span style="display: inline-block; font-size: 0.75rem; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 0.3rem 0.6rem; border-radius: 6px; font-weight: 700; letter-spacing: 0.05em;">● COMING SOON</span>
+            </div>
+            <div style="flex: 1; min-width: 250px; max-width: 350px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+                <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Center</h4>
+                <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #555;">789 Serenity Dr, Austin, TX</p>
+                <span style="display: inline-block; font-size: 0.75rem; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 0.3rem 0.6rem; border-radius: 6px; font-weight: 700; letter-spacing: 0.05em;">● COMING SOON</span>
             </div>
         </div>
-    </header>
+    </section>
 
     <section class="vibe-content-section">
         <h3>Restore Energy &bull; Quiet the Mind &bull; Elevate the Human Experience</h3>
@@ -766,6 +804,15 @@
             <a href="#" class="btn-outline" style="margin-top: 2rem; display: inline-block;">View Full Directory</a>
         </div>
     </div>
+
+    <script>
+        function filterMap(e) {
+            e.preventDefault();
+            const city = document.getElementById('section-city').value;
+            const mapFrame = document.getElementById('inline-map');
+            mapFrame.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d100000!2d-122.4194!3d37.7749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s' + encodeURIComponent(city) + '!5e0!3m2!1sen!2sus!4v1700000000000';
+        }
+    </script>
 
     <script>
         const canvas = document.getElementById('starfield');
