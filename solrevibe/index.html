@@ -639,251 +639,188 @@
             50% { transform: scale(1.3); }
             100% { transform: scale(0.9); }
         }
-
-        /* ── Expansion Section ── */
-        .revibe-expansion {
-            padding: 120px 8%;
-            background: linear-gradient(135deg, #f7f5ef 0%, #eef8f0 35%, #eef3ff 100%);
-            font-family: 'Gotham', sans-serif;
+        /* Station Finder Section */
+        .station-finder {
+            padding: 100px 6%;
+            background: linear-gradient(135deg, #f8f4ee 0%, #eef8f0 50%, #f2efff 100%);
         }
 
-        .revibe-expansion .section-header {
+        .finder-header {
             text-align: center;
-            max-width: 900px;
+            max-width: 1200px;
             margin: auto;
         }
 
-        .revibe-expansion .section-header h2 {
-            font-size: 64px;
-            line-height: 1.1;
+        .finder-header h2 {
+            font-size: 56px;
             font-weight: 700;
+            line-height: 1.15;
             color: #0f172a;
+            max-width: 1200px;
+            margin: auto;
         }
 
-        .revibe-expansion .gradient-text {
-            background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+        .gradient-text {
+            background: linear-gradient(90deg, #31c48d, #4f7cff, #b44cff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        .revibe-expansion .section-header p {
-            font-size: 22px;
-            color: #64748b;
-            margin-top: 20px;
-            line-height: 1.6;
+        .finder-form {
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
         }
 
-        .expansion-grid {
-            margin-top: 80px;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
+        .finder-form input {
+            width: 280px;
+            padding: 18px 20px;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            font-size: 16px;
         }
 
-        .map-card,
-        .demand-card,
-        .city-card,
-        .waitlist-card {
-            background: rgba(255,255,255,0.55);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 32px;
-            border: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        .finder-form button {
+            padding: 18px 34px;
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(90deg, #2ecf7c, #4f7cff, #b44cff);
+            cursor: pointer;
         }
 
-        .map-card {
-            padding: 30px;
+        .map-wrapper {
             position: relative;
+            margin-top: 50px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            background: rgba(255, 255, 255, .35);
+            backdrop-filter: blur(25px);
+            border-radius: 40px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, .7);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, .06);
         }
 
         .usa-map {
             width: 100%;
+            display: block;
+            border-radius: 30px;
         }
 
-        .city-node {
+        /* HOTSPOTS */
+        .hotspot {
             position: absolute;
-            padding: 8px 14px;
             background: white;
+            padding: 10px 16px;
             border-radius: 999px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #0f172a;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .city-node:hover {
-            transform: scale(1.08);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.12);
-        }
-
-        .austin { bottom: 80px; left: 48%; }
-        .dallas { bottom: 120px; left: 55%; }
-        .tampa { bottom: 95px; right: 18%; }
-        .phoenix { bottom: 140px; left: 30%; }
-        .nashville { bottom: 150px; right: 35%; }
-
-        .demand-card {
-            padding: 40px;
-        }
-
-        .demand-card h3 {
-            margin-bottom: 30px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .demand-item {
-            display: grid;
-            grid-template-columns: 80px 1fr 40px;
-            gap: 15px;
+            display: flex;
             align-items: center;
-            margin-bottom: 25px;
+            gap: 10px;
             font-size: 14px;
             font-weight: 600;
-            color: #334155;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
         }
 
-        .revibe-expansion .progress {
-            height: 10px;
-            background: #e7e7e7;
-            border-radius: 999px;
-            overflow: hidden;
+        .hotspot span {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #b44cff;
+            box-shadow: 0 0 0 10px rgba(180, 76, 255, .15), 0 0 0 20px rgba(180, 76, 255, .08);
         }
 
-        .fill {
-            height: 100%;
-            border-radius: 999px;
-            transition: width 1s ease;
+        /* COLORS */
+        .green span {
+            background: #32d583;
+            box-shadow: 0 0 0 10px rgba(50, 213, 131, .15), 0 0 0 20px rgba(50, 213, 131, .08);
         }
 
-        .fill.green { background: #4ade80; }
-        .fill.blue { background: #60a5fa; }
-        .fill.purple { background: #a855f7; }
-        .fill.orange { background: #fb923c; }
-        .fill.violet { background: #8b5cf6; }
-
-        .city-cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            margin-top: 40px;
+        .blue span {
+            background: #5b8dff;
+            box-shadow: 0 0 0 10px rgba(91, 141, 255, .15), 0 0 0 20px rgba(91, 141, 255, .08);
         }
 
-        .city-card {
-            padding: 35px;
+        .orange span {
+            background: #ff9d4d;
+            box-shadow: 0 0 0 10px rgba(255, 157, 77, .15), 0 0 0 20px rgba(255, 157, 77, .08);
         }
 
-        .city-card h4 {
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #0f172a;
+        .purple span {
+            background: #b44cff;
         }
 
-        .city-card p {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin: 0;
-            line-height: 1.5;
-        }
+        /* POSITIONING */
+        .seattle { top: 90px; left: 120px; }
+        .sf { top: 260px; left: 80px; }
+        .denver { top: 250px; left: 420px; }
+        .chicago { top: 210px; left: 820px; }
+        .austin { bottom: 110px; left: 540px; }
+        .dallas { bottom: 120px; left: 700px; }
+        .nashville { bottom: 250px; right: 420px; }
+        .tampa { bottom: 70px; right: 250px; }
+        .boston { top: 180px; right: 110px; }
 
-        .city-card span {
-            display: inline-block;
-            margin-top: 15px;
-            color: #7c3aed;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .waitlist-card {
-            margin-top: 50px;
-            padding: 60px;
-            text-align: center;
-        }
-
-        .waitlist-card h3 {
-            font-size: 42px;
-            margin-bottom: 30px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .waitlist-card form {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .waitlist-card input {
-            width: 300px;
-            padding: 18px;
-            border-radius: 14px;
-            border: 1px solid #ddd;
-            font-size: 1rem;
-            font-family: inherit;
-            color: #1f2937;
-            outline: none;
-            transition: border-color 0.3s;
+        /* LEGEND */
+        .legend {
+            position: absolute;
+            left: 40px;
+            bottom: 40px;
             background: white;
+            padding: 18px 22px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
         }
 
-        .waitlist-card input:focus {
-            border-color: #a855f7;
+        .legend div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .waitlist-card input::placeholder {
-            color: #94a3b8;
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
         }
 
-        .waitlist-card button {
-            padding: 18px 40px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
-            color: white;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            font-family: inherit;
-            transition: opacity 0.3s, transform 0.2s;
-        }
-
-        .waitlist-card button:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
+        .dot.green { background: #32d583; }
+        .dot.blue { background: #5b8dff; }
+        .dot.purple { background: #b44cff; }
 
         @media (max-width: 991px) {
-            .expansion-grid {
-                grid-template-columns: 1fr;
+            .finder-header h2 {
+                font-size: 36px;
             }
-            .city-cards {
-                grid-template-columns: 1fr 1fr;
+
+            .finder-form {
+                flex-direction: column;
+                align-items: center;
             }
-            .revibe-expansion .section-header h2 {
-                font-size: 42px;
-            }
-            .waitlist-card h3 {
-                font-size: 32px;
-            }
-            .waitlist-card input {
+
+            .finder-form input,
+            .finder-form button {
                 width: 100%;
+                max-width: 500px;
+            }
+
+            .legend {
+                position: relative;
+                left: auto;
+                bottom: auto;
+                margin-top: 20px;
             }
         }
 
-        @media (max-width: 600px) {
-            .city-cards {
-                grid-template-columns: 1fr;
-            }
-            .revibe-expansion {
-                padding: 60px 5%;
-            }
-        }
     </style>
 </head>
 
@@ -964,105 +901,89 @@
         <!-- Call Out Box Overlay -->
     </header>
 
-    <!-- Expansion Section -->
-    <section class="revibe-expansion">
+    <!-- Station Finder Section -->
+    <section class="station-finder">
 
-        <div class="section-header">
+        <div class="finder-header">
             <h2>
-                Bringing
-                <span class="gradient-text">Frequency Wellness</span>
-                to Every Community
+                Enter your email and city to find a
+                <span class="gradient-text">SOL REViBE</span>
+                Experience Station near you.
             </h2>
-            <p>
-                Join the priority waitlist and be the first to know when a
-                SOL REViBE Experience Station launches near you.
-            </p>
-        </div>
 
-        <div class="expansion-grid">
-
-            <!-- MAP SIDE -->
-            <div class="map-card">
-                <img src="../assets/usa-map.svg" alt="USA Expansion Map" class="usa-map" />
-                <div class="city-node austin">Austin</div>
-                <div class="city-node dallas">Dallas</div>
-                <div class="city-node tampa">Tampa</div>
-                <div class="city-node phoenix">Phoenix</div>
-                <div class="city-node nashville">Nashville</div>
-            </div>
-
-            <!-- DEMAND SIDE -->
-            <div class="demand-card">
-                <h3>Help Bring SOL REViBE to Your City</h3>
-
-                <div class="demand-item">
-                    <span>Austin</span>
-                    <div class="progress"><div class="fill green" style="width:87%"></div></div>
-                    <span>87%</span>
-                </div>
-
-                <div class="demand-item">
-                    <span>Dallas</span>
-                    <div class="progress"><div class="fill blue" style="width:75%"></div></div>
-                    <span>75%</span>
-                </div>
-
-                <div class="demand-item">
-                    <span>Phoenix</span>
-                    <div class="progress"><div class="fill purple" style="width:63%"></div></div>
-                    <span>63%</span>
-                </div>
-
-                <div class="demand-item">
-                    <span>Tampa</span>
-                    <div class="progress"><div class="fill orange" style="width:54%"></div></div>
-                    <span>54%</span>
-                </div>
-
-                <div class="demand-item">
-                    <span>Nashville</span>
-                    <div class="progress"><div class="fill violet" style="width:41%"></div></div>
-                    <span>41%</span>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- CITY CARDS -->
-        <div class="city-cards">
-            <div class="city-card">
-                <h4>Austin, TX</h4>
-                <p>Largest demand in Texas.</p>
-                <span>Priority Launch Market</span>
-            </div>
-            <div class="city-card">
-                <h4>Tampa, FL</h4>
-                <p>Active wellness community.</p>
-                <span>Coming Soon</span>
-            </div>
-            <div class="city-card">
-                <h4>Nashville, TN</h4>
-                <p>Expanding market.</p>
-                <span>Future Location</span>
-            </div>
-            <div class="city-card">
-                <h4>Phoenix, AZ</h4>
-                <p>High demand region.</p>
-                <span>Coming Soon</span>
-            </div>
-        </div>
-
-        <!-- WAITLIST -->
-        <div class="waitlist-card">
-            <h3>
-                Is Your
-                <span class="gradient-text">City Next?</span>
-            </h3>
-            <form>
-                <input type="email" placeholder="Email Address">
+            <div class="finder-form">
+                <input type="email" placeholder="Business Email">
                 <input type="text" placeholder="Your City">
-                <button>Join Priority Waitlist</button>
-            </form>
+                <button>Find a Station Near Me →</button>
+            </div>
+        </div>
+
+        <div class="map-wrapper">
+
+            <img src="../assets/map_mockup.png" alt="USA Map" class="usa-map">
+
+            <!-- HOTSPOTS -->
+            <div class="hotspot seattle">
+                <span></span>
+                Seattle, WA
+            </div>
+
+            <div class="hotspot sf">
+                <span></span>
+                San Francisco, CA
+            </div>
+
+            <div class="hotspot denver">
+                <span></span>
+                Denver, CO
+            </div>
+
+            <div class="hotspot chicago">
+                <span></span>
+                Chicago, IL
+            </div>
+
+            <div class="hotspot austin green">
+                <span></span>
+                Austin, TX
+            </div>
+
+            <div class="hotspot dallas blue">
+                <span></span>
+                Dallas, TX
+            </div>
+
+            <div class="hotspot nashville purple">
+                <span></span>
+                Nashville, TN
+            </div>
+
+            <div class="hotspot tampa orange">
+                <span></span>
+                Tampa, FL
+            </div>
+
+            <div class="hotspot boston purple">
+                <span></span>
+                Boston, MA
+            </div>
+
+            <!-- LEGEND -->
+            <div class="legend">
+                <div>
+                    <span class="dot green"></span>
+                    Launching Soon
+                </div>
+                <div>
+                    <span class="dot purple"></span>
+                    Priority Market
+                </div>
+                <div>
+                    <span class="dot blue"></span>
+                    Future Market
+                </div>
+            </div>
+
         </div>
 
     </section>
