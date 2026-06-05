@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="mapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e0f2e9;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#e8ecf8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0e8f8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Continental US simplified outline -->
+  <path d="M 130 100 L 180 95 L 220 90 L 260 95 L 300 90 L 340 85 L 380 90 L 420 88 L 460 90 L 500 92 L 540 90 L 580 95 L 620 100 L 660 105 L 700 110 L 740 120 L 760 130 L 780 140 L 800 155 L 810 170 L 815 185 L 810 200 L 800 215 L 790 225 L 780 235 L 770 250 L 760 260 L 750 275 L 745 290 L 750 305 L 755 320 L 760 335 L 755 350 L 745 360 L 730 370 L 715 380 L 700 385 L 685 395 L 670 405 L 660 420 L 650 430 L 640 440 L 625 445 L 610 440 L 595 430 L 580 425 L 565 420 L 550 415 L 530 420 L 510 430 L 490 440 L 470 445 L 450 440 L 430 430 L 410 425 L 390 420 L 370 415 L 350 420 L 330 430 L 310 435 L 290 430 L 270 425 L 250 420 L 230 415 L 210 420 L 190 425 L 170 430 L 150 425 L 135 415 L 120 400 L 110 385 L 105 370 L 100 355 L 95 340 L 90 325 L 85 310 L 80 295 L 78 280 L 80 260 L 85 245 L 90 230 L 95 215 L 100 200 L 105 185 L 110 170 L 115 155 L 120 140 L 125 120 Z" 
+    fill="url(#mapGrad)" stroke="#c4d4e8" stroke-width="2"/>
+  <!-- State-like dividing lines for visual interest -->
+  <line x1="300" y1="90" x2="310" y2="435" stroke="#d4dfe8" stroke-width="1" opacity="0.4"/>
+  <line x1="450" y1="88" x2="450" y2="440" stroke="#d4dfe8" stroke-width="1" opacity="0.4"/>
+  <line x1="600" y1="95" x2="620" y2="430" stroke="#d4dfe8" stroke-width="1" opacity="0.4"/>
+  <line x1="80" y1="250" x2="815" y2="250" stroke="#d4dfe8" stroke-width="1" opacity="0.4"/>
+  <line x1="85" y1="350" x2="760" y2="350" stroke="#d4dfe8" stroke-width="1" opacity="0.4"/>
+  <!-- Dot grid pattern for texture -->
+  <g opacity="0.15">
+    <circle cx="200" cy="150" r="2" fill="#94a3b8"/>
+    <circle cx="300" cy="200" r="2" fill="#94a3b8"/>
+    <circle cx="400" cy="150" r="2" fill="#94a3b8"/>
+    <circle cx="500" cy="200" r="2" fill="#94a3b8"/>
+    <circle cx="600" cy="150" r="2" fill="#94a3b8"/>
+    <circle cx="700" cy="200" r="2" fill="#94a3b8"/>
+    <circle cx="200" cy="300" r="2" fill="#94a3b8"/>
+    <circle cx="300" cy="350" r="2" fill="#94a3b8"/>
+    <circle cx="400" cy="300" r="2" fill="#94a3b8"/>
+    <circle cx="500" cy="350" r="2" fill="#94a3b8"/>
+    <circle cx="600" cy="300" r="2" fill="#94a3b8"/>
+    <circle cx="700" cy="350" r="2" fill="#94a3b8"/>
+  </g>
+</svg>

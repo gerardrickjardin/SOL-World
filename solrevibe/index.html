@@ -639,6 +639,251 @@
             50% { transform: scale(1.3); }
             100% { transform: scale(0.9); }
         }
+
+        /* ── Expansion Section ── */
+        .revibe-expansion {
+            padding: 120px 8%;
+            background: linear-gradient(135deg, #f7f5ef 0%, #eef8f0 35%, #eef3ff 100%);
+            font-family: 'Gotham', sans-serif;
+        }
+
+        .revibe-expansion .section-header {
+            text-align: center;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .revibe-expansion .section-header h2 {
+            font-size: 64px;
+            line-height: 1.1;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .revibe-expansion .gradient-text {
+            background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .revibe-expansion .section-header p {
+            font-size: 22px;
+            color: #64748b;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .expansion-grid {
+            margin-top: 80px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .map-card,
+        .demand-card,
+        .city-card,
+        .waitlist-card {
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 32px;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .map-card {
+            padding: 30px;
+            position: relative;
+        }
+
+        .usa-map {
+            width: 100%;
+        }
+
+        .city-node {
+            position: absolute;
+            padding: 8px 14px;
+            background: white;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f172a;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .city-node:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+        }
+
+        .austin { bottom: 80px; left: 48%; }
+        .dallas { bottom: 120px; left: 55%; }
+        .tampa { bottom: 95px; right: 18%; }
+        .phoenix { bottom: 140px; left: 30%; }
+        .nashville { bottom: 150px; right: 35%; }
+
+        .demand-card {
+            padding: 40px;
+        }
+
+        .demand-card h3 {
+            margin-bottom: 30px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .demand-item {
+            display: grid;
+            grid-template-columns: 80px 1fr 40px;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .revibe-expansion .progress {
+            height: 10px;
+            background: #e7e7e7;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 1s ease;
+        }
+
+        .fill.green { background: #4ade80; }
+        .fill.blue { background: #60a5fa; }
+        .fill.purple { background: #a855f7; }
+        .fill.orange { background: #fb923c; }
+        .fill.violet { background: #8b5cf6; }
+
+        .city-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .city-card {
+            padding: 35px;
+        }
+
+        .city-card h4 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .city-card p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .city-card span {
+            display: inline-block;
+            margin-top: 15px;
+            color: #7c3aed;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .waitlist-card {
+            margin-top: 50px;
+            padding: 60px;
+            text-align: center;
+        }
+
+        .waitlist-card h3 {
+            font-size: 42px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .waitlist-card form {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .waitlist-card input {
+            width: 300px;
+            padding: 18px;
+            border-radius: 14px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            font-family: inherit;
+            color: #1f2937;
+            outline: none;
+            transition: border-color 0.3s;
+            background: white;
+        }
+
+        .waitlist-card input:focus {
+            border-color: #a855f7;
+        }
+
+        .waitlist-card input::placeholder {
+            color: #94a3b8;
+        }
+
+        .waitlist-card button {
+            padding: 18px 40px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: opacity 0.3s, transform 0.2s;
+        }
+
+        .waitlist-card button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 991px) {
+            .expansion-grid {
+                grid-template-columns: 1fr;
+            }
+            .city-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+            .revibe-expansion .section-header h2 {
+                font-size: 42px;
+            }
+            .waitlist-card h3 {
+                font-size: 32px;
+            }
+            .waitlist-card input {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .city-cards {
+                grid-template-columns: 1fr;
+            }
+            .revibe-expansion {
+                padding: 60px 5%;
+            }
+        }
     </style>
 </head>
 
@@ -719,122 +964,107 @@
         <!-- Call Out Box Overlay -->
     </header>
 
-    <!-- Find a Station Section -->
-    <section id="find-station" style="max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; font-family: 'Gotham', sans-serif;">
-        
-        <!-- Form -->
-        <div style="text-align: center; margin-bottom: 2.5rem;">
-            <p style="font-size: 1.8rem; font-weight: 700; color: #1f2937; margin: 0 0 1.5rem 0; line-height: 1.3;">
-                Enter your email and city to find a
-                <span style="background: linear-gradient(to right, #22c55e, #3b82f6, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; white-space: nowrap;">SOL REViBE</span> Experience Station near you.
+    <!-- Expansion Section -->
+    <section class="revibe-expansion">
+
+        <div class="section-header">
+            <h2>
+                Bringing
+                <span class="gradient-text">Frequency Wellness</span>
+                to Every Community
+            </h2>
+            <p>
+                Join the priority waitlist and be the first to know when a
+                SOL REViBE Experience Station launches near you.
             </p>
-            <form onsubmit="filterMap(event)" style="display: flex; gap: 0.75rem; max-width: 700px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
-                <input type="email" id="section-email" placeholder="Business Email" required
-                    style="flex: 1; min-width: 200px; padding: 0.85rem 1.2rem; border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; font-size: 1rem; font-family: inherit; background: rgba(255,255,255,0.8); color: #1f2937; outline: none; transition: border-color 0.3s;">
-                <input type="text" id="section-city" placeholder="Your City" required
-                    style="flex: 1; min-width: 200px; padding: 0.85rem 1.2rem; border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; font-size: 1rem; font-family: inherit; background: rgba(255,255,255,0.8); color: #1f2937; outline: none; transition: border-color 0.3s;">
-                <button type="submit"
-                    style="padding: 0.85rem 2rem; background: linear-gradient(to right, #22c55e, #3b82f6, #a855f7); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; transition: opacity 0.3s;">
-                    Find a Station Near Me ➔
-                </button>
+        </div>
+
+        <div class="expansion-grid">
+
+            <!-- MAP SIDE -->
+            <div class="map-card">
+                <img src="../assets/usa-map.svg" alt="USA Expansion Map" class="usa-map" />
+                <div class="city-node austin">Austin</div>
+                <div class="city-node dallas">Dallas</div>
+                <div class="city-node tampa">Tampa</div>
+                <div class="city-node phoenix">Phoenix</div>
+                <div class="city-node nashville">Nashville</div>
+            </div>
+
+            <!-- DEMAND SIDE -->
+            <div class="demand-card">
+                <h3>Help Bring SOL REViBE to Your City</h3>
+
+                <div class="demand-item">
+                    <span>Austin</span>
+                    <div class="progress"><div class="fill green" style="width:87%"></div></div>
+                    <span>87%</span>
+                </div>
+
+                <div class="demand-item">
+                    <span>Dallas</span>
+                    <div class="progress"><div class="fill blue" style="width:75%"></div></div>
+                    <span>75%</span>
+                </div>
+
+                <div class="demand-item">
+                    <span>Phoenix</span>
+                    <div class="progress"><div class="fill purple" style="width:63%"></div></div>
+                    <span>63%</span>
+                </div>
+
+                <div class="demand-item">
+                    <span>Tampa</span>
+                    <div class="progress"><div class="fill orange" style="width:54%"></div></div>
+                    <span>54%</span>
+                </div>
+
+                <div class="demand-item">
+                    <span>Nashville</span>
+                    <div class="progress"><div class="fill violet" style="width:41%"></div></div>
+                    <span>41%</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CITY CARDS -->
+        <div class="city-cards">
+            <div class="city-card">
+                <h4>Austin, TX</h4>
+                <p>Largest demand in Texas.</p>
+                <span>Priority Launch Market</span>
+            </div>
+            <div class="city-card">
+                <h4>Tampa, FL</h4>
+                <p>Active wellness community.</p>
+                <span>Coming Soon</span>
+            </div>
+            <div class="city-card">
+                <h4>Nashville, TN</h4>
+                <p>Expanding market.</p>
+                <span>Future Location</span>
+            </div>
+            <div class="city-card">
+                <h4>Phoenix, AZ</h4>
+                <p>High demand region.</p>
+                <span>Coming Soon</span>
+            </div>
+        </div>
+
+        <!-- WAITLIST -->
+        <div class="waitlist-card">
+            <h3>
+                Is Your
+                <span class="gradient-text">City Next?</span>
+            </h3>
+            <form>
+                <input type="email" placeholder="Email Address">
+                <input type="text" placeholder="Your City">
+                <button>Join Priority Waitlist</button>
             </form>
         </div>
 
-        <!-- Map with Hotspot Overlays -->
-        <div id="map-wrapper" style="position: relative; width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 8px 32px rgba(0,0,0,0.08); background: #fff;">
-            <iframe 
-                id="inline-map"
-                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d12800000!2d-96.0!3d37.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1700000000000" 
-                style="width: 100%; height: 450px; border: none; display: block;"
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade"
-                title="SOL REViBE Station Locations">
-            </iframe>
-
-            <!-- Hotspot Markers (hidden until search) -->
-            <div id="hotspots-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.5s ease;">
-                
-                <!-- San Francisco Marker -->
-                <div class="map-hotspot" data-station="sf" style="position: absolute; top: 42%; left: 18%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('sf')">
-                    <div style="width: 18px; height: 18px; background: #22c55e; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(34,197,94,0.6), 0 0 24px rgba(34,197,94,0.3); animation: hotspotPulse 2s ease-in-out infinite;"></div>
-                    <!-- Popup -->
-                    <div id="popup-sf" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
-                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Lounge</h4>
-                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">123 Wellness Ave<br>San Francisco, CA</p>
-                        <span style="display: inline-block; font-size: 0.7rem; color: #10b981; background: rgba(16,185,129,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● AVAILABLE NOW</span>
-                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
-                    </div>
-                </div>
-
-                <!-- Los Angeles Marker -->
-                <div class="map-hotspot" data-station="la" style="position: absolute; top: 52%; left: 15%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('la')">
-                    <div style="width: 18px; height: 18px; background: #f59e0b; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(245,158,11,0.6), 0 0 24px rgba(245,158,11,0.3); animation: hotspotPulse 2s ease-in-out infinite; animation-delay: 0.4s;"></div>
-                    <!-- Popup -->
-                    <div id="popup-la" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
-                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Studio</h4>
-                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">456 Recovery Blvd<br>Los Angeles, CA</p>
-                        <span style="display: inline-block; font-size: 0.7rem; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● COMING SOON</span>
-                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
-                    </div>
-                </div>
-
-                <!-- Austin Marker -->
-                <div class="map-hotspot" data-station="atx" style="position: absolute; top: 62%; left: 42%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('atx')">
-                    <div style="width: 18px; height: 18px; background: #f59e0b; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(245,158,11,0.6), 0 0 24px rgba(245,158,11,0.3); animation: hotspotPulse 2s ease-in-out infinite; animation-delay: 0.8s;"></div>
-                    <!-- Popup -->
-                    <div id="popup-atx" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
-                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Center</h4>
-                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">789 Serenity Dr<br>Austin, TX</p>
-                        <span style="display: inline-block; font-size: 0.7rem; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● COMING SOON</span>
-                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
-                    </div>
-                </div>
-
-                <!-- New York Marker -->
-                <div class="map-hotspot" data-station="nyc" style="position: absolute; top: 35%; left: 75%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('nyc')">
-                    <div style="width: 18px; height: 18px; background: #3b82f6; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(59,130,246,0.6), 0 0 24px rgba(59,130,246,0.3); animation: hotspotPulse 2s ease-in-out infinite; animation-delay: 1.2s;"></div>
-                    <!-- Popup -->
-                    <div id="popup-nyc" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
-                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Hub</h4>
-                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">321 Recharge St<br>New York, NY</p>
-                        <span style="display: inline-block; font-size: 0.7rem; color: #3b82f6; background: rgba(59,130,246,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● PLANNED 2026</span>
-                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
-                    </div>
-                </div>
-
-                <!-- Miami Marker -->
-                <div class="map-hotspot" data-station="mia" style="position: absolute; top: 72%; left: 72%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('mia')">
-                    <div style="width: 18px; height: 18px; background: #a855f7; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(168,85,247,0.6), 0 0 24px rgba(168,85,247,0.3); animation: hotspotPulse 2s ease-in-out infinite; animation-delay: 1.6s;"></div>
-                    <!-- Popup -->
-                    <div id="popup-mia" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
-                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Beach</h4>
-                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">555 Ocean Wellness Dr<br>Miami, FL</p>
-                        <span style="display: inline-block; font-size: 0.7rem; color: #a855f7; background: rgba(168,85,247,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● PLANNED 2026</span>
-                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mock Station Cards -->
-        <div style="display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
-            <div style="flex: 1; min-width: 250px; max-width: 350px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
-                <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Lounge</h4>
-                <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #555;">123 Wellness Ave, San Francisco, CA</p>
-                <span style="display: inline-block; font-size: 0.75rem; color: #10b981; background: rgba(16,185,129,0.1); padding: 0.3rem 0.6rem; border-radius: 6px; font-weight: 700; letter-spacing: 0.05em;">● AVAILABLE NOW</span>
-            </div>
-            <div style="flex: 1; min-width: 250px; max-width: 350px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
-                <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Studio</h4>
-                <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #555;">456 Recovery Blvd, Los Angeles, CA</p>
-                <span style="display: inline-block; font-size: 0.75rem; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 0.3rem 0.6rem; border-radius: 6px; font-weight: 700; letter-spacing: 0.05em;">● COMING SOON</span>
-            </div>
-            <div style="flex: 1; min-width: 250px; max-width: 350px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
-                <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Center</h4>
-                <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #555;">789 Serenity Dr, Austin, TX</p>
-                <span style="display: inline-block; font-size: 0.75rem; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 0.3rem 0.6rem; border-radius: 6px; font-weight: 700; letter-spacing: 0.05em;">● COMING SOON</span>
-            </div>
-        </div>
     </section>
 
     <section class="vibe-content-section">
