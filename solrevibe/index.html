@@ -821,7 +821,77 @@
             }
         }
 
+        /* Expandable hotspot details */
+        .hotspot {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .hotspot:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .12);
+        }
+
+        .hotspot.expanded {
+            border-radius: 16px;
+            padding: 14px 18px;
+            z-index: 20;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, .15);
+        }
+
+        .hotspot-details {
+            display: none;
+            margin-top: 8px;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #444;
+            border-top: 1px solid #eee;
+            padding-top: 8px;
+        }
+
+        .hotspot.expanded .hotspot-details {
+            display: block;
+        }
+
+        .hotspot-details strong {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .hotspot-status {
+            font-style: normal;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .green-text { color: #32d583; }
+        .purple-text { color: #b44cff; }
+        .blue-text { color: #5b8dff; }
+        .orange-text { color: #ff9d4d; }
+
     </style>
+
+    <script>
+        function expandHotspot(el) {
+            // Close all others
+            document.querySelectorAll('.hotspot.expanded').forEach(function(h) {
+                if (h !== el) h.classList.remove('expanded');
+            });
+            // Toggle clicked one
+            el.classList.toggle('expanded');
+        }
+
+        // Close expanded hotspots when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.hotspot')) {
+                document.querySelectorAll('.hotspot.expanded').forEach(function(h) {
+                    h.classList.remove('expanded');
+                });
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -920,52 +990,105 @@
 
         <div class="map-wrapper">
 
-            <img src="../assets/map_mockup.png" alt="USA Map" class="usa-map">
+            <!-- Google Maps Embed -->
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d12800000!2d-96.0!3d37.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1700000000000"
+                style="width: 100%; height: 550px; border: none; display: block; border-radius: 30px;"
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade"
+                title="SOL REViBE Station Locations">
+            </iframe>
 
-            <!-- HOTSPOTS -->
-            <div class="hotspot seattle">
+            <!-- HOTSPOTS (expandable) -->
+            <div class="hotspot seattle" onclick="expandHotspot(this)">
                 <span></span>
                 Seattle, WA
+                <div class="hotspot-details">
+                    <strong>SOL REViBE Pacific</strong><br>
+                    1200 Wellness Way, Seattle, WA<br>
+                    <em class="hotspot-status purple-text">● Priority Market</em>
+                </div>
             </div>
 
-            <div class="hotspot sf">
+            <div class="hotspot sf" onclick="expandHotspot(this)">
                 <span></span>
                 San Francisco, CA
+                <div class="hotspot-details">
+                    <strong>SOL REViBE Bay Lounge</strong><br>
+                    450 Recovery Blvd, San Francisco, CA<br>
+                    <em class="hotspot-status purple-text">● Priority Market</em>
+                </div>
             </div>
 
-            <div class="hotspot denver">
+            <div class="hotspot denver" onclick="expandHotspot(this)">
                 <span></span>
                 Denver, CO
+                <div class="hotspot-details">
+                    <strong>SOL REViBE Mile High</strong><br>
+                    789 Altitude Ave, Denver, CO<br>
+                    <em class="hotspot-status purple-text">● Priority Market</em>
+                </div>
             </div>
 
-            <div class="hotspot chicago">
+            <div class="hotspot chicago" onclick="expandHotspot(this)">
                 <span></span>
                 Chicago, IL
+                <div class="hotspot-details">
+                    <strong>SOL REViBE Lakefront</strong><br>
+                    321 Recharge Dr, Chicago, IL<br>
+                    <em class="hotspot-status purple-text">● Priority Market</em>
+                </div>
             </div>
 
-            <div class="hotspot austin green">
+            <div class="hotspot austin green" onclick="expandHotspot(this)">
                 <span></span>
                 Austin, TX
+                <div class="hotspot-details">
+                    <strong>SOL REViBE Flagship</strong><br>
+                    100 SOL Plaza, Austin, TX<br>
+                    <em class="hotspot-status green-text">● Launching Soon</em>
+                </div>
             </div>
 
-            <div class="hotspot dallas blue">
+            <div class="hotspot dallas blue" onclick="expandHotspot(this)">
                 <span></span>
                 Dallas, TX
+                <div class="hotspot-details">
+                    <strong>SOL REViBE DFW Center</strong><br>
+                    555 Frequency Ln, Dallas, TX<br>
+                    <em class="hotspot-status blue-text">● Future Market</em>
+                </div>
             </div>
 
-            <div class="hotspot nashville purple">
+            <div class="hotspot nashville purple" onclick="expandHotspot(this)">
                 <span></span>
                 Nashville, TN
+                <div class="hotspot-details">
+                    <strong>SOL REViBE Music City</strong><br>
+                    220 Harmony St, Nashville, TN<br>
+                    <em class="hotspot-status purple-text">● Priority Market</em>
+                </div>
             </div>
 
-            <div class="hotspot tampa orange">
+            <div class="hotspot tampa orange" onclick="expandHotspot(this)">
                 <span></span>
                 Tampa, FL
+                <div class="hotspot-details">
+                    <strong>SOL REViBE Sunshine</strong><br>
+                    888 Coastal Blvd, Tampa, FL<br>
+                    <em class="hotspot-status orange-text">● Expansion Target</em>
+                </div>
             </div>
 
-            <div class="hotspot boston purple">
+            <div class="hotspot boston purple" onclick="expandHotspot(this)">
                 <span></span>
                 Boston, MA
+                <div class="hotspot-details">
+                    <strong>SOL REViBE Harbor</strong><br>
+                    175 Innovation Row, Boston, MA<br>
+                    <em class="hotspot-status purple-text">● Priority Market</em>
+                </div>
             </div>
 
             <!-- LEGEND -->
