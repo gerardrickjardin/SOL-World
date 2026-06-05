@@ -890,13 +890,18 @@
         const stations = [
             { id: 'seattle', name: 'SOL REViBE Pacific', city: 'Seattle', state: 'WA', lat: 47.6062, lng: -122.3321, address: '1200 Wellness Way', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
             { id: 'sf', name: 'SOL REViBE Bay Lounge', city: 'San Francisco', state: 'CA', lat: 37.7749, lng: -122.4194, address: '450 Recovery Blvd', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
+            { id: 'la', name: 'SOL REViBE City of Angels', city: 'Los Angeles', state: 'CA', lat: 34.0522, lng: -118.2437, address: '500 Sunset Blvd', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
             { id: 'denver', name: 'SOL REViBE Mile High', city: 'Denver', state: 'CO', lat: 39.7392, lng: -104.9903, address: '789 Altitude Ave', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
-            { id: 'chicago', name: 'SOL REViBE Lakefront', city: 'Chicago', state: 'IL', lat: 41.8781, lng: -87.6298, address: '321 Recharge Dr', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
+            { id: 'phoenix', name: 'SOL REViBE Desert Oasis', city: 'Phoenix', state: 'AZ', lat: 33.4484, lng: -112.0740, address: '320 Camelback Rd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text' },
             { id: 'austin', name: 'SOL REViBE Flagship', city: 'Austin', state: 'TX', lat: 30.2672, lng: -97.7431, address: '100 SOL Plaza', status: 'Launching Soon', color: 'green', textClass: 'green-text' },
             { id: 'dallas', name: 'SOL REViBE DFW Center', city: 'Dallas', state: 'TX', lat: 32.7767, lng: -96.7970, address: '555 Frequency Ln', status: 'Future Market', color: 'blue', textClass: 'blue-text' },
+            { id: 'chicago', name: 'SOL REViBE Lakefront', city: 'Chicago', state: 'IL', lat: 41.8781, lng: -87.6298, address: '321 Recharge Dr', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
             { id: 'nashville', name: 'SOL REViBE Music City', city: 'Nashville', state: 'TN', lat: 36.1627, lng: -86.7816, address: '220 Harmony St', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
+            { id: 'atlanta', name: 'SOL REViBE Peachtree', city: 'Atlanta', state: 'GA', lat: 33.7490, lng: -84.3880, address: '88 Piedmont Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text' },
             { id: 'tampa', name: 'SOL REViBE Sunshine', city: 'Tampa', state: 'FL', lat: 27.9506, lng: -82.4572, address: '888 Coastal Blvd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text' },
-            { id: 'boston', name: 'SOL REViBE Harbor', city: 'Boston', state: 'MA', lat: 42.3601, lng: -71.0589, address: '175 Innovation Row', status: 'Priority Market', color: 'purple', textClass: 'purple-text' }
+            { id: 'miami', name: 'SOL REViBE Ocean Drive', city: 'Miami', state: 'FL', lat: 25.7617, lng: -80.1918, address: '1100 Collins Ave', status: 'Launching Soon', color: 'green', textClass: 'green-text' },
+            { id: 'boston', name: 'SOL REViBE Harbor', city: 'Boston', state: 'MA', lat: 42.3601, lng: -71.0589, address: '175 Innovation Row', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
+            { id: 'ny', name: 'SOL REViBE Manhattan', city: 'New York', state: 'NY', lat: 40.7128, lng: -74.0060, address: '45 Rockefeller Plaza', status: 'Priority Market', color: 'purple', textClass: 'purple-text' }
         ];
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1012,7 +1017,7 @@
                     });
                 }, 300);
             } else {
-                alert("No experience station found in '" + cityInput + "'. Try Seattle, San Francisco, Denver, Chicago, Austin, Dallas, Nashville, Tampa, or Boston.");
+                alert("No experience station found in '" + cityInput + "'. Try Seattle, San Francisco, Los Angeles, Denver, Phoenix, Austin, Dallas, Chicago, Nashville, Atlanta, Tampa, Miami, Boston, or New York.");
             }
         }
 
@@ -1107,9 +1112,8 @@
 
         <div class="finder-header">
             <h2>
-                Enter your email and city to find a
-                <span class="gradient-text">SOL REViBE</span>
-                Experience Station near you.
+                Enter your email and city to find a<br>
+                <span class="gradient-text">SOL REViBE</span> Experience Station near you.
             </h2>
 
             <div class="finder-form">
