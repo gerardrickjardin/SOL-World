@@ -206,18 +206,16 @@
         .callout-box {
             position: absolute;
             bottom: 2.8cqw;
-            /* Anchored to bottom right quadrant */
             right: 3.12cqw;
             z-index: 15;
             width: 33.5cqw;
-            background: rgba(12, 6, 18, 0.85);
-            /* Deep dark background with subtle purple/blue tint */
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 1cqw;
             padding: 2cqw 1.3cqw 3.5cqw 1.3cqw;
-            box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -470,7 +468,7 @@
         .callout-form-prompt {
             font-size: 1.5cqw;
             font-weight: 700;
-            color: #ffffff;
+            color: #1f2937 !important;
             margin: 0 0 1.5cqw 0;
             line-height: 1.3;
         }
@@ -496,11 +494,11 @@
 
         .callout-form input {
             flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.12);
             border-radius: 0.3cqw;
             padding: 0.5cqw 0.65cqw;
-            color: #ffffff;
+            color: #1f2937;
             font-size: 0.62cqw;
             font-family: inherit;
             outline: none;
@@ -508,12 +506,12 @@
         }
 
         .callout-form input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(0, 0, 0, 0.4);
         }
 
         .callout-form input:focus {
-            border-color: #d946ef;
-            background: rgba(255, 255, 255, 0.08);
+            border-color: #a855f7;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .callout-form button {
@@ -598,8 +596,8 @@
                 margin: 0 auto !important;
                 border-radius: 24px !important;
                 padding: 2rem 1.5rem;
-                background: rgba(12, 6, 18, 0.95);
-                border: 1px solid rgba(255,255,255,0.1) !important;
+                background: rgba(255, 255, 255, 0.9);
+                border: 1px solid rgba(0,0,0,0.08) !important;
             }
 
             .callout-form-prompt {
