@@ -714,185 +714,104 @@
             border-radius: 30px;
         }
 
-        /* HOTSPOTS */
-        .hotspot {
+        /* Station Finder Map and Leaflet Hotspots */
+        #sol-map {
+            width: 100%;
+            height: 550px;
+            border-radius: 30px;
+            background: #f8f4ee;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+            z-index: 1;
+        }
+
+        .leaflet-marker-icon.hotspot-marker {
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            overflow: visible !important;
+        }
+
+        .hotspot-inner {
             position: absolute;
+            top: 0;
+            left: 0;
+            width: 28px;
+            height: 28px;
             background: transparent;
-            padding: 0;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0;
-            font-weight: 600;
-            box-shadow: none;
-            width: 28px;
-            height: 28px;
-        }
-
-        .hotspot .city-label {
-            display: none;
-            font-size: 14px;
-            margin-left: 10px;
-            background: none;
-            box-shadow: none;
-            width: auto;
-            height: auto;
-            border-radius: 0;
-            animation: none;
-        }
-
-        .hotspot > span:first-child {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #b44cff;
-            border: 3px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 0 6px rgba(180, 76, 255, .25), 0 0 0 12px rgba(180, 76, 255, .1);
-            flex-shrink: 0;
-        }
-
-        /* COLORS */
-        .green > span:first-child {
-            background: #32d583;
-            border: 3px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 0 6px rgba(50, 213, 131, .25), 0 0 0 12px rgba(50, 213, 131, .1);
-        }
-
-        .blue > span:first-child {
-            background: #5b8dff;
-            border: 3px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 0 6px rgba(91, 141, 255, .25), 0 0 0 12px rgba(91, 141, 255, .1);
-        }
-
-        .orange > span:first-child {
-            background: #ff9d4d;
-            border: 3px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 0 6px rgba(255, 157, 77, .25), 0 0 0 12px rgba(255, 157, 77, .1);
-        }
-
-        .purple > span:first-child {
-            background: #b44cff;
-        }
-
-        /* POSITIONING — calibrated to Google Maps embed (center: 37.5N, 96W) */
-        .seattle   { top: 16%;  left: 7.5%; }
-        .sf        { top: 51%;  left: 7.3%; }
-        .denver    { top: 44%;  left: 34.8%; }
-        .chicago   { top: 37%;  left: 61.4%; }
-        .austin    { top: 76%;  left: 45.4%; }
-        .dallas    { top: 68%;  left: 46.8%; }
-        .nashville { top: 56%;  left: 63.2%; }
-        .tampa     { top: 85%;  left: 70.0%; }
-        .boston    { top: 35%;  left: 87.8%; }
-
-        /* LEGEND */
-        .legend {
-            position: absolute;
-            left: 40px;
-            bottom: 40px;
-            background: white;
-            padding: 18px 22px;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
-        }
-
-        .legend div {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .dot.green { background: #32d583; }
-        .dot.blue { background: #5b8dff; }
-        .dot.purple { background: #b44cff; }
-
-        @media (max-width: 991px) {
-            .finder-header h2 {
-                font-size: 36px;
-            }
-
-            .finder-form {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .finder-form input,
-            .finder-form button {
-                width: 100%;
-                max-width: 500px;
-            }
-
-            .legend {
-                position: relative;
-                left: auto;
-                bottom: auto;
-                margin-top: 20px;
-            }
-        }
-
-        /* Expandable hotspot details */
-        .hotspot {
-            cursor: pointer;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 10;
+            cursor: pointer;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
-        .hotspot:hover {
+        .hotspot-inner:hover {
             transform: scale(1.2);
         }
 
-        .hotspot.expanded {
+        .hotspot-inner.expanded {
             background: white;
             border-radius: 16px;
             padding: 14px 18px;
-            width: auto;
+            width: 280px;
             height: auto;
-            z-index: 20;
+            z-index: 2000;
             box-shadow: 0 18px 50px rgba(0, 0, 0, .18);
             transform: translateY(-4px);
-            font-size: 14px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 12px;
+            cursor: default;
+            overflow: visible;
         }
 
-        .hotspot.expanded .city-label {
-            display: inline;
+        .hotspot-inner.expanded:hover {
+            transform: translateY(-4px);
         }
 
-        .hotspot.expanded > span:first-child {
-            animation: none;
+        .hotspot-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            flex-shrink: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
 
-        /* Pulsating dot animation */
-        .hotspot > span:first-child {
+        /* Pulsating animations and dot colors */
+        .purple .hotspot-dot {
+            background: #b44cff;
+            box-shadow: 0 0 0 6px rgba(180, 76, 255, .25), 0 0 0 12px rgba(180, 76, 255, .1);
             animation: dotPulse 2s ease-in-out infinite;
         }
 
-        @keyframes dotPulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(180, 76, 255, .4), 0 0 0 0 rgba(180, 76, 255, .2);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 0 10px rgba(180, 76, 255, .15), 0 0 0 20px rgba(180, 76, 255, .05);
-                transform: scale(1.15);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(180, 76, 255, .4), 0 0 0 0 rgba(180, 76, 255, .2);
-                transform: scale(1);
-            }
+        .green .hotspot-dot {
+            background: #32d583;
+            box-shadow: 0 0 0 6px rgba(50, 213, 131, .25), 0 0 0 12px rgba(50, 213, 131, .1);
+            animation: dotPulseGreen 2s ease-in-out infinite;
         }
 
-        .green > span:first-child {
-            animation: dotPulseGreen 2s ease-in-out infinite;
+        .blue .hotspot-dot {
+            background: #5b8dff;
+            box-shadow: 0 0 0 6px rgba(91, 141, 255, .25), 0 0 0 12px rgba(91, 141, 255, .1);
+            animation: dotPulseBlue 2s ease-in-out infinite;
+        }
+
+        .orange .hotspot-dot {
+            background: #ff9d4d;
+            box-shadow: 0 0 0 6px rgba(255, 157, 77, .25), 0 0 0 12px rgba(255, 157, 77, .1);
+            animation: dotPulseOrange 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0% { box-shadow: 0 0 0 0 rgba(180, 76, 255, .4); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(180, 76, 255, .15), 0 0 0 20px rgba(180, 76, 255, .05); transform: scale(1.15); }
+            100% { box-shadow: 0 0 0 0 rgba(180, 76, 255, .4); transform: scale(1); }
         }
 
         @keyframes dotPulseGreen {
@@ -901,18 +820,10 @@
             100% { box-shadow: 0 0 0 0 rgba(50, 213, 131, .4); transform: scale(1); }
         }
 
-        .blue > span:first-child {
-            animation: dotPulseBlue 2s ease-in-out infinite;
-        }
-
         @keyframes dotPulseBlue {
             0% { box-shadow: 0 0 0 0 rgba(91, 141, 255, .4); transform: scale(1); }
             50% { box-shadow: 0 0 0 10px rgba(91, 141, 255, .15), 0 0 0 20px rgba(91, 141, 255, .05); transform: scale(1.15); }
             100% { box-shadow: 0 0 0 0 rgba(91, 141, 255, .4); transform: scale(1); }
-        }
-
-        .orange > span:first-child {
-            animation: dotPulseOrange 2s ease-in-out infinite;
         }
 
         @keyframes dotPulseOrange {
@@ -921,41 +832,43 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 157, 77, .4); transform: scale(1); }
         }
 
+        /* Card details structure */
         .hotspot-details {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            margin-top: 0;
-            font-size: 13px;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #444;
-            border-top: 0 solid transparent;
-            padding-top: 0;
-            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                        opacity 0.3s ease,
-                        margin-top 0.3s ease,
-                        padding-top 0.3s ease,
-                        border-top 0.3s ease;
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            font-family: 'Gotham', sans-serif;
+            text-align: left;
+            flex-grow: 1;
+            box-sizing: border-box;
         }
 
-        .hotspot.expanded .hotspot-details {
-            max-height: 120px;
-            opacity: 1;
-            margin-top: 8px;
-            border-top: 1px solid #eee;
-            padding-top: 8px;
+        .hotspot-inner.expanded .hotspot-details {
+            display: flex;
         }
 
         .hotspot-details strong {
+            font-size: 14px;
             font-weight: 700;
             color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .hotspot-address {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 400;
+            line-height: 1.4;
         }
 
         .hotspot-status {
-            font-style: normal;
+            font-size: 11px;
             font-weight: 700;
-            font-size: 12px;
+            margin-top: 4px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 6px;
+            display: block;
+            text-transform: uppercase;
         }
 
         .green-text { color: #32d583; }
@@ -965,56 +878,148 @@
 
     </style>
 
+    <!-- Leaflet.js Assets -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <script>
-        function expandHotspot(el) {
-            // Close all others
-            document.querySelectorAll('.hotspot.expanded').forEach(function(h) {
-                if (h !== el) h.classList.remove('expanded');
+        let map;
+        let mapMarkers = {};
+
+        // Station Locations Data
+        const stations = [
+            { id: 'seattle', name: 'SOL REViBE Pacific', city: 'Seattle', state: 'WA', lat: 47.6062, lng: -122.3321, address: '1200 Wellness Way', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
+            { id: 'sf', name: 'SOL REViBE Bay Lounge', city: 'San Francisco', state: 'CA', lat: 37.7749, lng: -122.4194, address: '450 Recovery Blvd', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
+            { id: 'denver', name: 'SOL REViBE Mile High', city: 'Denver', state: 'CO', lat: 39.7392, lng: -104.9903, address: '789 Altitude Ave', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
+            { id: 'chicago', name: 'SOL REViBE Lakefront', city: 'Chicago', state: 'IL', lat: 41.8781, lng: -87.6298, address: '321 Recharge Dr', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
+            { id: 'austin', name: 'SOL REViBE Flagship', city: 'Austin', state: 'TX', lat: 30.2672, lng: -97.7431, address: '100 SOL Plaza', status: 'Launching Soon', color: 'green', textClass: 'green-text' },
+            { id: 'dallas', name: 'SOL REViBE DFW Center', city: 'Dallas', state: 'TX', lat: 32.7767, lng: -96.7970, address: '555 Frequency Ln', status: 'Future Market', color: 'blue', textClass: 'blue-text' },
+            { id: 'nashville', name: 'SOL REViBE Music City', city: 'Nashville', state: 'TN', lat: 36.1627, lng: -86.7816, address: '220 Harmony St', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
+            { id: 'tampa', name: 'SOL REViBE Sunshine', city: 'Tampa', state: 'FL', lat: 27.9506, lng: -82.4572, address: '888 Coastal Blvd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text' },
+            { id: 'boston', name: 'SOL REViBE Harbor', city: 'Boston', state: 'MA', lat: 42.3601, lng: -71.0589, address: '175 Innovation Row', status: 'Priority Market', color: 'purple', textClass: 'purple-text' }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize map centered at USA center
+            map = L.map('sol-map', {
+                center: [39.8283, -98.5795],
+                zoom: 4,
+                zoomControl: false,
+                attributionControl: false
             });
-            // Toggle clicked one
-            el.classList.toggle('expanded');
+
+            // Add CartoDB Positron tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 18,
+                minZoom: 3
+            }).addTo(map);
+
+            // Re-position zoom control to bottom-right
+            L.control.zoom({
+                position: 'bottomright'
+            }).addTo(map);
+
+            // Render station markers
+            renderMapMarkers();
+
+            // Close any open popups when map is clicked
+            map.on('click', function() {
+                closeAllMarkers();
+            });
+        });
+
+        function renderMapMarkers() {
+            stations.forEach(function(station) {
+                const markerHtml = `
+                    <div class="hotspot-inner ${station.color}">
+                        <span class="hotspot-dot"></span>
+                        <div class="hotspot-details">
+                            <strong>${station.name}</strong>
+                            <span class="hotspot-address">${station.address}, ${station.city}, ${station.state}</span>
+                            <span class="hotspot-status ${station.textClass}">● ${station.status}</span>
+                        </div>
+                    </div>
+                `;
+
+                const customIcon = L.divIcon({
+                    className: 'hotspot-marker',
+                    html: markerHtml,
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 14]
+                });
+
+                const marker = L.marker([station.lat, station.lng], { icon: customIcon }).addTo(map);
+
+                // Store marker for search lookup
+                mapMarkers[station.id] = marker;
+                mapMarkers[station.city.toLowerCase()] = marker;
+
+                // Setup click event
+                marker.on('click', function(e) {
+                    const element = marker.getElement().querySelector('.hotspot-inner');
+                    
+                    if (element.classList.contains('expanded')) {
+                        element.classList.remove('expanded');
+                    } else {
+                        closeAllMarkers();
+                        element.classList.add('expanded');
+                        // Center map on marker
+                        map.setView([station.lat, station.lng], map.getZoom(), { animate: true });
+                    }
+                    
+                    L.DomEvent.stopPropagation(e);
+                });
+            });
+        }
+
+        function closeAllMarkers() {
+            document.querySelectorAll('.hotspot-inner.expanded').forEach(function(el) {
+                el.classList.remove('expanded');
+            });
         }
 
         function findStation() {
-            var city = document.getElementById('finder-city').value.trim();
-            var mapWrapper = document.querySelector('.map-wrapper');
-            var iframe = mapWrapper.querySelector('iframe');
-            var hotspots = document.querySelectorAll('.hotspot');
+            const email = document.getElementById('finder-email').value.trim();
+            const cityInput = document.getElementById('finder-city').value.trim().toLowerCase();
 
-            // Default to US view if no city
-            var query = city || 'United States';
+            if (!cityInput) {
+                alert("Please enter a city name.");
+                return;
+            }
 
-            // Zoom Google Maps to the city
-            iframe.src = 'https://maps.google.com/maps?q=' + encodeURIComponent(query + ', USA') + '&t=&z=10&ie=UTF8&iwloc=&output=embed';
+            // Find the station
+            const station = stations.find(s => s.city.toLowerCase() === cityInput || s.id === cityInput);
 
-            // Animate: hide all hotspots first
-            hotspots.forEach(function(h) {
-                h.style.opacity = '0';
-                h.style.transform = 'scale(0)';
-                h.classList.remove('expanded');
-            });
+            if (station) {
+                // Scroll map into view
+                document.querySelector('.map-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            // Scroll map into view
-            mapWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Fly to the coordinates and zoom in
+                setTimeout(() => {
+                    map.flyTo([station.lat, station.lng], 10, {
+                        animate: true,
+                        duration: 1.5
+                    });
 
-            // After map loads, animate hotspots in one by one
-            setTimeout(function() {
-                hotspots.forEach(function(h, i) {
-                    setTimeout(function() {
-                        h.style.transition = 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
-                        h.style.opacity = '1';
-                        h.style.transform = 'scale(1)';
-                    }, i * 120);
-                });
-            }, 800);
+                    // Once zoom completes, expand the marker
+                    map.once('zoomend moveend', () => {
+                        closeAllMarkers();
+                        const marker = mapMarkers[station.id];
+                        if (marker) {
+                            const element = marker.getElement().querySelector('.hotspot-inner');
+                            element.classList.add('expanded');
+                        }
+                    });
+                }, 300);
+            } else {
+                alert("No experience station found in '" + cityInput + "'. Try Seattle, San Francisco, Denver, Chicago, Austin, Dallas, Nashville, Tampa, or Boston.");
+            }
         }
 
         // Close expanded hotspots when clicking outside
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.hotspot') && !e.target.closest('.finder-form')) {
-                document.querySelectorAll('.hotspot.expanded').forEach(function(h) {
-                    h.classList.remove('expanded');
-                });
+            if (!e.target.closest('.leaflet-marker-icon') && !e.target.closest('.finder-form')) {
+                closeAllMarkers();
             }
         });
     </script>
@@ -1116,106 +1121,8 @@
 
         <div class="map-wrapper">
 
-            <!-- Google Maps Embed -->
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d12800000!2d-96.0!3d37.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1700000000000"
-                style="width: 100%; height: 550px; border: none; display: block; border-radius: 30px;"
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade"
-                title="SOL REViBE Station Locations">
-            </iframe>
-
-            <!-- HOTSPOTS (expandable) -->
-            <div class="hotspot seattle" onclick="expandHotspot(this)">
-                <span></span>
-                <span class="city-label">Seattle, WA</span>
-                <div class="hotspot-details">
-                    <strong>SOL REViBE Pacific</strong><br>
-                    1200 Wellness Way, Seattle, WA<br>
-                    <em class="hotspot-status purple-text">● Priority Market</em>
-                </div>
-            </div>
-
-            <div class="hotspot sf" onclick="expandHotspot(this)">
-                <span></span>
-                <span class="city-label">San Francisco, CA</span>
-                <div class="hotspot-details">
-                    <strong>SOL REViBE Bay Lounge</strong><br>
-                    450 Recovery Blvd, San Francisco, CA<br>
-                    <em class="hotspot-status purple-text">● Priority Market</em>
-                </div>
-            </div>
-
-            <div class="hotspot denver" onclick="expandHotspot(this)">
-                <span></span>
-                <span class="city-label">Denver, CO</span>
-                <div class="hotspot-details">
-                    <strong>SOL REViBE Mile High</strong><br>
-                    789 Altitude Ave, Denver, CO<br>
-                    <em class="hotspot-status purple-text">● Priority Market</em>
-                </div>
-            </div>
-
-            <div class="hotspot chicago" onclick="expandHotspot(this)">
-                <span></span>
-                <span class="city-label">Chicago, IL</span>
-                <div class="hotspot-details">
-                    <strong>SOL REViBE Lakefront</strong><br>
-                    321 Recharge Dr, Chicago, IL<br>
-                    <em class="hotspot-status purple-text">● Priority Market</em>
-                </div>
-            </div>
-
-            <div class="hotspot austin green" onclick="expandHotspot(this)">
-                <span></span>
-                <span class="city-label">Austin, TX</span>
-                <div class="hotspot-details">
-                    <strong>SOL REViBE Flagship</strong><br>
-                    100 SOL Plaza, Austin, TX<br>
-                    <em class="hotspot-status green-text">● Launching Soon</em>
-                </div>
-            </div>
-
-            <div class="hotspot dallas blue" onclick="expandHotspot(this)">
-                <span></span>
-                <span class="city-label">Dallas, TX</span>
-                <div class="hotspot-details">
-                    <strong>SOL REViBE DFW Center</strong><br>
-                    555 Frequency Ln, Dallas, TX<br>
-                    <em class="hotspot-status blue-text">● Future Market</em>
-                </div>
-            </div>
-
-            <div class="hotspot nashville purple" onclick="expandHotspot(this)">
-                <span></span>
-                <span class="city-label">Nashville, TN</span>
-                <div class="hotspot-details">
-                    <strong>SOL REViBE Music City</strong><br>
-                    220 Harmony St, Nashville, TN<br>
-                    <em class="hotspot-status purple-text">● Priority Market</em>
-                </div>
-            </div>
-
-            <div class="hotspot tampa orange" onclick="expandHotspot(this)">
-                <span></span>
-                <span class="city-label">Tampa, FL</span>
-                <div class="hotspot-details">
-                    <strong>SOL REViBE Sunshine</strong><br>
-                    888 Coastal Blvd, Tampa, FL<br>
-                    <em class="hotspot-status orange-text">● Expansion Target</em>
-                </div>
-            </div>
-
-            <div class="hotspot boston purple" onclick="expandHotspot(this)">
-                <span></span>
-                <span class="city-label">Boston, MA</span>
-                <div class="hotspot-details">
-                    <strong>SOL REViBE Harbor</strong><br>
-                    175 Innovation Row, Boston, MA<br>
-                    <em class="hotspot-status purple-text">● Priority Market</em>
-                </div>
-            </div>
+            <!-- Leaflet Map Container -->
+            <div id="sol-map"></div>
 
         </div>
 
