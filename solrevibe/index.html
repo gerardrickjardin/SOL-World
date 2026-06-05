@@ -12,11 +12,61 @@
     <link rel="stylesheet" href="../style.css">
     <style>
         .vibe-navbar {
-            background-color: #000000;
-            padding-top: 1.25rem !important;
-            padding-bottom: 1.25rem !important;
+            background: linear-gradient(to right, #ebf7eb, #faf2e6, #fbf1e6, #e9edfa);
+            padding: 1rem 4rem !important;
             position: relative;
             z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vibe-nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .vibe-nav-links a {
+            text-decoration: none;
+            color: #1f2937;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            transition: color 0.2s ease;
+        }
+
+        .vibe-nav-links a:hover {
+            color: #8b5cf6;
+        }
+
+        .vibe-reserve-btn {
+            background: linear-gradient(to right, #a855f7, #3b82f6);
+            color: white !important;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4);
+        }
+
+        .vibe-reserve-btn:hover {
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 1024px) {
+            .vibe-nav-links {
+                display: none;
+            }
+            .vibe-navbar {
+                padding: 1rem 1.5rem !important;
+            }
         }
 
         .vibe-hero {
@@ -569,11 +619,18 @@
         <div class="logo">
             <a href="../index.html"
                 style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.85rem;">
-                <img src="../assets/SOL WORLD LOGO.png" alt="SOL World Logo" class="nav-logo-img">
+                <img src="../assets/SOL REViBE Logo.png" alt="SOL REViBE Logo" class="nav-logo-img" style="height: 38px; object-fit: contain;">
             </a>
         </div>
-        <div class="nav-links">
-            <a href="../index.html">BACK TO HOME</a>
+        <div class="vibe-nav-links">
+            <a href="#experience">EXPERIENCE</a>
+            <a href="#locations">LOCATIONS</a>
+            <a href="#science">SCIENCE</a>
+            <a href="#partnership">PARTNERSHIP</a>
+            <a href="#about">ABOUT</a>
+        </div>
+        <div>
+            <a href="/solrevibe/waitlist.html" class="vibe-reserve-btn">RESERVE YOUR PLACE &rarr;</a>
         </div>
     </nav>
 
