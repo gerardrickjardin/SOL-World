@@ -633,6 +633,12 @@
                 margin-top: 0.5rem;
             }
         }
+
+        @keyframes hotspotPulse {
+            0% { transform: scale(0.9); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(0.9); }
+        }
     </style>
 </head>
 
@@ -734,17 +740,81 @@
             </form>
         </div>
 
-        <!-- Map -->
-        <div style="width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 8px 32px rgba(0,0,0,0.08); background: #fff;">
+        <!-- Map with Hotspot Overlays -->
+        <div id="map-wrapper" style="position: relative; width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 8px 32px rgba(0,0,0,0.08); background: #fff;">
             <iframe 
                 id="inline-map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.086280870397!2d-122.4194!3d37.7749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064e2ddd29b%3A0x7f0c5e3b0fce2a0a!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1700000000000" 
+                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d12500000!2d-98.5795!3d39.8283!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1700000000000" 
                 style="width: 100%; height: 450px; border: none; display: block;"
                 allowfullscreen="" 
                 loading="lazy" 
                 referrerpolicy="no-referrer-when-downgrade"
                 title="SOL REViBE Station Locations">
             </iframe>
+
+            <!-- Hotspot Markers (hidden until search) -->
+            <div id="hotspots-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.5s ease;">
+                
+                <!-- San Francisco Marker -->
+                <div class="map-hotspot" data-station="sf" style="position: absolute; top: 42%; left: 18%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('sf')">
+                    <div style="width: 18px; height: 18px; background: #22c55e; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(34,197,94,0.6), 0 0 24px rgba(34,197,94,0.3); animation: hotspotPulse 2s ease-in-out infinite;"></div>
+                    <!-- Popup -->
+                    <div id="popup-sf" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
+                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Lounge</h4>
+                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">123 Wellness Ave<br>San Francisco, CA</p>
+                        <span style="display: inline-block; font-size: 0.7rem; color: #10b981; background: rgba(16,185,129,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● AVAILABLE NOW</span>
+                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
+                    </div>
+                </div>
+
+                <!-- Los Angeles Marker -->
+                <div class="map-hotspot" data-station="la" style="position: absolute; top: 52%; left: 15%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('la')">
+                    <div style="width: 18px; height: 18px; background: #f59e0b; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(245,158,11,0.6), 0 0 24px rgba(245,158,11,0.3); animation: hotspotPulse 2s ease-in-out infinite; animation-delay: 0.4s;"></div>
+                    <!-- Popup -->
+                    <div id="popup-la" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
+                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Studio</h4>
+                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">456 Recovery Blvd<br>Los Angeles, CA</p>
+                        <span style="display: inline-block; font-size: 0.7rem; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● COMING SOON</span>
+                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
+                    </div>
+                </div>
+
+                <!-- Austin Marker -->
+                <div class="map-hotspot" data-station="atx" style="position: absolute; top: 62%; left: 42%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('atx')">
+                    <div style="width: 18px; height: 18px; background: #f59e0b; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(245,158,11,0.6), 0 0 24px rgba(245,158,11,0.3); animation: hotspotPulse 2s ease-in-out infinite; animation-delay: 0.8s;"></div>
+                    <!-- Popup -->
+                    <div id="popup-atx" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
+                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Center</h4>
+                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">789 Serenity Dr<br>Austin, TX</p>
+                        <span style="display: inline-block; font-size: 0.7rem; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● COMING SOON</span>
+                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
+                    </div>
+                </div>
+
+                <!-- New York Marker -->
+                <div class="map-hotspot" data-station="nyc" style="position: absolute; top: 35%; left: 75%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('nyc')">
+                    <div style="width: 18px; height: 18px; background: #3b82f6; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(59,130,246,0.6), 0 0 24px rgba(59,130,246,0.3); animation: hotspotPulse 2s ease-in-out infinite; animation-delay: 1.2s;"></div>
+                    <!-- Popup -->
+                    <div id="popup-nyc" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
+                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Hub</h4>
+                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">321 Recharge St<br>New York, NY</p>
+                        <span style="display: inline-block; font-size: 0.7rem; color: #3b82f6; background: rgba(59,130,246,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● PLANNED 2026</span>
+                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
+                    </div>
+                </div>
+
+                <!-- Miami Marker -->
+                <div class="map-hotspot" data-station="mia" style="position: absolute; top: 72%; left: 72%; pointer-events: auto; cursor: pointer;" onclick="togglePopup('mia')">
+                    <div style="width: 18px; height: 18px; background: #a855f7; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(168,85,247,0.6), 0 0 24px rgba(168,85,247,0.3); animation: hotspotPulse 2s ease-in-out infinite; animation-delay: 1.6s;"></div>
+                    <!-- Popup -->
+                    <div id="popup-mia" style="display: none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 1rem 1.2rem; min-width: 220px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); z-index: 20; text-align: left;">
+                        <h4 style="margin: 0 0 0.3rem 0; font-size: 0.95rem; color: #1a5c2e; font-weight: 800;">SOL REViBE Beach</h4>
+                        <p style="margin: 0 0 0.4rem 0; font-size: 0.8rem; color: #555; line-height: 1.3;">555 Ocean Wellness Dr<br>Miami, FL</p>
+                        <span style="display: inline-block; font-size: 0.7rem; color: #a855f7; background: rgba(168,85,247,0.1); padding: 0.2rem 0.5rem; border-radius: 5px; font-weight: 700;">● PLANNED 2026</span>
+                        <div style="position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 12px; height: 12px; background: white; border-right: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Mock Station Cards -->
@@ -808,10 +878,37 @@
     <script>
         function filterMap(e) {
             e.preventDefault();
-            const city = document.getElementById('section-city').value;
-            const mapFrame = document.getElementById('inline-map');
-            mapFrame.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d100000!2d-122.4194!3d37.7749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s' + encodeURIComponent(city) + '!5e0!3m2!1sen!2sus!4v1700000000000';
+            // Show hotspots layer
+            var layer = document.getElementById('hotspots-layer');
+            layer.style.opacity = '1';
+            // Scroll map into view
+            document.getElementById('map-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+
+        function togglePopup(stationId) {
+            // Close all popups first
+            var allPopups = document.querySelectorAll('[id^="popup-"]');
+            allPopups.forEach(function(p) {
+                if (p.id !== 'popup-' + stationId) {
+                    p.style.display = 'none';
+                }
+            });
+            // Toggle the clicked one
+            var popup = document.getElementById('popup-' + stationId);
+            if (popup.style.display === 'none' || popup.style.display === '') {
+                popup.style.display = 'block';
+            } else {
+                popup.style.display = 'none';
+            }
+        }
+
+        // Close popups when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.map-hotspot')) {
+                var allPopups = document.querySelectorAll('[id^="popup-"]');
+                allPopups.forEach(function(p) { p.style.display = 'none'; });
+            }
+        });
     </script>
 
     <script>
