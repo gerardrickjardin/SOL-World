@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50" fill="none" stroke="url(#wave-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <linearGradient id="wave-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#5ec9a6" />
+      <stop offset="50%" stop-color="#6388ff" />
+      <stop offset="100%" stop-color="#b05cff" />
+    </linearGradient>
+  </defs>
+  <!-- Main smooth wave -->
+  <path d="M 0,25 C 25,5 25,45 50,25 C 75,5 75,45 100,25" />
+  <!-- Secondary offset wave with lower opacity -->
+  <path d="M 0,25 C 25,40 25,10 50,25 C 75,40 75,10 100,25" opacity="0.3" stroke-width="1.5" />
+</svg>
