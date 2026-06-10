@@ -1371,23 +1371,127 @@
         let mapMarkers = {};
         let toastTimeout;
 
-        // Station Locations Data
-        const stations = [
-            { id: 'seattle', name: 'SOL REViBE Pacific', city: 'Seattle', state: 'WA', lat: 47.6062, lng: -122.3321, address: '1200 Wellness Way', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
-            { id: 'sf', name: 'SOL REViBE Bay Lounge', city: 'San Francisco', state: 'CA', lat: 37.7749, lng: -122.4194, address: '450 Recovery Blvd', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
-            { id: 'la', name: 'SOL REViBE City of Angels', city: 'Los Angeles', state: 'CA', lat: 34.0522, lng: -118.2437, address: '500 Sunset Blvd', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
-            { id: 'denver', name: 'SOL REViBE Mile High', city: 'Denver', state: 'CO', lat: 39.7392, lng: -104.9903, address: '789 Altitude Ave', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
-            { id: 'phoenix', name: 'SOL REViBE Desert Oasis', city: 'Phoenix', state: 'AZ', lat: 33.4484, lng: -112.0740, address: '320 Camelback Rd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text' },
-            { id: 'austin', name: 'SOL REViBE Flagship', city: 'Austin', state: 'TX', lat: 30.2672, lng: -97.7431, address: '100 SOL Plaza', status: 'Launching Soon', color: 'green', textClass: 'green-text' },
-            { id: 'dallas', name: 'SOL REViBE DFW Center', city: 'Dallas', state: 'TX', lat: 32.7767, lng: -96.7970, address: '555 Frequency Ln', status: 'Future Market', color: 'blue', textClass: 'blue-text' },
-            { id: 'chicago', name: 'SOL REViBE Lakefront', city: 'Chicago', state: 'IL', lat: 41.8781, lng: -87.6298, address: '321 Recharge Dr', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
-            { id: 'nashville', name: 'SOL REViBE Music City', city: 'Nashville', state: 'TN', lat: 36.1627, lng: -86.7816, address: '220 Harmony St', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
-            { id: 'atlanta', name: 'SOL REViBE Peachtree', city: 'Atlanta', state: 'GA', lat: 33.7490, lng: -84.3880, address: '88 Piedmont Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text' },
-            { id: 'tampa', name: 'SOL REViBE Sunshine', city: 'Tampa', state: 'FL', lat: 27.9506, lng: -82.4572, address: '888 Coastal Blvd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text' },
-            { id: 'miami', name: 'SOL REViBE Ocean Drive', city: 'Miami', state: 'FL', lat: 25.7617, lng: -80.1918, address: '1100 Collins Ave', status: 'Launching Soon', color: 'green', textClass: 'green-text' },
-            { id: 'boston', name: 'SOL REViBE Harbor', city: 'Boston', state: 'MA', lat: 42.3601, lng: -71.0589, address: '175 Innovation Row', status: 'Priority Market', color: 'purple', textClass: 'purple-text' },
-            { id: 'ny', name: 'SOL REViBE Manhattan', city: 'New York', state: 'NY', lat: 40.7128, lng: -74.0060, address: '45 Rockefeller Plaza', status: 'Priority Market', color: 'purple', textClass: 'purple-text' }
-        ];
+        // Scalable Regional Zones & Station database
+        const SOL_LOCATOR_DB = {
+            regions: {
+                'west': { id: 'west', name: 'West Region' },
+                'southwest': { id: 'southwest', name: 'Southwest Region' },
+                'midwest': { id: 'midwest', name: 'Midwest Region' },
+                'southeast': { id: 'southeast', name: 'Southeast Region' },
+                'northeast': { id: 'northeast', name: 'Northeast Region' }
+            },
+            cities: {
+                // West Region (6 Cities)
+                'seattle': { id: 'seattle', name: 'Seattle', state: 'WA', regionId: 'west' },
+                'sf': { id: 'sf', name: 'San Francisco', state: 'CA', regionId: 'west' },
+                'la': { id: 'la', name: 'Los Angeles', state: 'CA', regionId: 'west' },
+                'portland': { id: 'portland', name: 'Portland', state: 'OR', regionId: 'west' },
+                'sd': { id: 'sd', name: 'San Diego', state: 'CA', regionId: 'west' },
+                'sanjose': { id: 'sanjose', name: 'San Jose', state: 'CA', regionId: 'west' },
+
+                // Southwest Region (6 Cities)
+                'denver': { id: 'denver', name: 'Denver', state: 'CO', regionId: 'southwest' },
+                'phoenix': { id: 'phoenix', name: 'Phoenix', state: 'AZ', regionId: 'southwest' },
+                'austin': { id: 'austin', name: 'Austin', state: 'TX', regionId: 'southwest' },
+                'dallas': { id: 'dallas', name: 'Dallas', state: 'TX', regionId: 'southwest' },
+                'houston': { id: 'houston', name: 'Houston', state: 'TX', regionId: 'southwest' },
+                'saltlake': { id: 'saltlake', name: 'Salt Lake City', state: 'UT', regionId: 'southwest' },
+
+                // Midwest Region (6 Cities)
+                'chicago': { id: 'chicago', name: 'Chicago', state: 'IL', regionId: 'midwest' },
+                'detroit': { id: 'detroit', name: 'Detroit', state: 'MI', regionId: 'midwest' },
+                'minneapolis': { id: 'minneapolis', name: 'Minneapolis', state: 'MN', regionId: 'midwest' },
+                'stlouis': { id: 'stlouis', name: 'St. Louis', state: 'MO', regionId: 'midwest' },
+                'columbus': { id: 'columbus', name: 'Columbus', state: 'OH', regionId: 'midwest' },
+                'indianapolis': { id: 'indianapolis', name: 'Indianapolis', state: 'IN', regionId: 'midwest' },
+
+                // Southeast Region (6 Cities)
+                'nashville': { id: 'nashville', name: 'Nashville', state: 'TN', regionId: 'southeast' },
+                'atlanta': { id: 'atlanta', name: 'Atlanta', state: 'GA', regionId: 'southeast' },
+                'tampa': { id: 'tampa', name: 'Tampa', state: 'FL', regionId: 'southeast' },
+                'miami': { id: 'miami', name: 'Miami', state: 'FL', regionId: 'southeast' },
+                'charlotte': { id: 'charlotte', name: 'Charlotte', state: 'NC', regionId: 'southeast' },
+                'orlando': { id: 'orlando', name: 'Orlando', state: 'FL', regionId: 'southeast' },
+
+                // Northeast Region (6 Cities)
+                'boston': { id: 'boston', name: 'Boston', state: 'MA', regionId: 'northeast' },
+                'ny': { id: 'ny', name: 'New York', state: 'NY', regionId: 'northeast' },
+                'philly': { id: 'philly', name: 'Philadelphia', state: 'PA', regionId: 'northeast' },
+                'dc': { id: 'dc', name: 'Washington', state: 'DC', regionId: 'northeast' },
+                'pittsburgh': { id: 'pittsburgh', name: 'Pittsburgh', state: 'PA', regionId: 'northeast' },
+                'baltimore': { id: 'baltimore', name: 'Baltimore', state: 'MD', regionId: 'northeast' }
+            },
+            stations: [
+                // West Region Stations
+                { id: 'sea-1', name: 'SOL REViBE Pacific (Flagship)', cityId: 'seattle', address: '1200 Wellness Way', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 47.6062, lng: -122.3321 },
+                { id: 'sea-2', name: 'SOL REViBE Capitol Hill', cityId: 'seattle', address: '500 Broadway E', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 47.6212, lng: -122.3214 },
+                { id: 'sf-1', name: 'SOL REViBE Bay Lounge', cityId: 'sf', address: '450 Recovery Blvd', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 37.7749, lng: -122.4194 },
+                { id: 'la-1', name: 'SOL REViBE City of Angels', cityId: 'la', address: '500 Sunset Blvd', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 34.0522, lng: -118.2437 },
+                { id: 'la-2', name: 'SOL REViBE Santa Monica', cityId: 'la', address: '1300 Ocean Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 34.0116, lng: -118.4962 },
+                { id: 'por-1', name: 'SOL REViBE Pearl District', cityId: 'portland', address: '1000 NW Lovejoy St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 45.5298, lng: -122.6816 },
+                { id: 'sd-1', name: 'SOL REViBE Gaslamp', cityId: 'sd', address: '400 Fifth Ave', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 32.7114, lng: -117.1599 },
+                { id: 'sj-1', name: 'SOL REViBE Silicon Valley', cityId: 'sanjose', address: '300 Santana Row', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 37.3218, lng: -121.9479 },
+
+                // Southwest Region Stations
+                { id: 'den-1', name: 'SOL REViBE Mile High', cityId: 'denver', address: '789 Altitude Ave', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 39.7392, lng: -104.9903 },
+                { id: 'phx-1', name: 'SOL REViBE Desert Oasis', cityId: 'phoenix', address: '320 Camelback Rd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 33.4484, lng: -112.0740 },
+                { id: 'aus-1', name: 'SOL REViBE Flagship', cityId: 'austin', address: '100 SOL Plaza', status: 'Launching Soon', color: 'green', textClass: 'green-text', lat: 30.2672, lng: -97.7431 },
+                { id: 'aus-2', name: 'SOL REViBE South Congress', cityId: 'austin', address: '1600 S Congress Ave', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 30.2498, lng: -97.7495 },
+                { id: 'dal-1', name: 'SOL REViBE DFW Center', cityId: 'dallas', address: '555 Frequency Ln', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 32.7767, lng: -96.7970 },
+                { id: 'hou-1', name: 'SOL REViBE Galleria', cityId: 'houston', address: '5000 Westheimer Rd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 29.7398, lng: -95.4639 },
+                { id: 'slc-1', name: 'SOL REViBE Temple Square', cityId: 'saltlake', address: '50 S Main St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 40.7689, lng: -111.8906 },
+
+                // Midwest Region Stations
+                { id: 'chi-1', name: 'SOL REViBE Lakefront', cityId: 'chicago', address: '321 Recharge Dr', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 41.8781, lng: -87.6298 },
+                { id: 'chi-2', name: 'SOL REViBE Lincoln Park', cityId: 'chicago', address: '2200 N Clark St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 41.9224, lng: -87.6384 },
+                { id: 'det-1', name: 'SOL REViBE Downtown', cityId: 'detroit', address: '1000 Woodward Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 42.3314, lng: -83.0458 },
+                { id: 'msp-1', name: 'SOL REViBE North Star', cityId: 'minneapolis', address: '600 Hennepin Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 44.9789, lng: -93.2725 },
+                { id: 'stl-1', name: 'SOL REViBE Gateway', cityId: 'stlouis', address: '200 N Broadway', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 38.6270, lng: -90.1882 },
+                { id: 'col-1', name: 'SOL REViBE Short North', cityId: 'columbus', address: '800 N High St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 39.9788, lng: -83.0039 },
+                { id: 'ind-1', name: 'SOL REViBE Mile Square', cityId: 'indianapolis', address: '10 W Market St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 39.7684, lng: -86.1581 },
+
+                // Southeast Region Stations
+                { id: 'nsh-1', name: 'SOL REViBE Music City', cityId: 'nashville', address: '220 Harmony St', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 36.1627, lng: -86.7816 },
+                { id: 'atl-1', name: 'SOL REViBE Peachtree', cityId: 'atlanta', address: '88 Piedmont Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 33.7490, lng: -84.3880 },
+                { id: 'tpa-1', name: 'SOL REViBE Sunshine', cityId: 'tampa', address: '888 Coastal Blvd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 27.9506, lng: -82.4572 },
+                { id: 'mia-1', name: 'SOL REViBE Ocean Drive', cityId: 'miami', address: '1100 Collins Ave', status: 'Launching Soon', color: 'green', textClass: 'green-text', lat: 25.7617, lng: -80.1918 },
+                { id: 'mia-2', name: 'SOL REViBE Brickell', cityId: 'miami', address: '700 Brickell Ave', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 25.7664, lng: -80.1908 },
+                { id: 'clt-1', name: 'SOL REViBE Uptown', cityId: 'charlotte', address: '100 N Tryon St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 35.2271, lng: -80.8431 },
+                { id: 'mco-1', name: 'SOL REViBE Lake Nona', cityId: 'orlando', address: '6900 Lake Nona Blvd', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 28.3752, lng: -81.2736 },
+
+                // Northeast Region Stations
+                { id: 'bos-1', name: 'SOL REViBE Harbor', cityId: 'boston', address: '175 Innovation Row', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 42.3601, lng: -71.0589 },
+                { id: 'ny-1', name: 'SOL REViBE Manhattan', cityId: 'ny', address: '45 Rockefeller Plaza', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 40.7128, lng: -74.0060 },
+                { id: 'ny-2', name: 'SOL REViBE Brooklyn', cityId: 'ny', address: '250 Bedford Ave', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 40.7174, lng: -73.9584 },
+                { id: 'phl-1', name: 'SOL REViBE Rittenhouse', cityId: 'philly', address: '1800 Walnut St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 39.9496, lng: -75.1702 },
+                { id: 'iad-1', name: 'SOL REViBE DuPont Circle', cityId: 'dc', address: '1500 Connecticut Ave NW', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 38.9097, lng: -77.0430 },
+                { id: 'pit-1', name: 'SOL REViBE Oakland', cityId: 'pittsburgh', address: '3900 Forbes Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 40.4412, lng: -79.9575 },
+                { id: 'bal-1', name: 'SOL REViBE Inner Harbor', cityId: 'baltimore', address: '400 E Pratt St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 39.2872, lng: -76.6086 }
+            ]
+        };
+
+        // Helper function to dynamically enrich relational database structure
+        function getEnrichedStations() {
+            return SOL_LOCATOR_DB.stations.map(station => {
+                const city = SOL_LOCATOR_DB.cities[station.cityId] || {};
+                const region = SOL_LOCATOR_DB.regions[city.regionId] || {};
+                return {
+                    id: station.id,
+                    name: station.name,
+                    city: city.name || '',
+                    cityId: station.cityId,
+                    state: city.state || '',
+                    regionId: city.regionId,
+                    regionName: region.name || '',
+                    lat: station.lat,
+                    lng: station.lng,
+                    address: station.address,
+                    status: station.status,
+                    color: station.color,
+                    textClass: station.textClass
+                };
+            });
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize map centered at USA center
@@ -1528,7 +1632,9 @@
         }
 
         function renderMapMarkers() {
-            stations.forEach(function(station) {
+            const enrichedStations = getEnrichedStations();
+            
+            enrichedStations.forEach(function(station) {
                 const markerHtml = `
                     <div class="hotspot-inner ${station.color}">
                         <span class="hotspot-dot"></span>
@@ -1551,7 +1657,13 @@
 
                 // Store marker for search lookup
                 mapMarkers[station.id] = marker;
-                mapMarkers[station.city.toLowerCase()] = marker;
+                
+                // Track by city as well, supporting lists of stations in a single city
+                const cityKey = station.city.toLowerCase();
+                if (!mapMarkers[cityKey]) {
+                    mapMarkers[cityKey] = [];
+                }
+                mapMarkers[cityKey].push(marker);
 
                 // Setup click event
                 marker.on('click', function(e) {
@@ -1613,24 +1725,34 @@
 
             if (!cityInput) return;
 
-            // Find the station
-            const station = stations.find(s => s.city.toLowerCase() === cityInput || s.id === cityInput);
+            const enrichedStations = getEnrichedStations();
 
-            if (station) {
+            // Find all matched stations in this city or matching station id/name
+            const matches = enrichedStations.filter(s => 
+                s.city.toLowerCase() === cityInput || 
+                s.cityId === cityInput || 
+                s.id.toLowerCase() === cityInput ||
+                s.name.toLowerCase().includes(cityInput)
+            );
+
+            if (matches.length > 0) {
+                // Focus on the first matched station
+                const primaryMatch = matches[0];
+
                 // Scroll map into view
                 document.querySelector('.map-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
                 // Fly to the coordinates and zoom in
                 setTimeout(() => {
-                    map.flyTo([station.lat, station.lng], 10, {
+                    map.flyTo([primaryMatch.lat, primaryMatch.lng], 10, {
                         animate: true,
                         duration: 1.5
                     });
 
-                    // Once zoom completes, expand the marker
+                    // Once zoom completes, expand the primary marker
                     map.once('zoomend moveend', () => {
                         closeAllMarkers();
-                        const marker = mapMarkers[station.id];
+                        const marker = mapMarkers[primaryMatch.id];
                         if (marker) {
                             const element = marker.getElement().querySelector('.hotspot-inner');
                             element.classList.add('expanded');
