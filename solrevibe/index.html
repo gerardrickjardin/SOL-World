@@ -2274,26 +2274,49 @@
                         }
                     })
                 })
-                .then(response => response.blob())
+                .then(response => {
+                    if (!response.ok) throw new Error("ElevenLabs API Request Failed");
+                    return response.blob();
+                })
                 .then(blob => {
                     const url = URL.createObjectURL(blob);
                     audio.src = url;
                     isAudioReady = true;
                 })
-                .catch(err => console.error("ElevenLabs API error:", err));
+                .catch(err => console.error("ElevenLabs API error (falling back to built-in voice):", err));
 
                 audioControl.addEventListener('click', () => {
                     if (isPlaying) {
-                        audio.pause();
-                        audio.currentTime = 0;
+                        if (isAudioReady) {
+                            audio.pause();
+                            audio.currentTime = 0;
+                        } else {
+                            window.speechSynthesis.cancel();
+                        }
                         isPlaying = false;
                         audioControl.classList.remove('playing');
-                    } else if (isAudioReady) {
-                        audio.play();
-                        isPlaying = true;
-                        audioControl.classList.add('playing');
                     } else {
-                        console.warn("Audio is still loading...");
+                        if (isAudioReady) {
+                            audio.play().catch(e => console.error("Audio play failed:", e));
+                            isPlaying = true;
+                            audioControl.classList.add('playing');
+                        } else {
+                            // Fallback to Web Speech API
+                            let utterance = new SpeechSynthesisUtterance(speechText);
+                            const voices = window.speechSynthesis.getVoices();
+                            const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Google US English') || (v.lang.startsWith('en') && v.name.includes('Female')));
+                            if (femaleVoice) utterance.voice = femaleVoice;
+                            
+                            utterance.onend = () => {
+                                isPlaying = false;
+                                audioControl.classList.remove('playing');
+                            };
+                            
+                            window.speechSynthesis.cancel();
+                            window.speechSynthesis.speak(utterance);
+                            isPlaying = true;
+                            audioControl.classList.add('playing');
+                        }
                     }
                 });
             }
