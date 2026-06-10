@@ -1131,10 +1131,18 @@
 
         .transformation-row{
             width: 100%;
-            aspect-ratio: 1672 / 941;
-            background: url('../assets/Chaos%20to%20Clarity%20Section.png') center center / contain no-repeat;
+            aspect-ratio: 16 / 9;
             border-radius: 30px;
             overflow: hidden;
+            position: relative;
+            background: #f7f4ef;
+        }
+
+        .transformation-video{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .benefits-row{
@@ -1798,7 +1806,9 @@
         </div>
 
         <div class="transformation-wrapper">
-            <div class="transformation-row"></div>
+            <div class="transformation-row">
+                <video src="../assets/FRom%20Chaos%20to%20Clarity.mp4" autoplay loop muted playsinline class="transformation-video"></video>
+            </div>
         </div>
 
         <div class="benefits-row">
