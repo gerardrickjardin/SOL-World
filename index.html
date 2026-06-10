@@ -311,6 +311,16 @@ window.addEventListener('load', () => {
         sDot.style.transform = `translate(${clampX * 50}%, ${clampY * 50}%)`;
         wDot.style.transform = `translate(${clampX * 45}%, ${clampY * 45}%)`;
     });
+
+    // Fix for mobile card flipping
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Only flip if clicking the card itself, not a link inside it
+            if (!e.target.closest('a')) {
+                this.classList.toggle('is-flipped');
+            }
+        });
+    });
 });
     </script>
 </body>

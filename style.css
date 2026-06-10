@@ -215,7 +215,8 @@ body {
 .card:nth-child(2) { animation-delay: 0.4s; }
 .card:nth-child(3) { animation-delay: 0.6s; }
 
-.card:hover {
+.card:hover,
+.card.is-flipped {
     transform: translateY(-12px);
 }
 
@@ -230,7 +231,8 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.card:hover .card-inner {
+.card:hover .card-inner,
+.card.is-flipped .card-inner {
     transform: rotateY(180deg);
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
 }
@@ -250,7 +252,8 @@ body {
     transition: var(--transition);
 }
 
-.card:hover .card-front {
+.card:hover .card-front,
+.card.is-flipped .card-front {
     border-color: rgba(255, 255, 255, 0.15);
     background: rgba(255, 255, 255, 0.05);
 }
@@ -292,7 +295,8 @@ body {
     transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.card:hover .card-image {
+.card:hover .card-image,
+.card.is-flipped .card-image {
     transform: scale(1.05);
 }
 
