@@ -1075,7 +1075,12 @@
         /* Mind Shift Section styling */
         .mind-shift-section{
             padding:120px 6%;
-            background: #f7f4ef url('../assets/Chaos%20to%20Clarity%20Section.png') center/cover no-repeat;
+            background:
+            linear-gradient(
+            135deg,
+            #f7f4ef 0%,
+            #eef8f0 40%,
+            #f2efff 100%);
         }
 
         .section-header{
@@ -1112,136 +1117,12 @@
 
         .transformation-row{
             margin-top:90px;
-            display:grid;
-            grid-template-columns:1fr 1fr 1fr;
-            align-items:center;
-            gap:40px;
-        }
-
-        .chaos-side,
-        .clarity-side{
-            text-align:center;
-        }
-
-        .chaos-side h3,
-        .clarity-side h3{
-            font-size:40px;
-            margin-bottom:30px;
-            font-weight: 700;
-            color: #111827;
-        }
-
-        .chaos-cloud{
-            width:320px;
-            height:320px;
-            margin:auto;
-            border-radius:50%;
-            background:
-            radial-gradient(
-            circle,
-            #444 0%,
-            #222 40%,
-            #000 100%);
-            position:relative;
-        }
-
-        .tag{
-            position:absolute;
-            background:white;
-            padding:12px 20px;
-            border-radius:999px;
-            box-shadow:
-            0 10px 25px rgba(0,0,0,.08);
-            font-size:14px;
-            font-weight:600;
-            color:#475569;
-        }
-
-        .tag:nth-child(1){
-            top:40px;
-            left:70px;
-        }
-
-        .tag:nth-child(2){
-            top:80px;
-            right:30px;
-        }
-
-        .tag:nth-child(3){
-            left:20px;
-            top:150px;
-        }
-
-        .tag:nth-child(4){
-            right:10px;
-            bottom:80px;
-        }
-
-        .tag:nth-child(5){
-            bottom:40px;
-            left:90px;
-        }
-
-        .flow-center{
-            position:relative;
-            height:300px;
-        }
-
-        .flow-wave{
-            position:absolute;
-            width:100%;
-            height:100%;
-            background:
-            url('../assets/flow-wave.svg')
-            center center / contain no-repeat;
-        }
-
-        .arrow{
-            position:absolute;
-            left:-20px;
-            top:50%;
-            transform:translateY(-50%);
-            font-size:70px;
-            color:#b05cff;
-        }
-
-        .arrow.right{
-            left:auto;
-            right:-20px;
-        }
-
-        .brain-glow{
-            width:320px;
-            height:320px;
-            margin:auto;
-            border-radius:50%;
-            background:
-            radial-gradient(
-            circle,
-            rgba(255,255,255,.95),
-            rgba(180,92,255,.4));
-            box-shadow:
-            0 0 80px rgba(180,92,255,.35);
-        }
-
-        .clarity-tags{
-            margin-top:20px;
-            display:flex;
-            flex-direction:column;
-            gap:12px;
-            align-items: center;
-        }
-
-        .clarity-tags div{
-            background:white;
-            padding:12px 20px;
-            border-radius:999px;
-            box-shadow:
-            0 10px 25px rgba(0,0,0,.08);
-            font-size:14px;
-            font-weight:600;
-            color:#475569;
-            width: fit-content;
+            width: 100%;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            aspect-ratio: 1672 / 941;
+            background: url('../assets/Chaos%20to%20Clarity%20Section.png') center center / contain no-repeat;
         }
 
         .benefits-row{
@@ -1904,35 +1785,7 @@
             <p>In a world of constant noise, stress, and sensory overload, SOL REViBE provides an immediate cognitive reset. Transition from mental friction to a state of calm, aligned focus in minutes.</p>
         </div>
 
-        <div class="transformation-row">
-            <div class="chaos-side">
-                <h3>Chaos</h3>
-                <div class="chaos-cloud">
-                    <div class="tag">Stress</div>
-                    <div class="tag">Anxiety</div>
-                    <div class="tag">Burnout</div>
-                    <div class="tag">Noise</div>
-                    <div class="tag">Friction</div>
-                </div>
-            </div>
-
-            <div class="flow-center">
-                <div class="flow-wave"></div>
-                <div class="arrow">&rarr;</div>
-                <div class="arrow right">&rarr;</div>
-            </div>
-
-            <div class="clarity-side">
-                <h3>Clarity</h3>
-                <div class="brain-glow"></div>
-                <div class="clarity-tags">
-                    <div>Flow State</div>
-                    <div>Deep Calm</div>
-                    <div>Peak Energy</div>
-                    <div>Sharp Focus</div>
-                </div>
-            </div>
-        </div>
+        <div class="transformation-row"></div>
 
         <div class="benefits-row">
             <div class="benefit-card">
