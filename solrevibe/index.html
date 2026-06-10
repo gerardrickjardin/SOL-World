@@ -2246,7 +2246,11 @@
             if (audioControl) {
                 const speechText = "Hello, there! I’m Kim, and I am thrilled to welcome you to the next evolution of personal vitality. Every day, we push our limits, chase our goals, and give the world everything we’ve got. But in the middle of that constant hustle, how do we truly recharge? Meet Sol Revibe. Sol Revibe isn’t just another wellness innovation; it’s a complete reset for your daily rhythm. By harmonizing sustainable, sun-inspired energy principles with intelligent recovery technology, Sol Revibe is designed to do exactly what its name promises: revive your core vitality.";
                 const voiceId = "4EfJOraSN0d4Lt6iDXwh";
-                const apiKey = "%VITE_ELEVENLABS_API_KEY%";
+                let apiKey = "%VITE_ELEVENLABS_API_KEY%";
+                // If running locally without build script injection, use the hardcoded key from SOL THRiVE
+                if (apiKey.includes("VITE_ELEVENLABS_API_KEY")) {
+                    apiKey = "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8";
+                }
                 let isPlaying = false;
                 let audio = new Audio();
                 let isAudioReady = false;
