@@ -23,7 +23,24 @@ const path = require('path');
       fs.mkdirSync(assetsDirDest);
     }
     fs.readdirSync(assetsDirSrc).forEach(file => {
-      fs.copyFileSync(path.join(assetsDirSrc, file), path.join(assetsDirDest, file));
+      const srcPath = path.join(assetsDirSrc, file);
+      if (fs.lstatSync(srcPath).isFile()) {
+        fs.copyFileSync(srcPath, path.join(assetsDirDest, file));
+      }
+    });
+  }
+
+  const solrevibeDirSrc = path.join(__dirname, 'solrevibe');
+  const solrevibeDirDest = path.join(outDir, 'solrevibe');
+  if (fs.existsSync(solrevibeDirSrc)) {
+    if (!fs.existsSync(solrevibeDirDest)) {
+      fs.mkdirSync(solrevibeDirDest);
+    }
+    fs.readdirSync(solrevibeDirSrc).forEach(file => {
+      const srcPath = path.join(solrevibeDirSrc, file);
+      if (fs.lstatSync(srcPath).isFile()) {
+        fs.copyFileSync(srcPath, path.join(solrevibeDirDest, file));
+      }
     });
   }
 
