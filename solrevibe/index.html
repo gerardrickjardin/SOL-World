@@ -2243,13 +2243,36 @@
             const audioControl = document.getElementById('hero-audio-control');
             const bgVideo = document.querySelector('.hero-background-video');
 
-            if (audioControl && bgVideo) {
+            if (audioControl) {
+                const speechText = "Hello, there! I’m Kim, and I am thrilled to welcome you to the next evolution of personal vitality. Every day, we push our limits, chase our goals, and give the world everything we’ve got. But in the middle of that constant hustle, how do we truly recharge? Meet Sol Revibe. Sol Revibe isn’t just another wellness innovation; it’s a complete reset for your daily rhythm. By harmonizing sustainable, sun-inspired energy principles with intelligent recovery technology, Sol Revibe is designed to do exactly what its name promises: revive your core vitality.";
+                let isPlaying = false;
+                let utterance = new SpeechSynthesisUtterance(speechText);
+                
+                // Try to find a good female voice (e.g. Samantha on macOS)
+                const setVoice = () => {
+                    const voices = window.speechSynthesis.getVoices();
+                    const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Google US English') || (v.lang.startsWith('en') && v.name.includes('Female')));
+                    if (femaleVoice) utterance.voice = femaleVoice;
+                };
+                
+                window.speechSynthesis.onvoiceschanged = setVoice;
+                setVoice();
+
+                utterance.onend = () => {
+                    isPlaying = false;
+                    audioControl.classList.remove('playing');
+                };
+
                 audioControl.addEventListener('click', () => {
-                    audioControl.classList.toggle('playing');
-                    if (audioControl.classList.contains('playing')) {
-                        bgVideo.muted = false;
+                    if (isPlaying) {
+                        window.speechSynthesis.cancel();
+                        isPlaying = false;
+                        audioControl.classList.remove('playing');
                     } else {
-                        bgVideo.muted = true;
+                        window.speechSynthesis.cancel(); // Cancel any lingering speech
+                        window.speechSynthesis.speak(utterance);
+                        isPlaying = true;
+                        audioControl.classList.add('playing');
                     }
                 });
             }
