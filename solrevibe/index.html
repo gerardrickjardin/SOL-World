@@ -2245,34 +2245,55 @@
 
             if (audioControl) {
                 const speechText = "Hello, there! I’m Kim, and I am thrilled to welcome you to the next evolution of personal vitality. Every day, we push our limits, chase our goals, and give the world everything we’ve got. But in the middle of that constant hustle, how do we truly recharge? Meet Sol Revibe. Sol Revibe isn’t just another wellness innovation; it’s a complete reset for your daily rhythm. By harmonizing sustainable, sun-inspired energy principles with intelligent recovery technology, Sol Revibe is designed to do exactly what its name promises: revive your core vitality.";
+                const voiceId = "21m00Tcm4TlvDq8ikWAM";
+                const apiKey = "%VITE_ELEVENLABS_API_KEY%";
                 let isPlaying = false;
-                let utterance = new SpeechSynthesisUtterance(speechText);
-                
-                // Try to find a good female voice (e.g. Samantha on macOS)
-                const setVoice = () => {
-                    const voices = window.speechSynthesis.getVoices();
-                    const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Google US English') || (v.lang.startsWith('en') && v.name.includes('Female')));
-                    if (femaleVoice) utterance.voice = femaleVoice;
-                };
-                
-                window.speechSynthesis.onvoiceschanged = setVoice;
-                setVoice();
+                let audio = new Audio();
+                let isAudioReady = false;
 
-                utterance.onend = () => {
+                audio.onended = () => {
                     isPlaying = false;
                     audioControl.classList.remove('playing');
                 };
 
+                // Pre-fetch the audio to avoid delay when clicked
+                fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'xi-api-key': apiKey
+                    },
+                    body: JSON.stringify({
+                        text: speechText,
+                        model_id: "eleven_monolingual_v1",
+                        voice_settings: {
+                            stability: 0.5,
+                            similarity_boost: 0.75,
+                            style: 0,
+                            use_speaker_boost: true
+                        }
+                    })
+                })
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    audio.src = url;
+                    isAudioReady = true;
+                })
+                .catch(err => console.error("ElevenLabs API error:", err));
+
                 audioControl.addEventListener('click', () => {
                     if (isPlaying) {
-                        window.speechSynthesis.cancel();
+                        audio.pause();
+                        audio.currentTime = 0;
                         isPlaying = false;
                         audioControl.classList.remove('playing');
-                    } else {
-                        window.speechSynthesis.cancel(); // Cancel any lingering speech
-                        window.speechSynthesis.speak(utterance);
+                    } else if (isAudioReady) {
+                        audio.play();
                         isPlaying = true;
                         audioControl.classList.add('playing');
+                    } else {
+                        console.warn("Audio is still loading...");
                     }
                 });
             }
