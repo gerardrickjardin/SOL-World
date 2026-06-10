@@ -1807,33 +1807,6 @@
         document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
         document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
     </script>
-    <div id="temp-debug-panel" style="position: fixed; top: 10px; left: 10px; background: rgba(0,0,0,0.85); color: #fff; padding: 15px; font-family: monospace; font-size: 14px; z-index: 99999; border-radius: 8px; border: 1px solid red; pointer-events: none;">
-        Loading debug styles...
-    </div>
-    <script>
-        window.addEventListener('load', () => {
-            const getStyles = (selector, props) => {
-                const el = document.querySelector(selector);
-                if (!el) return `${selector} not found`;
-                const styles = window.getComputedStyle(el);
-                return props.map(p => `<strong>${selector} ${p}:</strong> ${styles.getPropertyValue(p)}`).join('<br>');
-            };
-            const updateDebug = () => {
-                const debugDiv = document.getElementById('temp-debug-panel');
-                debugDiv.innerHTML = [
-                    `<strong>Viewport:</strong> ${window.innerWidth}x${window.innerHeight}`,
-                    getStyles('.hero-container-wrapper', ['width', 'height', 'max-width', 'position']),
-                    getStyles('.hero-text-block', ['width', 'height', 'left', 'top', 'position']),
-                    getStyles('.hero-text-block h1', ['font-size']),
-                    getStyles('.hero-spaces-header', ['width', 'height', 'right', 'top', 'position']),
-                    getStyles('.hero-spaces-header h2', ['font-size']),
-                    getStyles('.hero-panels-container', ['width', 'height', 'right', 'top', 'position']),
-                ].join('<br><hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 5px 0;">');
-            };
-            updateDebug();
-            window.addEventListener('resize', updateDebug);
-        });
-    </script>
 </body>
 
 </html>
