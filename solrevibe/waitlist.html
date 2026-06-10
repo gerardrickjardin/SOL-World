@@ -11,19 +11,24 @@
     <link rel="stylesheet" href="../style.css">
     <style>
         :root {
-            --brand-cyan: #0ea5e9;
-            --brand-cyan-hover: #0284c7;
-            --brand-cyan-glow: rgba(14, 165, 233, 0.4);
-            --brand-violet: #d946ef;
-            --brand-violet-hover: #c026d3;
-            --brand-violet-glow: rgba(217, 70, 239, 0.4);
+            --brand-cyan: #3b82f6;
+            --brand-cyan-hover: #2563eb;
+            --brand-cyan-glow: rgba(59, 130, 246, 0.15);
+            --brand-violet: #a855f7;
+            --brand-violet-hover: #9333ea;
+            --brand-violet-glow: rgba(168, 85, 247, 0.3);
         }
 
-        body {
-            background-color: #050505;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.03), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(217, 70, 239, 0.03), transparent 25%);
+        html, body {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            background: linear-gradient(180deg, #ebf7eb 0%, #faf2e6 25%, #fbf1e6 50%, #e9edfa 75%, #ebf7eb 100%) !important;
+            background-color: #f5f5f0 !important;
+            color: #0f172a !important;
+        }
+
+        #starfield, .glow-effect, .glow-effect-2 {
+            display: none !important;
         }
 
         .waitlist-nav {
@@ -36,6 +41,13 @@
 
         @media (max-width: 768px) {
             .waitlist-nav { padding: 2rem; }
+        }
+
+        .waitlist-nav .nav-logo-img {
+            height: 76px;
+            object-fit: contain;
+            filter: none !important;
+            mix-blend-mode: multiply;
         }
 
         .waitlist-container {
@@ -68,17 +80,18 @@
             line-height: 1.1;
             letter-spacing: -0.03em;
             margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #ffffff 0%, #fbcfe8 20%, #d946ef 60%, #0ea5e9 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #7c3aed 50%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .waitlist-subtitle {
             font-size: 1.15rem;
-            color: var(--text-muted);
+            color: #4b5563;
             line-height: 1.6;
             margin-bottom: 3rem;
-            font-weight: 300;
+            font-weight: 400;
         }
 
         .benefits-list {
@@ -92,22 +105,25 @@
             display: flex;
             align-items: flex-start;
             gap: 1rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             padding: 1.25rem;
             border-radius: 16px;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
             transition: all 0.3s ease;
         }
         
         .benefit-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(16, 185, 129, 0.2);
+            background: rgba(255, 255, 255, 0.65);
+            border-color: rgba(34, 197, 94, 0.3);
             transform: translateX(5px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
         }
 
         .benefit-icon {
-            color: var(--brand-violet);
+            color: #8b5cf6;
             flex-shrink: 0;
             display: flex;
             align-items: center;
@@ -120,25 +136,25 @@
         .benefit-text h4 {
             font-size: 1.05rem;
             font-weight: 600;
-            color: #fff;
+            color: #0f172a;
             margin-bottom: 0.25rem;
         }
 
         .benefit-text p {
             font-size: 0.9rem;
-            color: var(--text-muted);
+            color: #4b5563;
             line-height: 1.5;
         }
 
         /* Form Right Side */
         .form-wrapper {
-            background: rgba(12, 6, 18, 0.6);
+            background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             border-radius: 24px;
             padding: 3rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255,255,255,0.8);
             position: relative;
             overflow: hidden;
             animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -154,9 +170,10 @@
         .form-header h3 {
             font-size: 1.5rem;
             font-weight: 600;
-            background: linear-gradient(135deg, #ffffff 0%, #fbcfe8 20%, #d946ef 60%, #0ea5e9 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #7c3aed 50%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin: 0;
         }
 
@@ -179,8 +196,8 @@
         .form-label {
             display: block;
             font-size: 0.85rem;
-            font-weight: 500;
-            color: #e2e8f0;
+            font-weight: 600;
+            color: #334155;
             margin-bottom: 0.5rem;
         }
 
@@ -193,11 +210,11 @@
 
         .form-input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 12px;
             padding: 0.875rem 1rem;
-            color: #ffffff;
+            color: #0f172a;
             font-size: 1rem;
             font-family: inherit;
             transition: all 0.3s ease;
@@ -205,13 +222,13 @@
 
         .form-input:focus {
             outline: none;
-            border-color: var(--brand-cyan);
-            background: rgba(0, 0, 0, 0.6);
-            box-shadow: 0 0 0 3px var(--brand-cyan-glow);
+            border-color: #3b82f6;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
         }
 
         .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.25);
+            color: rgba(15, 23, 42, 0.35);
         }
         
         .error-message {
@@ -224,16 +241,28 @@
         .form-input.error {
             border-color: #ef4444;
         }
+        
+        .form-input.error:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+        }
+
+        @keyframes liquidFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
         .submit-btn {
             width: 100%;
-            background: var(--brand-violet);
-            color: #000000;
+            background: linear-gradient(270deg, #22c55e, #3b82f6, #a855f7, #3b82f6, #22c55e);
+            background-size: 200% 200%;
+            animation: liquidFlow 8s ease infinite;
+            color: #ffffff;
             border: none;
             border-radius: 12px;
             padding: 1.15rem;
             font-size: 1.05rem;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 0.05em;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -242,21 +271,22 @@
             justify-content: center;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: 0 10px 20px -5px var(--brand-violet-glow);
+            box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
         }
 
         .submit-btn:hover {
-            background: var(--brand-violet-hover);
             transform: translateY(-2px);
-            box-shadow: 0 15px 25px -5px rgba(217, 70, 239, 0.5);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+            opacity: 0.95;
         }
 
         .submit-btn:disabled {
-            background: #334155;
+            background: #cbd5e1;
             color: #94a3b8;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+            animation: none;
         }
 
         /* Spinner for loading state */
@@ -264,8 +294,8 @@
             display: none;
             width: 20px;
             height: 20px;
-            border: 2px solid rgba(0,0,0,0.1);
-            border-left-color: #000;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-left-color: #ffffff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -303,33 +333,33 @@
         .success-icon {
             width: 64px;
             height: 64px;
-            background: rgba(14, 165, 233, 0.1);
-            color: var(--brand-cyan);
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1.5rem;
-            box-shadow: 0 0 30px var(--brand-cyan-glow);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
         }
         
         .success-title {
             font-size: 1.75rem;
             font-weight: 700;
-            color: #fff;
+            color: #0f172a;
             margin-bottom: 1rem;
         }
         
         .success-text {
-            color: #cbd5e1;
+            color: #4b5563;
             line-height: 1.6;
             margin-bottom: 2rem;
         }
         
         .share-btn {
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
+            border: 1px solid rgba(15, 23, 42, 0.15);
+            color: #0f172a;
             border-radius: 50px;
             padding: 0.75rem 1.5rem;
             font-size: 0.9rem;
@@ -342,8 +372,8 @@
         }
         
         .share-btn:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: #fff;
+            background: rgba(15, 23, 42, 0.05);
+            border-color: #0f172a;
         }
     </style>
 </head>
@@ -354,7 +384,7 @@
 
     <nav class="waitlist-nav">
         <a href="/solrevibe/index.html" class="logo" style="text-decoration: none; color: inherit;">
-            <img src="../assets/SOL WORLD LOGO.png" alt="SOL World Logo" class="nav-logo-img">
+            <img src="../assets/SOL%20REViBE%20Logo.png" alt="SOL REViBE Logo" class="nav-logo-img">
         </a>
     </nav>
 

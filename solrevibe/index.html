@@ -1149,100 +1149,138 @@
             display: block;
         }
 
-        .benefits-row{
-            margin-top:80px;
-            display:grid;
-            grid-template-columns:repeat(3,1fr);
-            gap:25px;
+        .benefits-row {
+            margin-top: 80px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
         }
 
-        .benefit-card{
-            background:
-            rgba(255,255,255,.7);
-            backdrop-filter:blur(20px);
-            border-radius:30px;
-            padding:40px;
-            box-shadow:
-            0 15px 40px rgba(0,0,0,.05);
+        .benefit-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .03);
+            display: flex;
+            align-items: center;
+            gap: 25px;
             text-align: left;
+            transition: all 0.3s ease;
         }
 
-        .icon{
-            width:90px;
-            height:90px;
-            border-radius:50%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:40px;
+        .benefit-card:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .05);
         }
 
-        .green{
-            background:#e7f8e9;
-            color:#3cc15c;
+        .benefit-card-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            flex-shrink: 0;
         }
 
-        .orange{
-            background:#fff0df;
-            color:#ff8f29;
+        .benefit-card-text {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .purple{
-            background:#f1ebff;
-            color:#8855ff;
+        .benefit-card h4 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
         }
 
-        .benefit-card h4{
-            margin-top:20px;
-            font-size:32px;
-            font-weight: 700;
-            color: #111827;
+        .benefit-card h4.relax-title {
+            color: #22c55e;
         }
 
-        .benefit-card p{
-            margin-top: 12px;
-            color: #64748b;
-            font-size: 16px;
-            line-height: 1.6;
+        .benefit-card h4.recharge-title {
+            color: #f97316;
         }
 
-        .technology-bar{
-            margin-top:50px;
-            background:white;
-            border-radius:30px;
-            padding:40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        .benefit-card h4.revibe-title {
+            color: #8b5cf6;
         }
 
-        .technology-bar h5{
-            text-align:center;
-            letter-spacing:4px;
-            margin-bottom:40px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #94a3b8;
+        .benefit-card p {
+            margin: 0;
+            color: #475569;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .technology-bar {
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 30px;
+            padding: 35px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        .technology-bar h5 {
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 35px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #475569;
             text-transform: uppercase;
         }
 
-        .tech-grid{
-            display:grid;
-            grid-template-columns:repeat(4,1fr);
-            gap:30px;
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
             text-align: left;
         }
 
-        .tech-item strong{
-            display:block;
-            margin-bottom:10px;
-            font-size: 16px;
-            color: #111827;
-            font-weight: 700;
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 10px 25px;
+            border-right: 1px solid rgba(15, 23, 42, 0.08);
         }
 
-        .tech-item span{
-            color:#64748b;
-            font-size: 14px;
-            line-height: 1.5;
+        .tech-item:last-child {
+            border-right: none;
+        }
+
+        .tech-icon {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .tech-text-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .tech-item strong {
+            display: block;
+            margin: 0;
+            font-size: 15px;
+            color: #0f172a;
+            font-weight: 800;
+        }
+
+        .tech-item span {
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.4;
         }
 
         @media(max-width:991px){
@@ -1254,9 +1292,23 @@
             }
             .benefits-row{
                 grid-template-columns:1fr;
+                gap: 20px;
             }
             .tech-grid{
                 grid-template-columns:1fr;
+                gap: 20px;
+            }
+            .tech-item {
+                border-right: none;
+                border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+                padding: 15px 10px;
+            }
+            .tech-item:last-child {
+                border-bottom: none;
+            }
+            .benefit-card {
+                padding: 24px;
+                gap: 20px;
             }
         }
 
@@ -1817,40 +1869,58 @@
 
         <div class="benefits-row">
             <div class="benefit-card">
-                <div class="icon green">⚡</div>
-                <h4>Instant Energy</h4>
-                <p>Recharge your cells and boost your physical vitality through targeted PEMF frequency waves.</p>
+                <img src="../assets/RELAX.png" alt="Relax Logo" class="benefit-card-logo">
+                <div class="benefit-card-text">
+                    <h4 class="relax-title">RELAX</h4>
+                    <p>Quiet mental noise and support deep restoration.</p>
+                </div>
             </div>
             <div class="benefit-card">
-                <div class="icon orange">🧘</div>
-                <h4>Mental Peace</h4>
-                <p>Mute the noise of the day, release chronic anxiety, and drift into a state of deep restorative rest.</p>
+                <img src="../assets/RECHARGE.png" alt="Recharge Logo" class="benefit-card-logo">
+                <div class="benefit-card-text">
+                    <h4 class="recharge-title">RECHARGE</h4>
+                    <p>Support physical recovery and cellular renewal.</p>
+                </div>
             </div>
             <div class="benefit-card">
-                <div class="icon purple">🧠</div>
-                <h4>Enhanced Focus</h4>
-                <p>Entrain your brain waves to enter a high-performance flow state with maximum creativity.</p>
+                <img src="../assets/REVIBE.png" alt="REViBE Logo" class="benefit-card-logo">
+                <div class="benefit-card-text">
+                    <h4 class="revibe-title">REViBE</h4>
+                    <p>Leave feeling refreshed, focused, and energized.</p>
+                </div>
             </div>
         </div>
 
         <div class="technology-bar">
-            <h5>Integrated Synergy Technologies</h5>
+            <h5>POWERED BY PROVEN WELLNESS TECHNOLOGIES</h5>
             <div class="tech-grid">
                 <div class="tech-item">
-                    <strong>PEMF Therapy</strong>
-                    <span>Pulsed Electromagnetic Fields to recharge cells and enhance cellular recovery.</span>
+                    <img src="../assets/PEMF.png" alt="PEMF" class="tech-icon">
+                    <div class="tech-text-wrap">
+                        <strong>PEMF</strong>
+                        <span>Pulsed Electromagnetic Field Technology</span>
+                    </div>
                 </div>
                 <div class="tech-item">
-                    <strong>Binaural Sound</strong>
-                    <span>Acoustic brainwave entrainment to shift mental states from anxiety to deep focus.</span>
+                    <img src="../assets/THERAPEUTIC%20AUDIO.png" alt="Therapeutic Audio" class="tech-icon">
+                    <div class="tech-text-wrap">
+                        <strong>THERAPEUTIC AUDIO</strong>
+                        <span>Immersive soundscapes to guide your state</span>
+                    </div>
                 </div>
                 <div class="tech-item">
-                    <strong>Guided CBT</strong>
-                    <span>Cognitive Behavioral Therapy-based audio guidance to quiet the internal noise.</span>
+                    <img src="../assets/NLP.png" alt="NLP" class="tech-icon">
+                    <div class="tech-text-wrap">
+                        <strong>NLP</strong>
+                        <span>Neuro-Linguistic Programming</span>
+                    </div>
                 </div>
                 <div class="tech-item">
-                    <strong>Sensory Alignment</strong>
-                    <span>Multi-sensory coordination that harmonizes light, sound, and magnetic fields.</span>
+                    <img src="../assets/COGNITIVE%20AUDIO.png" alt="Cognitive Audio" class="tech-icon">
+                    <div class="tech-text-wrap">
+                        <strong>COGNITIVE AUDIO</strong>
+                        <span>Cognitive Behavioral Therapy based audio experiences</span>
+                    </div>
                 </div>
             </div>
         </div>
