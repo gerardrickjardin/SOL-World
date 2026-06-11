@@ -2346,6 +2346,26 @@
             const audioControl = document.getElementById('hero-audio-control');
             const bgVideo = document.querySelector('.hero-background-video');
 
+            if (bgVideo) {
+                // Fetch the video and load it via a Blob URL to force it entirely into RAM.
+                // This eliminates stuttering or freezing when the browser tries to re-request the file on loop.
+                fetch('../assets/SOL%20REViBE%20Final%20One.mp4')
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        bgVideo.src = url;
+                    })
+                    .catch(err => console.error('Video blob fetch failed:', err));
+
+                // Skip the final 100ms to avoid native loop stutter/black frames
+                bgVideo.addEventListener('timeupdate', function() {
+                    if (this.duration && this.currentTime >= this.duration - 0.1) {
+                        this.currentTime = 0;
+                        this.play().catch(() => {});
+                    }
+                });
+            }
+
             if (audioControl) {
                 let isPlaying = false;
                 let audio = new Audio('../assets/Audio%20for%20Joy.MP3');
