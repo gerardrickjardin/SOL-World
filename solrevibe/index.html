@@ -2347,83 +2347,24 @@
             const bgVideo = document.querySelector('.hero-background-video');
 
             if (audioControl) {
-                const speechText = "Hello, there! I’m Kim, and I am thrilled to welcome you to the next evolution of personal vitality. Every day, we push our limits, chase our goals, and give the world everything we’ve got. But in the middle of that constant hustle, how do we truly recharge? Meet Sol Revibe. Sol Revibe isn’t just another wellness innovation; it’s a complete reset for your daily rhythm. By harmonizing sustainable, sun-inspired energy principles with intelligent recovery technology, Sol Revibe is designed to do exactly what its name promises: revive your core vitality.";
-                const voiceId = "4EfJOraSN0d4Lt6iDXwh";
-                let apiKey = "%VITE_ELEVENLABS_API_KEY%";
-                // If running locally without build script injection, use the hardcoded key from SOL THRiVE
-                if (apiKey.includes("VITE_ELEVENLABS_API_KEY")) {
-                    apiKey = "sk_d2fc2ac281afdb8a56178f44c8ebca76f21da62f7a256bf8";
-                }
                 let isPlaying = false;
-                let audio = new Audio();
-                let isAudioReady = false;
+                let audio = new Audio('../assets/Audio for Joy.mp3');
 
                 audio.onended = () => {
                     isPlaying = false;
                     audioControl.classList.remove('playing');
                 };
 
-                // Pre-fetch the audio to avoid delay when clicked
-                fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'xi-api-key': apiKey
-                    },
-                    body: JSON.stringify({
-                        text: speechText,
-                        model_id: "eleven_monolingual_v1",
-                        voice_settings: {
-                            stability: 0.5,
-                            similarity_boost: 0.75,
-                            style: 0,
-                            use_speaker_boost: true
-                        }
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error("ElevenLabs API Request Failed");
-                    return response.blob();
-                })
-                .then(blob => {
-                    const url = URL.createObjectURL(blob);
-                    audio.src = url;
-                    isAudioReady = true;
-                })
-                .catch(err => console.error("ElevenLabs API error (falling back to built-in voice):", err));
-
                 audioControl.addEventListener('click', () => {
                     if (isPlaying) {
-                        if (isAudioReady) {
-                            audio.pause();
-                            audio.currentTime = 0;
-                        } else {
-                            window.speechSynthesis.cancel();
-                        }
+                        audio.pause();
+                        audio.currentTime = 0;
                         isPlaying = false;
                         audioControl.classList.remove('playing');
                     } else {
-                        if (isAudioReady) {
-                            audio.play().catch(e => console.error("Audio play failed:", e));
-                            isPlaying = true;
-                            audioControl.classList.add('playing');
-                        } else {
-                            // Fallback to Web Speech API
-                            let utterance = new SpeechSynthesisUtterance(speechText);
-                            const voices = window.speechSynthesis.getVoices();
-                            const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Google US English') || (v.lang.startsWith('en') && v.name.includes('Female')));
-                            if (femaleVoice) utterance.voice = femaleVoice;
-                            
-                            utterance.onend = () => {
-                                isPlaying = false;
-                                audioControl.classList.remove('playing');
-                            };
-                            
-                            window.speechSynthesis.cancel();
-                            window.speechSynthesis.speak(utterance);
-                            isPlaying = true;
-                            audioControl.classList.add('playing');
-                        }
+                        audio.play().catch(e => console.error("Audio play failed:", e));
+                        isPlaying = true;
+                        audioControl.classList.add('playing');
                     }
                 });
             }
