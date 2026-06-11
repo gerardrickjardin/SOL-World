@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            min-height: 100vh;
+            height: 100%;
             font-family: 'Inter', sans-serif;
             background-color: #2b3b4a; /* Dark blue-grey background matching screenshot */
             color: #ffffff;
@@ -54,6 +54,7 @@
         .split-box {
             display: flex;
             width: 100%;
+            height: clamp(520px, 58vh, 650px); /* Restrict height to prevent vertical scrolling */
             background: linear-gradient(135deg, #427588 0%, #2f5669 100%);
             border-radius: 20px;
             overflow: hidden;
@@ -61,11 +62,11 @@
         }
 
         .left-panel {
-            flex: 1.6;
+            height: 100%;
+            aspect-ratio: 1597 / 1198; /* Maintain exact GIF aspect ratio */
             position: relative;
             background-color: #cde2ef; 
-            min-height: auto;
-            aspect-ratio: 1597 / 1198; /* Maintain exact GIF dimensions to prevent cropping */
+            flex: 0 0 auto; /* Let aspect-ratio determine width from the stretched height */
         }
 
         .left-panel img {
@@ -84,6 +85,12 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center; /* Center the form content wrapper horizontally */
+        }
+
+        .right-panel-content {
+            width: 100%;
+            max-width: 550px; /* Limit input width to maintain premium spacing */
         }
 
         .right-headline {
@@ -191,9 +198,11 @@
         @media (max-width: 1280px) {
             .split-box {
                 flex-direction: column;
+                height: auto; /* Allow height to expand naturally when stacked */
             }
             .left-panel {
                 width: 100%;
+                height: auto;
                 aspect-ratio: 1597 / 1198;
             }
             .right-panel {
@@ -216,26 +225,28 @@
             </div>
             
             <div class="right-panel">
-                <h2 class="right-headline">CLINICAL AUTHORITY &<br>HANDS-FREE OPERATIONS</h2>
-                
-                <ul class="bullet-list">
-                    <li>Designed by physical therapy and mental health experts. Introduces Therapeutic Audio Guides (TAGs).</li>
-                    <li>Requires zero hours of staff supervision.</li>
-                    <li>Completely hands-free operational model.</li>
-                    <li>Scalable commercial-grade asset.</li>
-                </ul>
-
-                <form class="gate-form" id="leadForm">
-                    <input type="text" class="form-input" id="name" name="name" placeholder="NAME:" required>
-                    <input type="text" class="form-input" id="company" name="company" placeholder="COMPANY:" required>
-                    <input type="email" class="form-input" id="email" name="email" placeholder="EMAIL:" required>
-                    <input type="tel" class="form-input" id="phone" name="phone" placeholder="PHONE:" required pattern="^\+?\d{10,15}$" title="Please enter a valid phone number (10-15 digits)">
+                <div class="right-panel-content">
+                    <h2 class="right-headline">CLINICAL AUTHORITY &<br>HANDS-FREE OPERATIONS</h2>
                     
-                    <button type="submit" class="submit-btn" id="submitBtn">
-                        <span id="btnText">SHOW ME THE DETAILS</span>
-                        <div class="spinner" id="btnSpinner"></div>
-                    </button>
-                </form>
+                    <ul class="bullet-list">
+                        <li>Designed by physical therapy and mental health experts. Introduces Therapeutic Audio Guides (TAGs).</li>
+                        <li>Requires zero hours of staff supervision.</li>
+                        <li>Completely hands-free operational model.</li>
+                        <li>Scalable commercial-grade asset.</li>
+                    </ul>
+
+                    <form class="gate-form" id="leadForm">
+                        <input type="text" class="form-input" id="name" name="name" placeholder="NAME:" required>
+                        <input type="text" class="form-input" id="company" name="company" placeholder="COMPANY:" required>
+                        <input type="email" class="form-input" id="email" name="email" placeholder="EMAIL:" required>
+                        <input type="tel" class="form-input" id="phone" name="phone" placeholder="PHONE:" required pattern="^\+?\d{10,15}$" title="Please enter a valid phone number (10-15 digits)">
+                        
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span id="btnText">SHOW ME THE DETAILS</span>
+                            <div class="spinner" id="btnSpinner"></div>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
