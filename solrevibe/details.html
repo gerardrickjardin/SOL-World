@@ -1904,7 +1904,7 @@
         style="container-type: inline-size; container-name: hero; position: relative; z-index: 10; width: 100%; max-width: 1920px; aspect-ratio: 16 / 9; margin: 0 auto; overflow: hidden; display: block;">
         <video class="hero-background-video"
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 11; pointer-events: none; transform: translate3d(0, 0, 0); backface-visibility: hidden; will-change: transform;"
-            src="../assets/SOL%20REViBE%20Final%20One.mp4" preload="auto" disablePictureInPicture disableRemotePlayback autoplay loop muted playsinline></video>
+            src="../assets/SOL%20REViBE%20FINAL%202.mp4" preload="auto" disablePictureInPicture disableRemotePlayback autoplay loop muted playsinline></video>
 
         <!-- Features List Overlay (Right Side) -->
         <div class="glass-panel-features">
@@ -2346,25 +2346,7 @@
             const audioControl = document.getElementById('hero-audio-control');
             const bgVideo = document.querySelector('.hero-background-video');
 
-            if (bgVideo) {
-                // Fetch the video and load it via a Blob URL to force it entirely into RAM.
-                // This eliminates stuttering or freezing when the browser tries to re-request the file on loop.
-                fetch('../assets/SOL%20REViBE%20Final%20One.mp4')
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = URL.createObjectURL(blob);
-                        bgVideo.src = url;
-                    })
-                    .catch(err => console.error('Video blob fetch failed:', err));
-
-                // Skip the final 100ms to avoid native loop stutter/black frames
-                bgVideo.addEventListener('timeupdate', function() {
-                    if (this.duration && this.currentTime >= this.duration - 0.1) {
-                        this.currentTime = 0;
-                        this.play().catch(() => {});
-                    }
-                });
-            }
+            // Let the browser natively handle the video loop for optimal performance
 
             if (audioControl) {
                 let isPlaying = false;
