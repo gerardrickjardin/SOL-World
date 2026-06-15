@@ -44,6 +44,28 @@ const path = require('path');
     });
   }
 
+  const solgamesDirSrc = path.join(__dirname, 'solgames');
+  const solgamesDirDest = path.join(outDir, 'solgames');
+  if (fs.existsSync(solgamesDirSrc)) {
+    if (!fs.existsSync(solgamesDirDest)) {
+      fs.mkdirSync(solgamesDirDest);
+    }
+    const copyRecursiveSync = function(src, dest) {
+      const exists = fs.existsSync(src);
+      const stats = exists && fs.statSync(src);
+      const isDirectory = exists && stats.isDirectory();
+      if (isDirectory) {
+        if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+        fs.readdirSync(src).forEach(childItemName => {
+          copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+        });
+      } else {
+        fs.copyFileSync(src, dest);
+      }
+    };
+    copyRecursiveSync(solgamesDirSrc, solgamesDirDest);
+  }
+
   const key = process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY || "";
   const geminiKey = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "";
 
