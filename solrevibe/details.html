@@ -1500,6 +1500,34 @@
             align-items: flex-start;
             gap: 0.4cqw;
         }
+        .banner-container {
+            padding: 18px 4rem;
+        }
+        .banner-text {
+            font-size: clamp(14px, 2.2vw, 36px);
+        }
+        .banner-text-desktop {
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .banner-text-mobile {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .banner-container {
+                padding: 18px 1rem !important;
+            }
+            .banner-text {
+                font-size: clamp(10px, 3.8vw, 16px) !important;
+                line-height: 1.4 !important;
+            }
+            .banner-text-desktop {
+                display: none !important;
+            }
+            .banner-text-mobile {
+                display: inline-block !important;
+            }
+        }
     </style>
 
     <!-- Leaflet.js Assets -->
@@ -1947,9 +1975,13 @@
         </button>
     </nav>
 
-    <div style="background-color: #ffffff; width: 100%; text-align: center; padding: 18px 4rem; box-sizing: border-box; z-index: 20; position: relative;">
-        <h2 style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; font-size: clamp(14px, 2.2vw, 36px); color: #111111; letter-spacing: -0.01em; white-space: nowrap;">
-            SOL REViBE: The first hands-free recharge station designed for social wellness spaces.
+    <div class="banner-container" style="background-color: #ffffff; width: 100%; text-align: center; box-sizing: border-box; z-index: 20; position: relative;">
+        <h2 class="banner-text" style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #111111; letter-spacing: -0.01em;">
+            <span class="banner-text-desktop">SOL REViBE: The first hands-free recharge station designed for social wellness spaces.</span>
+            <span class="banner-text-mobile">
+                <span style="display: block; white-space: nowrap;">SOL REViBE: The first hands-free recharge station</span>
+                <span style="display: block; white-space: nowrap;">designed for social wellness spaces.</span>
+            </span>
         </h2>
     </div>
 
