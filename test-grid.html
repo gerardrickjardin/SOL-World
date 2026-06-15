@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOL WORLD</title>
+    <meta name="description" content="One World. Many Projects. Infinite Possibilities.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <div class="glow-effect"></div>
+    <div class="glow-effect-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <img src="assets/SOL WORLD LOGO.png" alt="SOL World Logo" class="nav-logo-img">
+        </div>
+        <div class="nav-links">
+            <a href="#">BRANDS</a>
+            <a href="#">PROJECTS</a>
+            <a href="#">ABOUT</a>
+            <a href="#">CONTACT</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div id="v4-logo" class="logo-container hero-main-logo-anim" style="display: grid; width: 100%; max-width: 800px; margin: 0 auto; cursor: default;">
+            <img src="assets/sol-world-base.png" alt="SOL World Base" style="grid-area: 1 / 1; width: 100%; height: auto; display: block; pointer-events: none; user-select: none;" />
+            
+            <div style="grid-area: 1 / 1; display: flex; flex-direction: column; width: 100%; height: 100%; pointer-events: none;">
+                <!-- SOL Dot Alignment -->
+                <div style="height: var(--sol-top, 28%);"></div>
+                <div style="display: flex; justify-content: center; align-items: center; height: 0; padding-right: calc(100% - (var(--sol-left, 50%) * 2));">
+                    <div style="width: var(--sol-width, 16%); aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center;">
+                        <div id="v4-sol" style="width: var(--dot-width, 40%); height: var(--dot-width, 40%); background-color: #ffffff; border-radius: 50%; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform;"></div>
+                    </div>
+                </div>
+
+                <!-- WORLD Dot Alignment -->
+                <div style="height: calc(var(--world-top, 73%) - var(--sol-top, 28%));"></div>
+                <div style="display: flex; justify-content: center; align-items: center; height: 0; padding-right: calc(100% - (var(--world-left, 36%) * 2));">
+                    <div style="width: var(--world-width, 16%); aspect-ratio: 1/1; display: flex; justify-content: center; align-items: center;">
+                        <div id="v4-world" style="width: var(--dot-width, 40%); height: var(--dot-width, 40%); background-color: #050505; border-radius: 50%; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="hero-subtitle">One World. Many Projects. Infinite Possibilities.</h2>
+    </header>
+
+    <section class="grid-section">
+        <div class="card card-white sol-vibe-card">
+            <div class="card-inner">
+                <div class="card-front" style="overflow: hidden; display: flex; justify-content: center; align-items: center; background: #ffffff; padding: 1.5rem; box-sizing: border-box;">
+                    <div class="logo-wrapper">
+                        <img src="assets/SOL REViBE Logo.png" alt="SOL REViBE Logo" style="width: 100%; height: 100%; display: block; pointer-events: none; user-select: none;">
+                        <div class="plasma-container">
+                            <div class="plasma-glow"></div>
+                            
+                            <!-- High-Fidelity SVG Electric Charge Simulator -->
+                            <svg class="electric-sparks-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <filter id="electric-discharge" x="-30%" y="-30%" width="160%" height="160%">
+                                        <feTurbulence type="fractalNoise" baseFrequency="0.13" numOctaves="4" result="noise">
+                                            <animate attributeName="seed" values="1;4;8;2;9;5;3;7;10;6" dur="0.4s" repeatCount="indefinite" />
+                                        </feTurbulence>
+                                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="22" xChannelSelector="R" yChannelSelector="G" />
+                                    </filter>
+                                </defs>
+                                
+                                <g filter="url(#electric-discharge)">
+                                    <!-- Concentric Electric Rings -->
+                                    <circle class="spark-ring ring-cyan" cx="50" cy="50" r="38" />
+                                    <circle class="spark-ring ring-purple" cx="50" cy="50" r="30" />
+                                    <circle class="spark-ring ring-blue" cx="50" cy="50" r="22" />
+                                    
+                                    <!-- Electric Signal Wavelengths (Pulsing Frequency Inside) -->
+                                    <path class="spark-signal signal-1" d="M 18,50 L 34,50 Q 38,30 42,50 T 50,50 T 58,50 L 82,50" />
+                                    <path class="spark-signal signal-2" d="M 22,78 L 36,64 Q 43,45 50,50 T 57,55 L 78,22" />
+                                    
+                                    <!-- Radial Lightning Bolts (Shooting out from core) -->
+                                    <line class="spark-bolt bolt-1" x1="50" y1="50" x2="50" y2="12" />
+                                    <line class="spark-bolt bolt-2" x1="50" y1="50" x2="88" y2="50" />
+                                    <line class="spark-bolt bolt-3" x1="50" y1="50" x2="50" y2="88" />
+                                    <line class="spark-bolt bolt-4" x1="50" y1="50" x2="12" y2="50" />
+                                    
+                                    <!-- Diagonal Branching Bolts -->
+                                    <line class="spark-bolt bolt-5" x1="50" y1="50" x2="77" y2="23" />
+                                    <line class="spark-bolt bolt-6" x1="50" y1="50" x2="77" y2="77" />
+                                    <line class="spark-bolt bolt-7" x1="50" y1="50" x2="23" y2="77" />
+                                    <line class="spark-bolt bolt-8" x1="50" y1="50" x2="23" y2="23" />
+                                </g>
+                            </svg>
+                            
+                            <div class="plasma-core"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back" style="display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem;">
+                    <p style="font-size: 0.95rem; margin-bottom: 0.75rem;">A Frequency Recharging Wellness Station</p>
+                    <div style="height: 220px; flex-shrink: 0; width: 100%; overflow: hidden; border-radius: 6px; border: 1px solid #eaeaea; display: flex; align-items: center; justify-content: center; background: #f8f9fa; position: relative;">
+                        <iframe src="solrevibe/details.html" style="width: 400%; height: 400%; border: none; overflow: hidden; pointer-events: none; transform: scale(0.25); transform-origin: top left; position: absolute; top: 0; left: 0;" scrolling="no"></iframe>
+                    </div>
+                    <a href="solrevibe/index.html" class="btn-outline-dark" style="margin-top: 0.75rem; padding: 0.8rem;">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL BiTE</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>An Interactive Story Branding Canvas</p>
+                    <a href="#" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL DRiVE</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>An Immersive Learning Content Delivery System</p>
+                    <a href="soldrive" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL INSiGHT</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>An Advanced Automated Operations Ecosystem</p>
+                    <a href="#" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL THRiVE</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back" style="display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem;">
+                    <p style="font-size: 0.95rem; margin-bottom: 0.75rem;">An AI Powered Interactive Coaching Platform</p>
+                    <div style="height: 220px; flex-shrink: 0; width: 100%; overflow: hidden; border-radius: 6px; border: 1px solid #eaeaea; display: flex; align-items: center; justify-content: center; background: #f8f9fa; position: relative;">
+                        <iframe src="https://www.thrivecoaching.ai" style="width: 400%; height: 400%; border: none; overflow: hidden; pointer-events: none; transform: scale(0.25); transform-origin: top left; position: absolute; top: 0; left: 0;" scrolling="no"></iframe>
+                    </div>
+                    <a href="https://www.thrivecoaching.ai" class="btn-outline-dark" style="margin-top: 0.75rem; padding: 0.8rem;">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL GaMES</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back" style="display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem;">
+                    <p style="font-size: 0.95rem; margin-bottom: 0.75rem;">An AI Game Creation Lab</p>
+                    <div style="height: 220px; flex-shrink: 0; width: 100%; overflow: hidden; border-radius: 6px; border: 1px solid #eaeaea; display: flex; align-items: center; justify-content: center; background: #f8f9fa; position: relative;">
+                        <iframe src="solgames/index.html" style="width: 400%; height: 400%; border: none; overflow: hidden; pointer-events: none; transform: scale(0.25); transform-origin: top left; position: absolute; top: 0; left: 0;" scrolling="no"></iframe>
+                    </div>
+                    <a href="solgames/index.html" class="btn-outline-dark" style="margin-top: 0.75rem; padding: 0.8rem;">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spacer card to align SOL CaRDS below SOL THRiVE in 3-column layout -->
+        <div class="spacer-card" style="visibility: hidden; pointer-events: none;"></div>
+
+        <div class="card card-white">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-content" style="height: 100%;">
+                        <div class="card-header" style="margin-bottom: 0;">
+                            <h2>SOL CaRDS</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <p>A Digital Identity Experience</p>
+                    <a href="#" class="btn-outline-dark">LEARN MORE</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <h3 class="footer-subtitle">SOL THEORY <span class="fw-bold">LLC</span></h3>
+        <p class="footer-mission">Our interconnected mission to unlock infinite human potential through innovative projects</p>
+        <p class="footer-copy">SOL THEORY LLC &copy; 2026 | solworld.ai</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const stars = [];
+        const numStars = 800; 
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: Math.random() * 1.2,
+                blinkSpeed: Math.random() * 0.02 + 0.005,
+                alpha: Math.random(),
+                drift: Math.random() * 0.15 + 0.05,
+                isShootingStar: Math.random() < 0.005,
+                shootingSpeedX: (Math.random() * 5 + 2) * (Math.random() > 0.5 ? 1 : -1),
+                shootingSpeedY: Math.random() * 3 + 1,
+                tailLength: Math.random() * 30 + 10
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < stars.length; i++) {
+                let s = stars[i];
+                
+                s.alpha += s.blinkSpeed;
+                if (s.alpha >= 1 || s.alpha <= 0.1) {
+                    s.blinkSpeed = -s.blinkSpeed;
+                }
+
+                if (s.isShootingStar) {
+                    s.x += s.shootingSpeedX;
+                    s.y += s.shootingSpeedY;
+
+                    if (s.x < 0 || s.x > width || s.y > height) {
+                        s.x = Math.random() * width;
+                        s.y = 0;
+                    }
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(s.x, s.y);
+                    ctx.lineTo(s.x - s.shootingSpeedX * s.tailLength, s.y - s.shootingSpeedY * s.tailLength);
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(0, s.alpha)})`;
+                    ctx.lineWidth = s.radius;
+                    ctx.stroke();
+                } else {
+                    s.y -= s.drift;
+                    if (s.y < 0) s.y = height;
+
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, s.alpha)})`;
+                    ctx.fill();
+                }
+            }
+            
+            requestAnimationFrame(draw);
+        }
+        
+        draw();
+        
+window.addEventListener('load', () => {
+    const sDot = document.getElementById('v4-sol');
+    const wDot = document.getElementById('v4-world');
+    const container = document.getElementById('v4-logo');
+    if (!sDot || !wDot || !container) return;
+
+    window.addEventListener('mousemove', (e) => {
+        // Track relative to the logo container for localized tracking
+        const rect = container.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        // Normalize offset (-1 to 1) using window half-width to scale the movement smoothly
+        const normX = (e.clientX - centerX) / (window.innerWidth / 2);
+        const normY = (e.clientY - centerY) / (window.innerHeight / 2);
+        
+        // Clamp between -1 and 1
+        const clampX = Math.max(-1, Math.min(1, normX));
+        const clampY = Math.max(-1, Math.min(1, normY));
+        
+        // Responsive bounds using percentages (translates relative to dot's own size)
+        sDot.style.transform = `translate(${clampX * 50}%, ${clampY * 50}%)`;
+        wDot.style.transform = `translate(${clampX * 45}%, ${clampY * 45}%)`;
+    });
+
+    // Fix for mobile card flipping
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Only flip if clicking the card itself, not a link inside it
+            if (!e.target.closest('a')) {
+                this.classList.toggle('is-flipped');
+            }
+        });
+    });
+});
+    </script>
+</body>
+</html>
