@@ -203,6 +203,7 @@
             .split-box {
                 flex-direction: column;
                 height: auto; /* Allow height to expand naturally when stacked */
+                max-height: none;
             }
             .left-panel {
                 width: 100%;
@@ -211,6 +212,17 @@
             }
             .right-panel {
                 padding: 2rem;
+                overflow-y: visible;
+            }
+        }
+
+        .mobile-text { display: none; }
+        @media (max-width: 768px) {
+            .desktop-text { display: none; }
+            .mobile-text { display: inline; }
+            .headline {
+                font-size: 19px !important;
+                line-height: 1.3;
             }
         }
     </style>
@@ -219,7 +231,8 @@
 
     <div class="gate-container">
         <div class="headline">
-            TURN AN UNUSED 5X5' CORNER OF YOUR SPACE INTO A<br>PREMIUM <span class="highlight">$5,000 TO $10,000 DOLLAR</span> <span style="white-space: nowrap;">MONTHLY REVENUE ASSET.</span>
+            <span class="desktop-text">TURN AN UNUSED 5X5' CORNER OF YOUR SPACE INTO A<br>PREMIUM <span class="highlight">$5,000 TO $10,000 DOLLAR</span> <span style="white-space: nowrap;">MONTHLY REVENUE ASSET.</span></span>
+            <span class="mobile-text">TURN AN UNUSED 5X5' CORNER OF YOUR SPACE<br>INTO A PREMIUM <span class="highlight">$5,000 TO $10,000 DOLLAR</span><br>MONTHLY REVENUE ASSET.</span>
         </div>
 
         <div class="split-box">
