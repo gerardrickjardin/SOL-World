@@ -85,9 +85,55 @@
             opacity: 0.9;
         }
         
+        .mobile-only-btn {
+            display: none;
+        }
+        .hamburger-menu {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+            padding: 5px;
+        }
+        .hamburger-menu span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #1f2937;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
         @media (max-width: 1024px) {
             .vibe-nav-links {
                 display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(to bottom, #ebf7eb, #faf2e6);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                border-top: 1px solid rgba(0,0,0,0.05);
+                box-sizing: border-box;
+            }
+            .vibe-nav-links.active {
+                display: flex;
+            }
+            .desktop-reserve-container {
+                display: none;
+            }
+            .mobile-only-btn {
+                display: inline-flex;
+                margin-top: 1rem;
+                justify-content: center;
+                width: 100%;
+            }
+            .hamburger-menu {
+                display: flex;
             }
             .vibe-navbar {
                 padding: 1rem 1.5rem !important;
@@ -1882,16 +1928,22 @@
                 <img src="../assets/SOL%20REViBE%20Logo.png" alt="SOL REViBE Logo" class="nav-logo-img" style="height: 76px; object-fit: contain;">
             </a>
         </div>
-        <div class="vibe-nav-links">
+        <div class="vibe-nav-links" id="vibeNavLinks">
             <a href="#experience">EXPERIENCE</a>
             <a href="#locations">LOCATIONS</a>
             <a href="#science">SCIENCE</a>
             <a href="#partnership">PARTNERSHIP</a>
             <a href="#about">ABOUT</a>
+            <a href="/solrevibe/waitlist.html" class="vibe-reserve-btn mobile-only-btn">JOIN THE WAITLIST &rarr;</a>
         </div>
-        <div>
+        <div class="desktop-reserve-container">
             <a href="/solrevibe/waitlist.html" class="vibe-reserve-btn">JOIN THE WAITLIST &rarr;</a>
         </div>
+        <button class="hamburger-menu" id="hamburgerMenu" aria-label="Toggle Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 
     <div style="background-color: #ffffff; width: 100%; text-align: center; padding: 18px 4rem; box-sizing: border-box; z-index: 20; position: relative;">
@@ -2347,6 +2399,14 @@
             const bgVideo = document.querySelector('.hero-background-video');
 
             // Let the browser natively handle the video loop for optimal performance
+
+            const hamburger = document.getElementById('hamburgerMenu');
+            const navLinks = document.getElementById('vibeNavLinks');
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
 
             if (audioControl) {
                 let isPlaying = false;
