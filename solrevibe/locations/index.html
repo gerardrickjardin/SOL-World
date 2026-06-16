@@ -24,8 +24,18 @@
         #map {
             height: 100%;
             width: 100%;
-            background: #1e293b;
+            background: #f8fafc;
             border-radius: 0.75rem;
+        }
+        .zone-label {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            color: #e2e8f0;
+            font-weight: 600;
+            font-size: 11px;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
         }
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
@@ -239,7 +249,7 @@
         // Initialize Map
         const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([39.8283, -98.5795], 4);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(map);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(map);
 
         let geojsonLayer;
         window.territoryStatusMap = {};
@@ -277,6 +287,11 @@
                         return { color: '#334155', weight: 1, fillColor: '#0f172a', fillOpacity: 0.8 }; // slate
                     },
                     onEachFeature: function (feature, layer) {
+                        layer.bindTooltip(feature.properties.name, {
+                            permanent: true, 
+                            direction: "center",
+                            className: "zone-label"
+                        });
                         layer.on({
                             mouseover: function (e) {
                                 const l = e.target;
