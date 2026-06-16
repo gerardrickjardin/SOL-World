@@ -267,6 +267,7 @@
                             <div class="spinner" id="btnSpinner"></div>
                         </button>
                     </form>
+                    <a href="#" id="skipLink" style="display: block; text-align: center; margin-top: 1.2rem; color: #e0ecef; text-decoration: underline; font-size: 0.95rem; font-weight: 500; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">Or proceed to site without completing form</a>
                 </div>
             </div>
         </div>
@@ -330,6 +331,13 @@
                 btnText.style.display = 'block';
                 btnSpinner.style.display = 'none';
             }
+        });
+
+        document.getElementById('skipLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Grant access and redirect to the main presentation page without form submission
+            sessionStorage.setItem('solrevibe_access_granted', 'true');
+            window.location.href = '/';
         });
     </script>
 </body>
