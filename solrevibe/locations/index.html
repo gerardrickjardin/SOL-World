@@ -640,7 +640,7 @@ function getZoneFromZip(userInputZip, lat = null, lng = null) {
         // Initialize Map
         const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([39.8283, -98.5795], 4);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(map);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(map);
 
         let geojsonLayer;
         window.territoryStatusMap = {};
@@ -712,11 +712,9 @@ function getZoneFromZip(userInputZip, lat = null, lng = null) {
         geojsonLayer = L.geoJSON(initialData, {
             style: function (feature) {
                 const status = window.territoryStatusMap[feature.properties.code];
-                if (status === "Assigned") {
-                    return { color: '#047857', weight: 1, fillColor: '#10b981', fillOpacity: 0.4 }; // emerald
-                }
-                const baseColor = getColorForFeature(feature.properties.code, feature.properties.baseColor);
-                return { color: '#ffffff', weight: 1, fillColor: baseColor, fillOpacity: 0.85 };
+                const baseColor = feature.properties.baseColor || '#10b981';
+                if (status === 'Assigned') return { color: '#10b981', weight: 1.5, opacity: 0.5, fillColor: '#10b981', fillOpacity: 0.18, dashArray: '4, 4' };
+                return { color: baseColor, weight: 1.5, opacity: 0.5, fillColor: baseColor, fillOpacity: 0.18, dashArray: '4, 4' };
             },
             onEachFeature: function (feature, layer) {
                 layer.bindTooltip(feature.properties.name, {
@@ -728,12 +726,13 @@ function getZoneFromZip(userInputZip, lat = null, lng = null) {
                     mouseover: function (e) {
                         const l = e.target;
                         const status = window.territoryStatusMap[feature.properties.code];
-                        const baseColor = getColorForFeature(feature.properties.code, feature.properties.baseColor);
+                        const baseColor = feature.properties.baseColor || '#10b981';
                         l.setStyle({
-                            weight: 2,
-                            color: status === "Assigned" ? '#34d399' : '#22d3ee',
-                            fillColor: status === "Assigned" ? '#10b981' : baseColor,
-                            fillOpacity: 1.0
+                            weight: 3.5,
+                            color: status === 'Assigned' ? '#10b981' : baseColor,
+                            fillColor: status === 'Assigned' ? '#10b981' : baseColor,
+                            fillOpacity: 0.3,
+                            dashArray: ''
                         });
                         l.bringToFront();
                     },
