@@ -95,21 +95,21 @@
                         <div class="w-3 h-3 rounded-full bg-slate-500"></div>
                         <span class="text-sm text-slate-300">Available</span>
                     </div>
-                    <span class="font-bold text-white">315</span>
+                    <span id="available-count" class="font-bold text-white">315</span>
                 </div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-2">
                         <div class="w-3 h-3 rounded-full bg-amber-400"></div>
                         <span class="text-sm text-slate-300">Reserved</span>
                     </div>
-                    <span class="font-bold text-white">12</span>
+                    <span id="reserved-count" class="font-bold text-white">12</span>
                 </div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-2">
                         <div class="w-3 h-3 rounded-full bg-cyan-400"></div>
                         <span class="text-sm text-slate-300">Assigned</span>
                     </div>
-                    <span class="font-bold text-white">3</span>
+                    <span id="assigned-count" class="font-bold text-white">3</span>
                 </div>
             </div>
             
@@ -149,7 +149,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-slate-400 mb-1">Status</p>
-                        <span class="text-xs font-bold text-slate-900 bg-slate-300 px-2 py-1 rounded inline-block">Available</span>
+                        <span id="t-status" class="text-xs font-bold text-slate-900 bg-slate-300 px-2 py-1 rounded inline-block">Available</span>
                     </div>
                 </div>
 
@@ -158,7 +158,7 @@
                     <p class="text-sm text-slate-300">Denver, Aurora, Lakewood, Centennial</p>
                 </div>
 
-                <button class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 rounded-lg transition shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+                <button id="assign-btn" onclick="assignTerritory()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 rounded-lg transition shadow-[0_0_15px_rgba(34,211,238,0.4)] mt-4">
                     Assign Territory
                 </button>
             </div>
@@ -167,57 +167,124 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAw4TmNQ4jMNjeUSa8D8838KeG993bY_hA",
+          authDomain: "sol-revibe-zones.firebaseapp.com",
+          projectId: "sol-revibe-zones",
+          storageBucket: "sol-revibe-zones.firebasestorage.app",
+          messagingSenderId: "550965647029",
+          appId: "1:550965647029:web:b3bba5ca540e35c40350fc",
+          measurementId: "G-CLQ6LZ5KG1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Global variables for UI
+        window.closePanel = function() {
+            document.getElementById('details-panel').style.display = 'none';
+        };
+
+        let currentFeatureId = null;
+
+        window.assignTerritory = async function() {
+            if (!currentFeatureId) return;
+            const btn = document.getElementById('assign-btn');
+            btn.innerText = "Assigning...";
+            
+            try {
+                await setDoc(doc(db, "territories", currentFeatureId), {
+                    status: "Assigned",
+                    assignedAt: new Date().toISOString()
+                }, { merge: true });
+                btn.innerText = "Assigned Successfully!";
+                btn.classList.replace("bg-cyan-500", "bg-emerald-500");
+                setTimeout(() => { closePanel(); }, 1500);
+            } catch (e) {
+                console.error("Error writing document: ", e);
+                btn.innerText = "Error - Check Console";
+            }
+        };
+
+        function openPanel(feature) {
+            const name = feature.properties.name + " Zone A";
+            currentFeatureId = feature.properties.name; // Using state name as mock ID
+            
+            document.getElementById('t-name').innerText = name;
+            document.getElementById('t-state').innerText = feature.properties.name;
+            
+            // Check status from our local cache map
+            const status = window.territoryStatusMap[currentFeatureId] || "Available";
+            const statusEl = document.getElementById('t-status');
+            statusEl.innerText = status;
+            
+            if(status === "Assigned") {
+                statusEl.className = "text-xs font-bold text-slate-900 bg-emerald-400 px-2 py-1 rounded inline-block";
+                document.getElementById('assign-btn').style.display = 'none';
+            } else {
+                statusEl.className = "text-xs font-bold text-slate-900 bg-slate-300 px-2 py-1 rounded inline-block";
+                const btn = document.getElementById('assign-btn');
+                btn.style.display = 'block';
+                btn.innerText = "Assign Territory";
+                btn.className = "w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 rounded-lg transition shadow-[0_0_15px_rgba(34,211,238,0.4)] mt-4";
+            }
+            
+            document.getElementById('details-panel').style.display = 'flex';
+        }
+
         // Initialize Map
-        const map = L.map('map', {
-            zoomControl: false,
-            attributionControl: false
-        }).setView([39.8283, -98.5795], 4); // Center of US
-
+        const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([39.8283, -98.5795], 4);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(map);
 
-        // Dark theme map tiles (CartoDB Dark Matter)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-            subdomains: 'abcd',
-            maxZoom: 19
-        }).addTo(map);
+        let geojsonLayer;
+        window.territoryStatusMap = {};
 
-        // UI Interactions
-        const detailsPanel = document.getElementById('details-panel');
-        const tName = document.getElementById('t-name');
-        const tState = document.getElementById('t-state');
-        
-        function closePanel() {
-            detailsPanel.style.display = 'none';
-        }
+        // Listen to Firestore for real-time updates
+        onSnapshot(collection(db, "territories"), (snapshot) => {
+            let assignedCount = 0;
+            snapshot.forEach((doc) => {
+                window.territoryStatusMap[doc.id] = doc.data().status;
+                if(doc.data().status === "Assigned") assignedCount++;
+            });
+            
+            // Update Dashboard UI
+            document.getElementById('assigned-count').innerText = assignedCount;
+            document.getElementById('available-count').innerText = 315 - assignedCount;
 
-        function openPanel(name, state) {
-            tName.innerText = name;
-            tState.innerText = state;
-            detailsPanel.style.display = 'flex';
-        }
+            // Redraw styles if layer exists
+            if (geojsonLayer) {
+                geojsonLayer.eachLayer(layer => {
+                    geojsonLayer.resetStyle(layer);
+                });
+            }
+        });
 
         // Mock GeoJSON for MVP (US States acting as Territories until Engine is complete)
         fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
             .then(res => res.json())
             .then(data => {
-                L.geoJSON(data, {
+                geojsonLayer = L.geoJSON(data, {
                     style: function (feature) {
-                        return {
-                            color: '#334155', // slate-700
-                            weight: 1,
-                            fillColor: '#0f172a', // very dark
-                            fillOpacity: 0.8
-                        };
+                        const status = window.territoryStatusMap[feature.properties.name];
+                        if (status === "Assigned") {
+                            return { color: '#047857', weight: 1, fillColor: '#10b981', fillOpacity: 0.4 }; // emerald
+                        }
+                        return { color: '#334155', weight: 1, fillColor: '#0f172a', fillOpacity: 0.8 }; // slate
                     },
                     onEachFeature: function (feature, layer) {
                         layer.on({
                             mouseover: function (e) {
                                 const l = e.target;
+                                const status = window.territoryStatusMap[feature.properties.name];
                                 l.setStyle({
                                     weight: 2,
-                                    color: '#22d3ee', // cyan-400
-                                    fillColor: '#1e293b',
+                                    color: status === "Assigned" ? '#34d399' : '#22d3ee',
+                                    fillColor: status === "Assigned" ? '#10b981' : '#1e293b',
                                     fillOpacity: 0.9
                                 });
                                 l.bringToFront();
@@ -226,7 +293,7 @@
                                 geojsonLayer.resetStyle(e.target);
                             },
                             click: function (e) {
-                                openPanel(feature.properties.name + " Zone A", feature.properties.name);
+                                openPanel(feature);
                                 map.fitBounds(e.target.getBounds());
                             }
                         });
