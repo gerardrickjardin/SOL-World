@@ -89,7 +89,7 @@
                 <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700 flex justify-between items-center">
                     <div>
                         <p class="text-xs text-slate-400 mb-1">Total Territories</p>
-                        <p class="text-2xl font-bold text-white">~330</p>
+                        <p class="text-2xl font-bold text-white">334</p>
                     </div>
                     <div class="text-right">
                         <p class="text-xs text-slate-400 mb-1">Avg Population</p>
@@ -221,11 +221,14 @@
         };
 
         function openPanel(feature) {
-            const name = feature.properties.name + " Zone A";
-            currentFeatureId = feature.properties.name; // Using state name as mock ID
+            const name = feature.properties.name;
+            currentFeatureId = feature.properties.code; // Unique territory code
             
             document.getElementById('t-name').innerText = name;
-            document.getElementById('t-state').innerText = feature.properties.name;
+            document.getElementById('t-code').innerText = currentFeatureId;
+            document.getElementById('t-state').innerText = feature.properties.state;
+            document.getElementById('t-pop').innerText = feature.properties.population.toLocaleString();
+            document.getElementById('t-zips').innerText = feature.properties.zips;
             
             // Check status from our local cache map
             const status = window.territoryStatusMap[currentFeatureId] || "Available";
@@ -274,13 +277,13 @@
             }
         });
 
-        // Mock GeoJSON for MVP (US States acting as Territories until Engine is complete)
-        fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
+        // Load the dynamically generated 334 Territories GeoJSON
+        fetch('/locations/territories.geojson')
             .then(res => res.json())
             .then(data => {
                 geojsonLayer = L.geoJSON(data, {
                     style: function (feature) {
-                        const status = window.territoryStatusMap[feature.properties.name];
+                        const status = window.territoryStatusMap[feature.properties.code];
                         if (status === "Assigned") {
                             return { color: '#047857', weight: 1, fillColor: '#10b981', fillOpacity: 0.4 }; // emerald
                         }
@@ -295,7 +298,7 @@
                         layer.on({
                             mouseover: function (e) {
                                 const l = e.target;
-                                const status = window.territoryStatusMap[feature.properties.name];
+                                const status = window.territoryStatusMap[feature.properties.code];
                                 l.setStyle({
                                     weight: 2,
                                     color: status === "Assigned" ? '#34d399' : '#22d3ee',
