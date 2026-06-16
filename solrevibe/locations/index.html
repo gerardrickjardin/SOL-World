@@ -876,10 +876,23 @@ function getZoneFromZip(userInputZip, lat = null, lng = null) {
         }
 
         // Load the dynamically generated CURATED_ZONES immediately
+        
+        // Build a complete map of all US zones by generating one zone for each prefix
+        const allZones = [...CURATED_ZONES];
+        Object.keys(ZIP_PREFIX_LOOKUP).forEach(prefix => {
+            const isCurated = CURATED_ZONES.some(z => z.zipCodes.some(zc => zc.startsWith(prefix)));
+            if (!isCurated) {
+                // Generate a base zone for this prefix
+                const z = getZoneFromZip(prefix + "000");
+                if (z) allZones.push(z);
+            }
+        });
+
         const initialData = {
             type: "FeatureCollection",
-            features: CURATED_ZONES.map(zoneToFeature)
+            features: allZones.map(zoneToFeature)
         };
+
 
         geojsonLayer = L.geoJSON(initialData, {
             style: function (feature) {
