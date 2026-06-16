@@ -157,8 +157,8 @@
                         <p id="t-state" class="font-semibold text-white">Colorado</p>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-400 mb-1">ZIP Codes</p>
-                        <p id="t-zips" class="font-semibold text-white">148</p>
+                        <p class="text-xs text-slate-400 mb-1">Region Type</p>
+                        <p id="t-region" class="font-semibold text-white">Metropolitan</p>
                     </div>
                     <div>
                         <p class="text-xs text-slate-400 mb-1">Status</p>
@@ -167,8 +167,11 @@
                 </div>
 
                 <div class="mb-6">
-                    <p class="text-xs text-slate-400 mb-2">Major Cities</p>
-                    <p class="text-sm text-slate-300">Denver, Aurora, Lakewood, Centennial</p>
+                    <p class="text-xs text-slate-400 mb-2">Market Analysis</p>
+                    <div class="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+                        <p class="text-xs text-slate-400">Existing B2B Clinics in Zone: <span id="t-clinics-count" class="font-bold text-white">0</span></p>
+                        <p id="t-clinics-list" class="text-sm text-cyan-400 mt-1 italic">-</p>
+                    </div>
                 </div>
 
                 <button id="assign-btn" onclick="showAssignForm()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 rounded-lg transition shadow-[0_0_15px_rgba(34,211,238,0.4)] mt-4">
@@ -198,6 +201,7 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script type="module">
+        import { CURATED_ZONES, getZoneFromZip } from './dynamic_engine.js';
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -273,14 +277,20 @@
         };
 
         function openPanel(feature) {
-            const name = feature.properties.name;
-            currentFeatureId = feature.properties.code; // Unique territory code
+            const props = feature.properties;
+            currentFeatureId = props.code; // Unique territory code
             
-            document.getElementById('t-name').innerText = name;
+            document.getElementById('t-name').innerText = props.name;
             document.getElementById('t-code').innerText = currentFeatureId;
-            document.getElementById('t-state').innerText = feature.properties.state;
-            document.getElementById('t-pop').innerText = feature.properties.population.toLocaleString();
-            document.getElementById('t-zips').innerText = feature.properties.zips;
+            document.getElementById('t-state').innerText = props.state;
+            document.getElementById('t-pop').innerText = props.population.toLocaleString();
+            document.getElementById('t-region').innerText = props.regionType || 'Unknown';
+            document.getElementById('t-clinics-count').innerText = props.soldStationsCount || '0';
+            
+            const clinicsList = props.existingStations && props.existingStations.length > 0 
+                ? props.existingStations.join('<br/>') 
+                : '-';
+            document.getElementById('t-clinics-list').innerHTML = clinicsList;
             
             // Check status from our local cache map
             const status = window.territoryStatusMap[currentFeatureId] || "Available";
@@ -338,16 +348,35 @@
             }
         });
 
+        function zoneToFeature(zone) {
+            const coords = zone.polygon.map(pt => [pt[1], pt[0]]);
+            // ensure closed polygon for GeoJSON
+            if (coords[0][0] !== coords[coords.length-1][0] || coords[0][1] !== coords[coords.length-1][1]) {
+                coords.push([...coords[0]]);
+            }
+            return {
+                type: "Feature",
+                geometry: { type: "Polygon", coordinates: [coords] },
+                properties: {
+                    code: zone.id,
+                    name: zone.name,
+                    state: zone.state,
+                    population: zone.totalPopulation,
+                    zips: zone.zipCodes.length,
+                    regionType: zone.regionType,
+                    soldStationsCount: zone.soldStationsCount,
+                    existingStations: zone.existingStations,
+                    representativeZip: zone.representativeZip,
+                    baseColor: zone.color
+                }
+            };
+        }
+
         const colorPalette = [
-            '#1e3a8a', // blue-900
-            '#312e81', // indigo-900
-            '#4c1d95', // violet-900
-            '#083344', // cyan-900
-            '#115e59', // teal-900
-            '#3f3f46', // zinc-700
-            '#0f172a'  // slate-900
+            '#1e3a8a', '#312e81', '#4c1d95', '#083344', '#115e59', '#3f3f46', '#0f172a'
         ];
-        function getColorForFeature(code) {
+        function getColorForFeature(code, baseColor) {
+            if (baseColor) return baseColor;
             let hash = 0;
             for (let i = 0; i < code.length; i++) {
                 hash = code.charCodeAt(i) + ((hash << 5) - hash);
@@ -355,51 +384,52 @@
             return colorPalette[Math.abs(hash) % colorPalette.length];
         }
 
-        // Load the dynamically generated 334 Territories GeoJSON
-        fetch('/locations/territories.geojson')
-            .then(res => res.json())
-            .then(data => {
-                geojsonLayer = L.geoJSON(data, {
-                    style: function (feature) {
-                        const status = window.territoryStatusMap[feature.properties.code];
-                        if (status === "Assigned") {
-                            return { color: '#047857', weight: 1, fillColor: '#10b981', fillOpacity: 0.4 }; // emerald
-                        }
-                        const baseColor = getColorForFeature(feature.properties.code);
-                        return { color: '#ffffff', weight: 1, fillColor: baseColor, fillOpacity: 0.85 };
-                    },
-                    onEachFeature: function (feature, layer) {
-                        layer.bindTooltip(feature.properties.name, {
-                            permanent: false, 
-                            direction: "center",
-                            className: "zone-label"
-                        });
-                        layer.on({
-                            mouseover: function (e) {
-                                const l = e.target;
-                                const status = window.territoryStatusMap[feature.properties.code];
-                                const baseColor = getColorForFeature(feature.properties.code);
-                                l.setStyle({
-                                    weight: 2,
-                                    color: status === "Assigned" ? '#34d399' : '#22d3ee',
-                                    fillColor: status === "Assigned" ? '#10b981' : baseColor,
-                                    fillOpacity: 1.0
-                                });
-                                l.bringToFront();
-                            },
-                            mouseout: function (e) {
-                                geojsonLayer.resetStyle(e.target);
-                            },
-                            click: function (e) {
-                                openPanel(feature);
-                                map.fitBounds(e.target.getBounds());
-                            }
-                        });
-                    }
-                }).addTo(map);
-            });
+        // Load the dynamically generated CURATED_ZONES immediately
+        const initialData = {
+            type: "FeatureCollection",
+            features: CURATED_ZONES.map(zoneToFeature)
+        };
 
-        // Search Functionality
+        geojsonLayer = L.geoJSON(initialData, {
+            style: function (feature) {
+                const status = window.territoryStatusMap[feature.properties.code];
+                if (status === "Assigned") {
+                    return { color: '#047857', weight: 1, fillColor: '#10b981', fillOpacity: 0.4 }; // emerald
+                }
+                const baseColor = getColorForFeature(feature.properties.code, feature.properties.baseColor);
+                return { color: '#ffffff', weight: 1, fillColor: baseColor, fillOpacity: 0.85 };
+            },
+            onEachFeature: function (feature, layer) {
+                layer.bindTooltip(feature.properties.name, {
+                    permanent: false, 
+                    direction: "center",
+                    className: "zone-label"
+                });
+                layer.on({
+                    mouseover: function (e) {
+                        const l = e.target;
+                        const status = window.territoryStatusMap[feature.properties.code];
+                        const baseColor = getColorForFeature(feature.properties.code, feature.properties.baseColor);
+                        l.setStyle({
+                            weight: 2,
+                            color: status === "Assigned" ? '#34d399' : '#22d3ee',
+                            fillColor: status === "Assigned" ? '#10b981' : baseColor,
+                            fillOpacity: 1.0
+                        });
+                        l.bringToFront();
+                    },
+                    mouseout: function (e) {
+                        geojsonLayer.resetStyle(e.target);
+                    },
+                    click: function (e) {
+                        openPanel(feature);
+                        map.fitBounds(e.target.getBounds());
+                    }
+                });
+            }
+        }).addTo(map);
+
+        // Dynamic Search Functionality
         const searchInput = document.getElementById('search-input');
         searchInput.addEventListener('keypress', async function(e) {
             if (e.key === 'Enter') {
@@ -409,25 +439,39 @@
                 // Check if it's a 5-digit ZIP code
                 if (/^\d{5}$/.test(val)) {
                     const originalVal = this.value;
-                    this.value = "Searching ZIP...";
+                    this.value = "Generating Zone...";
                     try {
                         const res = await fetch(`https://api.zippopotam.us/us/${val}`);
                         if(!res.ok) throw new Error("Not Found");
                         const data = await res.json();
                         const lng = parseFloat(data.places[0].longitude);
                         const lat = parseFloat(data.places[0].latitude);
-                        const pt = turf.point([lng, lat]);
                         
-                        let found = false;
+                        // Use Dynamic Engine to generate territory polygon
+                        const zone = getZoneFromZip(val, lat, lng);
+                        if (!zone) throw new Error("Could not generate zone");
+                        
+                        const feature = zoneToFeature(zone);
+                        
+                        // Check if it already exists in the layer
+                        let foundLayer = null;
                         geojsonLayer.eachLayer(layer => {
-                            // Some Leaflet geoJSON geometries are MultiPolygon, turf handles it well
-                            if (turf.booleanPointInPolygon(pt, layer.feature)) {
-                                layer.fire('click');
-                                map.setView([lat, lng], 6);
-                                found = true;
-                            }
+                            if (layer.feature.properties.code === feature.properties.code) foundLayer = layer;
                         });
-                        if(!found) alert("ZIP code found but falls outside generated MVP territories.");
+                        
+                        if (!foundLayer) {
+                            // Add new dynamic zone to map
+                            geojsonLayer.addData(feature);
+                            // Find the newly added layer to interact with it
+                            geojsonLayer.eachLayer(layer => {
+                                if (layer.feature.properties.code === feature.properties.code) foundLayer = layer;
+                            });
+                        }
+                        
+                        if(foundLayer) {
+                            foundLayer.fire('click');
+                            map.setView([lat, lng], 6);
+                        }
                     } catch(err) {
                         alert("Invalid US ZIP Code");
                     }
