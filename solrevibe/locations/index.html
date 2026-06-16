@@ -14,6 +14,9 @@
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
+    <!-- Turf JS for Spatial Search -->
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    
     <!-- Custom CSS -->
     <style>
         body {
@@ -125,7 +128,7 @@
             
             <div class="mt-auto pt-6">
                 <div class="relative">
-                    <input type="text" placeholder="Search ZIP, City, or Code..." class="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 px-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition">
+                    <input id="search-input" type="text" placeholder="Search ZIP, State, or Code... (Press Enter)" class="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 px-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition">
                 </div>
             </div>
         </aside>
@@ -395,6 +398,60 @@
                     }
                 }).addTo(map);
             });
+
+        // Search Functionality
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('keypress', async function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.trim().toLowerCase();
+                if(!val) return;
+                
+                // Check if it's a 5-digit ZIP code
+                if (/^\d{5}$/.test(val)) {
+                    const originalVal = this.value;
+                    this.value = "Searching ZIP...";
+                    try {
+                        const res = await fetch(`https://api.zippopotam.us/us/${val}`);
+                        if(!res.ok) throw new Error("Not Found");
+                        const data = await res.json();
+                        const lng = parseFloat(data.places[0].longitude);
+                        const lat = parseFloat(data.places[0].latitude);
+                        const pt = turf.point([lng, lat]);
+                        
+                        let found = false;
+                        geojsonLayer.eachLayer(layer => {
+                            // Some Leaflet geoJSON geometries are MultiPolygon, turf handles it well
+                            if (turf.booleanPointInPolygon(pt, layer.feature)) {
+                                layer.fire('click');
+                                map.setView([lat, lng], 6);
+                                found = true;
+                            }
+                        });
+                        if(!found) alert("ZIP code found but falls outside generated MVP territories.");
+                    } catch(err) {
+                        alert("Invalid US ZIP Code");
+                    }
+                    this.value = originalVal;
+                } else {
+                    // Search by State, Code, or Name
+                    let found = false;
+                    geojsonLayer.eachLayer(layer => {
+                        const props = layer.feature.properties;
+                        if (
+                            props.name.toLowerCase().includes(val) || 
+                            props.code.toLowerCase().includes(val) || 
+                            props.state.toLowerCase().includes(val)
+                        ) {
+                            if(!found) { // Only zoom to the first match
+                                layer.fire('click');
+                                found = true;
+                            }
+                        }
+                    });
+                    if(!found) alert("No matching territory found.");
+                }
+            }
+        });
     </script>
 </body>
 </html>
