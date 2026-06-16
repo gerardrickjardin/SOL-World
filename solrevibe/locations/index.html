@@ -6,7 +6,42 @@
     <title>SOL REViBE Zone Builder</title>
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+        function populateCuratedHubs() {
+            const container = document.getElementById('curated-hubs-container');
+            if(!container) return;
+            container.innerHTML = CURATED_ZONES.map(zone => {
+                const status = window.territoryStatusMap ? window.territoryStatusMap[zone.id] : null;
+                const isAssigned = status === 'Assigned';
+                const soldCount = isAssigned ? 3 : (zone.soldStationsCount || 0);
+                
+                let badgeClass = 'text-emerald-400 border-emerald-900 bg-emerald-950/50';
+                let badgeText = '0/3 open';
+                if (soldCount > 0 && soldCount < 3) {
+                    badgeClass = 'text-amber-400 border-amber-900 bg-amber-950/50';
+                    badgeText = `${soldCount}/3 sold`;
+                } else if (soldCount === 3) {
+                    badgeClass = 'text-red-400 border-red-900 bg-red-950/50';
+                    badgeText = '3/3 sold';
+                }
+
+                return `
+                    <div onclick="triggerSearch('${zone.representativeZip}')" class="bg-[#0f172a] border border-[#1e293b] hover:border-cyan-500/50 rounded-xl p-4 cursor-pointer transition flex justify-between items-center group">
+                        <div>
+                            <p class="text-[10px] text-slate-500 font-mono mb-1">${zone.id}</p>
+                            <h4 class="text-sm font-bold text-slate-200 group-hover:text-cyan-400 transition">${zone.name.split(' & ')[0].split('Core')[0]}</h4>
+                            <p class="text-[10px] text-slate-500">${zone.state}</p>
+                        </div>
+                        <div class="border rounded-full px-3 py-1 text-xs font-bold ${badgeClass}">
+                            ${badgeText}
+                        </div>
+                    </div>
+                `;
+            }).slice(0, 6).join('');
+        }
+        setTimeout(populateCuratedHubs, 1000);
+
+    </script>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -15,7 +50,42 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <!-- Turf JS for Spatial Search -->
-    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js">
+        function populateCuratedHubs() {
+            const container = document.getElementById('curated-hubs-container');
+            if(!container) return;
+            container.innerHTML = CURATED_ZONES.map(zone => {
+                const status = window.territoryStatusMap ? window.territoryStatusMap[zone.id] : null;
+                const isAssigned = status === 'Assigned';
+                const soldCount = isAssigned ? 3 : (zone.soldStationsCount || 0);
+                
+                let badgeClass = 'text-emerald-400 border-emerald-900 bg-emerald-950/50';
+                let badgeText = '0/3 open';
+                if (soldCount > 0 && soldCount < 3) {
+                    badgeClass = 'text-amber-400 border-amber-900 bg-amber-950/50';
+                    badgeText = `${soldCount}/3 sold`;
+                } else if (soldCount === 3) {
+                    badgeClass = 'text-red-400 border-red-900 bg-red-950/50';
+                    badgeText = '3/3 sold';
+                }
+
+                return `
+                    <div onclick="triggerSearch('${zone.representativeZip}')" class="bg-[#0f172a] border border-[#1e293b] hover:border-cyan-500/50 rounded-xl p-4 cursor-pointer transition flex justify-between items-center group">
+                        <div>
+                            <p class="text-[10px] text-slate-500 font-mono mb-1">${zone.id}</p>
+                            <h4 class="text-sm font-bold text-slate-200 group-hover:text-cyan-400 transition">${zone.name.split(' & ')[0].split('Core')[0]}</h4>
+                            <p class="text-[10px] text-slate-500">${zone.state}</p>
+                        </div>
+                        <div class="border rounded-full px-3 py-1 text-xs font-bold ${badgeClass}">
+                            ${badgeText}
+                        </div>
+                    </div>
+                `;
+            }).slice(0, 6).join('');
+        }
+        setTimeout(populateCuratedHubs, 1000);
+
+    </script>
     
     <!-- Custom CSS -->
     <style>
@@ -58,148 +128,203 @@
         }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden">
 
-    <!-- Top Navigation -->
-    <nav class="glass-panel border-b border-slate-700 px-6 py-4 flex justify-between items-center z-50">
-        <div class="flex items-center space-x-4">
-            <div class="w-10 h-10 bg-cyan-400 rounded-full flex items-center justify-center text-slate-900 font-bold text-xl">S</div>
-            <div>
-                <h1 class="text-xl font-bold tracking-wider text-white">SOL REViBE <span class="text-cyan-400">ZONE BUILDER</span></h1>
-                <p class="text-xs text-slate-400">ENTERPRISE TERRITORY MANAGEMENT</p>
-            </div>
-        </div>
-        <div class="flex items-center space-x-6">
-            <button class="text-slate-300 hover:text-white transition">Dashboard</button>
-            <button class="text-slate-300 hover:text-white transition">Territories</button>
-            <button class="text-slate-300 hover:text-white transition">Settings</button>
-            <div class="h-8 w-8 rounded-full bg-slate-700 border border-slate-600"></div>
-        </div>
-    </nav>
-
-    <!-- Main Workspace -->
-    <div class="flex-1 flex overflow-hidden">
+<body class="bg-[#0b1329] text-slate-100 antialiased min-h-screen p-4 md:p-8 font-sans">
+    <div class="max-w-7xl mx-auto space-y-6">
         
-        <!-- Left Sidebar: Dashboard Metrics -->
-        <aside class="w-80 glass-panel border-r border-slate-700 p-6 flex flex-col overflow-y-auto z-40 shadow-2xl">
-            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">National Overview</h2>
+        <!-- HEADER / SEARCH SECTION -->
+        <div class="bg-[#131b2f] border border-[#1e293b] rounded-xl p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl font-bold tracking-tight text-white">U.S. Territory Search</h1>
+                    <span class="bg-teal-900/40 text-teal-400 border border-teal-500/50 rounded-full px-2 py-0.5 text-xs font-mono font-bold tracking-wide">PROTOTYPE v1.4</span>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="map.setView([39.8283, -98.5795], 4);" class="px-4 py-2 rounded-md bg-slate-800 hover:bg-slate-700 text-sm font-medium border border-slate-700 transition">↺ Reset Map</button>
+                </div>
+            </div>
+
+            <p class="text-slate-300 mb-4 text-sm">We group neighboring zip codes into high-value <span class="text-cyan-400">"Zone IDs"</span> of roughly <span class="text-white font-bold">1,000,000 population</span>. Look up any area to instantly visualize geographical coverage and determine eligibility for the exclusive <span class="text-white font-bold">First Mover Advantage</span>.</p>
+
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-6 mt-6">
+                <p class="text-sm font-bold text-white mb-3">Enter a 5-digit ZIP code to check territory availability for SOL REViBE:</p>
+                <div class="flex gap-4">
+                    <div class="relative flex-1">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 text-xl">⚲</span>
+                        <input type="text" id="search-input" placeholder="e.g. 80202 (Denver), 98101 (Seattle), 82001 (Wyoming)" class="w-full bg-[#050a16] border border-slate-700 rounded-lg pl-12 pr-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition font-mono">
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3 mt-4 text-sm">
+                    <span class="text-slate-500">Quick ZIP Jump:</span>
+                    <button onclick="triggerSearch('82001')" class="text-emerald-400 bg-emerald-950/30 border border-emerald-900 px-3 py-1 rounded hover:bg-emerald-900/50 transition font-mono">82001 (Wyoming)</button>
+                    <button onclick="triggerSearch('80202')" class="text-amber-400 bg-amber-950/30 border border-amber-900 px-3 py-1 rounded hover:bg-amber-900/50 transition font-mono">80202 (Denver)</button>
+                    <button onclick="triggerSearch('98101')" class="text-amber-400 bg-amber-950/30 border border-amber-900 px-3 py-1 rounded hover:bg-amber-900/50 transition font-mono">98101 (Seattle)</button>
+                    <button onclick="triggerSearch('10001')" class="text-red-400 bg-red-950/30 border border-red-900 px-3 py-1 rounded hover:bg-red-900/50 transition font-mono">10001 (New York)</button>
+                    <button onclick="triggerSearch('90001')" class="text-emerald-400 bg-emerald-950/30 border border-emerald-900 px-3 py-1 rounded hover:bg-emerald-900/50 transition font-mono">90001 (Los Angeles)</button>
+                </div>
+            </div>
+
+            <!-- DYNAMIC STATUS BANNER -->
+            <div id="status-banner" class="mt-6 border rounded-xl p-4 flex items-center justify-between hidden">
+                <div class="flex items-start gap-4">
+                    <div id="banner-icon" class="p-2 rounded-lg text-xl"></div>
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <h3 id="banner-title" class="text-lg font-bold uppercase text-white"></h3>
+                            <span id="banner-badge" class="text-xs font-bold px-2 py-0.5 rounded text-slate-900"></span>
+                        </div>
+                        <p id="banner-desc" class="text-sm mt-1"></p>
+                    </div>
+                </div>
+                <div class="text-right whitespace-nowrap pl-4">
+                    <span id="banner-side-badge" class="border px-3 py-1 rounded-md text-xs font-mono font-bold"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN TWO-COLUMN GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            <div class="space-y-4">
-                <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
-                    <p class="text-xs text-slate-400 mb-1">Total US Population Covered</p>
-                    <p class="text-2xl font-bold text-white">331.4M</p>
-                </div>
-                <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700 flex justify-between items-center">
+            <!-- LEFT COLUMN: ZONE INTELLIGENCE -->
+            <div class="lg:col-span-5 space-y-6">
+                <!-- Zone Identity Card -->
+                <div class="bg-[#131b2f] border border-[#1e293b] rounded-xl p-6 shadow-2xl relative overflow-hidden hidden" id="zone-details-card">
+                    <div class="absolute top-0 left-0 w-full h-1" id="card-top-border"></div>
+                    
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-cyan-400">⚲</span>
+                            <span id="t-code" class="font-mono font-bold tracking-wider text-sm"></span>
+                        </div>
+                        <span id="t-opportunity" class="text-xs font-bold tracking-wide px-2 py-1 rounded"></span>
+                    </div>
+
+                    <p id="t-state" class="text-cyan-500 text-xs font-bold uppercase tracking-widest mb-2"></p>
+                    <h2 id="t-name" class="text-2xl font-bold text-white leading-tight mb-2"></h2>
+                    <p class="text-sm text-slate-400 flex items-center gap-2 mb-6">
+                        <span class="text-slate-500">●</span> Boundary covers representative target ZIP <span id="t-rep-zip" class="font-bold text-white"></span>
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-4">
+                            <p class="text-xs text-slate-500 mb-1">Clustered Population</p>
+                            <p id="t-pop" class="text-2xl font-bold text-cyan-400"></p>
+                            <p class="text-[10px] text-slate-500 mt-1">~1 Million Milestone</p>
+                        </div>
+                        <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-4">
+                            <p class="text-xs text-slate-500 mb-1">Stations Contracted</p>
+                            <p class="text-2xl font-bold text-slate-300"><span id="t-clinics-count"></span> <span class="text-sm font-normal text-slate-500">/ 3 Max</span></p>
+                            <p class="text-[10px] text-slate-500 mt-1">Top-Tier Threshold</p>
+                        </div>
+                    </div>
+
+                    <!-- Zip Code Grid -->
+                    <div class="mb-6">
+                        <div class="flex justify-between text-xs font-bold mb-2">
+                            <span class="text-slate-400 flex items-center gap-2">▤ Clustered Zip-Code Network:</span>
+                            <span class="text-slate-500"><span id="t-zips-count"></span> linked zones</span>
+                        </div>
+                        <div id="t-zips-grid" class="bg-[#0a0f1c] border border-slate-800 rounded-lg p-3 grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-[120px] overflow-y-auto">
+                        </div>
+                    </div>
+
+                    <!-- Peers -->
                     <div>
-                        <p class="text-xs text-slate-400 mb-1">Total Territories</p>
-                        <p class="text-2xl font-bold text-white">334</p>
+                        <div class="text-xs font-bold text-slate-400 flex items-center gap-2 mb-2">⚑ Active Network Peers:</div>
+                        <div class="bg-[#0a0f1c] border border-slate-800 rounded-lg p-4" id="t-peers-container">
+                        </div>
                     </div>
-                    <div class="text-right">
-                        <p class="text-xs text-slate-400 mb-1">Avg Population</p>
-                        <p class="text-lg font-semibold text-cyan-400">1.0M</p>
+                </div>
+
+                <!-- Onboarding Card -->
+                <div class="bg-[#131b2f] border border-[#1e293b] rounded-xl p-6 shadow-2xl" id="onboarding-card">
+                    <h3 class="text-xs font-bold text-slate-400 tracking-widest uppercase mb-4">Representative Actions & Onboarding</h3>
+                    
+                    <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-4">
+                        <p class="text-xs text-slate-400 mb-3 flex items-center gap-2">ⓘ Reserve or check exclusive terms below:</p>
+                        
+                        <label class="block text-[10px] text-slate-500 uppercase font-bold mb-1">Recipient/Lead Partner Email:</label>
+                        <input id="f-email" type="email" placeholder="steve@soltheory.com" class="w-full bg-[#050a16] border border-slate-700 rounded p-2 text-sm text-white mb-3 focus:border-cyan-500 outline-none">
+                        
+                        <label class="block text-[10px] text-slate-500 uppercase font-bold mb-1">Proposed Brand Name / Hub Notes:</label>
+                        <textarea id="f-business" rows="2" placeholder="e.g. Apex Longevity Spa Denver, or general questions..." class="w-full bg-[#050a16] border border-slate-700 rounded p-2 text-sm text-white mb-4 focus:border-cyan-500 outline-none resize-none"></textarea>
+
+                        <button id="assign-btn" onclick="assignTerritory()" class="w-full bg-gradient-to-r from-cyan-500 to-indigo-500 hover:from-cyan-400 hover:to-indigo-400 text-white font-bold py-3 rounded-lg shadow-lg transition text-sm">Lock First Mover Claim Brief</button>
                     </div>
+                </div>
+
+                <!-- Protocols -->
+                <div class="bg-[#131b2f] border border-[#1e293b] rounded-xl p-6 shadow-2xl text-sm">
+                    <h3 class="text-xs font-bold text-slate-400 tracking-widest uppercase mb-4 flex items-center gap-2">ⓘ Protocols & Tiering Definition:</h3>
+                    <ul class="space-y-3 text-slate-400">
+                        <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">✓</span> <span><strong class="text-white">First Mover Advantage</strong> occurs when a zone is at 0/3. Releasing localized media buy credits to this claim instantly.</span></li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500 mt-0.5">✓</span> <span><strong class="text-white">Top-Tier Slots Availability</strong> ends when exactly three brands enter a 1-million cluster. Once capped, no new buyers qualify.</span></li>
+                        <li class="flex items-start gap-2"><span class="text-cyan-500 mt-0.5">ℹ</span> <span>Our database uses local postal adjacency algorithms to assemble metropolitan census counts.</span></li>
+                    </ul>
                 </div>
             </div>
 
-            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mt-8 mb-4">Territory Status</h2>
-            <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-3 h-3 rounded-full bg-slate-500"></div>
-                        <span class="text-sm text-slate-300">Available</span>
-                    </div>
-                    <span id="available-count" class="font-bold text-white">315</span>
+            <!-- RIGHT COLUMN: MAP & CARDS -->
+            <div class="lg:col-span-7 flex flex-col gap-6">
+                <!-- Map Container -->
+                <div class="bg-[#131b2f] border border-[#1e293b] rounded-xl p-2 shadow-2xl relative">
+                    <div id="map" class="w-full h-[450px] rounded-lg overflow-hidden bg-slate-900 border border-slate-800"></div>
                 </div>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-3 h-3 rounded-full bg-amber-400"></div>
-                        <span class="text-sm text-slate-300">Reserved</span>
+
+                <!-- Curated Hubs Grid -->
+                <div class="bg-[#131b2f] border border-[#1e293b] rounded-xl p-6 shadow-2xl flex-1">
+                    <h3 class="text-sm font-bold text-white tracking-widest uppercase mb-2 flex items-center gap-2"><span class="text-cyan-400">⚲</span> Core Curated Demonstration Hubs</h3>
+                    <p class="text-xs text-slate-400 mb-4">Select a pre-populated B2B metropolitan hub or vast wilderness frontier zone to inspect.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="curated-hubs-container">
                     </div>
-                    <span id="reserved-count" class="font-bold text-white">12</span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-3 h-3 rounded-full bg-cyan-400"></div>
-                        <span class="text-sm text-slate-300">Assigned</span>
-                    </div>
-                    <span id="assigned-count" class="font-bold text-white">3</span>
                 </div>
             </div>
-            
-            <div class="mt-auto pt-6">
-                <div class="relative">
-                    <input id="search-input" type="text" placeholder="Search ZIP, State, or Code... (Press Enter)" class="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 px-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition">
-                </div>
-            </div>
-        </aside>
+        </div>
 
-        <!-- Center Map Area -->
-        <main class="flex-1 p-4 relative z-10">
-            <div id="map" class="shadow-2xl"></div>
-            
-            <!-- Territory Details Overlay Panel (Hidden by default) -->
-            <div id="details-panel" class="absolute top-8 right-8 w-96 glass-panel rounded-xl shadow-2xl p-6 hidden flex-col border border-slate-600 transition-all z-[1000]">
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <span id="t-code" class="text-xs font-mono text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded">CO-001-A</span>
-                        <h2 id="t-name" class="text-2xl font-bold text-white mt-2">Denver Metro Zone A</h2>
-                    </div>
-                    <button onclick="closePanel()" class="text-slate-400 hover:text-white">&times;</button>
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4 mb-6 border-y border-slate-700 py-4">
-                    <div>
-                        <p class="text-xs text-slate-400 mb-1">Population</p>
-                        <p id="t-pop" class="font-semibold text-white">1,024,500</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 mb-1">State</p>
-                        <p id="t-state" class="font-semibold text-white">Colorado</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 mb-1">Region Type</p>
-                        <p id="t-region" class="font-semibold text-white">Metropolitan</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 mb-1">Status</p>
-                        <span id="t-status" class="text-xs font-bold text-slate-900 bg-slate-300 px-2 py-1 rounded inline-block">Available</span>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <p class="text-xs text-slate-400 mb-2">Market Analysis</p>
-                    <div class="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
-                        <p class="text-xs text-slate-400">Existing B2B Clinics in Zone: <span id="t-clinics-count" class="font-bold text-white">0</span></p>
-                        <p id="t-clinics-list" class="text-sm text-cyan-400 mt-1 italic">-</p>
-                    </div>
-                </div>
-
-                <button id="assign-btn" onclick="showAssignForm()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 rounded-lg transition shadow-[0_0_15px_rgba(34,211,238,0.4)] mt-4">
-                    Assign Territory
-                </button>
-                
-                <div id="assign-form" class="hidden flex-col space-y-3 mt-4 border-t border-slate-700 pt-4">
-                    <input id="f-business" type="text" placeholder="Business Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 px-3 text-sm text-white focus:border-cyan-400 focus:outline-none">
-                    <input id="f-owner" type="text" placeholder="Owner Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 px-3 text-sm text-white focus:border-cyan-400 focus:outline-none">
-                    <input id="f-email" type="email" placeholder="Email Address" class="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 px-3 text-sm text-white focus:border-cyan-400 focus:outline-none">
-                    <div class="flex space-x-2">
-                        <button onclick="cancelAssign()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 rounded-lg transition text-sm">Cancel</button>
-                        <button id="confirm-assign-btn" onclick="assignTerritory()" class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-2 rounded-lg transition text-sm shadow-[0_0_10px_rgba(34,211,238,0.4)]">Confirm</button>
-                    </div>
-                </div>
-
-                <div id="owner-info" class="hidden flex-col space-y-2 mt-4 border-t border-slate-700 pt-4">
-                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Owner Details</h3>
-                    <p class="text-sm text-white font-medium" id="o-business">-</p>
-                    <p class="text-xs text-slate-300" id="o-owner">-</p>
-                    <p class="text-xs text-cyan-400" id="o-email">-</p>
-                </div>
-            </div>
-        </main>
+        <footer class="text-center text-xs text-slate-600 pt-8 pb-12">
+            <p>© 2026 SOL REViBE Commercial Operations. All rights reserved.</p>
+            <p class="mt-1 max-w-2xl mx-auto">This workspace application is intended internally for SOL REViBE sales executives and prospective commercial partners to confirm licensing zones. Final regulatory boundaries are subject to state authority filings.</p>
+        </footer>
     </div>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+        function populateCuratedHubs() {
+            const container = document.getElementById('curated-hubs-container');
+            if(!container) return;
+            container.innerHTML = CURATED_ZONES.map(zone => {
+                const status = window.territoryStatusMap ? window.territoryStatusMap[zone.id] : null;
+                const isAssigned = status === 'Assigned';
+                const soldCount = isAssigned ? 3 : (zone.soldStationsCount || 0);
+                
+                let badgeClass = 'text-emerald-400 border-emerald-900 bg-emerald-950/50';
+                let badgeText = '0/3 open';
+                if (soldCount > 0 && soldCount < 3) {
+                    badgeClass = 'text-amber-400 border-amber-900 bg-amber-950/50';
+                    badgeText = `${soldCount}/3 sold`;
+                } else if (soldCount === 3) {
+                    badgeClass = 'text-red-400 border-red-900 bg-red-950/50';
+                    badgeText = '3/3 sold';
+                }
+
+                return `
+                    <div onclick="triggerSearch('${zone.representativeZip}')" class="bg-[#0f172a] border border-[#1e293b] hover:border-cyan-500/50 rounded-xl p-4 cursor-pointer transition flex justify-between items-center group">
+                        <div>
+                            <p class="text-[10px] text-slate-500 font-mono mb-1">${zone.id}</p>
+                            <h4 class="text-sm font-bold text-slate-200 group-hover:text-cyan-400 transition">${zone.name.split(' & ')[0].split('Core')[0]}</h4>
+                            <p class="text-[10px] text-slate-500">${zone.state}</p>
+                        </div>
+                        <div class="border rounded-full px-3 py-1 text-xs font-bold ${badgeClass}">
+                            ${badgeText}
+                        </div>
+                    </div>
+                `;
+            }).slice(0, 6).join('');
+        }
+        setTimeout(populateCuratedHubs, 1000);
+
+    </script>
     <script type="module">
         // Dynamic Territory Generation Engine
 
@@ -595,47 +720,93 @@ function getZoneFromZip(userInputZip, lat = null, lng = null) {
             }
         };
 
+        
         function openPanel(feature) {
+            currentSelectedZoneId = feature.properties.code;
             const props = feature.properties;
-            currentFeatureId = props.code; // Unique territory code
-            
+            const status = window.territoryStatusMap[props.code] || 'Available';
+            const isAssigned = status === 'Assigned';
+            const soldCount = isAssigned ? 3 : (props.soldStationsCount || 0);
+
+            // Show card
+            document.getElementById('zone-details-card').classList.remove('hidden');
+
             document.getElementById('t-name').innerText = props.name;
-            document.getElementById('t-code').innerText = currentFeatureId;
-            document.getElementById('t-state').innerText = props.state;
-            document.getElementById('t-pop').innerText = props.population.toLocaleString();
-            document.getElementById('t-region').innerText = props.regionType || 'Unknown';
-            document.getElementById('t-clinics-count').innerText = props.soldStationsCount || '0';
+            document.getElementById('t-code').innerText = props.code;
+            document.getElementById('t-state').innerText = props.state || 'Unknown Region';
+            document.getElementById('t-rep-zip').innerText = props.representativeZip || props.zipCodes[0];
+            document.getElementById('t-pop').innerText = (props.totalPopulation || 1000000).toLocaleString();
             
-            const clinicsList = props.existingStations && props.existingStations.length > 0 
-                ? props.existingStations.join('<br/>') 
-                : '-';
-            document.getElementById('t-clinics-list').innerHTML = clinicsList;
-            
-            // Check status from our local cache map
-            const status = window.territoryStatusMap[currentFeatureId] || "Available";
-            const data = window.territoryDataMap[currentFeatureId] || {};
-            const statusEl = document.getElementById('t-status');
-            statusEl.innerText = status;
-            
-            // Reset UI
-            document.getElementById('assign-form').style.display = 'none';
-            document.getElementById('assign-btn').style.display = 'none';
-            document.getElementById('owner-info').style.display = 'none';
-            
-            if(status === "Assigned") {
-                statusEl.className = "text-xs font-bold text-slate-900 bg-emerald-400 px-2 py-1 rounded inline-block";
-                document.getElementById('owner-info').style.display = 'flex';
-                document.getElementById('o-business').innerText = data.businessName || "Unknown Business";
-                document.getElementById('o-owner').innerText = data.ownerName || "Unknown Owner";
-                document.getElementById('o-email').innerText = data.email || "No Email";
+            document.getElementById('t-clinics-count').innerText = soldCount;
+            if (soldCount === 0) {
+                document.getElementById('t-clinics-count').className = 'text-emerald-400';
+                document.getElementById('card-top-border').className = 'absolute top-0 left-0 w-full h-1 bg-emerald-500';
+                document.getElementById('t-opportunity').innerText = '100% OPEN OPPORTUNITY';
+                document.getElementById('t-opportunity').className = 'text-[10px] font-bold tracking-wide bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded uppercase';
+            } else if (soldCount < 3) {
+                document.getElementById('t-clinics-count').className = 'text-amber-400';
+                document.getElementById('card-top-border').className = 'absolute top-0 left-0 w-full h-1 bg-amber-500';
+                document.getElementById('t-opportunity').innerText = 'PARTIAL AVAILABILITY';
+                document.getElementById('t-opportunity').className = 'text-[10px] font-bold tracking-wide bg-amber-500/20 text-amber-400 px-2 py-1 rounded uppercase';
             } else {
-                statusEl.className = "text-xs font-bold text-slate-900 bg-slate-300 px-2 py-1 rounded inline-block";
-                document.getElementById('assign-btn').style.display = 'block';
-                document.getElementById('assign-btn').innerText = "Assign Territory";
+                document.getElementById('t-clinics-count').className = 'text-red-400';
+                document.getElementById('card-top-border').className = 'absolute top-0 left-0 w-full h-1 bg-red-500';
+                document.getElementById('t-opportunity').innerText = 'MARKET LOCKED';
+                document.getElementById('t-opportunity').className = 'text-[10px] font-bold tracking-wide bg-red-500/20 text-red-400 px-2 py-1 rounded uppercase';
             }
-            
-            document.getElementById('details-panel').style.display = 'flex';
+
+            document.getElementById('t-zips-count').innerText = props.zipCodes.length;
+            const zipsGrid = document.getElementById('t-zips-grid');
+            zipsGrid.innerHTML = props.zipCodes.map(z => `<div class="bg-[#131b2f] border border-slate-700 text-slate-300 text-xs py-1 text-center rounded">${z}</div>`).join('');
+
+            const peersContainer = document.getElementById('t-peers-container');
+            if (props.existingStations && props.existingStations.length > 0 && !isAssigned) {
+                peersContainer.innerHTML = `<ul class="list-disc pl-4 text-sm text-slate-300 space-y-1">` + 
+                    props.existingStations.map(s => `<li>${s}</li>`).join('') + `</ul>`;
+            } else if (isAssigned || soldCount === 3) {
+                peersContainer.innerHTML = `<p class="text-sm text-red-400">Territory fully claimed by master licensees.</p>`;
+            } else {
+                peersContainer.innerHTML = `<p class="text-sm text-emerald-400">No competing SOL REViBE presence currently recorded in this zone. You hold absolute premium field monopoly.</p>`;
+            }
+
+            const banner = document.getElementById('status-banner');
+            banner.classList.remove('hidden');
+            if (soldCount === 0) {
+                banner.className = 'mt-6 bg-emerald-950/30 border border-emerald-500/50 rounded-xl p-4 flex items-center justify-between';
+                document.getElementById('banner-icon').className = 'bg-emerald-500/20 text-emerald-400 p-2 rounded-lg text-xl';
+                document.getElementById('banner-icon').innerText = '✨';
+                document.getElementById('banner-title').innerText = '🔥 FIRST MOVER ADVANTAGE AVAILABLE!';
+                document.getElementById('banner-title').className = 'text-lg font-bold uppercase text-emerald-400';
+                document.getElementById('banner-badge').innerText = 'UNCLAIMED ZONE';
+                document.getElementById('banner-badge').className = 'bg-emerald-500 text-slate-900 text-xs font-bold px-2 py-0.5 rounded';
+                document.getElementById('banner-desc').innerHTML = `You will be the absolute first business in this 1-Million population market to feature SOL REViBE. <span class="font-bold text-white">(3 of 3 top-tier slots open)</span>.`;
+                document.getElementById('banner-side-badge').innerText = 'ZONE STATUS: UNTOUCHED';
+                document.getElementById('banner-side-badge').className = 'border border-emerald-500/50 text-emerald-400 px-3 py-1 rounded-md text-xs font-mono font-bold';
+            } else if (soldCount < 3) {
+                banner.className = 'mt-6 bg-amber-950/30 border border-amber-500/50 rounded-xl p-4 flex items-center justify-between';
+                document.getElementById('banner-icon').className = 'bg-amber-500/20 text-amber-400 p-2 rounded-lg text-xl';
+                document.getElementById('banner-icon').innerText = '⚠️';
+                document.getElementById('banner-title').innerText = 'LIMITED SLOTS REMAINING';
+                document.getElementById('banner-title').className = 'text-lg font-bold uppercase text-amber-400';
+                document.getElementById('banner-badge').innerText = 'PARTIAL ZONE';
+                document.getElementById('banner-badge').className = 'bg-amber-500 text-slate-900 text-xs font-bold px-2 py-0.5 rounded';
+                document.getElementById('banner-desc').innerHTML = `There is already an established presence in this network. <span class="font-bold text-white">(${3 - soldCount} of 3 top-tier slots open)</span>. First mover advantage is gone.`;
+                document.getElementById('banner-side-badge').innerText = `ZONE STATUS: ${soldCount}/3 CLAIMED`;
+                document.getElementById('banner-side-badge').className = 'border border-amber-500/50 text-amber-400 px-3 py-1 rounded-md text-xs font-mono font-bold';
+            } else {
+                banner.className = 'mt-6 bg-red-950/30 border border-red-500/50 rounded-xl p-4 flex items-center justify-between';
+                document.getElementById('banner-icon').className = 'bg-red-500/20 text-red-400 p-2 rounded-lg text-xl';
+                document.getElementById('banner-icon').innerText = '🔒';
+                document.getElementById('banner-title').innerText = 'TERRITORY COMPLETELY LOCKED';
+                document.getElementById('banner-title').className = 'text-lg font-bold uppercase text-red-400';
+                document.getElementById('banner-badge').innerText = 'MAX CAPACITY';
+                document.getElementById('banner-badge').className = 'bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded';
+                document.getElementById('banner-desc').innerHTML = `This territory has reached its maximum density limit. <span class="font-bold text-white">(0 of 3 top-tier slots open)</span>. No new licenses will be issued for this zone.`;
+                document.getElementById('banner-side-badge').innerText = 'ZONE STATUS: CLOSED';
+                document.getElementById('banner-side-badge').className = 'border border-red-500/50 text-red-400 px-3 py-1 rounded-md text-xs font-mono font-bold';
+            }
         }
+
 
         // Initialize Map
         const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([39.8283, -98.5795], 4);
@@ -659,6 +830,7 @@ function getZoneFromZip(userInputZip, lat = null, lng = null) {
             document.getElementById('assigned-count').innerText = assignedCount;
             document.getElementById('available-count').innerText = 315 - assignedCount;
 
+            populateCuratedHubs();
             // Redraw styles if layer exists
             if (geojsonLayer) {
                 geojsonLayer.eachLayer(layer => {
@@ -748,34 +920,7 @@ function getZoneFromZip(userInputZip, lat = null, lng = null) {
         }).addTo(map);
 
         // Dynamic Search Functionality
-        const searchInput = document.getElementById('search-input');
-        searchInput.addEventListener('keypress', async function(e) {
-            if (e.key === 'Enter') {
-                const val = this.value.trim().toLowerCase();
-                if(!val) return;
-                
-                // Check if it's a 5-digit ZIP code
-                if (/^\d{5}$/.test(val)) {
-                    const originalVal = this.value;
-                    this.value = "Generating Zone...";
-                    try {
-                        const res = await fetch(`https://api.zippopotam.us/us/${val}`);
-                        if(!res.ok) throw new Error("Not Found");
-                        const data = await res.json();
-                        const lng = parseFloat(data.places[0].longitude);
-                        const lat = parseFloat(data.places[0].latitude);
-                        
-                        // Use Dynamic Engine to generate territory polygon
-                        const zone = getZoneFromZip(val, lat, lng);
-                        if (!zone) throw new Error("Could not generate zone");
-                        
-                        const feature = zoneToFeature(zone);
-                        
-                        // Check if it already exists in the layer
-                        let foundLayer = null;
-                        geojsonLayer.eachLayer(layer => {
-                            if (layer.feature.properties.code === feature.properties.code) foundLayer = layer;
-                        });
+        
                         
                         if (!foundLayer) {
                             // Add new dynamic zone to map
@@ -814,6 +959,41 @@ function getZoneFromZip(userInputZip, lat = null, lng = null) {
                 }
             }
         });
+    
+        function populateCuratedHubs() {
+            const container = document.getElementById('curated-hubs-container');
+            if(!container) return;
+            container.innerHTML = CURATED_ZONES.map(zone => {
+                const status = window.territoryStatusMap ? window.territoryStatusMap[zone.id] : null;
+                const isAssigned = status === 'Assigned';
+                const soldCount = isAssigned ? 3 : (zone.soldStationsCount || 0);
+                
+                let badgeClass = 'text-emerald-400 border-emerald-900 bg-emerald-950/50';
+                let badgeText = '0/3 open';
+                if (soldCount > 0 && soldCount < 3) {
+                    badgeClass = 'text-amber-400 border-amber-900 bg-amber-950/50';
+                    badgeText = `${soldCount}/3 sold`;
+                } else if (soldCount === 3) {
+                    badgeClass = 'text-red-400 border-red-900 bg-red-950/50';
+                    badgeText = '3/3 sold';
+                }
+
+                return `
+                    <div onclick="triggerSearch('${zone.representativeZip}')" class="bg-[#0f172a] border border-[#1e293b] hover:border-cyan-500/50 rounded-xl p-4 cursor-pointer transition flex justify-between items-center group">
+                        <div>
+                            <p class="text-[10px] text-slate-500 font-mono mb-1">${zone.id}</p>
+                            <h4 class="text-sm font-bold text-slate-200 group-hover:text-cyan-400 transition">${zone.name.split(' & ')[0].split('Core')[0]}</h4>
+                            <p class="text-[10px] text-slate-500">${zone.state}</p>
+                        </div>
+                        <div class="border rounded-full px-3 py-1 text-xs font-bold ${badgeClass}">
+                            ${badgeText}
+                        </div>
+                    </div>
+                `;
+            }).slice(0, 6).join('');
+        }
+        setTimeout(populateCuratedHubs, 1000);
+
     </script>
 </body>
 </html>
