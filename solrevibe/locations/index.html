@@ -335,6 +335,23 @@
             }
         });
 
+        const colorPalette = [
+            '#1e3a8a', // blue-900
+            '#312e81', // indigo-900
+            '#4c1d95', // violet-900
+            '#083344', // cyan-900
+            '#115e59', // teal-900
+            '#3f3f46', // zinc-700
+            '#0f172a'  // slate-900
+        ];
+        function getColorForFeature(code) {
+            let hash = 0;
+            for (let i = 0; i < code.length; i++) {
+                hash = code.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return colorPalette[Math.abs(hash) % colorPalette.length];
+        }
+
         // Load the dynamically generated 334 Territories GeoJSON
         fetch('/locations/territories.geojson')
             .then(res => res.json())
@@ -345,11 +362,12 @@
                         if (status === "Assigned") {
                             return { color: '#047857', weight: 1, fillColor: '#10b981', fillOpacity: 0.4 }; // emerald
                         }
-                        return { color: '#334155', weight: 1, fillColor: '#0f172a', fillOpacity: 0.8 }; // slate
+                        const baseColor = getColorForFeature(feature.properties.code);
+                        return { color: '#ffffff', weight: 1, fillColor: baseColor, fillOpacity: 0.85 };
                     },
                     onEachFeature: function (feature, layer) {
                         layer.bindTooltip(feature.properties.name, {
-                            permanent: true, 
+                            permanent: false, 
                             direction: "center",
                             className: "zone-label"
                         });
@@ -357,11 +375,12 @@
                             mouseover: function (e) {
                                 const l = e.target;
                                 const status = window.territoryStatusMap[feature.properties.code];
+                                const baseColor = getColorForFeature(feature.properties.code);
                                 l.setStyle({
                                     weight: 2,
                                     color: status === "Assigned" ? '#34d399' : '#22d3ee',
-                                    fillColor: status === "Assigned" ? '#10b981' : '#1e293b',
-                                    fillOpacity: 0.9
+                                    fillColor: status === "Assigned" ? '#10b981' : baseColor,
+                                    fillOpacity: 1.0
                                 });
                                 l.bringToFront();
                             },
