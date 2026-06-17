@@ -149,7 +149,7 @@
         /* Territory Showcase Map Card Styles */
         .territory-map-container {
             width: 100%;
-            height: 140px;
+            height: 260px;
             margin-top: 24px;
             margin-bottom: 24px;
             border-radius: 18px;
@@ -305,61 +305,150 @@
         }
 
         /* Pulsating Hotspots on Map Card */
-        .map-hotspot {
+        .hotspot-inner {
             position: absolute;
-            width: 12px;
-            height: 12px;
+            top: 0;
+            left: 0;
+            width: 28px;
+            height: 28px;
+            background: transparent;
             border-radius: 50%;
-            pointer-events: none;
-            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10;
+            cursor: pointer;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
-        .map-hotspot.green {
-            background-color: #10B981;
-            box-shadow: 0 0 8px #10B981;
-        }
-        .map-hotspot.purple {
-            background-color: #8B5CF6;
-            box-shadow: 0 0 8px #8B5CF6;
-        }
-        .map-hotspot.blue {
-            background-color: #3B82F6;
-            box-shadow: 0 0 8px #3B82F6;
+        .hotspot-inner:hover {
+            transform: scale(1.2);
         }
 
-        .map-hotspot::after {
-            content: '';
-            position: absolute;
-            top: -6px;
-            left: -6px;
+        .hotspot-inner.expanded {
+            background: white;
+            border-radius: 16px;
+            padding: 14px 18px;
+            width: 280px;
+            height: auto;
+            z-index: 2000;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, .18);
+            transform: translateY(-4px);
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 12px;
+            cursor: default;
+            overflow: visible;
+        }
+
+        .hotspot-inner.expanded:hover {
+            transform: translateY(-4px);
+        }
+
+        .hotspot-dot {
             width: 24px;
             height: 24px;
             border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            flex-shrink: 0;
             box-sizing: border-box;
-            opacity: 0.8;
-            animation: hotspotPulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            transition: all 0.3s ease;
         }
 
-        .map-hotspot.green::after {
-            border: 2px solid #10B981;
-        }
-        .map-hotspot.purple::after {
-            border: 2px solid #8B5CF6;
-        }
-        .map-hotspot.blue::after {
-            border: 2px solid #3B82F6;
+        /* Pulsating animations and dot colors */
+        .purple .hotspot-dot {
+            background: #b44cff;
+            box-shadow: 0 0 0 6px rgba(180, 76, 255, .25), 0 0 0 12px rgba(180, 76, 255, .1);
+            animation: dotPulse 2s ease-in-out infinite;
         }
 
-        @keyframes hotspotPulse {
-            0% {
-                transform: scale(0.5);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1.8);
-                opacity: 0;
-            }
+        .green .hotspot-dot {
+            background: #32d583;
+            box-shadow: 0 0 0 6px rgba(50, 213, 131, .25), 0 0 0 12px rgba(50, 213, 131, .1);
+            animation: dotPulseGreen 2s ease-in-out infinite;
         }
+
+        .blue .hotspot-dot {
+            background: #5b8dff;
+            box-shadow: 0 0 0 6px rgba(91, 141, 255, .25), 0 0 0 12px rgba(91, 141, 255, .1);
+            animation: dotPulseBlue 2s ease-in-out infinite;
+        }
+
+        .orange .hotspot-dot {
+            background: #ff9d4d;
+            box-shadow: 0 0 0 6px rgba(255, 157, 77, .25), 0 0 0 12px rgba(255, 157, 77, .1);
+            animation: dotPulseOrange 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0% { box-shadow: 0 0 0 0 rgba(180, 76, 255, .4); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(180, 76, 255, .15), 0 0 0 20px rgba(180, 76, 255, .05); transform: scale(1.15); }
+            100% { box-shadow: 0 0 0 0 rgba(180, 76, 255, .4); transform: scale(1); }
+        }
+
+        @keyframes dotPulseGreen {
+            0% { box-shadow: 0 0 0 0 rgba(50, 213, 131, .4); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(50, 213, 131, .15), 0 0 0 20px rgba(50, 213, 131, .05); transform: scale(1.15); }
+            100% { box-shadow: 0 0 0 0 rgba(50, 213, 131, .4); transform: scale(1); }
+        }
+
+        @keyframes dotPulseBlue {
+            0% { box-shadow: 0 0 0 0 rgba(91, 141, 255, .4); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(91, 141, 255, .15), 0 0 0 20px rgba(91, 141, 255, .05); transform: scale(1.15); }
+            100% { box-shadow: 0 0 0 0 rgba(91, 141, 255, .4); transform: scale(1); }
+        }
+
+        @keyframes dotPulseOrange {
+            0% { box-shadow: 0 0 0 0 rgba(255, 157, 77, .4); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 157, 77, .15), 0 0 0 20px rgba(255, 157, 77, .05); transform: scale(1.15); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 157, 77, .4); transform: scale(1); }
+        }
+
+        /* Card details structure */
+        .hotspot-details {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            font-family: 'Inter', sans-serif;
+            text-align: left;
+            flex-grow: 1;
+            box-sizing: border-box;
+        }
+
+        .hotspot-inner.expanded .hotspot-details {
+            display: flex;
+        }
+
+        .hotspot-details strong {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .hotspot-address {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .hotspot-status {
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 4px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 6px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .green-text { color: #32d583; }
+        .purple-text { color: #b44cff; }
+        .blue-text { color: #5b8dff; }
+        .orange-text { color: #ff9d4d; }
 
         .gate-form {
             display: flex;
@@ -572,19 +661,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize mini map centered on USA center
+            // Initialize mini map centered on USA center, making it fully interactive
             const miniMap = L.map('mini-map', {
                 center: [37.8, -96.0],
                 zoom: 3.5,
                 zoomSnap: 0.5,
-                zoomControl: false,
+                zoomControl: true,
                 attributionControl: false,
-                dragging: false,
-                scrollWheelZoom: false,
-                doubleClickZoom: false,
-                touchZoom: false,
-                boxZoom: false,
-                keyboard: false
+                dragging: true,
+                scrollWheelZoom: false, // Prevents intercepting page scroll, highly recommended for embedded cards
+                doubleClickZoom: true,
+                touchZoom: true,
+                boxZoom: true,
+                keyboard: true
             });
 
             // Add CartoDB Positron tile layer
@@ -593,28 +682,107 @@
                 minZoom: 3
             }).addTo(miniMap);
 
-            // Define hotspots (stations) coordinates representing the live locations
+            // Define hotspots (stations) coordinates representing the live locations with detailed info
             const hotspots = [
-                { lat: 30.2672, lng: -97.7431, color: 'green' },   // Austin
-                { lat: 40.7128, lng: -74.0060, color: 'purple' },  // New York
-                { lat: 34.0522, lng: -118.2437, color: 'purple' }, // Los Angeles
-                { lat: 25.7617, lng: -80.1918, color: 'green' },   // Miami
-                { lat: 41.8781, lng: -87.6298, color: 'purple' },  // Chicago
-                { lat: 47.6062, lng: -122.3321, color: 'blue' },   // Seattle
-                { lat: 39.7392, lng: -104.9903, color: 'purple' }  // Denver
+                { 
+                    lat: 30.2672, lng: -97.7431, color: 'green',
+                    name: 'SOL REViBE Flagship',
+                    address: '100 SOL Plaza, Austin, TX',
+                    status: 'Launching Soon',
+                    textClass: 'green-text'
+                },
+                { 
+                    lat: 40.7128, lng: -74.0060, color: 'purple',
+                    name: 'SOL REViBE Manhattan',
+                    address: '45 Rockefeller Plaza, New York, NY',
+                    status: 'Priority Market',
+                    textClass: 'purple-text'
+                },
+                { 
+                    lat: 34.0522, lng: -118.2437, color: 'purple',
+                    name: 'SOL REViBE City of Angels',
+                    address: '500 Sunset Blvd, Los Angeles, CA',
+                    status: 'Priority Market',
+                    textClass: 'purple-text'
+                },
+                { 
+                    lat: 25.7617, lng: -80.1918, color: 'green',
+                    name: 'SOL REViBE Ocean Drive',
+                    address: '1100 Collins Ave, Miami, FL',
+                    status: 'Launching Soon',
+                    textClass: 'green-text'
+                },
+                { 
+                    lat: 41.8781, lng: -87.6298, color: 'purple',
+                    name: 'SOL REViBE Lakefront',
+                    address: '321 Recharge Dr, Chicago, IL',
+                    status: 'Priority Market',
+                    textClass: 'purple-text'
+                },
+                { 
+                    lat: 47.6062, lng: -122.3321, color: 'blue',
+                    name: 'SOL REViBE Pacific',
+                    address: '1200 Wellness Way, Seattle, WA',
+                    status: 'Priority Market',
+                    textClass: 'blue-text'
+                },
+                { 
+                    lat: 39.7392, lng: -104.9903, color: 'purple',
+                    name: 'SOL REViBE Mile High',
+                    address: '789 Altitude Ave, Denver, CO',
+                    status: 'Priority Market',
+                    textClass: 'purple-text'
+                }
             ];
 
-            // Render hotspots as Leaflet markers
+            // Render hotspots as Leaflet markers with click expand behavior
             hotspots.forEach(function(spot) {
-                const markerHtml = `<div class="map-hotspot ${spot.color}" style="top: 0; left: 0;"></div>`;
+                const markerHtml = `
+                    <div class="hotspot-inner ${spot.color}">
+                        <span class="hotspot-dot"></span>
+                        <div class="hotspot-details">
+                            <strong>${spot.name}</strong>
+                            <span class="hotspot-address">${spot.address}</span>
+                            <span class="hotspot-status ${spot.textClass}">● ${spot.status}</span>
+                        </div>
+                    </div>
+                `;
+
                 const customIcon = L.divIcon({
                     className: 'hotspot-marker',
                     html: markerHtml,
-                    iconSize: [12, 12],
-                    iconAnchor: [6, 6]
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 14]
                 });
-                L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(miniMap);
+
+                const marker = L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(miniMap);
+
+                // Setup marker click event to toggle popup details
+                marker.on('click', function(e) {
+                    const element = marker.getElement().querySelector('.hotspot-inner');
+                    
+                    if (element.classList.contains('expanded')) {
+                        element.classList.remove('expanded');
+                    } else {
+                        closeAllMarkers();
+                        element.classList.add('expanded');
+                        // Center map on marker
+                        miniMap.setView([spot.lat, spot.lng], miniMap.getZoom(), { animate: true });
+                    }
+                    L.DomEvent.stopPropagation(e);
+                });
             });
+
+            // Close all popups when the map itself is clicked
+            miniMap.on('click', function() {
+                closeAllMarkers();
+            });
+
+            function closeAllMarkers() {
+                document.querySelectorAll('.hotspot-inner.expanded').forEach(function(el) {
+                    el.classList.remove('expanded');
+                });
+            }
         });
 
         document.getElementById('leadForm').addEventListener('submit', async function (e) {
