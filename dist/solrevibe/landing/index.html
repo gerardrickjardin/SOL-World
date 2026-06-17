@@ -757,8 +757,11 @@
                 const mapSize = miniMap.getSize();
                 // We want the Denver marker to be 140px LEFT of center, and 50px ABOVE center.
                 // Since the map is currently centered on Denver, Denver is at (mapSize.x/2, mapSize.y/2).
-                // To push Denver 140px LEFT and 50px UP, we must pan the map 140px RIGHT and 50px DOWN.
-                const offsetPoint = L.point(mapSize.x / 2 + 140, mapSize.y / 2 + 50);
+                // Adjusting based on exact layout rendering offsets: 
+                // Popup was 86px too far right and 21px too far down.
+                // Original offsets were +140 and +50.
+                // We add the error margins to perfectly center it: 140 + 86 = 226, and 50 + 21 = 71.
+                const offsetPoint = L.point(mapSize.x / 2 + 226, mapSize.y / 2 + 71);
                 const perfectCenterLatLng = miniMap.containerPointToLatLng(offsetPoint);
                 miniMap.setView(perfectCenterLatLng, miniMap.getZoom(), { animate: false });
             });
