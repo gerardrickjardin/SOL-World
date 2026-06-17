@@ -1,0 +1,5 @@
+# OS files
+.DS_Store
+
+# Large asset files exceeding GitHub 100MB limit
+*SOL GaMES Hands.png

@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOL REViBE | Waitlist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #2b3b4a;
+            /* Dark blue-grey background matching screenshot */
+            color: #ffffff;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box;
+        }
+
+        .gate-container {
+            width: 96%;
+            max-width: 2500px;
+            padding: 2rem 1rem;
+            box-sizing: border-box;
+            margin: auto;
+            /* Vertically center when space permits, start from top if overflowing */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .headline {
+            text-align: center;
+            font-weight: 800;
+            font-size: clamp(20px, 2.4vw, 45px);
+            line-height: 1.25;
+            letter-spacing: 0.02em;
+            margin-bottom: 2rem;
+            max-width: 1760px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .highlight {
+            color: #55b6ab;
+            /* Teal/cyan color matching screenshot */
+        }
+
+        .split-box-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1760px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        .split-box-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            background: linear-gradient(135deg, #55b6ab, #60a5fa, #b44cff); /* pastel teal, blue, purple */
+            border-radius: 20px;
+            z-index: -1;
+            filter: blur(35px); /* 20-40px blur radius */
+            opacity: 0.4; /* subtle, elegant outer glow */
+            pointer-events: none;
+        }
+
+        .split-box {
+            position: relative;
+            width: 100%;
+            max-width: 1760px;
+            margin: 0 auto;
+            min-height: 650px;
+            /* Ensure there is always enough room for form */
+            height: 68vh;
+            max-height: 850px;
+            background: linear-gradient(135deg, #55b6ab, #60a5fa, #b44cff); /* permanent static gradient border */
+            border-radius: 20px;
+            overflow: hidden;
+            padding: 2px; /* 2px border width */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        /* Rotating single subtle highlight on top of permanent border */
+        .split-box::before {
+            content: '';
+            position: absolute;
+            width: 180%;
+            height: 180%;
+            top: -40%;
+            left: -40%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 60%,
+                rgba(255, 255, 255, 0.05) 75%,
+                rgba(255, 255, 255, 0.9) 90%,
+                rgba(255, 255, 255, 0.05) 95%,
+                transparent 100%
+            );
+            animation: borderRotate 6s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes borderRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .split-box-inner {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #427588 0%, #2f5669 100%);
+            border-radius: 18px; /* 20px - 2px border */
+            display: flex;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .left-panel {
+            height: 100%;
+            aspect-ratio: 1597 / 1198;
+            /* Maintain exact GIF aspect ratio */
+            position: relative;
+            background-color: #cde2ef;
+            flex: 0 0 auto;
+            /* Let aspect-ratio determine width from the stretched height */
+        }
+
+        .left-panel img,
+        .left-panel video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 3.5rem 2.5rem 3.5rem 5.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            /* Center the form content wrapper horizontally */
+            box-sizing: border-box;
+            overflow: hidden;
+            /* Prevent cutting if screen is extremely small */
+        }
+
+        .right-panel-content {
+            width: 100%;
+            max-width: 680px;
+            /* Limit input width to maintain premium spacing */
+        }
+
+        .right-headline {
+            font-size: clamp(18px, 2.0vw, 24px);
+            font-weight: 700;
+            line-height: 1.25;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.2rem 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 1.6rem;
+            margin-bottom: 0.6rem;
+            font-size: 1.05rem;
+            line-height: 1.4;
+            color: #e0ecef;
+        }
+
+        .bullet-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #55b6ab;
+            font-size: 1.6rem;
+            line-height: 1;
+            top: -4px;
+        }
+
+        /* Territory Showcase Map Card Styles */
+        .territory-map-container {
+            width: 100%;
+            height: 140px;
+            margin-top: 24px;
+            margin-bottom: 24px;
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+            background-color: #f8f4ee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        #mini-map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .leaflet-marker-icon.hotspot-marker {
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            overflow: visible !important;
+        }
+
+        .territory-card {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            width: 90%;
+            max-width: 440px;
+            height: 90px;
+            box-sizing: border-box;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        .territory-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+        }
+
+        .card-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 100%;
+            position: relative;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .pin-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .location-pin {
+            width: 32px;
+            height: 32px;
+            z-index: 2;
+            filter: drop-shadow(0 2px 5px rgba(168, 85, 247, 0.4));
+            animation: pinPulse 2.5s ease-in-out infinite;
+            transition: filter 0.3s ease;
+        }
+
+        .territory-card:hover .location-pin {
+            filter: drop-shadow(0 4px 10px rgba(168, 85, 247, 0.7));
+        }
+
+        @keyframes pinPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .pulse-ring {
+            position: absolute;
+            width: 48px;
+            height: 24px;
+            border: 1.5px solid #8B5CF6;
+            border-radius: 50%;
+            background: transparent;
+            z-index: 1;
+            transform: scale(0.5);
+            opacity: 0.6;
+            animation: ringPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            pointer-events: none;
+            bottom: 4px;
+        }
+
+        @keyframes ringPulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .card-divider {
+            width: 1px;
+            height: 46px;
+            background-color: #e2e8f0;
+            margin-right: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .card-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .map-card-title {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #1a2f3c;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .brand-gradient-text {
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        /* Pulsating Hotspots on Map Card */
+        .hotspot-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 28px;
+            height: 28px;
+            background: transparent;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10;
+            cursor: pointer;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .hotspot-inner:hover {
+            transform: scale(1.2);
+        }
+
+        .hotspot-inner.expanded {
+            background: white;
+            border-radius: 16px;
+            padding: 14px 18px;
+            width: 280px;
+            height: auto;
+            z-index: 2000;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, .18);
+            transform: translateY(-4px);
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 12px;
+            cursor: default;
+            overflow: visible;
+        }
+
+        .hotspot-inner.expanded:hover {
+            transform: translateY(-4px);
+        }
+
+        .hotspot-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            flex-shrink: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        /* Pulsating animations and dot colors */
+        .purple .hotspot-dot {
+            background: #b44cff;
+            box-shadow: 0 0 0 6px rgba(180, 76, 255, .25), 0 0 0 12px rgba(180, 76, 255, .1);
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        .green .hotspot-dot {
+            background: #32d583;
+            box-shadow: 0 0 0 6px rgba(50, 213, 131, .25), 0 0 0 12px rgba(50, 213, 131, .1);
+            animation: dotPulseGreen 2s ease-in-out infinite;
+        }
+
+        .blue .hotspot-dot {
+            background: #5b8dff;
+            box-shadow: 0 0 0 6px rgba(91, 141, 255, .25), 0 0 0 12px rgba(91, 141, 255, .1);
+            animation: dotPulseBlue 2s ease-in-out infinite;
+        }
+
+        .orange .hotspot-dot {
+            background: #ff9d4d;
+            box-shadow: 0 0 0 6px rgba(255, 157, 77, .25), 0 0 0 12px rgba(255, 157, 77, .1);
+            animation: dotPulseOrange 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0% { box-shadow: 0 0 0 0 rgba(180, 76, 255, .4); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(180, 76, 255, .15), 0 0 0 20px rgba(180, 76, 255, .05); transform: scale(1.15); }
+            100% { box-shadow: 0 0 0 0 rgba(180, 76, 255, .4); transform: scale(1); }
+        }
+
+        @keyframes dotPulseGreen {
+            0% { box-shadow: 0 0 0 0 rgba(50, 213, 131, .4); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(50, 213, 131, .15), 0 0 0 20px rgba(50, 213, 131, .05); transform: scale(1.15); }
+            100% { box-shadow: 0 0 0 0 rgba(50, 213, 131, .4); transform: scale(1); }
+        }
+
+        @keyframes dotPulseBlue {
+            0% { box-shadow: 0 0 0 0 rgba(91, 141, 255, .4); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(91, 141, 255, .15), 0 0 0 20px rgba(91, 141, 255, .05); transform: scale(1.15); }
+            100% { box-shadow: 0 0 0 0 rgba(91, 141, 255, .4); transform: scale(1); }
+        }
+
+        @keyframes dotPulseOrange {
+            0% { box-shadow: 0 0 0 0 rgba(255, 157, 77, .4); transform: scale(1); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 157, 77, .15), 0 0 0 20px rgba(255, 157, 77, .05); transform: scale(1.15); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 157, 77, .4); transform: scale(1); }
+        }
+
+        /* Card details structure */
+        .hotspot-details {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            font-family: 'Inter', sans-serif;
+            text-align: left;
+            flex-grow: 1;
+            box-sizing: border-box;
+        }
+
+        .hotspot-inner.expanded .hotspot-details {
+            display: flex;
+        }
+
+        .hotspot-details strong {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .hotspot-address {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .hotspot-status {
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 4px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 6px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .green-text { color: #32d583; }
+        .purple-text { color: #b44cff; }
+        .blue-text { color: #5b8dff; }
+        .orange-text { color: #ff9d4d; }
+
+        .gate-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 0.6rem;
+            width: 100%;
+        }
+
+        .form-row .form-input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            color: #333333;
+        }
+
+        .form-input::placeholder {
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-input:focus {
+            outline: 2px solid #55b6ab;
+        }
+
+        .submit-btn {
+            background-color: #213c4c;
+            color: #ffffff;
+            border: none;
+            border-radius: 2.5rem;
+            padding: 1.1rem;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 0.4rem;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .submit-btn:hover {
+            background-color: #1a2f3c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 1280px) {
+            .split-box {
+                height: auto;
+                /* Allow height to expand naturally when stacked */
+                max-height: none;
+            }
+
+            .split-box-inner {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .left-panel {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1597 / 1198;
+            }
+
+            .right-panel {
+                padding: 2rem;
+                overflow-y: visible;
+                align-items: center;
+            }
+
+            .territory-map-container {
+                max-width: 100%;
+                margin: 24px auto;
+            }
+        }
+
+        .desktop-text {
+            white-space: nowrap;
+        }
+
+        .mobile-text {
+            display: none;
+            white-space: normal;
+        }
+
+        @media (max-width: 768px) {
+            .gate-container {
+                padding: 1.5rem 0.3rem;
+            }
+
+            .desktop-text {
+                display: none;
+            }
+
+            .mobile-text {
+                display: inline;
+            }
+
+            .headline {
+                font-size: clamp(22px, 6vw, 30px) !important;
+                line-height: 1.35;
+                letter-spacing: 0.01em;
+                word-spacing: 0.05em;
+            }
+
+            .territory-card {
+                width: 95%;
+                padding: 0.6rem 1rem;
+            }
+
+            .map-card-title {
+                font-size: 1.05rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="gate-container">
+        <div class="headline">
+            <span class="desktop-text">Make <span class="highlight">$10,000+ Monthly</span> by Placing a <span class="highlight">SOL REViBE</span> Wellness Station in your Business</span>
+            <span class="mobile-text">
+                Make <span class="highlight">$10,000+ Monthly</span> by Placing a<br><span class="highlight">SOL REViBE</span> Wellness Station<br>in your Business
+            </span>
+        </div>
+
+        <div class="split-box-wrapper">
+            <div class="split-box">
+                <div class="split-box-inner">
+                    <div class="left-panel">
+                        <video autoplay loop muted playsinline>
+                            <source src="../assets/UPDATED%20SOL%20REViBE%20Landing%20Page.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
+                    <div class="right-panel">
+                        <div class="right-panel-content">
+                            <h2 class="right-headline">BE THE FIRST TO SECURE THE SOL REViBE<br>SHOWCASE POSITION IN YOUR AREA</h2>
+
+                            <ul class="bullet-list">
+                                <li>Integrates Pulsed Electromagnetic Field Therapy (PEMF), terahertz frequency, Therapeutic Audio Guides (TAGS) and aromatherapy</li>
+                                <li>Minimal staff supervision</li>
+                                <li>Passive income of $10K+ monthly income (or more)</li>
+                            </ul>
+
+                            <!-- Territory Showcase Map Card -->
+                            <div class="territory-map-container">
+                                <div id="mini-map"></div>
+                            </div>
+
+                            <form class="gate-form" id="leadForm">
+                                <div class="form-row">
+                                    <input type="text" class="form-input" id="name" name="name" placeholder="NAME:" required>
+                                    <input type="text" class="form-input" id="company" name="company" placeholder="COMPANY:"
+                                        required>
+                                </div>
+                                <div class="form-row">
+                                    <input type="email" class="form-input" id="email" name="email" placeholder="EMAIL:" required>
+                                    <input type="tel" class="form-input" id="phone" name="phone" placeholder="PHONE:" required
+                                        pattern="^\+?\d{10,15}$" title="Please enter a valid phone number (10-15 digits)">
+                                </div>
+
+                                <button type="submit" class="submit-btn" id="submitBtn">
+                                    <span id="btnText">SHOW ME THE DETAILS</span>
+                                    <div class="spinner" id="btnSpinner"></div>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize mini map centered on USA center, making it fully interactive
+            const miniMap = L.map('mini-map', {
+                center: [37.8, -96.0],
+                zoom: 3.5,
+                zoomSnap: 0.5,
+                zoomControl: true,
+                attributionControl: false,
+                dragging: true,
+                scrollWheelZoom: false, // Prevents intercepting page scroll, highly recommended for embedded cards
+                doubleClickZoom: true,
+                touchZoom: true,
+                boxZoom: true,
+                keyboard: true
+            });
+
+            // Add CartoDB Positron tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 18,
+                minZoom: 3
+            }).addTo(miniMap);
+
+            // Define hotspots (stations) coordinates representing the live locations with detailed info
+            const hotspots = [
+                { 
+                    lat: 30.2672, lng: -97.7431, color: 'green',
+                    name: 'SOL REViBE Flagship',
+                    address: '100 SOL Plaza, Austin, TX',
+                    status: 'Launching Soon',
+                    textClass: 'green-text'
+                },
+                { 
+                    lat: 40.7128, lng: -74.0060, color: 'purple',
+                    name: 'SOL REViBE Manhattan',
+                    address: '45 Rockefeller Plaza, New York, NY',
+                    status: 'Priority Market',
+                    textClass: 'purple-text'
+                },
+                { 
+                    lat: 34.0522, lng: -118.2437, color: 'purple',
+                    name: 'SOL REViBE City of Angels',
+                    address: '500 Sunset Blvd, Los Angeles, CA',
+                    status: 'Priority Market',
+                    textClass: 'purple-text'
+                },
+                { 
+                    lat: 25.7617, lng: -80.1918, color: 'green',
+                    name: 'SOL REViBE Ocean Drive',
+                    address: '1100 Collins Ave, Miami, FL',
+                    status: 'Launching Soon',
+                    textClass: 'green-text'
+                },
+                { 
+                    lat: 41.8781, lng: -87.6298, color: 'purple',
+                    name: 'SOL REViBE Lakefront',
+                    address: '321 Recharge Dr, Chicago, IL',
+                    status: 'Priority Market',
+                    textClass: 'purple-text'
+                },
+                { 
+                    lat: 47.6062, lng: -122.3321, color: 'blue',
+                    name: 'SOL REViBE Pacific',
+                    address: '1200 Wellness Way, Seattle, WA',
+                    status: 'Priority Market',
+                    textClass: 'blue-text'
+                },
+                { 
+                    lat: 39.7392, lng: -104.9903, color: 'purple',
+                    name: 'SOL REViBE Mile High',
+                    address: '789 Altitude Ave, Denver, CO',
+                    status: 'Priority Market',
+                    textClass: 'purple-text'
+                }
+            ];
+
+            // Render hotspots as Leaflet markers with click expand behavior
+            hotspots.forEach(function(spot) {
+                const markerHtml = `
+                    <div class="hotspot-inner ${spot.color}">
+                        <span class="hotspot-dot"></span>
+                        <div class="hotspot-details">
+                            <strong>${spot.name}</strong>
+                            <span class="hotspot-address">${spot.address}</span>
+                            <span class="hotspot-status ${spot.textClass}">● ${spot.status}</span>
+                        </div>
+                    </div>
+                `;
+
+                const customIcon = L.divIcon({
+                    className: 'hotspot-marker',
+                    html: markerHtml,
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 14]
+                });
+
+                const marker = L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(miniMap);
+
+                // Setup marker click event to toggle popup details
+                marker.on('click', function(e) {
+                    const element = marker.getElement().querySelector('.hotspot-inner');
+                    
+                    if (element.classList.contains('expanded')) {
+                        element.classList.remove('expanded');
+                    } else {
+                        closeAllMarkers();
+                        element.classList.add('expanded');
+                        // Center map on marker
+                        miniMap.setView([spot.lat, spot.lng], miniMap.getZoom(), { animate: true });
+                    }
+                    L.DomEvent.stopPropagation(e);
+                });
+            });
+
+            // Close all popups when the map itself is clicked
+            miniMap.on('click', function() {
+                closeAllMarkers();
+            });
+
+            function closeAllMarkers() {
+                document.querySelectorAll('.hotspot-inner.expanded').forEach(function(el) {
+                    el.classList.remove('expanded');
+                });
+            }
+        });
+
+        document.getElementById('leadForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Basic validation is handled by HTML5 attributes (required, type="email", pattern for phone)
+
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+
+            // Show loading state
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            btnSpinner.style.display = 'block';
+
+            // Gather form data
+            const formData = {
+                name: document.getElementById('name').value,
+                company: document.getElementById('company').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                timestamp: new Date().toISOString()
+            };
+
+            // Mock Google Sheets Integration
+            // To make this fully functional later, you would replace this URL with your Google Apps Script Web App URL
+            const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwYOUR_APP_ID/exec';
+
+            try {
+                // We'll simulate a network request here since we don't have a real backend URL yet
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                /* 
+                // Actual fetch code to use when ready:
+                await fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                */
+
+                // Grant access and redirect to the main presentation page
+                sessionStorage.setItem('solrevibe_access_granted', 'true');
+                window.location.href = '/';
+
+            } catch (error) {
+                console.error('Submission failed:', error);
+                alert("Something went wrong. Please try again.");
+
+                // Reset button state on failure
+                btn.disabled = false;
+                btnText.style.display = 'block';
+                btnSpinner.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

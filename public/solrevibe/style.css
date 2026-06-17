@@ -1,0 +1,794 @@
+:root {
+    --bg-dark: #050505;
+    --bg-glass: rgba(255, 255, 255, 0.03);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
+    --accent: #ffffff;
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.5;
+    overflow-x: clip;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Starfield Canvas */
+#starfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -3;
+    pointer-events: none;
+    background-color: #000000; /* Deep black universe */
+}
+
+/* Soft Glows */
+.glow-effect {
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
+    border-radius: 50%;
+    top: -300px;
+    left: -200px;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.glow-effect-2 {
+    position: absolute;
+    width: 1000px;
+    height: 1000px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+    border-radius: 50%;
+    bottom: -400px;
+    right: -300px;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem 5rem;
+    position: relative;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.nav-logo-img {
+    height: 36px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    transition: var(--transition);
+}
+
+.nav-links a:hover {
+    color: var(--text-main);
+}
+
+.nav-links a.btn-pill {
+    color: var(--bg-dark);
+    background-color: var(--text-main);
+    padding: 0.7rem 1.8rem;
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+.nav-links a.btn-pill:hover {
+    background-color: rgba(255, 255, 255, 0.85);
+    transform: scale(1.03);
+}
+
+/* HERO */
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    min-height: 45vh;
+    padding: 8rem 2rem;
+    text-align: center;
+}
+
+.hero-container-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    z-index: 1; /* Establishes a local stacking context to prevent negative z-index video from rendering behind body background */
+}
+
+.hero-background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1; /* Changed to positive to prevent negative z-index rendering issues on various browsers */
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-main-logo {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-subtitle {
+    font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.2s;
+}
+
+/* CARDS GRID */
+.grid-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 2.5rem;
+    padding: 0 5rem 8rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.card {
+    transition: var(--transition);
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.2s;
+    perspective: 1500px;
+    min-height: 420px;
+}
+
+.spacer-card {
+    min-height: 420px;
+}
+@media (max-width: 1024px) {
+    .spacer-card {
+        display: none;
+    }
+}
+
+.card:nth-child(2) { animation-delay: 0.4s; }
+.card:nth-child(3) { animation-delay: 0.6s; }
+
+@media (hover: hover) and (pointer: fine) {
+    .card:hover {
+        transform: translateY(-12px);
+    }
+}
+.card.is-flipped {
+    transform: translateY(-12px);
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-style: preserve-3d;
+    display: grid;
+    border-radius: 28px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .card:hover .card-inner {
+        transform: rotateY(180deg);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    }
+}
+.card.is-flipped .card-inner {
+    transform: rotateY(180deg);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+.card-front, .card-back {
+    grid-area: 1 / 1;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .card:hover .card-front {
+        border-color: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
+    }
+}
+.card.is-flipped .card-front {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.card-white .card-front {
+    background: #ffffff !important;
+    color: var(--bg-dark);
+    justify-content: center;
+    align-items: center;
+}
+
+.card-white .card-front h2 {
+    color: var(--bg-dark);
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    padding: 2.5rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #ffffff !important;
+    color: var(--bg-dark);
+}
+
+.card-back p {
+    color: #222222;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+.card-image {
+    height: 280px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .card:hover .card-image {
+        transform: scale(1.05);
+    }
+}
+.card.is-flipped .card-image {
+    transform: scale(1.05);
+}
+
+/* Subtle overlay to blend image into card */
+.card-image::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; /* Fix for sub-pixel rendering gaps */
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(5, 5, 5, 1) 0%, rgba(5, 5, 5, 0.8) 20%, transparent 100%);
+    pointer-events: none;
+}
+
+.card-content {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    position: relative;
+    z-index: 2;
+    margin-top: -30px; /* Bring content up into the gradient fade */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Remove fade and margin offset for SOL ViBE animated card */
+.sol-vibe-card .card-image::after {
+    display: none;
+}
+
+.sol-vibe-card .card-content {
+    margin-top: 0;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.card-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-main);
+}
+
+.card-header h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.card-logo {
+    height: 36px;
+    width: auto;
+    object-fit: contain;
+    max-width: 100%;
+}
+
+.card p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem;
+    flex-grow: 1;
+    line-height: 1.6;
+}
+
+.btn-outline {
+    display: inline-block;
+    width: 100%;
+    padding: 1.2rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-main);
+    border: 1px solid var(--border-glass);
+    border-radius: 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    transition: var(--transition);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.btn-outline:hover {
+    background: var(--text-main);
+    color: var(--bg-dark);
+    border-color: var(--text-main);
+}
+
+.btn-outline-dark {
+    display: inline-block;
+    width: 100%;
+    padding: 1.2rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--bg-dark);
+    border: 1px solid rgba(5, 5, 5, 0.2);
+    border-radius: 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    transition: var(--transition);
+    background: transparent;
+    margin-top: 1.5rem;
+}
+
+.btn-outline-dark:hover {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    border-color: var(--bg-dark);
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    padding: 5rem 2rem 6rem;
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-glass), transparent);
+}
+
+.footer-subtitle {
+    font-size: 0.95rem;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+.fw-bold {
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.footer-mission {
+    font-size: 1.5rem;
+    max-width: 650px;
+    margin: 0 auto 4rem;
+    color: var(--text-main);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+}
+
+.footer-copy {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 2rem 3rem;
+    }
+    
+    .grid-section {
+        padding: 0 3rem 6rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem 1.5rem;
+    }
+    
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+    
+    .hero {
+        padding: 4rem 1.5rem;
+        min-height: 40vh;
+    }
+    
+    .grid-section {
+        padding: 0 1.5rem 5rem;
+    }
+    
+    .card-image {
+        height: 240px;
+    }
+}
+
+.hero-main-logo-anim {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- ALIGNMENT CONFIGURATION --- */
+:root {
+  --sol-top: 28%;        
+  --sol-left: 50%;       
+  --sol-width: 16%;      
+  
+  --world-top: 73%;      
+  --world-left: 36%;     
+  --world-width: 16%;    
+  
+  --dot-width: 40%;      
+}
+
+.logo-container {
+  position: relative;
+  display: inline-block;
+  max-width: 600px;
+  width: 100%;
+  filter: invert(1);
+}
+
+/* SOL REViBE Logo Looping Animation */
+.logo-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+
+.plasma-container {
+  position: absolute;
+  left: 50%;
+  top: 30.1%;
+  width: 13.5%;
+  height: 24%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.plasma-glow {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  left: -50%;
+  top: -50%;
+  background: conic-gradient(from 0deg, transparent, rgba(168, 85, 247, 0.45), transparent, rgba(59, 130, 246, 0.45), transparent);
+  animation: rotatePlasma 2s linear infinite;
+  mix-blend-mode: color-dodge;
+}
+
+/* High-Fidelity SVG Electrical Charges (Sparks) */
+.electric-sparks-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.spark-ring {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 25 75;
+  transform-origin: center;
+}
+
+.ring-cyan {
+  stroke: rgba(0, 238, 255, 0.95);
+  stroke-width: 1.5px;
+  filter: drop-shadow(0 0 4px #00e5ff);
+  animation: spinRing1 0.4s steps(6) infinite;
+}
+
+.ring-purple {
+  stroke: rgba(217, 70, 239, 0.95);
+  stroke-width: 1.2px;
+  filter: drop-shadow(0 0 5px #d946ef);
+  animation: spinRing2 0.3s steps(5) infinite;
+}
+
+.ring-blue {
+  stroke: rgba(59, 130, 246, 0.9);
+  stroke-width: 1px;
+  filter: drop-shadow(0 0 4px #3b82f6);
+  animation: spinRing3 0.5s steps(7) infinite;
+}
+
+/* Electric Signal Wavelengths (Inside the charge) */
+.spark-signal {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 1.2px;
+  transform-origin: center;
+  mix-blend-mode: screen;
+}
+
+.signal-1 {
+  stroke: rgba(0, 238, 255, 0.95);
+  filter: drop-shadow(0 0 5px #00e5ff);
+  animation: pulseSignal1 0.35s steps(4) infinite;
+}
+
+.signal-2 {
+  stroke: rgba(217, 70, 239, 0.95);
+  filter: drop-shadow(0 0 6px #d946ef);
+  animation: pulseSignal2 0.45s steps(5) infinite;
+}
+
+/* Lightning Bolts */
+.spark-bolt {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 30 70;
+  stroke-width: 1.2px;
+  transform-origin: center;
+  opacity: 0;
+}
+
+.bolt-1, .bolt-3, .bolt-5, .bolt-7 {
+  stroke: rgba(0, 238, 255, 0.9);
+  filter: drop-shadow(0 0 3px #00e5ff);
+}
+
+.bolt-2, .bolt-4, .bolt-6, .bolt-8 {
+  stroke: rgba(217, 70, 239, 0.9);
+  filter: drop-shadow(0 0 4px #d946ef);
+}
+
+/* Individual Staggered Electrical Crashing Animations */
+.bolt-1 { animation: flashBolt1 0.28s steps(3) infinite; }
+.bolt-2 { animation: flashBolt2 0.32s steps(3) infinite; }
+.bolt-3 { animation: flashBolt3 0.24s steps(2) infinite; }
+.bolt-4 { animation: flashBolt4 0.36s steps(3) infinite; }
+.bolt-5 { animation: flashBolt1 0.3s steps(3) infinite; }
+.bolt-6 { animation: flashBolt2 0.26s steps(2) infinite; }
+.bolt-7 { animation: flashBolt3 0.34s steps(3) infinite; }
+.bolt-8 { animation: flashBolt4 0.22s steps(2) infinite; }
+
+/* Erratic Vibrating Core */
+.plasma-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26%;
+  height: 26%;
+  background: radial-gradient(circle, #ffffff 0%, #f472b6 40%, #d946ef 75%, #a21caf 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 12px #d946ef, 0 0 24px #a21caf, 0 0 35px rgba(217, 70, 239, 0.5), inset 0 1px 2px rgba(255,255,255,0.9);
+  animation: crackleCore 0.25s steps(4) infinite;
+}
+
+@keyframes rotatePlasma {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes crackleCore {
+  0%, 100% {
+    transform: translate(-50%, -50%) translate(-1px, 2px) scale(0.95);
+    filter: brightness(1.25);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(2px, -1px) scale(1.05);
+    filter: brightness(0.9);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(-2px, -2px) scale(0.9);
+    filter: brightness(1.35);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(1px, 1px) scale(1.1);
+    filter: brightness(1.0);
+  }
+}
+
+@keyframes spinRing1 {
+  0% { transform: rotate(0deg) scale(1); opacity: 0.95; }
+  50% { transform: rotate(180deg) scale(0.95); opacity: 0.75; }
+  100% { transform: rotate(360deg) scale(1); opacity: 0.95; }
+}
+
+@keyframes spinRing2 {
+  0% { transform: rotate(120deg) scale(0.95); opacity: 0.8; }
+  50% { transform: rotate(-60deg) scale(1.05); opacity: 0.95; }
+  100% { transform: rotate(-240deg) scale(0.95); opacity: 0.8; }
+}
+
+@keyframes spinRing3 {
+  0% { transform: rotate(270deg) scale(1.02); opacity: 0.75; }
+  50% { transform: rotate(90deg) scale(0.9); opacity: 0.9; }
+  100% { transform: rotate(-90deg) scale(1.02); opacity: 0.75; }
+}
+
+@keyframes flashBolt1 {
+  0%, 100% { opacity: 0; stroke-dashoffset: 50; }
+  15% { opacity: 0.95; stroke-dashoffset: 10; }
+  30% { opacity: 0; stroke-dashoffset: 80; }
+  45% { opacity: 0.85; stroke-dashoffset: 0; }
+  60% { opacity: 0; stroke-dashoffset: 40; }
+  75% { opacity: 1; stroke-dashoffset: 20; }
+}
+
+@keyframes flashBolt2 {
+  0%, 100% { opacity: 0; stroke-dashoffset: 80; }
+  20% { opacity: 0.9; stroke-dashoffset: 20; }
+  40% { opacity: 0; stroke-dashoffset: 60; }
+  60% { opacity: 1; stroke-dashoffset: 0; }
+  80% { opacity: 0; stroke-dashoffset: 40; }
+}
+
+@keyframes flashBolt3 {
+  0%, 100% { opacity: 0; stroke-dashoffset: 40; }
+  25% { opacity: 1; stroke-dashoffset: 0; }
+  50% { opacity: 0; stroke-dashoffset: 70; }
+  75% { opacity: 0.8; stroke-dashoffset: 15; }
+}
+
+@keyframes flashBolt4 {
+  0%, 100% { opacity: 0; stroke-dashoffset: 60; }
+  30% { opacity: 0.95; stroke-dashoffset: 10; }
+  60% { opacity: 0; stroke-dashoffset: 80; }
+  90% { opacity: 1; stroke-dashoffset: 0; }
+}
+
+@keyframes pulseSignal1 {
+  0% {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 200;
+    opacity: 0.85;
+  }
+  50% {
+    stroke-dashoffset: 100;
+    opacity: 0.6;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.95;
+  }
+}
+
+@keyframes pulseSignal2 {
+  0% {
+    stroke-dasharray: 60 40;
+    stroke-dashoffset: 0;
+    opacity: 0.7;
+  }
+  50% {
+    stroke-dashoffset: -50;
+    opacity: 0.95;
+  }
+  100% {
+    stroke-dashoffset: -100;
+    opacity: 0.7;
+  }
+}
+
