@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOL REViBE | Waitlist</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
         body,
         html {
@@ -153,15 +155,29 @@
             border-radius: 18px;
             overflow: hidden;
             position: relative;
-            background-image: url('../assets/map_mockup.png');
-            background-size: cover;
-            background-position: center;
+            background-color: #f8f4ee;
             display: flex;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
             box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        #mini-map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .leaflet-marker-icon.hotspot-marker {
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            overflow: visible !important;
         }
 
         .territory-card {
@@ -180,6 +196,8 @@
             box-sizing: border-box;
             transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             cursor: pointer;
+            position: relative;
+            z-index: 2;
         }
 
         .territory-card:hover {
@@ -284,6 +302,63 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 800;
+        }
+
+        /* Pulsating Hotspots on Map Card */
+        .map-hotspot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .map-hotspot.green {
+            background-color: #10B981;
+            box-shadow: 0 0 8px #10B981;
+        }
+        .map-hotspot.purple {
+            background-color: #8B5CF6;
+            box-shadow: 0 0 8px #8B5CF6;
+        }
+        .map-hotspot.blue {
+            background-color: #3B82F6;
+            box-shadow: 0 0 8px #3B82F6;
+        }
+
+        .map-hotspot::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            box-sizing: border-box;
+            opacity: 0.8;
+            animation: hotspotPulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        }
+
+        .map-hotspot.green::after {
+            border: 2px solid #10B981;
+        }
+        .map-hotspot.purple::after {
+            border: 2px solid #8B5CF6;
+        }
+        .map-hotspot.blue::after {
+            border: 2px solid #3B82F6;
+        }
+
+        @keyframes hotspotPulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
         }
 
         .gate-form {
@@ -470,6 +545,8 @@
 
                     <!-- Territory Showcase Map Card -->
                     <div class="territory-map-container">
+                        <div id="mini-map"></div>
+
                         <div class="territory-card">
                             <div class="card-left">
                                 <div class="pin-wrapper">
@@ -517,6 +594,52 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize mini map centered on USA center
+            const miniMap = L.map('mini-map', {
+                center: [37.8, -96.0],
+                zoom: 3.5,
+                zoomSnap: 0.5,
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                touchZoom: false,
+                boxZoom: false,
+                keyboard: false
+            });
+
+            // Add CartoDB Positron tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 18,
+                minZoom: 3
+            }).addTo(miniMap);
+
+            // Define hotspots (stations) coordinates representing the live locations
+            const hotspots = [
+                { lat: 30.2672, lng: -97.7431, color: 'green' },   // Austin
+                { lat: 40.7128, lng: -74.0060, color: 'purple' },  // New York
+                { lat: 34.0522, lng: -118.2437, color: 'purple' }, // Los Angeles
+                { lat: 25.7617, lng: -80.1918, color: 'green' },   // Miami
+                { lat: 41.8781, lng: -87.6298, color: 'purple' },  // Chicago
+                { lat: 47.6062, lng: -122.3321, color: 'blue' },   // Seattle
+                { lat: 39.7392, lng: -104.9903, color: 'purple' }  // Denver
+            ];
+
+            // Render hotspots as Leaflet markers
+            hotspots.forEach(function(spot) {
+                const markerHtml = `<div class="map-hotspot ${spot.color}" style="top: 0; left: 0;"></div>`;
+                const customIcon = L.divIcon({
+                    className: 'hotspot-marker',
+                    html: markerHtml,
+                    iconSize: [12, 12],
+                    iconAnchor: [6, 6]
+                });
+                L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(miniMap);
+            });
+        });
+
         document.getElementById('leadForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
