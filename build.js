@@ -30,39 +30,29 @@ const path = require('path');
     });
   }
 
+  const copyRecursiveSync = function(src, dest) {
+    const exists = fs.existsSync(src);
+    const stats = exists && fs.statSync(src);
+    const isDirectory = exists && stats.isDirectory();
+    if (isDirectory) {
+      if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+      fs.readdirSync(src).forEach(childItemName => {
+        copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+      });
+    } else {
+      fs.copyFileSync(src, dest);
+    }
+  };
+
   const solrevibeDirSrc = path.join(__dirname, 'solrevibe');
   const solrevibeDirDest = path.join(outDir, 'solrevibe');
   if (fs.existsSync(solrevibeDirSrc)) {
-    if (!fs.existsSync(solrevibeDirDest)) {
-      fs.mkdirSync(solrevibeDirDest);
-    }
-    fs.readdirSync(solrevibeDirSrc).forEach(file => {
-      const srcPath = path.join(solrevibeDirSrc, file);
-      if (fs.lstatSync(srcPath).isFile()) {
-        fs.copyFileSync(srcPath, path.join(solrevibeDirDest, file));
-      }
-    });
+    copyRecursiveSync(solrevibeDirSrc, solrevibeDirDest);
   }
 
   const solgamesDirSrc = path.join(__dirname, 'solgames');
   const solgamesDirDest = path.join(outDir, 'solgames');
   if (fs.existsSync(solgamesDirSrc)) {
-    if (!fs.existsSync(solgamesDirDest)) {
-      fs.mkdirSync(solgamesDirDest);
-    }
-    const copyRecursiveSync = function(src, dest) {
-      const exists = fs.existsSync(src);
-      const stats = exists && fs.statSync(src);
-      const isDirectory = exists && stats.isDirectory();
-      if (isDirectory) {
-        if (!fs.existsSync(dest)) fs.mkdirSync(dest);
-        fs.readdirSync(src).forEach(childItemName => {
-          copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
-        });
-      } else {
-        fs.copyFileSync(src, dest);
-      }
-    };
     copyRecursiveSync(solgamesDirSrc, solgamesDirDest);
   }
 
