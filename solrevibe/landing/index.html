@@ -737,19 +737,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize mini map centered on USA center, making it fully interactive
+            // Initialize mini map as a fully static display
             const miniMap = L.map('mini-map', {
                 center: [39.0, -100.0], // Centered slightly east of Denver to accommodate popup width
                 zoom: 3.5,
                 zoomSnap: 0.5,
-                zoomControl: true,
+                zoomControl: false,
                 attributionControl: false,
-                dragging: true,
+                dragging: false,
                 scrollWheelZoom: false, // Prevents intercepting page scroll, highly recommended for embedded cards
-                doubleClickZoom: true,
-                touchZoom: true,
-                boxZoom: true,
-                keyboard: true
+                doubleClickZoom: false,
+                touchZoom: false,
+                boxZoom: false,
+                keyboard: false
             });
 
             // Add CartoDB Positron tile layer
