@@ -739,6 +739,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize mini map as a fully static display
             const miniMap = L.map('mini-map', {
+                center: [39.7392, -104.9903], // Fallback center on Denver
                 zoom: 3.5,
                 zoomSnap: 0.5,
                 zoomControl: false,
