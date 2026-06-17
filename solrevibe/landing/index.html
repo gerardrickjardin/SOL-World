@@ -99,7 +99,7 @@
             align-items: center;
             /* Center the form content wrapper horizontally */
             box-sizing: border-box;
-            overflow-y: auto;
+            overflow: hidden;
             /* Prevent cutting if screen is extremely small */
         }
 
@@ -290,6 +290,17 @@
             gap: 0.6rem;
         }
 
+        .form-row {
+            display: flex;
+            gap: 0.6rem;
+            width: 100%;
+        }
+
+        .form-row .form-input {
+            flex: 1;
+            min-width: 0;
+        }
+
         .form-input {
             width: 100%;
             padding: 0.8rem 1.2rem;
@@ -412,6 +423,11 @@
             .map-card-title {
                 font-size: 1.05rem;
             }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0.6rem;
+            }
         }
     </style>
 </head>
@@ -471,12 +487,16 @@
                     </div>
 
                     <form class="gate-form" id="leadForm">
-                        <input type="text" class="form-input" id="name" name="name" placeholder="NAME:" required>
-                        <input type="text" class="form-input" id="company" name="company" placeholder="COMPANY:"
-                            required>
-                        <input type="email" class="form-input" id="email" name="email" placeholder="EMAIL:" required>
-                        <input type="tel" class="form-input" id="phone" name="phone" placeholder="PHONE:" required
-                            pattern="^\+?\d{10,15}$" title="Please enter a valid phone number (10-15 digits)">
+                        <div class="form-row">
+                            <input type="text" class="form-input" id="name" name="name" placeholder="NAME:" required>
+                            <input type="text" class="form-input" id="company" name="company" placeholder="COMPANY:"
+                                required>
+                        </div>
+                        <div class="form-row">
+                            <input type="email" class="form-input" id="email" name="email" placeholder="EMAIL:" required>
+                            <input type="tel" class="form-input" id="phone" name="phone" placeholder="PHONE:" required
+                                pattern="^\+?\d{10,15}$" title="Please enter a valid phone number (10-15 digits)">
+                        </div>
 
                         <button type="submit" class="submit-btn" id="submitBtn">
                             <span id="btnText">SHOW ME THE DETAILS</span>
