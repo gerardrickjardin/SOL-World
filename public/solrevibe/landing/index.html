@@ -739,18 +739,26 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize mini map as a fully static display
             const miniMap = L.map('mini-map', {
-                center: [29.5, -88.0], // Fine-tuned: half-way vertical and exact horizontal pixel calculation
                 zoom: 3.5,
                 zoomSnap: 0.5,
                 zoomControl: false,
                 attributionControl: false,
                 dragging: false,
-                scrollWheelZoom: false, // Prevents intercepting page scroll, highly recommended for embedded cards
+                scrollWheelZoom: false,
                 doubleClickZoom: false,
                 touchZoom: false,
                 boxZoom: false,
                 keyboard: false
             });
+
+            // Calculate pixel-perfect center to place the 280x100 popup exactly in the middle of the container
+            // The popup is 280px wide and extends right, so marker must be 140px left of center
+            // The popup is ~100px tall and extends down, so marker must be 50px above center
+            const denverLatLng = L.latLng(39.7392, -104.9903);
+            const denverPoint = miniMap.project(denverLatLng, miniMap.getZoom());
+            const perfectCenterPoint = L.point(denverPoint.x + 140, denverPoint.y + 50);
+            const perfectCenterLatLng = miniMap.unproject(perfectCenterPoint, miniMap.getZoom());
+            miniMap.setView(perfectCenterLatLng, miniMap.getZoom());
 
             // Add CartoDB Positron tile layer
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
