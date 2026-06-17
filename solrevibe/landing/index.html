@@ -90,6 +90,7 @@
             /* Ensure there is always enough room for form */
             height: 68vh;
             max-height: 850px;
+            background: linear-gradient(135deg, #55b6ab, #60a5fa, #b44cff); /* permanent static gradient border */
             border-radius: 20px;
             overflow: hidden;
             padding: 2px; /* 2px border width */
@@ -97,7 +98,7 @@
             box-sizing: border-box;
         }
 
-        /* Rotating gradient background for liquid border effect */
+        /* Rotating single subtle highlight on top of permanent border */
         .split-box::before {
             content: '';
             position: absolute;
@@ -107,13 +108,13 @@
             left: -40%;
             background: conic-gradient(
                 from 0deg,
-                transparent 30%,
-                #55b6ab 45%,
-                #60a5fa 60%,
-                #b44cff 75%,
-                transparent 90%
+                transparent 60%,
+                rgba(255, 255, 255, 0.05) 75%,
+                rgba(255, 255, 255, 0.9) 90%,
+                rgba(255, 255, 255, 0.05) 95%,
+                transparent 100%
             );
-            animation: borderRotate 5s linear infinite;
+            animation: borderRotate 6s linear infinite;
             z-index: 1;
         }
 
