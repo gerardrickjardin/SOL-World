@@ -813,8 +813,10 @@
 
             // Render hotspots as Leaflet markers with click expand behavior
             hotspots.forEach(function(spot) {
+                const isStatic = spot.name === 'SOL REViBE Mile High';
+                const extraClasses = isStatic ? ' expanded static-expanded' : '';
                 const markerHtml = `
-                    <div class="hotspot-inner ${spot.color}">
+                    <div class="hotspot-inner ${spot.color}${extraClasses}">
                         <span class="hotspot-dot"></span>
                         <div class="hotspot-details">
                             <strong>${spot.name}</strong>
@@ -837,6 +839,12 @@
                 marker.on('click', function(e) {
                     const element = marker.getElement().querySelector('.hotspot-inner');
                     
+                    if (element.classList.contains('static-expanded')) {
+                        // Keep the static one open and do not toggle
+                        L.DomEvent.stopPropagation(e);
+                        return;
+                    }
+                    
                     if (element.classList.contains('expanded')) {
                         element.classList.remove('expanded');
                     } else {
@@ -855,7 +863,7 @@
             });
 
             function closeAllMarkers() {
-                document.querySelectorAll('.hotspot-inner.expanded').forEach(function(el) {
+                document.querySelectorAll('.hotspot-inner.expanded:not(.static-expanded)').forEach(function(el) {
                     el.classList.remove('expanded');
                 });
             }
