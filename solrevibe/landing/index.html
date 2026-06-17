@@ -94,11 +94,11 @@
 
         .right-panel {
             flex: 1;
-            padding: 3.5rem 2.5rem;
+            padding: 3.5rem 2.5rem 3.5rem 4rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             /* Center the form content wrapper horizontally */
             box-sizing: border-box;
             overflow: hidden;
@@ -107,7 +107,7 @@
 
         .right-panel-content {
             width: 100%;
-            max-width: 550px;
+            max-width: 680px;
             /* Limit input width to maintain premium spacing */
         }
 
@@ -147,6 +147,8 @@
         /* Territory Showcase Map Card Styles */
         .territory-map-container {
             width: 100%;
+            max-width: 480px;
+            margin-left: 0;
             height: 140px;
             margin-top: 24px;
             margin-bottom: 24px;
@@ -386,6 +388,11 @@
                 padding: 2rem;
                 overflow-y: visible;
                 align-items: center;
+            }
+
+            .territory-map-container {
+                max-width: 100%;
+                margin: 24px auto;
             }
         }
 
