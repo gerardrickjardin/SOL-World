@@ -752,19 +752,14 @@
                 keyboard: false
             });
 
-            // Use exact CSS container pixels to perfectly align the popup card
-            miniMap.whenReady(function() {
-                const mapSize = miniMap.getSize();
-                // We want the Denver marker to be 140px LEFT of center, and 50px ABOVE center.
-                // Since the map is currently centered on Denver, Denver is at (mapSize.x/2, mapSize.y/2).
-                // Adjusting based on exact layout rendering offsets: 
-                // Popup was 86px too far right and 21px too far down.
-                // Original offsets were +140 and +50.
-                // We add the error margins to perfectly center it: 140 + 86 = 226, and 50 + 21 = 71.
-                const offsetPoint = L.point(mapSize.x / 2 + 226, mapSize.y / 2 + 71);
-                const perfectCenterLatLng = miniMap.containerPointToLatLng(offsetPoint);
-                miniMap.setView(perfectCenterLatLng, miniMap.getZoom(), { animate: false });
-            });
+            // Use exact pixel panning to perfectly align the popup card.
+            // By default, the map centers exactly on Denver.
+            // The popup is 280px wide and extends right. Its anchor is 14px left. So its visual center is 126px right of Denver.
+            // The popup is 90px tall and extends down. Its anchor is 14px up. So its visual center is 31px below Denver.
+            // To perfectly center the popup, we push the map 126px RIGHT and 31px DOWN.
+            setTimeout(function() {
+                miniMap.panBy([126, 31], { animate: false });
+            }, 100);
 
             // Add CartoDB Positron tile layer
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
