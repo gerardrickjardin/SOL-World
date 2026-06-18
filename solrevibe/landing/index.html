@@ -260,7 +260,7 @@
             max-width: 440px;
             height: 90px;
             box-sizing: border-box;
-            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.2s ease;
             cursor: pointer;
             position: relative;
             z-index: 2;
@@ -421,6 +421,12 @@
             flex-shrink: 0;
             box-sizing: border-box;
             transition: all 0.3s ease;
+        }
+
+        .hotspot-dot.active {
+            transform: scale(1.25);
+            border-color: #ffffff;
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.55), 0 0 15px rgba(255, 255, 255, 0.95) !important;
         }
 
         /* Pulsating animations and dot colors */
@@ -709,6 +715,30 @@
                             <!-- Territory Showcase Map Card -->
                             <div class="territory-map-container">
                                 <div id="mini-map"></div>
+                                <div class="territory-card" id="active-territory-card">
+                                    <div class="card-left">
+                                        <div class="pin-wrapper">
+                                            <div class="pulse-ring"></div>
+                                            <div class="pulse-ring" style="animation-delay: 0.8s;"></div>
+                                            <div class="pulse-ring" style="animation-delay: 1.6s;"></div>
+                                            <svg class="location-pin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px; z-index: 2; filter: drop-shadow(0 2px 5px rgba(168, 85, 247, 0.4));">
+                                                <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="url(#pin-grad)"/>
+                                                <defs>
+                                                    <linearGradient id="pin-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop id="pin-grad-stop1" offset="0%" stop-color="#A855F7" />
+                                                        <stop id="pin-grad-stop2" offset="100%" stop-color="#8B5CF6" />
+                                                    </linearGradient>
+                                                </defs>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="card-divider"></div>
+                                    <div class="card-right">
+                                        <h3 class="map-card-title" id="card-title">SOL REViBE Mile High</h3>
+                                        <span class="hotspot-address" id="card-address">789 Altitude Ave, Denver, CO</span>
+                                        <span class="hotspot-status purple-text" id="card-status">● Priority Market</span>
+                                    </div>
+                                </div>
                             </div>
 
                             <form class="gate-form" id="leadForm">
@@ -757,7 +787,14 @@
             // placing the popup exactly in the dead center of the container regardless of projection scaling.
             setTimeout(function() {
                 miniMap.panBy([126, 31], { animate: false });
-            }, 100);
+                
+                // Highlight the default (Denver) marker dot on load
+                const denverMarker = markerInstances['SOL REViBE Mile High'];
+                if (denverMarker) {
+                    const dot = denverMarker.getElement().querySelector('.hotspot-dot');
+                    if (dot) dot.classList.add('active');
+                }
+            }, 150);
 
             // Add CartoDB Positron tile layer
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -822,16 +859,9 @@
 
             // Render hotspots as Leaflet markers with click expand behavior
             hotspots.forEach(function(spot) {
-                const isDenver = spot.name === 'SOL REViBE Mile High';
-                const extraClasses = isDenver ? ' expanded' : '';
                 const markerHtml = `
-                    <div class="hotspot-inner ${spot.color}${extraClasses}">
+                    <div class="hotspot-inner ${spot.color}">
                         <span class="hotspot-dot"></span>
-                        <div class="hotspot-details">
-                            <strong>${spot.name}</strong>
-                            <span class="hotspot-address">${spot.address}</span>
-                            <span class="hotspot-status ${spot.textClass}">● ${spot.status}</span>
-                        </div>
                     </div>
                 `;
 
@@ -844,72 +874,76 @@
 
                 const marker = L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(miniMap);
                 markerInstances[spot.name] = marker;
-                
-                if (isDenver) {
-                    marker.setZIndexOffset(1000);
-                }
 
-                // Setup marker click event to toggle popup details
+                // Setup marker click event to toggle popup details without moving the map
                 marker.on('click', function(e) {
-                    const element = marker.getElement().querySelector('.hotspot-inner');
-                    
-                    if (element.classList.contains('expanded')) {
-                        if (isDenver) {
-                            L.DomEvent.stopPropagation(e);
-                            return;
-                        }
-                        element.classList.remove('expanded');
-                        resetToDenver();
-                    } else {
-                        closeAllMarkers();
-                        element.classList.add('expanded');
-                        marker.setZIndexOffset(1000);
-                        
-                        // Center map on marker and pan to perfectly align the popup card in the container
-                        miniMap.setView([spot.lat, spot.lng], miniMap.getZoom(), { animate: true });
-                        setTimeout(function() {
-                            miniMap.panBy([126, 31], { animate: true });
-                        }, 250);
-                    }
+                    updateFloatingCard(spot);
+                    setActiveMarkerDot(spot.name);
                     L.DomEvent.stopPropagation(e);
                 });
             });
 
-            // Close all popups when the map itself is clicked, reverting back to Denver
+            // Reset details to Denver on map click
             miniMap.on('click', function() {
                 resetToDenver();
             });
 
-            function closeAllMarkers() {
+            // Prevent map clicks from bubbling up to document
+            L.DomEvent.on(miniMap.getContainer(), 'click', L.DomEvent.stopPropagation);
+
+            function updateFloatingCard(spot) {
+                const card = document.getElementById('active-territory-card');
+                if (!card) return;
+
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(8px)';
+
+                setTimeout(function() {
+                    document.getElementById('card-title').innerText = spot.name;
+                    document.getElementById('card-address').innerText = spot.address;
+
+                    const statusEl = document.getElementById('card-status');
+                    statusEl.innerText = '● ' + spot.status;
+                    statusEl.className = 'hotspot-status ' + spot.textClass;
+
+                    // Update pin gradient based on spot color
+                    const stop1 = document.getElementById('pin-grad-stop1');
+                    const stop2 = document.getElementById('pin-grad-stop2');
+                    
+                    if (spot.color === 'green') {
+                        stop1.setAttribute('stop-color', '#34D399');
+                        stop2.setAttribute('stop-color', '#059669');
+                    } else if (spot.color === 'blue') {
+                        stop1.setAttribute('stop-color', '#60A5FA');
+                        stop2.setAttribute('stop-color', '#2563EB');
+                    } else { // purple
+                        stop1.setAttribute('stop-color', '#A855F7');
+                        stop2.setAttribute('stop-color', '#8B5CF6');
+                    }
+
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 150);
+            }
+
+            function setActiveMarkerDot(activeName) {
                 Object.keys(markerInstances).forEach(name => {
                     const marker = markerInstances[name];
-                    const element = marker.getElement().querySelector('.hotspot-inner');
-                    if (element) {
-                        element.classList.remove('expanded');
-                    }
-                    if (name !== 'SOL REViBE Mile High') {
-                        marker.setZIndexOffset(0);
-                    } else {
-                        marker.setZIndexOffset(900);
+                    const dot = marker.getElement()?.querySelector('.hotspot-dot');
+                    if (dot) {
+                        if (name === activeName) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
                     }
                 });
             }
 
             function resetToDenver() {
-                closeAllMarkers();
                 const denverSpot = hotspots.find(h => h.name === 'SOL REViBE Mile High');
-                const denverMarker = markerInstances[denverSpot.name];
-                if (denverMarker) {
-                    const element = denverMarker.getElement().querySelector('.hotspot-inner');
-                    if (element) {
-                        element.classList.add('expanded');
-                    }
-                    denverMarker.setZIndexOffset(1000);
-                }
-                miniMap.setView([denverSpot.lat, denverSpot.lng], miniMap.getZoom(), { animate: true });
-                setTimeout(function() {
-                    miniMap.panBy([126, 31], { animate: true });
-                }, 250);
+                updateFloatingCard(denverSpot);
+                setActiveMarkerDot(denverSpot.name);
             }
         });
 
