@@ -12,6 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOL REViBE | Frequency Recharging Wellness Station</title>
     <meta name="description" content="A Frequency Recharging Wellness Station">
+    <link rel="preload" href="assets/Final_Hero.jpg" as="image">
+    <link rel="preload" href="assets/Chaos%20to%20Clarity%20Section.png" as="image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -217,7 +219,7 @@
             /* Explicitly enforce 16:9 ratio based on width */
             max-height: 1080px !important;
             overflow: hidden;
-            background-color: #ffffff;
+            background-color: #f5f5f0;
         }
 
         .hero-background-video {
@@ -228,12 +230,17 @@
             height: calc(100% + 4px) !important;
             object-fit: cover !important;
             z-index: 11 !important;
-            opacity: 1 !important;
+            opacity: 0 !important;
             visibility: visible !important;
+            pointer-events: none !important;
             -webkit-transform-style: preserve-3d;
             -webkit-backface-visibility: hidden;
             transform: translateZ(0);
             will-change: transform;
+            transition: opacity 0.5s ease-in !important;
+        }
+        .hero-background-video.loaded {
+            opacity: 1 !important;
         }
 
         .hero-text-block {
@@ -1200,6 +1207,11 @@
             transform: translate(-50%, -50%);
             object-fit: cover;
             display: block;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        .transformation-video.loaded {
+            opacity: 1;
         }
 
         .benefits-row {
@@ -1994,9 +2006,10 @@
 
     <header class="hero-container-wrapper"
         style="container-type: inline-size; container-name: hero; position: relative; z-index: 10; width: 100%; max-width: 1920px; aspect-ratio: 16 / 9; margin: 0 auto; overflow: hidden; display: block;">
-        <img class="hero-background-video"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 11; pointer-events: none; transform: translate3d(0, 0, 0); backface-visibility: hidden; will-change: transform;"
-            src="assets/SOL%20REViBE%20FINAL%202.gif" alt="Hero Animation">
+        <video class="hero-background-video" autoplay loop muted playsinline preload="auto" poster="assets/Final_Hero.jpg">
+            <source src="assets/Final%20SOL%20REViBE.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
 
         <!-- Features List Overlay (Right Side) -->
         <div class="glass-panel-features">
@@ -2108,7 +2121,7 @@
 
         <div class="transformation-wrapper">
             <div class="transformation-row">
-                <video src="assets/FRom%20Chaos%20to%20Clarity.mp4" autoplay loop muted playsinline class="transformation-video"></video>
+                <video src="assets/FRom%20Chaos%20to%20Clarity.mp4" autoplay loop muted playsinline preload="auto" poster="assets/Chaos%20to%20Clarity%20Section.png" class="transformation-video"></video>
             </div>
         </div>
 
@@ -2408,7 +2421,26 @@
             const audioControl = document.getElementById('hero-audio-control');
             const bgVideo = document.querySelector('.hero-background-video');
 
-            // Let the browser natively handle the video loop for optimal performance
+            if (bgVideo) {
+                if (bgVideo.readyState >= 3) {
+                    bgVideo.classList.add('loaded');
+                } else {
+                    bgVideo.addEventListener('canplay', () => {
+                        bgVideo.classList.add('loaded');
+                    });
+                }
+            }
+
+            const transformVideo = document.querySelector('.transformation-video');
+            if (transformVideo) {
+                if (transformVideo.readyState >= 3) {
+                    transformVideo.classList.add('loaded');
+                } else {
+                    transformVideo.addEventListener('canplay', () => {
+                        transformVideo.classList.add('loaded');
+                    });
+                }
+            }
 
             const hamburger = document.getElementById('hamburgerMenu');
             const navLinks = document.getElementById('vibeNavLinks');
