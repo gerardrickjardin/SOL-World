@@ -1368,57 +1368,12 @@
         .hero-audio-wrapper {
             position: absolute;
             top: 65%;
-            right: 4%;
+            left: 8%;
+            right: auto;
             z-index: 100;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 1cqw;
-        }
-        .hero-audio-control {
-            display: flex;
-            align-items: center;
-            gap: 1cqw;
-            cursor: pointer;
-            padding: 0.5cqw;
-        }
-        .hero-audio-control img {
-            width: 4cqw;
-            height: 4cqw;
-            object-fit: contain;
-            filter: drop-shadow(0 0.1cqw 0.25cqw rgba(0,0,0,0.2));
-            transition: transform 0.2s;
-        }
-        .hero-audio-control:active img {
-            transform: scale(0.95);
-        }
-        .audio-waves {
-            display: flex;
-            gap: 0.3cqw;
-            height: 3cqw;
-            align-items: center;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-        .hero-audio-control.playing .audio-waves {
-            opacity: 1;
-        }
-        .wave {
-            width: 0.3cqw;
-            height: 3cqw;
-            background: #5cdbfa;
-            border-radius: 0.3cqw;
-            box-shadow: 0 0 0.4cqw rgba(255,255,255,0.4);
-            transform-origin: center;
-            transform: scaleY(0.1);
-            transition: transform 0.3s ease;
-        }
-        .hero-audio-control.playing .wave {
-            animation: waveScale 1.2s infinite ease-in-out;
-        }
-        @keyframes waveScale {
-            0%, 100% { transform: scaleY(0.1); }
-            50% { transform: scaleY(var(--scale-max, 1)); }
+            align-items: flex-start;
         }
         .glass-panel-features {
             position: absolute;
@@ -2042,40 +1997,8 @@
         </div>
         <!-- Audio Control -->
         <div class="hero-audio-wrapper">
-            <span style="font-family: 'Inter', sans-serif; font-size: 0.75cqw; font-weight: 800; color: #111111; letter-spacing: 0.08em; white-space: nowrap; pointer-events: none;">AUDIO OVERVIEW</span>
-            <div id="hero-audio-control" class="hero-audio-control">
-                <div class="audio-waves left">
-                <span class="wave" style="--scale-max: 0.2; animation-delay: 0.0s;"></span>
-                <span class="wave" style="--scale-max: 0.4; animation-delay: 0.1s;"></span>
-                <span class="wave" style="--scale-max: 0.7; animation-delay: 0.2s;"></span>
-                <span class="wave" style="--scale-max: 0.3; animation-delay: 0.3s;"></span>
-                <span class="wave" style="--scale-max: 0.9; animation-delay: 0.4s;"></span>
-                <span class="wave" style="--scale-max: 0.5; animation-delay: 0.5s;"></span>
-                <span class="wave" style="--scale-max: 1.0; animation-delay: 0.6s;"></span>
-                <span class="wave" style="--scale-max: 0.6; animation-delay: 0.7s;"></span>
-                <span class="wave" style="--scale-max: 0.8; animation-delay: 0.8s;"></span>
-                <span class="wave" style="--scale-max: 0.4; animation-delay: 0.9s;"></span>
-                <span class="wave" style="--scale-max: 0.5; animation-delay: 1.0s;"></span>
-                <span class="wave" style="--scale-max: 0.2; animation-delay: 1.1s;"></span>
-            </div>
-            <img src="assets/Play.png" alt="Play Audio">
-            <div class="audio-waves right">
-                <span class="wave" style="--scale-max: 0.2; animation-delay: 1.1s;"></span>
-                <span class="wave" style="--scale-max: 0.5; animation-delay: 1.0s;"></span>
-                <span class="wave" style="--scale-max: 0.4; animation-delay: 0.9s;"></span>
-                <span class="wave" style="--scale-max: 0.8; animation-delay: 0.8s;"></span>
-                <span class="wave" style="--scale-max: 0.6; animation-delay: 0.7s;"></span>
-                <span class="wave" style="--scale-max: 1.0; animation-delay: 0.6s;"></span>
-                <span class="wave" style="--scale-max: 0.5; animation-delay: 0.5s;"></span>
-                <span class="wave" style="--scale-max: 0.9; animation-delay: 0.4s;"></span>
-                <span class="wave" style="--scale-max: 0.3; animation-delay: 0.3s;"></span>
-                <span class="wave" style="--scale-max: 0.7; animation-delay: 0.2s;"></span>
-                <span class="wave" style="--scale-max: 0.4; animation-delay: 0.1s;"></span>
-                <span class="wave" style="--scale-max: 0.2; animation-delay: 0.0s;"></span>
-            </div>
+            <span id="hero-audio-control" class="vibe-reserve-btn" style="font-size: 0.95cqw; padding: 0.6cqw 1.2cqw; border-radius: 0.6cqw; cursor: pointer; white-space: nowrap; box-shadow: 0 0.3cqw 1.2cqw rgba(34, 197, 94, 0.3);">START HERE</span>
         </div>
-        <span class="vibe-reserve-btn" style="font-size: 0.95cqw; padding: 0.6cqw 1.2cqw; border-radius: 0.6cqw; pointer-events: none; white-space: nowrap; box-shadow: 0 0.3cqw 1.2cqw rgba(34, 197, 94, 0.3);">PLAY ME</span>
-    </div>
 </header>
 
     <!-- Station Finder Section -->
@@ -2454,6 +2377,7 @@
                 audio.onended = () => {
                     isPlaying = false;
                     audioControl.classList.remove('playing');
+                    audioControl.innerText = 'START HERE';
                 };
 
                 audioControl.addEventListener('click', () => {
@@ -2462,10 +2386,12 @@
                         audio.currentTime = 0;
                         isPlaying = false;
                         audioControl.classList.remove('playing');
+                        audioControl.innerText = 'START HERE';
                     } else {
                         audio.play().catch(e => console.error("Audio play failed:", e));
                         isPlaying = true;
                         audioControl.classList.add('playing');
+                        audioControl.innerText = 'PAUSE';
                     }
                 });
             }
