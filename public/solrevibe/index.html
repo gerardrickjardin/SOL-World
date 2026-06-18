@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOL REViBE | Frequency Recharging Wellness Station</title>
     <meta name="description" content="A Frequency Recharging Wellness Station">
-    <link rel="preload" href="assets/Final_Hero.jpg" as="image">
+    <link rel="preload" href="assets/SOL%20REViBE%20FINAL%202.gif" as="image">
     <link rel="preload" href="assets/Chaos%20to%20Clarity%20Section.png" as="image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2006,10 +2006,7 @@
 
     <header class="hero-container-wrapper"
         style="container-type: inline-size; container-name: hero; position: relative; z-index: 10; width: 100%; max-width: 1920px; aspect-ratio: 16 / 9; margin: 0 auto; overflow: hidden; display: block;">
-        <video class="hero-background-video" autoplay loop muted playsinline preload="auto" poster="assets/Final_Hero.jpg">
-            <source src="assets/Final%20SOL%20REViBE.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+        <img class="hero-background-video" src="assets/SOL%20REViBE%20FINAL%202.gif" alt="Hero Animation">
 
         <!-- Features List Overlay (Right Side) -->
         <div class="glass-panel-features">
@@ -2422,12 +2419,22 @@
             const bgVideo = document.querySelector('.hero-background-video');
 
             if (bgVideo) {
-                if (bgVideo.readyState >= 3) {
-                    bgVideo.classList.add('loaded');
-                } else {
-                    bgVideo.addEventListener('canplay', () => {
+                if (bgVideo.tagName === 'IMG' || bgVideo.tagName === 'img') {
+                    if (bgVideo.complete) {
                         bgVideo.classList.add('loaded');
-                    });
+                    } else {
+                        bgVideo.addEventListener('load', () => {
+                            bgVideo.classList.add('loaded');
+                        });
+                    }
+                } else {
+                    if (bgVideo.readyState >= 3) {
+                        bgVideo.classList.add('loaded');
+                    } else {
+                        bgVideo.addEventListener('canplay', () => {
+                            bgVideo.classList.add('loaded');
+                        });
+                    }
                 }
             }
 
