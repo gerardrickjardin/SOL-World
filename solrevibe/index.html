@@ -1375,6 +1375,52 @@
             flex-direction: column;
             align-items: center;
         }
+        .audio-btn-glow-wrapper {
+            position: relative;
+            background: linear-gradient(135deg, #55b6ab, #60a5fa, #b44cff);
+            border-radius: 0.85cqw;
+            overflow: hidden;
+            padding: 2.5px;
+            cursor: pointer;
+            display: inline-flex;
+            box-shadow: 0 0.3cqw 1.2cqw rgba(34, 197, 94, 0.3);
+            transition: transform 0.2s;
+        }
+        .audio-btn-glow-wrapper:active {
+            transform: scale(0.95);
+        }
+        .audio-btn-glow-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 60%,
+                rgba(255, 255, 255, 0.05) 75%,
+                rgba(255, 255, 255, 0.9) 90%,
+                rgba(255, 255, 255, 0.05) 95%,
+                transparent 100%
+            );
+            animation: borderRotate 6s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .audio-btn-inner {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+        @keyframes borderRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
         .glass-panel-features {
             position: absolute;
             right: 4%;
@@ -1997,7 +2043,9 @@
         </div>
         <!-- Audio Control -->
         <div class="hero-audio-wrapper">
-            <span id="hero-audio-control" class="vibe-reserve-btn" style="font-size: 0.95cqw; padding: 0.6cqw 1.2cqw; border-radius: 0.6cqw; cursor: pointer; white-space: nowrap; box-shadow: 0 0.3cqw 1.2cqw rgba(34, 197, 94, 0.3);">START HERE</span>
+            <div id="hero-audio-control" class="audio-btn-glow-wrapper">
+                <span class="vibe-reserve-btn audio-btn-inner" style="font-size: 0.95cqw; padding: 0.6cqw 1.2cqw; border-radius: 0.6cqw; white-space: nowrap; box-shadow: 0 0.3cqw 1.2cqw rgba(34, 197, 94, 0.3); pointer-events: none;">START HERE</span>
+            </div>
         </div>
 </header>
 
@@ -2373,11 +2421,12 @@
             if (audioControl) {
                 let isPlaying = false;
                 let audio = new Audio('assets/Audio%20for%20Joy.MP3');
+                const audioBtnText = audioControl.querySelector('.audio-btn-inner');
 
                 audio.onended = () => {
                     isPlaying = false;
                     audioControl.classList.remove('playing');
-                    audioControl.innerText = 'START HERE';
+                    if (audioBtnText) audioBtnText.innerText = 'START HERE';
                 };
 
                 audioControl.addEventListener('click', () => {
@@ -2386,12 +2435,12 @@
                         audio.currentTime = 0;
                         isPlaying = false;
                         audioControl.classList.remove('playing');
-                        audioControl.innerText = 'START HERE';
+                        if (audioBtnText) audioBtnText.innerText = 'START HERE';
                     } else {
                         audio.play().catch(e => console.error("Audio play failed:", e));
                         isPlaying = true;
                         audioControl.classList.add('playing');
-                        audioControl.innerText = 'PAUSE';
+                        if (audioBtnText) audioBtnText.innerText = 'PAUSE';
                     }
                 });
             }
