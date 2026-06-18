@@ -767,9 +767,21 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize mini map as a fully static display
+            // Calculate the offset center coordinates so the map is fully static from frame 1.
+            // We want Denver [39.7392, -104.9903] to be positioned 126px to the left and 31px above the center of the container.
+            // We can calculate the exact LatLng using Leaflet's projection system on a temporary map instance.
+            const tempMap = L.map(document.createElement('div'), {
+                center: [39.7392, -104.9903],
+                zoom: 3.5
+            });
+            const denverPoint = tempMap.project([39.7392, -104.9903], 3.5);
+            const offsetPoint = denverPoint.add([126, 31]);
+            const offsetCenter = tempMap.unproject(offsetPoint, 3.5);
+            tempMap.remove();
+
+            // Initialize mini map as a fully static display at the calculated offset center
             const miniMap = L.map('mini-map', {
-                center: [39.7392, -104.9903], // Center exactly on Denver
+                center: offsetCenter,
                 zoom: 3.5,
                 zoomSnap: 0.5,
                 zoomControl: false,
@@ -782,19 +794,14 @@
                 keyboard: false
             });
 
-            // Use exact pixel panning to flawlessly align the 280x90 popup card in the 700x140 container.
-            // Panning the map 126px RIGHT and 31px DOWN mathematically pushes Denver 126px LEFT and 31px UP,
-            // placing the popup exactly in the dead center of the container regardless of projection scaling.
+            // Highlight the default (Denver) marker dot on load
             setTimeout(function() {
-                miniMap.panBy([126, 31], { animate: false });
-                
-                // Highlight the default (Denver) marker dot on load
                 const denverMarker = markerInstances['SOL REViBE Mile High'];
                 if (denverMarker) {
                     const dot = denverMarker.getElement().querySelector('.hotspot-dot');
                     if (dot) dot.classList.add('active');
                 }
-            }, 150);
+            }, 100);
 
             // Add CartoDB Positron tile layer
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
