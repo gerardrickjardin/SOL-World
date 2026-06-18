@@ -739,7 +739,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize mini map as a fully static display
             const miniMap = L.map('mini-map', {
-                center: [35.4, -89.3], // Explicitly placed so Denver popup is in the exact middle
+                center: [39.7392, -104.9903], // Center exactly on Denver
                 zoom: 3.5,
                 zoomSnap: 0.5,
                 zoomControl: false,
@@ -751,6 +751,13 @@
                 boxZoom: false,
                 keyboard: false
             });
+
+            // Use exact pixel panning to flawlessly align the 280x90 popup card in the 700x140 container.
+            // Panning the map 126px RIGHT and 31px DOWN mathematically pushes Denver 126px LEFT and 31px UP,
+            // placing the popup exactly in the dead center of the container regardless of projection scaling.
+            setTimeout(function() {
+                miniMap.panBy([126, 31], { animate: false });
+            }, 100);
 
             // Add CartoDB Positron tile layer
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -811,10 +818,12 @@
                 }
             ];
 
+            const markerInstances = {};
+
             // Render hotspots as Leaflet markers with click expand behavior
             hotspots.forEach(function(spot) {
-                const isStatic = spot.name === 'SOL REViBE Mile High';
-                const extraClasses = isStatic ? ' expanded static-expanded' : '';
+                const isDenver = spot.name === 'SOL REViBE Mile High';
+                const extraClasses = isDenver ? ' expanded' : '';
                 const markerHtml = `
                     <div class="hotspot-inner ${spot.color}${extraClasses}">
                         <span class="hotspot-dot"></span>
@@ -834,8 +843,9 @@
                 });
 
                 const marker = L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(miniMap);
+                markerInstances[spot.name] = marker;
                 
-                if (isStatic) {
+                if (isDenver) {
                     marker.setZIndexOffset(1000);
                 }
 
@@ -843,33 +853,63 @@
                 marker.on('click', function(e) {
                     const element = marker.getElement().querySelector('.hotspot-inner');
                     
-                    if (element.classList.contains('static-expanded')) {
-                        // Keep the static one open and do not toggle
-                        L.DomEvent.stopPropagation(e);
-                        return;
-                    }
-                    
                     if (element.classList.contains('expanded')) {
+                        if (isDenver) {
+                            L.DomEvent.stopPropagation(e);
+                            return;
+                        }
                         element.classList.remove('expanded');
+                        resetToDenver();
                     } else {
                         closeAllMarkers();
                         element.classList.add('expanded');
-                        // Center map on marker
+                        marker.setZIndexOffset(1000);
+                        
+                        // Center map on marker and pan to perfectly align the popup card in the container
                         miniMap.setView([spot.lat, spot.lng], miniMap.getZoom(), { animate: true });
+                        setTimeout(function() {
+                            miniMap.panBy([126, 31], { animate: true });
+                        }, 250);
                     }
                     L.DomEvent.stopPropagation(e);
                 });
             });
 
-            // Close all popups when the map itself is clicked
+            // Close all popups when the map itself is clicked, reverting back to Denver
             miniMap.on('click', function() {
-                closeAllMarkers();
+                resetToDenver();
             });
 
             function closeAllMarkers() {
-                document.querySelectorAll('.hotspot-inner.expanded:not(.static-expanded)').forEach(function(el) {
-                    el.classList.remove('expanded');
+                Object.keys(markerInstances).forEach(name => {
+                    const marker = markerInstances[name];
+                    const element = marker.getElement().querySelector('.hotspot-inner');
+                    if (element) {
+                        element.classList.remove('expanded');
+                    }
+                    if (name !== 'SOL REViBE Mile High') {
+                        marker.setZIndexOffset(0);
+                    } else {
+                        marker.setZIndexOffset(900);
+                    }
                 });
+            }
+
+            function resetToDenver() {
+                closeAllMarkers();
+                const denverSpot = hotspots.find(h => h.name === 'SOL REViBE Mile High');
+                const denverMarker = markerInstances[denverSpot.name];
+                if (denverMarker) {
+                    const element = denverMarker.getElement().querySelector('.hotspot-inner');
+                    if (element) {
+                        element.classList.add('expanded');
+                    }
+                    denverMarker.setZIndexOffset(1000);
+                }
+                miniMap.setView([denverSpot.lat, denverSpot.lng], miniMap.getZoom(), { animate: true });
+                setTimeout(function() {
+                    miniMap.panBy([126, 31], { animate: true });
+                }, 250);
             }
         });
 
