@@ -739,7 +739,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize mini map as a fully static display
             const miniMap = L.map('mini-map', {
-                center: [39.7392, -104.9903], // Fallback center on Denver
+                center: [29.5, -89.3], // Explicitly placed so Denver popup is in the exact middle
                 zoom: 3.5,
                 zoomSnap: 0.5,
                 zoomControl: false,
@@ -751,15 +751,6 @@
                 boxZoom: false,
                 keyboard: false
             });
-
-            // Use exact pixel panning to perfectly align the popup card.
-            // By default, the map centers exactly on Denver.
-            // The popup is 280px wide and extends right. Its anchor is 14px left. So its visual center is 126px right of Denver.
-            // The popup is 90px tall and extends down. Its anchor is 14px up. So its visual center is 31px below Denver.
-            // To perfectly center the popup, we push the map 126px RIGHT and 31px DOWN.
-            setTimeout(function() {
-                miniMap.panBy([126, 31], { animate: false });
-            }, 100);
 
             // Add CartoDB Positron tile layer
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
