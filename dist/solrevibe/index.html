@@ -16,7 +16,14 @@
     <link rel="preload" href="assets/Chaos%20to%20Clarity%20Section.png" as="image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    
     <link rel="stylesheet" href="style.css">
     <style>
         html, body {
@@ -1560,419 +1567,7 @@
         }
     </style>
 
-    <!-- Leaflet.js Assets -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <script>
-        let map;
-        let mapMarkers = {};
-        let toastTimeout;
-
-        // Scalable Regional Zones & Station database
-        const SOL_LOCATOR_DB = {
-            regions: {
-                'west': { id: 'west', name: 'West Region' },
-                'southwest': { id: 'southwest', name: 'Southwest Region' },
-                'midwest': { id: 'midwest', name: 'Midwest Region' },
-                'southeast': { id: 'southeast', name: 'Southeast Region' },
-                'northeast': { id: 'northeast', name: 'Northeast Region' }
-            },
-            cities: {
-                // West Region (6 Cities)
-                'seattle': { id: 'seattle', name: 'Seattle', state: 'WA', regionId: 'west' },
-                'sf': { id: 'sf', name: 'San Francisco', state: 'CA', regionId: 'west' },
-                'la': { id: 'la', name: 'Los Angeles', state: 'CA', regionId: 'west' },
-                'portland': { id: 'portland', name: 'Portland', state: 'OR', regionId: 'west' },
-                'sd': { id: 'sd', name: 'San Diego', state: 'CA', regionId: 'west' },
-                'sanjose': { id: 'sanjose', name: 'San Jose', state: 'CA', regionId: 'west' },
-
-                // Southwest Region (6 Cities)
-                'denver': { id: 'denver', name: 'Denver', state: 'CO', regionId: 'southwest' },
-                'phoenix': { id: 'phoenix', name: 'Phoenix', state: 'AZ', regionId: 'southwest' },
-                'austin': { id: 'austin', name: 'Austin', state: 'TX', regionId: 'southwest' },
-                'dallas': { id: 'dallas', name: 'Dallas', state: 'TX', regionId: 'southwest' },
-                'houston': { id: 'houston', name: 'Houston', state: 'TX', regionId: 'southwest' },
-                'saltlake': { id: 'saltlake', name: 'Salt Lake City', state: 'UT', regionId: 'southwest' },
-
-                // Midwest Region (6 Cities)
-                'chicago': { id: 'chicago', name: 'Chicago', state: 'IL', regionId: 'midwest' },
-                'detroit': { id: 'detroit', name: 'Detroit', state: 'MI', regionId: 'midwest' },
-                'minneapolis': { id: 'minneapolis', name: 'Minneapolis', state: 'MN', regionId: 'midwest' },
-                'stlouis': { id: 'stlouis', name: 'St. Louis', state: 'MO', regionId: 'midwest' },
-                'columbus': { id: 'columbus', name: 'Columbus', state: 'OH', regionId: 'midwest' },
-                'indianapolis': { id: 'indianapolis', name: 'Indianapolis', state: 'IN', regionId: 'midwest' },
-
-                // Southeast Region (6 Cities)
-                'nashville': { id: 'nashville', name: 'Nashville', state: 'TN', regionId: 'southeast' },
-                'atlanta': { id: 'atlanta', name: 'Atlanta', state: 'GA', regionId: 'southeast' },
-                'tampa': { id: 'tampa', name: 'Tampa', state: 'FL', regionId: 'southeast' },
-                'miami': { id: 'miami', name: 'Miami', state: 'FL', regionId: 'southeast' },
-                'charlotte': { id: 'charlotte', name: 'Charlotte', state: 'NC', regionId: 'southeast' },
-                'orlando': { id: 'orlando', name: 'Orlando', state: 'FL', regionId: 'southeast' },
-
-                // Northeast Region (6 Cities)
-                'boston': { id: 'boston', name: 'Boston', state: 'MA', regionId: 'northeast' },
-                'ny': { id: 'ny', name: 'New York', state: 'NY', regionId: 'northeast' },
-                'philly': { id: 'philly', name: 'Philadelphia', state: 'PA', regionId: 'northeast' },
-                'dc': { id: 'dc', name: 'Washington', state: 'DC', regionId: 'northeast' },
-                'pittsburgh': { id: 'pittsburgh', name: 'Pittsburgh', state: 'PA', regionId: 'northeast' },
-                'baltimore': { id: 'baltimore', name: 'Baltimore', state: 'MD', regionId: 'northeast' }
-            },
-            stations: [
-                // West Region Stations
-                { id: 'sea-1', name: 'SOL REViBE Pacific (Flagship)', cityId: 'seattle', address: '1200 Wellness Way', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 47.6062, lng: -122.3321 },
-                { id: 'sea-2', name: 'SOL REViBE Capitol Hill', cityId: 'seattle', address: '500 Broadway E', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 47.6212, lng: -122.3214 },
-                { id: 'sf-1', name: 'SOL REViBE Bay Lounge', cityId: 'sf', address: '450 Recovery Blvd', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 37.7749, lng: -122.4194 },
-                { id: 'la-1', name: 'SOL REViBE City of Angels', cityId: 'la', address: '500 Sunset Blvd', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 34.0522, lng: -118.2437 },
-                { id: 'la-2', name: 'SOL REViBE Santa Monica', cityId: 'la', address: '1300 Ocean Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 34.0116, lng: -118.4962 },
-                { id: 'por-1', name: 'SOL REViBE Pearl District', cityId: 'portland', address: '1000 NW Lovejoy St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 45.5298, lng: -122.6816 },
-                { id: 'sd-1', name: 'SOL REViBE Gaslamp', cityId: 'sd', address: '400 Fifth Ave', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 32.7114, lng: -117.1599 },
-                { id: 'sj-1', name: 'SOL REViBE Silicon Valley', cityId: 'sanjose', address: '300 Santana Row', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 37.3218, lng: -121.9479 },
-
-                // Southwest Region Stations
-                { id: 'den-1', name: 'SOL REViBE Mile High', cityId: 'denver', address: '789 Altitude Ave', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 39.7392, lng: -104.9903 },
-                { id: 'phx-1', name: 'SOL REViBE Desert Oasis', cityId: 'phoenix', address: '320 Camelback Rd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 33.4484, lng: -112.0740 },
-                { id: 'aus-1', name: 'SOL REViBE Flagship', cityId: 'austin', address: '100 SOL Plaza', status: 'Launching Soon', color: 'green', textClass: 'green-text', lat: 30.2672, lng: -97.7431 },
-                { id: 'aus-2', name: 'SOL REViBE South Congress', cityId: 'austin', address: '1600 S Congress Ave', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 30.2498, lng: -97.7495 },
-                { id: 'dal-1', name: 'SOL REViBE DFW Center', cityId: 'dallas', address: '555 Frequency Ln', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 32.7767, lng: -96.7970 },
-                { id: 'hou-1', name: 'SOL REViBE Galleria', cityId: 'houston', address: '5000 Westheimer Rd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 29.7398, lng: -95.4639 },
-                { id: 'slc-1', name: 'SOL REViBE Temple Square', cityId: 'saltlake', address: '50 S Main St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 40.7689, lng: -111.8906 },
-
-                // Midwest Region Stations
-                { id: 'chi-1', name: 'SOL REViBE Lakefront', cityId: 'chicago', address: '321 Recharge Dr', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 41.8781, lng: -87.6298 },
-                { id: 'chi-2', name: 'SOL REViBE Lincoln Park', cityId: 'chicago', address: '2200 N Clark St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 41.9224, lng: -87.6384 },
-                { id: 'det-1', name: 'SOL REViBE Downtown', cityId: 'detroit', address: '1000 Woodward Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 42.3314, lng: -83.0458 },
-                { id: 'msp-1', name: 'SOL REViBE North Star', cityId: 'minneapolis', address: '600 Hennepin Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 44.9789, lng: -93.2725 },
-                { id: 'stl-1', name: 'SOL REViBE Gateway', cityId: 'stlouis', address: '200 N Broadway', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 38.6270, lng: -90.1882 },
-                { id: 'col-1', name: 'SOL REViBE Short North', cityId: 'columbus', address: '800 N High St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 39.9788, lng: -83.0039 },
-                { id: 'ind-1', name: 'SOL REViBE Mile Square', cityId: 'indianapolis', address: '10 W Market St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 39.7684, lng: -86.1581 },
-
-                // Southeast Region Stations
-                { id: 'nsh-1', name: 'SOL REViBE Music City', cityId: 'nashville', address: '220 Harmony St', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 36.1627, lng: -86.7816 },
-                { id: 'atl-1', name: 'SOL REViBE Peachtree', cityId: 'atlanta', address: '88 Piedmont Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 33.7490, lng: -84.3880 },
-                { id: 'tpa-1', name: 'SOL REViBE Sunshine', cityId: 'tampa', address: '888 Coastal Blvd', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 27.9506, lng: -82.4572 },
-                { id: 'mia-1', name: 'SOL REViBE Ocean Drive', cityId: 'miami', address: '1100 Collins Ave', status: 'Launching Soon', color: 'green', textClass: 'green-text', lat: 25.7617, lng: -80.1918 },
-                { id: 'mia-2', name: 'SOL REViBE Brickell', cityId: 'miami', address: '700 Brickell Ave', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 25.7664, lng: -80.1908 },
-                { id: 'clt-1', name: 'SOL REViBE Uptown', cityId: 'charlotte', address: '100 N Tryon St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 35.2271, lng: -80.8431 },
-                { id: 'mco-1', name: 'SOL REViBE Lake Nona', cityId: 'orlando', address: '6900 Lake Nona Blvd', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 28.3752, lng: -81.2736 },
-
-                // Northeast Region Stations
-                { id: 'bos-1', name: 'SOL REViBE Harbor', cityId: 'boston', address: '175 Innovation Row', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 42.3601, lng: -71.0589 },
-                { id: 'ny-1', name: 'SOL REViBE Manhattan', cityId: 'ny', address: '45 Rockefeller Plaza', status: 'Priority Market', color: 'purple', textClass: 'purple-text', lat: 40.7128, lng: -74.0060 },
-                { id: 'ny-2', name: 'SOL REViBE Brooklyn', cityId: 'ny', address: '250 Bedford Ave', status: 'Expansion Target', color: 'orange', textClass: 'orange-text', lat: 40.7174, lng: -73.9584 },
-                { id: 'phl-1', name: 'SOL REViBE Rittenhouse', cityId: 'philly', address: '1800 Walnut St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 39.9496, lng: -75.1702 },
-                { id: 'iad-1', name: 'SOL REViBE DuPont Circle', cityId: 'dc', address: '1500 Connecticut Ave NW', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 38.9097, lng: -77.0430 },
-                { id: 'pit-1', name: 'SOL REViBE Oakland', cityId: 'pittsburgh', address: '3900 Forbes Ave', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 40.4412, lng: -79.9575 },
-                { id: 'bal-1', name: 'SOL REViBE Inner Harbor', cityId: 'baltimore', address: '400 E Pratt St', status: 'Future Market', color: 'blue', textClass: 'blue-text', lat: 39.2872, lng: -76.6086 }
-            ]
-        };
-
-        // Helper function to dynamically enrich relational database structure
-        function getEnrichedStations() {
-            return SOL_LOCATOR_DB.stations.map(station => {
-                const city = SOL_LOCATOR_DB.cities[station.cityId] || {};
-                const region = SOL_LOCATOR_DB.regions[city.regionId] || {};
-                return {
-                    id: station.id,
-                    name: station.name,
-                    city: city.name || '',
-                    cityId: station.cityId,
-                    state: city.state || '',
-                    regionId: city.regionId,
-                    regionName: region.name || '',
-                    lat: station.lat,
-                    lng: station.lng,
-                    address: station.address,
-                    status: station.status,
-                    color: station.color,
-                    textClass: station.textClass
-                };
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize map centered at USA center
-            map = L.map('sol-map', {
-                center: [39.8283, -98.5795],
-                zoom: 4,
-                zoomControl: false,
-                attributionControl: false
-            });
-
-            // Add CartoDB Positron tile layer
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                maxZoom: 18,
-                minZoom: 3
-            }).addTo(map);
-
-            // Re-position zoom control to bottom-right
-            L.control.zoom({
-                position: 'bottomright'
-            }).addTo(map);
-
-            // Render station markers
-            renderMapMarkers();
-
-            // Close any open popups when map is clicked
-            map.on('click', function() {
-                closeAllMarkers();
-            });
-
-            // Check if map is already unlocked in localStorage
-            if (localStorage.getItem('sol_revibe_unlocked') === 'true') {
-                unlockMap(true);
-            }
-
-            // Bind input validation listeners to clear errors on typing
-            setupValidationListeners();
-        });
-
-        function setupValidationListeners() {
-            const emailInput = document.getElementById('finder-email');
-            const cityInput = document.getElementById('finder-city');
-
-            if (emailInput) {
-                emailInput.addEventListener('input', function() {
-                    if (this.value.trim() && validateEmailFormat(this.value.trim())) {
-                        this.classList.remove('invalid');
-                        document.getElementById('email-error').classList.remove('show');
-                    }
-                });
-            }
-
-            if (cityInput) {
-                cityInput.addEventListener('input', function() {
-                    if (this.value.trim()) {
-                        this.classList.remove('invalid');
-                        document.getElementById('city-error').classList.remove('show');
-                    }
-                });
-            }
-        }
-
-        function validateEmailFormat(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        function submitFinderForm() {
-            const emailInput = document.getElementById('finder-email');
-            const cityInput = document.getElementById('finder-city');
-            const emailValue = emailInput.value.trim();
-            const cityValue = cityInput.value.trim();
-
-            let isValid = true;
-
-            // Validate email
-            if (!emailValue || !validateEmailFormat(emailValue)) {
-                emailInput.classList.add('invalid');
-                document.getElementById('email-error').classList.add('show');
-                isValid = false;
-            } else {
-                emailInput.classList.remove('invalid');
-                document.getElementById('email-error').classList.remove('show');
-            }
-
-            // Validate city
-            if (!cityValue) {
-                cityInput.classList.add('invalid');
-                document.getElementById('city-error').classList.add('show');
-                isValid = false;
-            } else {
-                cityInput.classList.remove('invalid');
-                document.getElementById('city-error').classList.remove('show');
-            }
-
-            if (!isValid) return;
-
-            // Save unlock state
-            localStorage.setItem('sol_revibe_unlocked', 'true');
-
-            // Unlock map (smooth transition)
-            unlockMap(false);
-
-            // Execute findStation logic
-            findStation();
-        }
-
-        function unlockMap(instant) {
-            const overlay = document.getElementById('map-lock-overlay');
-            if (overlay) {
-                if (instant) {
-                    overlay.style.display = 'none';
-                    overlay.classList.add('unlocked');
-                } else {
-                    overlay.classList.add('unlocked');
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                    }, 500); // matches transition time
-                }
-            }
-        }
-
-        function handleLockedMapClick() {
-            const toast = document.getElementById('map-lock-toast');
-            if (!toast) return;
-
-            // Show toast
-            toast.classList.add('show');
-
-            // Clear previous timeout if user clicks rapidly
-            if (toastTimeout) {
-                clearTimeout(toastTimeout);
-            }
-
-            // Hide toast after 3 seconds
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        function renderMapMarkers() {
-            const enrichedStations = getEnrichedStations();
-            
-            enrichedStations.forEach(function(station) {
-                const markerHtml = `
-                    <div class="hotspot-inner ${station.color}">
-                        <span class="hotspot-dot"></span>
-                        <div class="hotspot-details">
-                            <strong>${station.name}</strong>
-                            <span class="hotspot-address">${station.address}, ${station.city}, ${station.state}</span>
-                            <span class="hotspot-status ${station.textClass}">● ${station.status}</span>
-                        </div>
-                    </div>
-                `;
-
-                const customIcon = L.divIcon({
-                    className: 'hotspot-marker',
-                    html: markerHtml,
-                    iconSize: [28, 28],
-                    iconAnchor: [14, 14]
-                });
-
-                const marker = L.marker([station.lat, station.lng], { icon: customIcon }).addTo(map);
-
-                // Store marker for search lookup
-                mapMarkers[station.id] = marker;
-                
-                // Track by city as well, supporting lists of stations in a single city
-                const cityKey = station.city.toLowerCase();
-                if (!mapMarkers[cityKey]) {
-                    mapMarkers[cityKey] = [];
-                }
-                mapMarkers[cityKey].push(marker);
-
-                // Setup click event
-                marker.on('click', function(e) {
-                    // Prevent action if map is still locked
-                    if (localStorage.getItem('sol_revibe_unlocked') !== 'true') {
-                        handleLockedMapClick();
-                        L.DomEvent.stopPropagation(e);
-                        return;
-                    }
-
-                    const element = marker.getElement().querySelector('.hotspot-inner');
-                    
-                    if (element.classList.contains('expanded')) {
-                        element.classList.remove('expanded');
-                    } else {
-                        closeAllMarkers();
-                        element.classList.add('expanded');
-                        // Center map on marker
-                        map.setView([station.lat, station.lng], map.getZoom(), { animate: true });
-                    }
-                    
-                    L.DomEvent.stopPropagation(e);
-                });
-            });
-        }
-
-        function closeAllMarkers() {
-            document.querySelectorAll('.hotspot-inner.expanded').forEach(function(el) {
-                el.classList.remove('expanded');
-            });
-        }
-
-        function showMessageToast(text) {
-            const toast = document.getElementById('map-lock-toast');
-            if (!toast) return;
-
-            // Update toast text temporarily
-            const span = toast.querySelector('span');
-            const originalText = span.innerText;
-            span.innerText = text;
-
-            toast.classList.add('show');
-
-            if (toastTimeout) {
-                clearTimeout(toastTimeout);
-            }
-
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-                // restore text after fade-out transition
-                setTimeout(() => {
-                    span.innerText = originalText;
-                }, 400);
-            }, 4000);
-        }
-
-        function findStation() {
-            const cityInput = document.getElementById('finder-city').value.trim().toLowerCase();
-
-            if (!cityInput) return;
-
-            const enrichedStations = getEnrichedStations();
-
-            // Find all matched stations in this city or matching station id/name
-            const matches = enrichedStations.filter(s => 
-                s.city.toLowerCase() === cityInput || 
-                s.cityId === cityInput || 
-                s.id.toLowerCase() === cityInput ||
-                s.name.toLowerCase().includes(cityInput)
-            );
-
-            if (matches.length > 0) {
-                // Focus on the first matched station
-                const primaryMatch = matches[0];
-
-                // Scroll map into view
-                document.querySelector('.map-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-                // Fly to the coordinates and zoom in
-                setTimeout(() => {
-                    map.flyTo([primaryMatch.lat, primaryMatch.lng], 10, {
-                        animate: true,
-                        duration: 1.5
-                    });
-
-                    // Once zoom completes, expand the primary marker
-                    map.once('zoomend moveend', () => {
-                        closeAllMarkers();
-                        const marker = mapMarkers[primaryMatch.id];
-                        if (marker) {
-                            const element = marker.getElement().querySelector('.hotspot-inner');
-                            element.classList.add('expanded');
-                        }
-                    });
-                }, 300);
-            } else {
-                // Scroll map into view and show friendly toast message instead of browser alert
-                document.querySelector('.map-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                setTimeout(() => {
-                    showMessageToast("We don't have a station in '" + cityInput + "' yet. Try Austin, Seattle, or Miami!");
-                }, 300);
-            }
-        }
-
-        // Close expanded hotspots when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.leaflet-marker-icon') && !e.target.closest('.finder-form')) {
-                closeAllMarkers();
-            }
-        });
-    </script>
 </head>
 
 <body>
@@ -2070,55 +1665,167 @@
         </div>
 </header>
 
-    <!-- Station Finder Section -->
-    <section class="station-finder">
-
-        <div class="finder-header">
-            <h2>
-                Enter your business email and city to find a<br>
-                <span class="gradient-text">SOL REViBE</span> Experience Station near you.
-            </h2>
-
-            <form class="finder-form" id="station-finder-form" onsubmit="event.preventDefault(); submitFinderForm();" novalidate>
-                <div class="form-field">
-                    <input type="email" id="finder-email" placeholder="Business Email" required>
-                    <span class="error-msg" id="email-error">Please enter a valid business email.</span>
-                </div>
-                <div class="form-field">
-                    <input type="text" id="finder-city" placeholder="Your City" required>
-                    <span class="error-msg" id="city-error">Please enter your city.</span>
-                </div>
-                <button type="submit" id="finder-submit-btn">Find a Station Near Me</button>
-            </form>
-        </div>
-
-        <div class="map-wrapper">
-            <!-- Lock Overlay -->
-            <div class="map-lock-overlay" id="map-lock-overlay" onclick="handleLockedMapClick()">
-                <div class="lock-indicator">
-                    <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                    </svg>
-                    <span>Locations Locked</span>
-                </div>
+        <!-- Map Workspace Container -->
+        <section class="map-wrapper" id="map-section">
+            
+            <!-- Map Instance -->
+            <div id="map"></div>
+            
+            <!-- Floating Google-Maps-Style Search Bar (Top-Left) -->
+            <div class="search-container">
+                <form id="zip-search-form" class="search-box">
+                    <i class="fa-solid fa-location-dot search-icon"></i>
+                    <input type="text" 
+                           id="zip-search-input" 
+                           placeholder="Enter business ZIP code to check zone availability..." 
+                           maxlength="5"
+                           autocomplete="off">
+                    <button type="submit" id="zip-search-btn" aria-label="Search Zone">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+                <div id="search-feedback" class="search-feedback hidden"></div>
             </div>
 
-            <!-- Floating Notification Toast -->
-            <div class="map-toast" id="map-lock-toast">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
-                <span>Please enter your business email and city first to unlock station locations.</span>
+            <!-- Floating Status Card (Top-Right, Hidden by Default) -->
+            <div id="status-card" class="status-card hidden">
+                <div class="card-header">
+                    <span class="status-badge" id="card-status-badge"><i class="fa-solid fa-circle-check"></i> Available</span>
+                    <button id="close-card-btn" class="close-btn" aria-label="Close card">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                
+                <h3 class="card-title" id="card-status-title">Good news! This zone is available.</h3>
+                <div class="card-desc hidden" id="card-status-desc"></div>
+                
+                <div class="card-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Zone ID</span>
+                        <span class="detail-val" id="val-zone-id">-</span>
+                    </div>
+                    <div class="detail-row hidden" id="row-flagship">
+                        <span class="detail-label">Flagship Hub</span>
+                        <span class="detail-val" id="val-flagship">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Primary City</span>
+                        <span class="detail-val" id="val-city">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">State Coverage</span>
+                        <span class="detail-val" id="val-state">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">ZIP Codes Count</span>
+                        <span class="detail-val" id="val-zips-count">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Est. Population</span>
+                        <span class="detail-val" id="val-pop">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Target Pop.</span>
+                        <span class="detail-val" id="val-target-pop">-</span>
+                    </div>
+                </div>
+                
+                <button id="claim-zone-btn" class="claim-btn">
+                    Claim This Zone Now <i class="fa-solid fa-arrow-right"></i>
+                </button>
             </div>
+            
+            <!-- Map Legend (Bottom-Right) -->
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-color available"></span>
+                    <span class="legend-text">Available Territory</span>
+                </div>
+                <div class="legend-item" style="margin-top: 4px;">
+                    <span class="legend-color taken"></span>
+                    <span class="legend-text">Flagship Activated</span>
+                </div>
+            </div>
+            
+        </section>
 
-            <!-- Leaflet Map Container -->
-            <div id="sol-map"></div>
-        </div>
-
-    </section>
+        <!-- Application Section -->
+        <section id="application-form-section" class="application-section">
+            <div class="section-divider">
+                <img src="assets/partnership_signature_icon.png" alt="Signature Icon" class="divider-icon">
+            </div>
+            
+            <h2 class="form-title">Claimed Territory Application</h2>
+            <p class="form-subtitle">
+                Secure your exclusive rights today. Fill out this brief application form and our partnership development team will contact you within 24 hours to finalize your registration.
+            </p>
+            
+            <div class="form-container">
+                <form id="franchise-application-form" onsubmit="event.preventDefault(); alert('Application submitted successfully! Our team will reach out shortly.');">
+                    <div class="form-grid">
+                        
+                        <!-- Contact Info Group -->
+                        <div class="form-card">
+                            <h3 class="card-section-title"><i class="fa-solid fa-user"></i> Contact Information</h3>
+                            
+                            <div class="input-group">
+                                <label for="first-name">First Name</label>
+                                <input type="text" id="first-name" required placeholder="John">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" required placeholder="Doe">
+                            </div>
+                            
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" required placeholder="john.doe@example.com">
+                                </div>
+                                <div class="input-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" required placeholder="(555) 000-0000">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Business & Territory Info Group -->
+                        <div class="form-card">
+                            <h3 class="card-section-title"><i class="fa-solid fa-briefcase"></i> Business & Selected Territory</h3>
+                            
+                            <div class="input-group">
+                                <label for="company-name">Company / DBA Name</label>
+                                <input type="text" id="company-name" placeholder="Leave blank if not registered yet">
+                            </div>
+                            
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="claimed-zone">Selected Zone ID</label>
+                                    <input type="text" id="claimed-zone" readonly placeholder="Search and claim on map above" class="readonly-input">
+                                </div>
+                                <div class="input-group">
+                                    <label for="claimed-city">Territory City/State</label>
+                                    <input type="text" id="claimed-city" readonly placeholder="Search and claim on map above" class="readonly-input">
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="experience">Describe your business background</label>
+                                <textarea id="experience" rows="3" placeholder="Tell us briefly about your current operations or industry experience..."></textarea>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="form-submit-wrapper">
+                        <button type="submit" class="submit-form-btn">
+                            Submit Territory Application <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
 
     <!-- Mind Shift Section -->
     <section class="mind-shift-section">
@@ -2197,62 +1904,7 @@
         <p class="footer-copy">SOL THEORY LLC &copy; 2026 | solworld.ai</p>
     </footer>
 
-    <!-- Map Modal Overlay -->
-    <div id="map-modal" class="map-modal-overlay">
-        <div class="map-modal-content">
-            <button class="close-modal-btn" onclick="closeMapModal()">×</button>
-            <h3 class="map-modal-title">Experience Stations</h3>
-            <p class="map-modal-subtitle" id="map-modal-subtitle">Connecting to SOL Network...</p>
-            <div class="map-image-container">
-                <iframe id="dynamic-map" src="" title="Station Map"></iframe>
-                <div class="scanning-bar"></div>
 
-                <div id="station-tooltip" class="station-tooltip">
-                    <button class="close-tooltip-btn" onclick="closeTooltip(event)">×</button>
-                    <h4 id="st-name">SOL REViBE Lounge</h4>
-                    <p id="st-address">123 Wellness Ave</p>
-                    <div class="status">● AVAILABLE NOW</div>
-                </div>
-            </div>
-            <a href="#" class="btn-outline" style="margin-top: 2rem; display: inline-block;">View Full Directory</a>
-        </div>
-    </div>
-
-    <script>
-        function filterMap(e) {
-            e.preventDefault();
-            // Show hotspots layer
-            var layer = document.getElementById('hotspots-layer');
-            layer.style.opacity = '1';
-            // Scroll map into view
-            document.getElementById('map-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        function togglePopup(stationId) {
-            // Close all popups first
-            var allPopups = document.querySelectorAll('[id^="popup-"]');
-            allPopups.forEach(function(p) {
-                if (p.id !== 'popup-' + stationId) {
-                    p.style.display = 'none';
-                }
-            });
-            // Toggle the clicked one
-            var popup = document.getElementById('popup-' + stationId);
-            if (popup.style.display === 'none' || popup.style.display === '') {
-                popup.style.display = 'block';
-            } else {
-                popup.style.display = 'none';
-            }
-        }
-
-        // Close popups when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.map-hotspot')) {
-                var allPopups = document.querySelectorAll('[id^="popup-"]');
-                allPopups.forEach(function(p) { p.style.display = 'none'; });
-            }
-        });
-    </script>
 
     <script>
         const canvas = document.getElementById('starfield');
@@ -2328,100 +1980,7 @@
 
         draw();
 
-        // Map Modal Logic
-        const stationNames = ["SOL Zenith Center", "ViBE Lounge Central", "Quantum Wellness Spa", "SOL Core Station", "Aura Healing Hub", "Neon Pulse Studio", "Ascend Wellness"];
-        const stationStreets = ["123 Future Ave", "88 Frequency Blvd", "404 Energy St", "77 Harmonic Way", "990 Resonance Dr", "256 Horizon Ln", "33 Zenith Path"];
 
-        function showMapModal(event) {
-            event.preventDefault();
-            const email = document.getElementById('search-email').value;
-            const city = document.getElementById('search-city').value;
-
-            if (email && city) {
-                const modal = document.getElementById('map-modal');
-                const subtitle = document.getElementById('map-modal-subtitle');
-                const mapIframe = document.getElementById('dynamic-map');
-
-                // Dynamically update the map to show the user's city
-                const encodedCity = encodeURIComponent(city);
-                mapIframe.src = `https://maps.google.com/maps?q=${encodedCity}&t=m&z=12&output=embed&iwloc=near`;
-
-                // Simulate loading state
-                subtitle.innerHTML = 'Connecting to SOL Network...';
-                modal.classList.add('active');
-                closeTooltip(); // ensure tooltip is closed
-
-                // Simulate found stations after scan animation starts
-                setTimeout(() => {
-                    const count = Math.floor(Math.random() * 5) + 3; // random number 3-7
-                    subtitle.innerHTML = `Found <strong style="color:#ffffff">${count} active stations</strong> near ${city}`;
-
-                    // Generate violet mockup markers over the iframe
-                    const mapContainer = document.querySelector('.map-image-container');
-                    document.querySelectorAll('.mockup-marker').forEach(el => el.remove()); // clear old
-
-                    for (let i = 0; i < count; i++) {
-                        const marker = document.createElement('div');
-                        marker.className = 'mockup-marker';
-
-                        // Scatter markers mostly in the central 60% of the map view
-                        const top = 20 + Math.random() * 60;
-                        const left = 20 + Math.random() * 60;
-
-                        marker.style.top = `${top}%`;
-                        marker.style.left = `${left}%`;
-
-                        // Interaction data
-                        const sName = stationNames[Math.floor(Math.random() * stationNames.length)];
-                        const sStreet = stationStreets[Math.floor(Math.random() * stationStreets.length)];
-
-                        marker.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            const tooltip = document.getElementById('station-tooltip');
-                            document.getElementById('st-name').innerText = sName;
-                            document.getElementById('st-address').innerText = `${sStreet}, ${city}`;
-
-                            // Position tooltip above the marker
-                            tooltip.style.left = `${left}%`;
-                            // Offset tooltip vertically to sit right above marker
-                            tooltip.style.top = `calc(${top}% - 25px)`;
-
-                            // Visual highlight
-                            document.querySelectorAll('.mockup-marker').forEach(m => m.style.border = '2px solid #ffffff');
-                            marker.style.border = '2px solid #0ea5e9';
-
-                            tooltip.classList.add('active');
-                        });
-
-                        // Stagger the fade-in for a cool effect
-                        setTimeout(() => {
-                            marker.style.opacity = '1';
-                        }, i * 300);
-
-                        mapContainer.appendChild(marker);
-                    }
-                }, 1500);
-            }
-        }
-
-        function closeTooltip(event) {
-            if (event) event.stopPropagation();
-            document.getElementById('station-tooltip').classList.remove('active');
-            document.querySelectorAll('.mockup-marker').forEach(m => m.style.border = '2px solid #ffffff');
-        }
-
-        function closeMapModal() {
-            document.getElementById('map-modal').classList.remove('active');
-            closeTooltip();
-
-            // Reset form for demo purposes
-            setTimeout(() => {
-                document.getElementById('search-email').value = '';
-                document.getElementById('search-city').value = '';
-                document.getElementById('dynamic-map').src = '';
-                document.querySelectorAll('.mockup-marker').forEach(el => el.remove());
-            }, 400); // wait for fade out
-        }
     </script>
 
     <script>
@@ -2496,6 +2055,15 @@
             }
         });
     </script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Esri Leaflet -->
+    <script src="https://unpkg.com/esri-leaflet@3.0.10/dist/esri-leaflet.js"></script>
+
+    <!-- Custom Script -->
+    <script src="app.js"></script>
 </body>
 
 </html>

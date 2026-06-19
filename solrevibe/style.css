@@ -1150,11 +1150,13 @@ body {
 }
 
 .divider-icon {
-    background-color: var(--bg-page);
-    color: var(--text-muted-map);
-    font-size: 1.25rem;
-    padding: 0 16px;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    padding: 0 8px;
     z-index: 2;
+    background-color: #faf2e6; /* matches the local body gradient to mask the line */
 }
 
 .form-title {

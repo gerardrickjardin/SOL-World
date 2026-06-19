@@ -774,6 +774,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const markerInstances = {};
             // Calculate the offset center coordinates so the map is fully static from frame 1.
             // We want Denver [39.7392, -104.9903] to be positioned 126px to the left and 31px above the center of the container.
             // We can calculate the exact LatLng using Leaflet's projection system on a temporary map instance.
@@ -868,8 +869,6 @@
                     textClass: 'purple-text'
                 }
             ];
-
-            const markerInstances = {};
 
             // Render hotspots as Leaflet markers with click expand behavior
             hotspots.forEach(function(spot) {
