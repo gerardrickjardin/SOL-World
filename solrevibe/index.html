@@ -1154,10 +1154,13 @@
             text-align:center;
             max-width:900px;
             margin:auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .section-header h2{
-            font-size:72px;
+            font-size: clamp(38px, 3.8vw, 72px);
             line-height:1.05;
             color:#111827;
             font-weight:700;
@@ -1562,7 +1565,7 @@
 
         <!-- Steak Video Section -->
         <section class="steak-video-section" style="max-width: 1200px; margin: 6rem auto; padding: 0 2rem; text-align: center; position: relative; z-index: 20;">
-            <div class="section-header" style="margin-bottom: 3rem;">
+            <div class="section-header" style="margin-bottom: 3rem; max-width: none;">
                 <h2>Experience the <span style="background: linear-gradient(90deg, #5ec9a6, #6388ff, #b05cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">Energy Recharging</span> Wellness</h2>
                 <p>Discover how the frequency recharging station harmonizes <br> physical recovery and cellular renewal.</p>
             </div>
@@ -1579,7 +1582,7 @@
         </section>
 
         <!-- Map Title Section -->
-        <div class="section-header" style="margin-top: 6rem; margin-bottom: 2.5rem;">
+        <div class="section-header" style="margin-top: 6rem; margin-bottom: 2.5rem; max-width: none;">
             <h2>Claim Your <span style="background: linear-gradient(90deg, #5ec9a6, #6388ff, #b05cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">SOL REViBE</span> Territory <span style="background: linear-gradient(90deg, #5ec9a6, #6388ff, #b05cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">Now</span></h2>
             <p>Use the interactive map below to search for your B2B metropolitan hub or commercial zone availability.</p>
         </div>
