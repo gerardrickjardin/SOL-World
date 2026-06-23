@@ -1485,6 +1485,20 @@
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
             border-color: rgba(255, 255, 255, 0.8);
         }
+        .video-card-container:hover .play-btn-circle {
+            transform: scale(1.15);
+        }
+        @keyframes pulsePlay {
+            0% {
+                box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 0 0 rgba(59, 130, 246, 0.4);
+            }
+            70% {
+                box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 0 20px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
     </style>
 
 
@@ -1555,8 +1569,14 @@
                 </p>
             </div>
             
-            <div class="video-card-container" style="position: relative; border-radius: 24px; overflow: hidden; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-width: 960px; margin: 0 auto; aspect-ratio: 16 / 9;">
-                <video src="assets/steak_video.mp4" controls autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 24px;"></video>
+            <div class="video-card-container" id="videoContainer" style="position: relative; border-radius: 24px; overflow: hidden; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-width: 960px; margin: 0 auto; aspect-ratio: 16 / 9; cursor: pointer;">
+                <video id="steakVideo" src="assets/steak_video.mp4" loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 24px;"></video>
+                <!-- Play Button Overlay Mockup -->
+                <div class="video-play-overlay" id="videoOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.2); transition: opacity 0.4s ease; z-index: 5;">
+                    <div class="play-btn-circle" style="width: 84px; height: 84px; border-radius: 50%; background: rgba(255, 255, 255, 0.95); display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px rgba(0,0,0,0.25); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: pulsePlay 2s infinite;">
+                        <i class="fa-solid fa-play" style="color: #3b82f6; font-size: 2.2rem; margin-left: 8px;"></i>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1942,6 +1962,25 @@
                         isPlaying = true;
                         audioControl.classList.add('playing');
                         if (audioBtnText) audioBtnText.innerText = 'PAUSE';
+                    }
+                });
+            }
+
+            // Steak Video Play/Pause Mockup Overlay Logic
+            const videoContainer = document.getElementById('videoContainer');
+            const steakVideo = document.getElementById('steakVideo');
+            const videoOverlay = document.getElementById('videoOverlay');
+            if (videoContainer && steakVideo && videoOverlay) {
+                videoContainer.addEventListener('click', () => {
+                    if (steakVideo.paused) {
+                        steakVideo.play().then(() => {
+                            videoOverlay.style.opacity = '0';
+                            videoOverlay.style.pointerEvents = 'none';
+                        }).catch(e => console.error(e));
+                    } else {
+                        steakVideo.pause();
+                        videoOverlay.style.opacity = '1';
+                        videoOverlay.style.pointerEvents = 'auto';
                     }
                 });
             }
