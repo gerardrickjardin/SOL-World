@@ -1497,11 +1497,250 @@
             0% {
                 box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 0 0 rgba(59, 130, 246, 0.4);
             }
-            70% {
-                box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 0 20px rgba(59, 130, 246, 0);
-            }
             100% {
                 box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
+        /* Homepage Payment Section styling */
+        .homepage-payment-section {
+            padding: 100px 6%;
+            background: linear-gradient(135deg, #f8f4ee 0%, #eef8f0 40%, #f2efff 100%);
+            position: relative;
+            z-index: 20;
+        }
+
+        .payment-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #3b82f6;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .payment-card-wrapper {
+            max-width: 1240px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 45px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .payment-card-wrapper:hover {
+            box-shadow: 0 25px 60px rgba(59, 130, 246, 0.12);
+            border-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .payment-details-col {
+            text-align: left;
+        }
+
+        .payment-details-col .product-tagline {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+
+        .payment-details-col h3 {
+            font-size: clamp(26px, 3vw, 38px);
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .payment-price-box {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        }
+
+        .payment-price-box .price-num {
+            font-size: clamp(42px, 4.5vw, 56px);
+            font-weight: 900;
+            color: #0f172a;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+
+        .payment-price-box .price-unit {
+            font-size: 18px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .payment-price-box .price-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .payment-features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 28px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .payment-features-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .payment-features-list .check-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .payment-features-list strong {
+            display: block;
+            font-size: 16px;
+            color: #0f172a;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .payment-features-list p {
+            margin: 0;
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .payment-action-card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 36px 30px;
+            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(79, 124, 255, 0.12);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+        }
+
+        .security-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #059669;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .payment-cta-button {
+            width: 100%;
+            background: linear-gradient(270deg, #22c55e, #3b82f6, #a855f7, #3b82f6, #22c55e);
+            background-size: 200% 200%;
+            animation: liquidFlow 8s ease infinite;
+            color: white !important;
+            text-decoration: none;
+            padding: 18px 28px;
+            border-radius: 16px;
+            font-family: 'Gotham', 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.03em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .payment-cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.45);
+            opacity: 0.95;
+        }
+
+        .payment-methods-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: #94a3b8;
+            font-size: 22px;
+            margin-top: 4px;
+        }
+
+        .payment-note-text {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        @media (max-width: 991px) {
+            .payment-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .payment-card-wrapper {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -1525,6 +1764,7 @@
             <a href="#experience">EXPERIENCE</a>
             <a href="locations/index.html">LOCATIONS</a>
             <a href="#science">SCIENCE</a>
+            <a href="#payment">PAYMENT</a>
             <a href="#partnership">PARTNERSHIP</a>
             <a href="#about">ABOUT</a>
             <a href="landing" class="vibe-reserve-btn mobile-only-btn">JOIN THE WAITLIST &rarr;</a>
@@ -1743,6 +1983,93 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </section>
+
+        <!-- Payment Preview Section -->
+        <section id="payment" class="homepage-payment-section">
+            <div class="section-header" style="max-width: 900px; margin: 0 auto 3rem auto; text-align: center;">
+                <div class="payment-badge-pill">
+                    <i class="fa-solid fa-credit-card"></i> Direct B2B Purchase
+                </div>
+                <h2 style="font-size: clamp(32px, 3.3vw, 56px); line-height: 1.15; font-weight: 700; color: #0f172a;">Order & Reserve Your <span class="gradient-text">SOUL REViBE Station</span></h2>
+                <p style="margin-top: 20px; color: #64748b; font-size: 20px; line-height: 1.6;">Ready to bring SOL REViBE to your facility? Access our single-page PCI-encrypted checkout portal to secure your commercial station order instantly.</p>
+            </div>
+
+            <div class="payment-card-wrapper">
+                <div class="payment-grid">
+                    <!-- Left Details -->
+                    <div class="payment-details-col">
+                        <div class="product-tagline">Direct Purchase Package</div>
+                        <h3>SOUL REViBE Business-in-a-Box Station</h3>
+                        
+                        <div class="payment-price-box">
+                            <span class="price-num">$3,000</span>
+                            <span class="price-unit">USD</span>
+                            <span class="price-badge"><i class="fa-solid fa-bolt"></i> Commercial Package</span>
+                        </div>
+
+                        <ul class="payment-features-list">
+                            <li>
+                                <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+                                <div>
+                                    <strong>Commercial-Grade PEMF Platform</strong>
+                                    <p>High-performance pulsed electromagnetic field station engineered for continuous commercial wellness sessions.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+                                <div>
+                                    <strong>Complete TAG Audio Library</strong>
+                                    <p>Full suite of neuro-acoustic soundscapes and therapeutic frequency audio tracks.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+                                <div>
+                                    <strong>Eleven-Piece Comfort Package</strong>
+                                    <p>Ergonomic body alignment cushions, luxury sanitizable covers, and complete accessory kit.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+                                <div>
+                                    <strong>Priority Showcase Allocation</strong>
+                                    <p>Direct priority dispatch, dedicated account manager, and full station setup guidance.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Right Payment Portal CTA Card -->
+                    <div class="payment-action-card">
+                        <div class="security-badge-pill">
+                            <i class="fa-solid fa-shield-halved"></i> 256-Bit PCI Encrypted Checkout
+                        </div>
+
+                        <div style="text-align: center; margin: 10px 0;">
+                            <img src="assets/SOL%20REViBE%20Logo.png" alt="SOL REViBE" style="height: 48px; object-fit: contain; mix-blend-mode: multiply;">
+                            <p style="font-weight: 700; color: #0f172a; margin-top: 8px; font-size: 15px;">Official B2B Order Portal</p>
+                        </div>
+
+                        <a href="payment.html" class="payment-cta-button">
+                            <span>Go to Payment Page</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                        <div class="payment-methods-row">
+                            <i class="fa-brands fa-cc-visa" title="Visa"></i>
+                            <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
+                            <i class="fa-brands fa-cc-amex" title="American Express"></i>
+                            <i class="fa-brands fa-cc-discover" title="Discover"></i>
+                            <i class="fa-solid fa-lock" title="PCI Tokenized Security" style="font-size: 16px; color: #10b981;"></i>
+                        </div>
+
+                        <p class="payment-note-text">
+                            Click above to open the secure single-page payment portal at <strong style="color: #0f172a;">solrevibe.com/payment</strong>
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
 
