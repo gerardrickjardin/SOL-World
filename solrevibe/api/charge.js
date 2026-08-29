@@ -1,45 +1,47 @@
-// Vercel Serverless Function — Authorize.net Payment Charge Handler
 const https = require('https');
 
 function postJson(urlStr, data) {
   return new Promise((resolve, reject) => {
-    const url = new URL(urlStr);
-    const body = JSON.stringify(data);
+    try {
+      const url = new URL(urlStr);
+      const body = JSON.stringify(data);
 
-    const options = {
-      hostname: url.hostname,
-      port: 443,
-      path: url.pathname + url.search,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body),
-      },
-      timeout: 30000,
-    };
+      const options = {
+        hostname: url.hostname,
+        port: 443,
+        path: url.pathname + url.search,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(body),
+        },
+        timeout: 25000,
+      };
 
-    const req = https.request(options, (res) => {
-      let responseBody = '';
-      res.setEncoding('utf8');
-      res.on('data', (chunk) => { responseBody += chunk; });
-      res.on('end', () => {
-        resolve({ statusCode: res.statusCode, body: responseBody });
+      const req = https.request(options, (res) => {
+        let responseBody = '';
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => { responseBody += chunk; });
+        res.on('end', () => {
+          resolve({ statusCode: res.statusCode, body: responseBody });
+        });
       });
-    });
 
-    req.on('error', (err) => reject(err));
-    req.on('timeout', () => {
-      req.destroy();
-      reject(new Error('Payment gateway request timed out.'));
-    });
+      req.on('error', (err) => reject(err));
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Authorize.net gateway timeout'));
+      });
 
-    req.write(body);
-    req.end();
+      req.write(body);
+      req.end();
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 
-module.exports = async function handler(req, res) {
-  // CORS Headers
+const handler = async function(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -50,10 +52,20 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed. Use POST.' });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
+    let body = req.body;
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body);
+      } catch (e) {
+        body = {};
+      }
+    }
+    body = body || {};
+
     const {
       opaqueDataDescriptor,
       opaqueDataValue,
@@ -67,7 +79,7 @@ module.exports = async function handler(req, res) {
       state,
       zip,
       cardholderName,
-    } = req.body || {};
+    } = body;
 
     if (!opaqueDataDescriptor || !opaqueDataValue) {
       return res.status(400).json({ error: 'Missing tokenized payment credentials. Please re-enter your card details.' });
@@ -76,11 +88,6 @@ module.exports = async function handler(req, res) {
     const apiLoginId = process.env.AUTHORIZENET_API_LOGIN_ID || '76zv3ZF6';
     const transactionKey = process.env.AUTHORIZENET_TRANSACTION_KEY || '4ypP828TvKAqs35c';
     const env = (process.env.AUTHORIZENET_ENV || 'production').toLowerCase().trim();
-
-    if (!apiLoginId || !transactionKey) {
-      console.error('Authorize.net credentials missing in environment.');
-      return res.status(500).json({ error: 'Payment gateway configuration missing. Please contact support.' });
-    }
 
     const endpoint = (env === 'sandbox')
       ? 'https://apitest.authorize.net/xml/v1/request.api'
@@ -127,30 +134,24 @@ module.exports = async function handler(req, res) {
       },
     };
 
-    console.log(`Sending transaction to ${endpoint}...`);
     const { statusCode, body: rawBody } = await postJson(endpoint, chargePayload);
-
-    // Strip BOM if present
-    const cleanText = rawBody.replace(/^\uFEFF/, '').trim();
+    const cleanText = (rawBody || '').replace(/^\uFEFF/, '').trim();
     let data;
     try {
       data = JSON.parse(cleanText);
     } catch (parseErr) {
-      console.error('Failed to parse Authorize.net response JSON:', cleanText);
-      return res.status(502).json({ error: 'Invalid response received from payment gateway.' });
+      return res.status(502).json({ error: 'Invalid response from payment gateway.' });
     }
 
     const messages = data && data.messages;
     if (messages && messages.resultCode === 'Error') {
       const errMsg = (messages.message && messages.message[0] && messages.message[0].text) || 'Transaction failed.';
-      console.error('Authorize.net Gateway Error:', errMsg);
       return res.status(400).json({ error: errMsg });
     }
 
     const txResult = data && data.transactionResponse;
     const responseCode = txResult && txResult.responseCode;
 
-    // Response Code 1 = Approved
     if (responseCode === '1') {
       return res.status(200).json({
         success: true,
@@ -163,17 +164,17 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // Response Code 2 = Declined, 3 = Error, 4 = Held for Review
     const declineMsg =
       (txResult && txResult.errors && txResult.errors.error && txResult.errors.error[0] && txResult.errors.error[0].errorText) ||
       (txResult && txResult.messages && txResult.messages.message && txResult.messages.message[0] && txResult.messages.message[0].description) ||
-      'The card was declined. Please verify the card number, expiration date, and CVV, or try a different card.';
+      'The transaction was declined by the card issuer. Please verify your details or use another card.';
 
-    console.error('Authorize.net Transaction Declined:', declineMsg, 'Response Code:', responseCode);
     return res.status(402).json({ error: declineMsg });
 
   } catch (err) {
-    console.error('API Handler Exception:', err);
-    return res.status(500).json({ error: 'Server error processing transaction: ' + (err.message || 'Please try again.') });
+    return res.status(500).json({ error: 'Server error processing transaction: ' + (err.message || 'Unknown error') });
   }
 };
+
+module.exports = handler;
+module.exports.default = handler;
