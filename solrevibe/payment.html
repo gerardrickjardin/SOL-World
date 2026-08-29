@@ -15,6 +15,8 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Authorize.net Accept.js SDK — handles secure card tokenization -->
+    <script src="https://js.authorize.net/v3/AcceptUI.js" charset="utf-8"></script>
 
     <style>
         * {
@@ -65,6 +67,10 @@
                 token: null,
                 isProcessing: false,
                 isSuccess: false,
+                transactionId: null,
+                authCode: null,
+                last4: null,
+                errorMessage: null,
             });
 
             const [activeModal, setActiveModal] = useState(null); // 'terms' | 'privacy' | 'shipping' | 'guarantee'
@@ -77,20 +83,108 @@
                 }));
             };
 
+            // Called by Authorize.net Accept.js after successful card tokenization
+            window.authorizeNetResponseHandler = async function(response) {
+                if (response.messages.resultCode === 'Error') {
+                    const errMsg = response.messages.message.map(m => m.text).join(' ');
+                    setTokenizedState(prev => ({
+                        ...prev,
+                        isProcessing: false,
+                        errorMessage: errMsg,
+                    }));
+                    return;
+                }
+
+                // We have a real opaqueData token — now charge via our serverless API
+                const { dataDescriptor, dataValue } = response.opaqueData;
+
+                try {
+                    const res = await fetch('/api/charge', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            opaqueDataDescriptor: dataDescriptor,
+                            opaqueDataValue: dataValue,
+                            amount: '3000.00',
+                            businessName:   formData.businessName,
+                            contactName:    formData.contactName,
+                            email:          formData.email,
+                            phone:          formData.phone,
+                            address:        formData.address,
+                            city:           formData.city,
+                            state:          formData.state,
+                            zip:            formData.zip,
+                            cardholderName: formData.cardholderName,
+                        }),
+                    });
+
+                    const result = await res.json();
+
+                    if (res.ok && result.success) {
+                        setTokenizedState({
+                            isTokenized: true,
+                            token: dataValue,
+                            isProcessing: false,
+                            isSuccess: true,
+                            transactionId: result.transactionId,
+                            authCode: result.authCode,
+                            last4: result.last4,
+                            errorMessage: null,
+                        });
+                    } else {
+                        setTokenizedState(prev => ({
+                            ...prev,
+                            isProcessing: false,
+                            errorMessage: result.error || 'Transaction declined. Please try a different card.',
+                        }));
+                    }
+                } catch (err) {
+                    setTokenizedState(prev => ({
+                        ...prev,
+                        isProcessing: false,
+                        errorMessage: 'Network error. Please check your connection and try again.',
+                    }));
+                }
+            };
+
             const handleSubmit = (e) => {
                 e.preventDefault();
-                setTokenizedState(prev => ({ ...prev, isProcessing: true }));
 
-                // Simulate Payment Gateway Tokenization (Integrity Payment / NMI / Authorize.net)
-                setTimeout(() => {
-                    const mockToken = 'TOK_PAYMENT_' + Math.random().toString(36).substr(2, 9).toUpperCase();
-                    setTokenizedState({
-                        isTokenized: true,
-                        token: mockToken,
+                // Basic validation
+                if (!formData.cardholderName.trim()) {
+                    setTokenizedState(prev => ({ ...prev, errorMessage: 'Please enter the cardholder name.' }));
+                    return;
+                }
+
+                setTokenizedState(prev => ({ ...prev, isProcessing: true, errorMessage: null }));
+
+                // Trigger Accept.js to tokenize the card data from the hosted fields
+                // Accept.js will call window.authorizeNetResponseHandler with the result
+                if (typeof Accept === 'undefined') {
+                    setTokenizedState(prev => ({
+                        ...prev,
                         isProcessing: false,
-                        isSuccess: true,
-                    });
-                }, 1800);
+                        errorMessage: 'Payment gateway not loaded. Please refresh the page.',
+                    }));
+                    return;
+                }
+
+                const secureData = {
+                    authData: {
+                        clientKey: '399jvLeL3sad7vryJF66bg9Tgwe9Tf9k548NLqhdmK3GLGVE5B962Xq75AZaLhsX',
+                        apiLoginID: '76zv3ZF6',
+                    },
+                    cardData: {
+                        cardNumber:     document.querySelector('[data-accept-js="cardNumber"]') ? document.querySelector('[data-accept-js="cardNumber"]').value : '',
+                        month:          document.getElementById('exp-month') ? document.getElementById('exp-month').value : '',
+                        year:           document.getElementById('exp-year') ? document.getElementById('exp-year').value : '',
+                        cardCode:       document.getElementById('card-cvv') ? document.getElementById('card-cvv').value : '',
+                        fullName:       formData.cardholderName,
+                        zip:            formData.zip,
+                    },
+                };
+
+                Accept.dispatchData(secureData, 'authorizeNetResponseHandler');
             };
 
             return (
@@ -140,9 +234,21 @@
                                     </p>
                                     <div className="token-details-box">
                                         <div className="token-row">
-                                            <span>PCI Gateway Token:</span>
-                                            <code>{tokenizedState.token}</code>
+                                            <span>Transaction ID:</span>
+                                            <code>{tokenizedState.transactionId || 'Confirmed'}</code>
                                         </div>
+                                        {tokenizedState.authCode && (
+                                            <div className="token-row">
+                                                <span>Authorization Code:</span>
+                                                <strong>{tokenizedState.authCode}</strong>
+                                            </div>
+                                        )}
+                                        {tokenizedState.last4 && (
+                                            <div className="token-row">
+                                                <span>Card:</span>
+                                                <strong>ending in {tokenizedState.last4}</strong>
+                                            </div>
+                                        )}
                                         <div className="token-row">
                                             <span>Business Account:</span>
                                             <strong>{formData.businessName || 'Corporate Showcase Account'}</strong>
@@ -150,6 +256,10 @@
                                         <div className="token-row">
                                             <span>Confirmation Email:</span>
                                             <strong>{formData.email || 'partner@business.com'}</strong>
+                                        </div>
+                                        <div className="token-row">
+                                            <span>Amount Charged:</span>
+                                            <strong style={{color:'#059669'}}>$3,000.00 USD</strong>
                                         </div>
                                     </div>
                                     <button 
