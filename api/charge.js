@@ -1,47 +1,5 @@
-const https = require('https');
-
-function postJson(urlStr, data) {
-  return new Promise((resolve, reject) => {
-    try {
-      const url = new URL(urlStr);
-      const body = JSON.stringify(data);
-
-      const options = {
-        hostname: url.hostname,
-        port: 443,
-        path: url.pathname + url.search,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(body),
-        },
-        timeout: 25000,
-      };
-
-      const req = https.request(options, (res) => {
-        let responseBody = '';
-        res.setEncoding('utf8');
-        res.on('data', (chunk) => { responseBody += chunk; });
-        res.on('end', () => {
-          resolve({ statusCode: res.statusCode, body: responseBody });
-        });
-      });
-
-      req.on('error', (err) => reject(err));
-      req.on('timeout', () => {
-        req.destroy();
-        reject(new Error('Authorize.net gateway timeout'));
-      });
-
-      req.write(body);
-      req.end();
-    } catch (e) {
-      reject(e);
-    }
-  });
-}
-
-const handler = async function(req, res) {
+export default async function handler(req, res) {
+  // CORS Headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -52,19 +10,22 @@ const handler = async function(req, res) {
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed. Please use POST.' });
   }
 
   try {
-    let body = req.body;
-    if (typeof body === 'string') {
-      try {
-        body = JSON.parse(body);
-      } catch (e) {
-        body = {};
+    let body = {};
+    if (req.body) {
+      if (typeof req.body === 'string') {
+        try {
+          body = JSON.parse(req.body);
+        } catch (e) {
+          body = {};
+        }
+      } else {
+        body = req.body;
       }
     }
-    body = body || {};
 
     const {
       opaqueDataDescriptor,
@@ -134,18 +95,28 @@ const handler = async function(req, res) {
       },
     };
 
-    const { statusCode, body: rawBody } = await postJson(endpoint, chargePayload);
-    const cleanText = (rawBody || '').replace(/^\uFEFF/, '').trim();
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(chargePayload),
+    });
+
+    const rawText = await response.text();
+    const cleanText = (rawText || '').replace(/^\uFEFF/, '').trim();
     let data;
     try {
       data = JSON.parse(cleanText);
     } catch (parseErr) {
-      return res.status(502).json({ error: 'Invalid response from payment gateway.' });
+      console.error('Failed to parse Authorize.net JSON:', cleanText);
+      return res.status(502).json({ error: 'Invalid response received from payment gateway.' });
     }
 
     const messages = data && data.messages;
     if (messages && messages.resultCode === 'Error') {
       const errMsg = (messages.message && messages.message[0] && messages.message[0].text) || 'Transaction failed.';
+      console.error('Authorize.net Gateway Error:', errMsg);
       return res.status(400).json({ error: errMsg });
     }
 
@@ -172,9 +143,7 @@ const handler = async function(req, res) {
     return res.status(402).json({ error: declineMsg });
 
   } catch (err) {
+    console.error('API Handler Error:', err);
     return res.status(500).json({ error: 'Server error processing transaction: ' + (err.message || 'Unknown error') });
   }
-};
-
-module.exports = handler;
-module.exports.default = handler;
+}
