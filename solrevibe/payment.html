@@ -15,26 +15,8 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Authorize.net Accept.js SDK — dynamically loads sandbox or production -->
-    <script>
-        (function() {
-            // Detect sandbox vs production by checking the API endpoint via a meta tag
-            // We default to sandbox-safe URL; the charge.js backend handles the real routing
-            var script = document.createElement('script');
-            script.charset = 'utf-8';
-            // Use sandbox Accept.js URL (jstest) so tokenization works in both modes.
-            // The actual charge is routed to sandbox/production by the backend AUTHORIZENET_ENV var.
-            script.src = 'https://jstest.authorize.net/v1/Accept.js';
-            script.onerror = function() {
-                // Fallback to production URL if test URL fails
-                var s2 = document.createElement('script');
-                s2.charset = 'utf-8';
-                s2.src = 'https://js.authorize.net/v1/Accept.js';
-                document.head.appendChild(s2);
-            };
-            document.head.appendChild(script);
-        })();
-    </script>
+    <!-- Authorize.net Production Accept.js SDK -->
+    <script src="https://js.authorize.net/v1/Accept.js" charset="utf-8"></script>
 
     <style>
         * {
@@ -91,7 +73,7 @@
                 errorMessage: null,
             });
 
-            const [activeModal, setActiveModal] = useState(null); // 'terms' | 'privacy' | 'shipping' | 'guarantee'
+            const [activeModal, setActiveModal] = useState(null);
 
             const handleInputChange = (e) => {
                 const { name, value, type, checked } = e.target;
@@ -101,22 +83,36 @@
                 }));
             };
 
-            // Called by Authorize.net Accept.js after successful card tokenization
-            window.authorizeNetResponseHandler = async function(response) {
-                if (response.messages.resultCode === 'Error') {
-                    const errMsg = response.messages.message.map(m => m.text).join(' ');
+            // Handles the token response from Accept.js
+            const handleAcceptResponse = async (response) => {
+                console.log("Accept.js response received:", response);
+
+                if (response.messages && response.messages.resultCode === 'Error') {
+                    const errorDetails = response.messages.message
+                        ? response.messages.message.map(m => m.text).join(' ')
+                        : 'Credit card verification failed.';
+                    console.error("Accept.js Error:", errorDetails);
                     setTokenizedState(prev => ({
                         ...prev,
                         isProcessing: false,
-                        errorMessage: errMsg,
+                        errorMessage: errorDetails,
                     }));
                     return;
                 }
 
-                // We have a real opaqueData token — now charge via our serverless API
+                if (!response.opaqueData || !response.opaqueData.dataValue) {
+                    setTokenizedState(prev => ({
+                        ...prev,
+                        isProcessing: false,
+                        errorMessage: 'Unable to tokenize payment details. Please check card number, expiration, and CVV.',
+                    }));
+                    return;
+                }
+
                 const { dataDescriptor, dataValue } = response.opaqueData;
 
                 try {
+                    console.log("Calling /api/charge with tokenized nonce...");
                     const res = await fetch('/api/charge', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -137,6 +133,7 @@
                     });
 
                     const result = await res.json();
+                    console.log("Charge API response:", result);
 
                     if (res.ok && result.success) {
                         setTokenizedState({
@@ -153,73 +150,100 @@
                         setTokenizedState(prev => ({
                             ...prev,
                             isProcessing: false,
-                            errorMessage: result.error || 'Transaction declined. Please try a different card.',
+                            errorMessage: result.error || 'Transaction was declined. Please verify your card details or try another card.',
                         }));
                     }
                 } catch (err) {
+                    console.error("Payment API network error:", err);
                     setTokenizedState(prev => ({
                         ...prev,
                         isProcessing: false,
-                        errorMessage: 'Network error. Please check your connection and try again.',
+                        errorMessage: 'Network error communicating with payment server. Please try again.',
                     }));
                 }
             };
 
+            // Global callback registered on window for Accept.js string lookup
+            window.authorizeNetResponseHandler = handleAcceptResponse;
+
             const handleSubmit = (e) => {
                 e.preventDefault();
+                console.log("Submit clicked. Validating inputs...");
 
-                // Basic validation
+                // Read card fields
+                const cardNumberEl = document.getElementById('card-number');
+                const cardExpiryEl = document.getElementById('card-expiry');
+                const cardCvvEl = document.getElementById('card-cvv');
+
+                const rawCardNum = cardNumberEl ? cardNumberEl.value.replace(/[^0-9]/g, '') : '';
+                const rawExp = cardExpiryEl ? cardExpiryEl.value.trim() : '';
+                const rawCvv = cardCvvEl ? cardCvvEl.value.replace(/[^0-9]/g, '') : '';
+
                 if (!formData.cardholderName.trim()) {
                     setTokenizedState(prev => ({ ...prev, errorMessage: 'Please enter the cardholder name.' }));
                     return;
                 }
 
+                if (!rawCardNum || rawCardNum.length < 13) {
+                    setTokenizedState(prev => ({ ...prev, errorMessage: 'Please enter a valid card number.' }));
+                    return;
+                }
+
+                if (!rawExp || !rawExp.includes('/')) {
+                    setTokenizedState(prev => ({ ...prev, errorMessage: 'Please enter expiration date in MM/YY format (e.g. 12/26).' }));
+                    return;
+                }
+
+                if (!rawCvv || rawCvv.length < 3) {
+                    setTokenizedState(prev => ({ ...prev, errorMessage: 'Please enter a valid 3 or 4 digit CVV / CVC code.' }));
+                    return;
+                }
+
+                const parts = rawExp.split('/');
+                const expMonth = parts[0].trim();
+                let expYear = parts[1].trim();
+                if (expYear.length === 2) {
+                    expYear = '20' + expYear;
+                }
+
                 setTokenizedState(prev => ({ ...prev, isProcessing: true, errorMessage: null }));
 
-                // Trigger Accept.js to tokenize the card data from the hosted fields
-                // Accept.js will call window.authorizeNetResponseHandler with the result
                 if (typeof Accept === 'undefined') {
+                    console.error("Accept.js SDK is not loaded on window.");
                     setTokenizedState(prev => ({
                         ...prev,
                         isProcessing: false,
-                        errorMessage: 'Payment gateway not loaded. Please refresh the page.',
+                        errorMessage: 'Payment gateway SDK is loading. Please wait 2 seconds and click again.',
                     }));
                     return;
                 }
 
-                // Read card fields — support multiple possible ID patterns
-                const getVal = (ids) => {
-                    for (const id of ids) {
-                        const el = document.getElementById(id);
-                        if (el && el.value) return el.value.replace(/\s/g, '');
-                    }
-                    return '';
-                };
-                const rawExp = getVal(['card-expiry', 'exp-full', 'card-exp']) || '';
-                let expMonth = getVal(['exp-month', 'card-month']);
-                let expYear  = getVal(['exp-year', 'card-year']);
-                if (rawExp.includes('/')) {
-                    const parts = rawExp.split('/');
-                    expMonth = expMonth || parts[0].trim();
-                    const rawYear = parts[1] ? parts[1].trim() : '';
-                    expYear = expYear || (rawYear.length === 4 ? rawYear.slice(-2) : rawYear);
-                }
                 const secureData = {
                     authData: {
                         clientKey: '399jvLeL3sad7vryJF66bg9Tgwe9Tf9k548NLqhdmK3GLGVE5B962Xq75AZaLhsX',
                         apiLoginID: '76zv3ZF6',
                     },
                     cardData: {
-                        cardNumber: getVal(['card-number', 'cardNumber', 'card-num']),
-                        month:      expMonth,
-                        year:       expYear,
-                        cardCode:   getVal(['card-cvv', 'cvv', 'card-cvc', 'cvc']),
-                        fullName:   formData.cardholderName,
-                        zip:        formData.zip,
+                        cardNumber: rawCardNum,
+                        month: expMonth,
+                        year: expYear,
+                        cardCode: rawCvv,
+                        fullName: formData.cardholderName,
+                        zip: formData.zip || '78701',
                     },
                 };
 
-                Accept.dispatchData(secureData, 'authorizeNetResponseHandler');
+                console.log("Dispatching card tokenization to Authorize.net Accept.js...");
+                try {
+                    Accept.dispatchData(secureData, handleAcceptResponse);
+                } catch (dispatchErr) {
+                    console.error("Error executing Accept.dispatchData:", dispatchErr);
+                    setTokenizedState(prev => ({
+                        ...prev,
+                        isProcessing: false,
+                        errorMessage: 'Failed to process card: ' + dispatchErr.message,
+                    }));
+                }
             };
 
             return (
@@ -597,6 +621,23 @@
 
                                             {/* Submit Button CTA */}
                                             <div className="submit-wrap">
+                                                {tokenizedState.errorMessage && (
+                                                    <div style={{
+                                                        background: '#fef2f2',
+                                                        border: '1.5px solid #ef4444',
+                                                        borderRadius: '12px',
+                                                        padding: '1rem 1.25rem',
+                                                        color: '#b91c1c',
+                                                        fontSize: '0.925rem',
+                                                        fontWeight: '600',
+                                                        marginBottom: '1.25rem',
+                                                        textAlign: 'center',
+                                                        lineHeight: '1.45',
+                                                        boxShadow: '0 4px 6px -1px rgba(239, 68, 68, 0.1)'
+                                                    }}>
+                                                        ⚠️ {tokenizedState.errorMessage}
+                                                    </div>
+                                                )}
                                                 <button 
                                                     type="submit" 
                                                     className="main-cta-btn" 
