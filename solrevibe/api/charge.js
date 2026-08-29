@@ -3,7 +3,7 @@ export const config = {
 };
 
 export default async function handler(req) {
-  // Handle CORS Preflight
+  // CORS Preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       status: 200,
@@ -95,9 +95,15 @@ export default async function handler(req) {
       },
     };
 
+    console.log(`Connecting to Authorize.net endpoint: ${endpoint}`);
+
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
       body: JSON.stringify(chargePayload),
     });
 
@@ -107,6 +113,7 @@ export default async function handler(req) {
     try {
       data = JSON.parse(cleanText);
     } catch (parseErr) {
+      console.error('Failed to parse Authorize.net response:', cleanText);
       return new Response(JSON.stringify({ error: 'Invalid response from payment gateway.' }), {
         status: 502,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -116,6 +123,7 @@ export default async function handler(req) {
     const messages = data && data.messages;
     if (messages && messages.resultCode === 'Error') {
       const errMsg = (messages.message && messages.message[0] && messages.message[0].text) || 'Transaction failed.';
+      console.error('Authorize.net API Result Error:', errMsg);
       return new Response(JSON.stringify({ error: errMsg }), {
         status: 400,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -125,6 +133,7 @@ export default async function handler(req) {
     const txResult = data && data.transactionResponse;
     const responseCode = txResult && txResult.responseCode;
 
+    // Response Code 1 = Approved
     if (responseCode === '1') {
       return new Response(JSON.stringify({
         success: true,
@@ -140,6 +149,7 @@ export default async function handler(req) {
       });
     }
 
+    // Response Code 2 = Declined, 3 = Error, 4 = Held for Review
     const declineMsg =
       (txResult && txResult.errors && txResult.errors.error && txResult.errors.error[0] && txResult.errors.error[0].errorText) ||
       (txResult && txResult.messages && txResult.messages.message && txResult.messages.message[0] && txResult.messages.message[0].description) ||
@@ -151,6 +161,7 @@ export default async function handler(req) {
     });
 
   } catch (err) {
+    console.error('Charge API Exception:', err);
     return new Response(JSON.stringify({ error: 'Server error processing transaction: ' + (err.message || 'Unknown error') }), {
       status: 500,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
