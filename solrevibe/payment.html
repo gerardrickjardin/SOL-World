@@ -111,59 +111,106 @@
 
                 const { dataDescriptor, dataValue } = response.opaqueData;
 
-                try {
-                    console.log("Calling /api/charge with tokenized nonce...");
-                    const res = await fetch('/api/charge', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            opaqueDataDescriptor: dataDescriptor,
-                            opaqueDataValue: dataValue,
+                const chargePayload = {
+                    createTransactionRequest: {
+                        merchantAuthentication: {
+                            name: '76zv3ZF6',
+                            transactionKey: '4ypP828TvKAqs35c',
+                        },
+                        refId: 'ORDER-' + Date.now(),
+                        transactionRequest: {
+                            transactionType: 'authCaptureTransaction',
                             amount: '3000.00',
-                            businessName:   formData.businessName,
-                            contactName:    formData.contactName,
-                            email:          formData.email,
-                            phone:          formData.phone,
-                            address:        formData.address,
-                            city:           formData.city,
-                            state:          formData.state,
-                            zip:            formData.zip,
-                            cardholderName: formData.cardholderName,
-                        }),
+                            payment: {
+                                opaqueData: {
+                                    dataDescriptor: dataDescriptor,
+                                    dataValue: dataValue,
+                                },
+                            },
+                            billTo: {
+                                firstName: (formData.cardholderName || formData.contactName || 'Valued').split(' ')[0] || 'Valued',
+                                lastName: (formData.cardholderName || formData.contactName || 'Partner').split(' ').slice(1).join(' ') || 'Partner',
+                                company: formData.businessName || '',
+                                address: formData.address || '',
+                                city: formData.city || '',
+                                state: formData.state || '',
+                                zip: formData.zip || '',
+                                country: 'US',
+                                email: formData.email || '',
+                                phoneNumber: formData.phone || '',
+                            },
+                            order: {
+                                description: 'SOUL REViBE Business-in-a-Box Station — Direct B2B Purchase',
+                            },
+                            userFields: {
+                                userField: [
+                                    { name: 'businessName', value: formData.businessName || '' },
+                                    { name: 'contactName', value: formData.contactName || '' },
+                                ],
+                            },
+                        },
+                    },
+                };
+
+                try {
+                    console.log("Submitting transaction directly to Authorize.net gateway API...");
+                    const res = await fetch('https://api.authorize.net/xml/v1/request.api', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify(chargePayload),
                     });
 
-                    let result = {};
-                    try {
-                        result = await res.json();
-                    } catch (parseErr) {
-                        result = { error: 'Server response error (Status ' + res.status + '). Please try again.' };
-                    }
-                    console.log("Charge API response:", result);
+                    const rawText = await res.text();
+                    const cleanText = (rawText || '').replace(/^﻿/, '').trim();
+                    const result = JSON.parse(cleanText);
+                    console.log("Authorize.net Transaction Response:", result);
 
-                    if (res.ok && result.success) {
+                    const messages = result && result.messages;
+                    if (messages && messages.resultCode === 'Error') {
+                        const errMsg = (messages.message && messages.message[0] && messages.message[0].text) || 'Transaction failed.';
+                        setTokenizedState(prev => ({
+                            ...prev,
+                            isProcessing: false,
+                            errorMessage: errMsg,
+                        }));
+                        return;
+                    }
+
+                    const txResult = result && result.transactionResponse;
+                    const responseCode = txResult && txResult.responseCode;
+
+                    // Response Code 1 = Approved
+                    if (responseCode === '1') {
                         setTokenizedState({
                             isTokenized: true,
                             token: dataValue,
                             isProcessing: false,
                             isSuccess: true,
-                            transactionId: result.transactionId,
-                            authCode: result.authCode,
-                            last4: result.last4,
+                            transactionId: txResult.transId,
+                            authCode: txResult.authCode,
+                            last4: txResult.accountNumber ? txResult.accountNumber.replace(/X/g, '') : '',
                             errorMessage: null,
                         });
                     } else {
+                        const declineMsg =
+                            (txResult && txResult.errors && txResult.errors.error && txResult.errors.error[0] && txResult.errors.error[0].errorText) ||
+                            (txResult && txResult.messages && txResult.messages.message && txResult.messages.message[0] && txResult.messages.message[0].description) ||
+                            'Transaction was declined by the card issuer. Please verify your details or use another card.';
                         setTokenizedState(prev => ({
                             ...prev,
                             isProcessing: false,
-                            errorMessage: result.error || 'Transaction was declined. Please verify your card details or try another card.',
+                            errorMessage: declineMsg,
                         }));
                     }
                 } catch (err) {
-                    console.error("Payment API network error:", err);
+                    console.error("Direct Authorize.net gateway error:", err);
                     setTokenizedState(prev => ({
                         ...prev,
                         isProcessing: false,
-                        errorMessage: 'Network error communicating with payment server. Please try again.',
+                        errorMessage: 'Communication error: ' + (err.message || 'Please try again.'),
                     }));
                 }
             };
