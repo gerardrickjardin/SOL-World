@@ -13,7 +13,6 @@ function postAuthorizeNet(endpoint, payload) {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)',
         'Content-Length': Buffer.byteLength(body),
       },
       timeout: 30000,
@@ -39,7 +38,7 @@ function postAuthorizeNet(endpoint, payload) {
   });
 }
 
-module.exports = async function handler(req, res) {
+module.exports = async (req, res) => {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -47,27 +46,14 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
   if (req.method === 'OPTIONS') {
-    res.statusCode = 200;
-    return res.end();
+    return res.status(200).end();
   }
 
   if (req.method !== 'POST') {
-    res.statusCode = 405;
-    res.setHeader('Content-Type', 'application/json');
-    return res.end(JSON.stringify({ error: 'Method not allowed. Please use POST.' }));
+    return res.status(405).json({ error: 'Method not allowed. Please use POST.' });
   }
 
   try {
-    let body = req.body;
-    if (typeof body === 'string') {
-      try {
-        body = JSON.parse(body);
-      } catch (e) {
-        body = {};
-      }
-    }
-    body = body || {};
-
     const {
       opaqueDataDescriptor,
       opaqueDataValue,
@@ -81,12 +67,10 @@ module.exports = async function handler(req, res) {
       state,
       zip,
       cardholderName,
-    } = body;
+    } = req.body || {};
 
     if (!opaqueDataDescriptor || !opaqueDataValue) {
-      res.statusCode = 400;
-      res.setHeader('Content-Type', 'application/json');
-      return res.end(JSON.stringify({ error: 'Missing tokenized payment credentials. Please re-enter your card details.' }));
+      return res.status(400).json({ error: 'Missing tokenized payment credentials. Please re-enter your card details.' });
     }
 
     const apiLoginId = process.env.AUTHORIZENET_API_LOGIN_ID || '76zv3ZF6';
@@ -147,18 +131,14 @@ module.exports = async function handler(req, res) {
       data = JSON.parse(cleanText);
     } catch (parseErr) {
       console.error('Failed to parse Authorize.net response:', cleanText);
-      res.statusCode = 502;
-      res.setHeader('Content-Type', 'application/json');
-      return res.end(JSON.stringify({ error: 'Invalid response from payment gateway.' }));
+      return res.status(502).json({ error: 'Invalid response from payment gateway.' });
     }
 
     const messages = data && data.messages;
     if (messages && messages.resultCode === 'Error') {
       const errMsg = (messages.message && messages.message[0] && messages.message[0].text) || 'Transaction failed.';
       console.error('Authorize.net Gateway Error:', errMsg);
-      res.statusCode = 400;
-      res.setHeader('Content-Type', 'application/json');
-      return res.end(JSON.stringify({ error: errMsg }));
+      return res.status(400).json({ error: errMsg });
     }
 
     const txResult = data && data.transactionResponse;
@@ -166,9 +146,7 @@ module.exports = async function handler(req, res) {
 
     // Response Code 1 = Approved
     if (responseCode === '1') {
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/json');
-      return res.end(JSON.stringify({
+      return res.status(200).json({
         success: true,
         transactionId: txResult.transId,
         authCode: txResult.authCode,
@@ -176,7 +154,7 @@ module.exports = async function handler(req, res) {
         last4: txResult.accountNumber ? txResult.accountNumber.replace(/X/g, '') : '',
         amount: amount || '3000.00',
         message: (txResult.messages && txResult.messages.message && txResult.messages.message[0] && txResult.messages.message[0].description) || 'Transaction approved',
-      }));
+      });
     }
 
     // Response Code 2 = Declined, 3 = Error, 4 = Held for Review
@@ -185,14 +163,10 @@ module.exports = async function handler(req, res) {
       (txResult && txResult.messages && txResult.messages.message && txResult.messages.message[0] && txResult.messages.message[0].description) ||
       'The transaction was declined by the card issuer. Please verify your details or use another card.';
 
-    res.statusCode = 402;
-    res.setHeader('Content-Type', 'application/json');
-    return res.end(JSON.stringify({ error: declineMsg }));
+    return res.status(402).json({ error: declineMsg });
 
   } catch (err) {
     console.error('Serverless Handler Exception:', err);
-    res.statusCode = 500;
-    res.setHeader('Content-Type', 'application/json');
-    return res.end(JSON.stringify({ error: 'Server error processing transaction: ' + (err.message || 'Unknown error') }));
+    return res.status(500).json({ error: 'Server error processing transaction: ' + (err.message || 'Unknown error') });
   }
 };
