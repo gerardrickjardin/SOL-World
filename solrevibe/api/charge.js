@@ -1,3 +1,77 @@
+const https = require('https');
+
+function sendJson(res, statusCode, data) {
+  const jsonStr = JSON.stringify(data);
+  if (typeof res.status === 'function' && typeof res.json === 'function') {
+    return res.status(statusCode).json(data);
+  }
+  res.statusCode = statusCode;
+  res.setHeader('Content-Type', 'application/json');
+  res.end(jsonStr);
+}
+
+function getBody(req) {
+  return new Promise((resolve) => {
+    if (req.body) {
+      if (typeof req.body === 'string') {
+        try { return resolve(JSON.parse(req.body)); } catch (e) { return resolve({}); }
+      }
+      return resolve(req.body);
+    }
+    let body = '';
+    req.on('data', (chunk) => { body += chunk; });
+    req.on('end', () => {
+      try {
+        resolve(JSON.parse(body || '{}'));
+      } catch (e) {
+        resolve({});
+      }
+    });
+    req.on('error', () => resolve({}));
+  });
+}
+
+function postJson(urlStr, data) {
+  return new Promise((resolve, reject) => {
+    try {
+      const url = new URL(urlStr);
+      const body = JSON.stringify(data);
+
+      const options = {
+        hostname: url.hostname,
+        port: 443,
+        path: url.pathname + url.search,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(body),
+        },
+        timeout: 25000,
+      };
+
+      const req = https.request(options, (res) => {
+        let responseBody = '';
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => { responseBody += chunk; });
+        res.on('end', () => {
+          resolve({ statusCode: res.statusCode, body: responseBody });
+        });
+      });
+
+      req.on('error', (err) => reject(err));
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Authorize.net gateway timeout'));
+      });
+
+      req.write(body);
+      req.end();
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
 module.exports = async function handler(req, res) {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -6,26 +80,16 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    res.statusCode = 200;
+    return res.end();
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed. Please use POST.' });
+    return sendJson(res, 405, { error: 'Method not allowed. Please use POST.' });
   }
 
   try {
-    let body = {};
-    if (req.body) {
-      if (typeof req.body === 'string') {
-        try {
-          body = JSON.parse(req.body);
-        } catch (e) {
-          body = {};
-        }
-      } else {
-        body = req.body;
-      }
-    }
+    const body = await getBody(req);
 
     const {
       opaqueDataDescriptor,
@@ -40,10 +104,10 @@ module.exports = async function handler(req, res) {
       state,
       zip,
       cardholderName,
-    } = body;
+    } = body || {};
 
     if (!opaqueDataDescriptor || !opaqueDataValue) {
-      return res.status(400).json({ error: 'Missing tokenized payment credentials. Please re-enter your card details.' });
+      return sendJson(res, 400, { error: 'Missing tokenized payment credentials. Please re-enter your card details.' });
     }
 
     const apiLoginId = process.env.AUTHORIZENET_API_LOGIN_ID || '76zv3ZF6';
@@ -95,36 +159,27 @@ module.exports = async function handler(req, res) {
       },
     };
 
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(chargePayload),
-    });
-
-    const rawText = await response.text();
-    const cleanText = (rawText || '').replace(/^\uFEFF/, '').trim();
+    console.log(`Executing charge against Authorize.net (${env})...`);
+    const { statusCode, body: rawBody } = await postJson(endpoint, chargePayload);
+    const cleanText = (rawBody || '').replace(/^\uFEFF/, '').trim();
     let data;
     try {
       data = JSON.parse(cleanText);
     } catch (parseErr) {
-      console.error('Failed to parse Authorize.net JSON:', cleanText);
-      return res.status(502).json({ error: 'Invalid response received from payment gateway.' });
+      return sendJson(res, 502, { error: 'Invalid response from payment gateway.' });
     }
 
     const messages = data && data.messages;
     if (messages && messages.resultCode === 'Error') {
       const errMsg = (messages.message && messages.message[0] && messages.message[0].text) || 'Transaction failed.';
-      console.error('Authorize.net Gateway Error:', errMsg);
-      return res.status(400).json({ error: errMsg });
+      return sendJson(res, 400, { error: errMsg });
     }
 
     const txResult = data && data.transactionResponse;
     const responseCode = txResult && txResult.responseCode;
 
     if (responseCode === '1') {
-      return res.status(200).json({
+      return sendJson(res, 200, {
         success: true,
         transactionId: txResult.transId,
         authCode: txResult.authCode,
@@ -140,10 +195,10 @@ module.exports = async function handler(req, res) {
       (txResult && txResult.messages && txResult.messages.message && txResult.messages.message[0] && txResult.messages.message[0].description) ||
       'The transaction was declined by the card issuer. Please verify your details or use another card.';
 
-    return res.status(402).json({ error: declineMsg });
+    return sendJson(res, 402, { error: declineMsg });
 
   } catch (err) {
-    console.error('API Handler Error:', err);
-    return res.status(500).json({ error: 'Server error processing transaction: ' + (err.message || 'Unknown error') });
+    console.error('Charge API Exception:', err);
+    return sendJson(res, 500, { error: 'Server error processing transaction: ' + (err.message || 'Unknown error') });
   }
 };
