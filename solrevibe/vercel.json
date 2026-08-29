@@ -1,3 +1,38 @@
 {
-  "cleanUrls": true
+  "version": 2,
+  "cleanUrls": true,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "public"
+      }
+    },
+    {
+      "src": "api/charge.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "solrevibe/api/charge.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/charge",
+      "dest": "/api/charge.js"
+    },
+    {
+      "src": "/solrevibe/api/charge",
+      "dest": "/solrevibe/api/charge.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
 }
