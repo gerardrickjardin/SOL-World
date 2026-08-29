@@ -132,7 +132,12 @@
                         }),
                     });
 
-                    const result = await res.json();
+                    let result = {};
+                    try {
+                        result = await res.json();
+                    } catch (parseErr) {
+                        result = { error: 'Server response error (Status ' + res.status + '). Please try again.' };
+                    }
                     console.log("Charge API response:", result);
 
                     if (res.ok && result.success) {
