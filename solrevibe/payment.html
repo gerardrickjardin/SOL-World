@@ -127,6 +127,12 @@
                                     dataValue: dataValue,
                                 },
                             },
+                            order: {
+                                description: 'SOUL REViBE Business-in-a-Box Station — Direct B2B Purchase',
+                            },
+                            customer: {
+                                email: formData.email || 'concierge@solrevibe.com',
+                            },
                             billTo: {
                                 firstName: (formData.cardholderName || formData.contactName || 'Valued').split(' ')[0] || 'Valued',
                                 lastName: (formData.cardholderName || formData.contactName || 'Partner').split(' ').slice(1).join(' ') || 'Partner',
@@ -134,19 +140,8 @@
                                 address: formData.address || '',
                                 city: formData.city || '',
                                 state: formData.state || '',
-                                zip: formData.zip || '',
+                                zip: formData.zip || '78701',
                                 country: 'US',
-                                email: formData.email || '',
-                                phoneNumber: formData.phone || '',
-                            },
-                            order: {
-                                description: 'SOUL REViBE Business-in-a-Box Station — Direct B2B Purchase',
-                            },
-                            userFields: {
-                                userField: [
-                                    { name: 'businessName', value: formData.businessName || '' },
-                                    { name: 'contactName', value: formData.contactName || '' },
-                                ],
                             },
                         },
                     },
