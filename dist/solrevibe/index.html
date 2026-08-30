@@ -1743,234 +1743,8 @@
                 padding: 30px 20px;
             }
         }
-
-
-        @keyframes roiReveal {
-            from { opacity: 0; transform: translateY(28px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-
-        /* --- SOL REViBE Station ROI Calculator Section Styles --- */
-        .roi-calculator-section {
-            max-width: 1240px;
-            margin: 6rem auto;
-            padding: 0 1.5rem;
-            position: relative;
-            z-index: 20;
-            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-        }
-
-        .roi-dashboard-grid {
-            display: grid;
-            grid-template-columns: 1.15fr 0.95fr;
-            gap: 2.25rem;
-            background: linear-gradient(165deg, #101c22 0%, #080f12 100%);
-            border: 1px solid rgba(0, 229, 153, 0.25);
-            border-radius: 28px;
-            padding: 2.75rem;
-            box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 229, 153, 0.1);
-            color: #ffffff;
-        }
-
-        .roi-sliders-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 1.75rem;
-        }
-
-        .roi-slider-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
-            padding: 1.25rem 1.4rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.85rem;
-            transition: all 0.2s ease;
-        }
-
-        .roi-slider-card:hover {
-            border-color: rgba(0, 229, 153, 0.35);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .roi-slider-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .roi-slider-title {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #f8fafc;
-        }
-
-        .roi-slider-sub {
-            font-size: 0.78rem;
-            color: #94a3b8;
-            display: block;
-        }
-
-        .roi-value-pill {
-            font-family: 'Outfit', 'Inter', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #00e599;
-            background: rgba(0, 229, 153, 0.12);
-            border: 1px solid rgba(0, 229, 153, 0.3);
-            padding: 4px 14px;
-            border-radius: 10px;
-            min-width: 80px;
-            text-align: center;
-        }
-
-        .roi-range-slider {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 10px;
-            border-radius: 999px;
-            background: #1e293b;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .roi-range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 3px solid #00e599;
-            box-shadow: 0 0 15px rgba(0, 229, 153, 0.6);
-            cursor: grab;
-            margin-top: -8px;
-            transition: transform 0.15s ease;
-        }
-
-        .roi-range-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-
-        .roi-range-slider::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 3px solid #00e599;
-            box-shadow: 0 0 15px rgba(0, 229, 153, 0.6);
-            cursor: grab;
-        }
-
-        .roi-range-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: #64748b;
-            font-weight: 600;
-        }
-
-        .roi-results-panel {
-            background: rgba(6, 12, 15, 0.7);
-            border: 1px solid rgba(0, 229, 153, 0.25);
-            border-radius: 22px;
-            padding: 2.25rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 1.75rem;
-            position: relative;
-        }
-
-        .roi-massive-num {
-            font-family: 'Outfit', 'Inter', sans-serif;
-            font-size: clamp(3rem, 4.5vw, 4.2rem);
-            font-weight: 900;
-            color: #ffffff;
-            line-height: 1;
-            letter-spacing: -0.03em;
-            text-shadow: 0 0 35px rgba(0, 229, 153, 0.4);
-        }
-
-        .roi-massive-num.surpassed-glow {
-            color: #00e599;
-            text-shadow: 0 0 45px rgba(0, 229, 153, 0.7);
-        }
-
-        .roi-milestone-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 0.78rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .roi-milestone-tag.achieved {
-            background: rgba(0, 229, 153, 0.2);
-            border: 1px solid rgba(0, 229, 153, 0.5);
-            color: #00e599;
-            box-shadow: 0 0 20px rgba(0, 229, 153, 0.3);
-        }
-
-        .roi-milestone-tag.pending {
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: #f59e0b;
-        }
-
-        .roi-target-bar {
-            width: 100%;
-            height: 10px;
-            background: #1a252c;
-            border-radius: 999px;
-            overflow: hidden;
-            margin-top: 6px;
-        }
-
-        .roi-target-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #06b6d4, #00e599);
-            border-radius: 999px;
-            box-shadow: 0 0 12px rgba(0, 229, 153, 0.5);
-            transition: width 0.3s ease;
-        }
-
-        .roi-cta-claim {
-            background: linear-gradient(135deg, #00e599 0%, #059669 100%);
-            color: #04140d !important;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 1rem;
-            padding: 1rem 1.75rem;
-            border-radius: 12px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(0, 229, 153, 0.35);
-            transition: all 0.2s ease;
-            text-align: center;
-        }
-
-        .roi-cta-claim:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 229, 153, 0.55);
-        }
-
-        .roi-value-props-3col {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin-top: 2.5rem;
-        }
-
         .roi-prop-card {
             background: rgba(18, 28, 33, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -2041,7 +1815,7 @@
         </div>
         <div class="vibe-nav-links" id="vibeNavLinks">
             <a href="#experience">EXPERIENCE</a>
-            <a href="#roi-section" onclick="(function(e){ var s=document.getElementById('roi-section'); var w=document.getElementById('roi-cta-wrapper'); if(s.style.display==='none'){ s.style.display='block'; s.style.animation='roiReveal 0.5s cubic-bezier(0.16,1,0.3,1) both'; if(w) w.style.display='none'; } })(event)">ROI CALCULATOR</a>
+            <a href="/roi-calculator">ROI CALCULATOR</a>
             <a href="locations/index.html">LOCATIONS</a>
             <a href="#science">SCIENCE</a>
             <a href="#payment">PAYMENT</a>
@@ -2101,20 +1875,12 @@
             </div>
         <!-- ── Calculate ROI CTA ──────────────────────────────── -->
         <div id="roi-cta-wrapper" style="text-align:center; margin: 2rem auto 0; position:relative; z-index:20;">
-            <button id="show-roi-btn"
-                onclick="(function(){
-                    var s=document.getElementById('roi-section');
-                    var w=document.getElementById('roi-cta-wrapper');
-                    s.style.display='block';
-                    s.style.animation='roiReveal 0.5s cubic-bezier(0.16,1,0.3,1) both';
-                    w.style.display='none';
-                    setTimeout(function(){ s.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
-                })()"
+            <a href="/roi-calculator"
                 style="display:inline-flex; align-items:center; gap:12px;
                     background: linear-gradient(135deg, #00e599 0%, #059669 100%);
                     color: #04140d; font-family: 'Inter', sans-serif; font-size: 1rem;
                     font-weight: 800; padding: 1rem 2.2rem; border-radius: 999px;
-                    border: none; cursor: pointer; letter-spacing: 0.01em;
+                    text-decoration: none; letter-spacing: 0.01em;
                     box-shadow: 0 8px 28px rgba(0,229,153,0.4);
                     transition: all 0.2s ease;"
                 onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 34px rgba(0,229,153,0.55)'"
@@ -2123,165 +1889,13 @@
                 <i class="fa-solid fa-calculator"></i>
                 Calculate Your ROI
                 <i class="fa-solid fa-arrow-right"></i>
-            </button>
+            </a>
             <div style="font-size:0.78rem; color:#64748b; margin-top:0.75rem;">
-                Customized projection based on your facility's foot traffic & pricing
+                Customized projection based on your facility&rsquo;s foot traffic &amp; pricing
             </div>
         </div>
 
-        <!-- SOL REViBE ROI & Revenue Calculator Section -->
-        <section class="roi-calculator-section" id="roi-section" style="display:none;">
-            <div class="section-header" style="margin-bottom: 2.5rem; max-width: none; text-align: center;">
-                <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 229, 153, 0.12); border: 1px solid rgba(0, 229, 153, 0.35); padding: 6px 16px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; color: #00e599; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem;">
-                    ✦ Commercial Revenue Engine
-                </div>
-                <h2>Make <span style="background: linear-gradient(90deg, #00e599, #34d399, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">$10,000+ Monthly</span> with Zero Staff Overhead</h2>
-                <p>Calculate your customized facility revenue based on daily foot traffic, conversion rate, and session pricing.</p>
-            </div>
-
-            <!-- Dashboard Grid -->
-            <div class="roi-dashboard-grid">
-                
-                <!-- Left: 3 Range Sliders -->
-                <div class="roi-sliders-panel">
-                    
-                    <!-- Slider 1: Traffic -->
-                    <div class="roi-slider-card">
-                        <div class="roi-slider-top">
-                            <div>
-                                <span class="roi-slider-title">Daily Client Foot Traffic</span>
-                                <span class="roi-slider-sub">Visitors entering your spa, clinic, or gym daily</span>
-                            </div>
-                            <div class="roi-value-pill" id="main-traffic-val">50</div>
-                        </div>
-                        <input type="range" id="main-slider-traffic" class="roi-range-slider" min="10" max="200" step="5" value="50">
-                        <div class="roi-range-labels">
-                            <span>10 visitors</span>
-                            <span>100 visitors</span>
-                            <span>200+ visitors</span>
-                        </div>
-                    </div>
-
-                    <!-- Slider 2: Conversion -->
-                    <div class="roi-slider-card">
-                        <div class="roi-slider-top">
-                            <div>
-                                <span class="roi-slider-title">Session Conversion Rate</span>
-                                <span class="roi-slider-sub">% of foot traffic booking a 20-min session</span>
-                            </div>
-                            <div class="roi-value-pill" id="main-conversion-val">15%</div>
-                        </div>
-                        <input type="range" id="main-slider-conversion" class="roi-range-slider" min="5" max="50" step="1" value="15">
-                        <div class="roi-range-labels">
-                            <span>5% (Conservative)</span>
-                            <span>25% (Average)</span>
-                            <span>50% (Optimized)</span>
-                        </div>
-                    </div>
-
-                    <!-- Slider 3: Price -->
-                    <div class="roi-slider-card">
-                        <div class="roi-slider-top">
-                            <div>
-                                <span class="roi-slider-title">Price Per 20-Min Session</span>
-                                <span class="roi-slider-sub">Automated frequency recharge session rate</span>
-                            </div>
-                            <div class="roi-value-pill" id="main-price-val">$45</div>
-                        </div>
-                        <input type="range" id="main-slider-price" class="roi-range-slider" min="25" max="100" step="5" value="45">
-                        <div class="roi-range-labels">
-                            <span>$25/session</span>
-                            <span>$60/session</span>
-                            <span>$100/session</span>
-                        </div>
-                    </div>
-
-                    <div style="font-size: 0.8rem; color: #94a3b8; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-regular fa-calendar-check" style="color: #00e599;"></i>
-                        <span><strong>Assumed Constant:</strong> 24 operational days per month.</span>
-                    </div>
-
-                </div>
-
-                <!-- Right: Dynamic Results Box -->
-                <div class="roi-results-panel">
-                    
-                    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 0.82rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em;">Projected Monthly Gross</span>
-                            <div class="roi-milestone-tag achieved" id="main-milestone-badge">
-                                🔥 $10k+ Monthly Goal
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="roi-massive-num" id="main-monthly-revenue">$8,100</div>
-                            <div style="font-size: 0.88rem; color: #94a3b8; margin-top: 4px;">
-                                ⚡ Hands-off automated session revenue
-                            </div>
-                        </div>
-
-                        <!-- Target Progress Tracker -->
-                        <div>
-                            <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 600;">
-                                <span style="color: #94a3b8;">$10,000 / Month Milestone:</span>
-                                <span style="color: #00e599;" id="main-gauge-label">81% Achieved</span>
-                            </div>
-                            <div class="roi-target-bar">
-                                <div class="roi-target-bar-fill" id="main-gauge-fill" style="width: 81%;"></div>
-                            </div>
-                        </div>
-
-                        <!-- Metrics Grid -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 0.85rem;">
-                                <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Daily Revenue</div>
-                                <div style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 800; color: #ffffff;" id="main-daily-revenue">$338</div>
-                            </div>
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 0.85rem;">
-                                <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Annual Run Rate</div>
-                                <div style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 800; color: #ffffff;" id="main-annual-revenue">$97,200</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Direct CTA to Claim Territory -->
-                    <a href="#map-section" class="roi-cta-claim">
-                        <span>Check & Secure Your ZIP Code Territory</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-
-                </div>
-
-            </div>
-
-            <!-- Value Proposition Footer -->
-            <div class="roi-value-props-3col">
-                
-                <div class="roi-prop-card">
-                    <div class="roi-prop-icon"><i class="fa-solid fa-bolt"></i></div>
-                    <h4>20 Minutes</h4>
-                    <div class="roi-prop-sub">Sessions Clients Can Feel</div>
-                    <p>Synchronized PEMF, terahertz, and sound frequency guide brainwaves into theta relaxation, delivering deep cellular recharge in only 20 minutes.</p>
-                </div>
-
-                <div class="roi-prop-card">
-                    <div class="roi-prop-icon"><i class="fa-solid fa-cubes"></i></div>
-                    <h4>3 Revenue Streams</h4>
-                    <div class="roi-prop-sub">Sessions, Sales & Referrals</div>
-                    <p>Monetize recurring daily in-facility bookings, earn high-ticket affiliate commissions on at-home units, and capture member referrals.</p>
-                </div>
-
-                <div class="roi-prop-card">
-                    <div class="roi-prop-icon"><i class="fa-solid fa-microchip"></i></div>
-                    <h4>1 Device</h4>
-                    <div class="roi-prop-sub">Simple to Integrate</div>
-                    <p>Zero masseuse or dedicated staff required. Turnkey plug-and-play station with an intuitive touchless client journey.</p>
-                </div>
-
-            </div>
-
-        </section>
+        </div>
 
         <!-- Map Title Section -->
         <div class="section-header" style="margin-top: 6rem; margin-bottom: 2.5rem; max-width: none;">
