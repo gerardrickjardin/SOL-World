@@ -1,17 +1,6 @@
 {
   "cleanUrls": true,
   "regions": ["iad1"],
-  "functions": {
-    "api/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "rewrites": [
-    { "source": "/calculator-demo", "destination": "/calculator-demo/index.html" },
-    { "source": "/roi-calculator", "destination": "/roi-calculator/index.html" },
-    { "source": "/hero-preview", "destination": "/hero-preview/index.html" },
-    { "source": "/payment", "destination": "/payment.html" }
-  ],
   "headers": [
     {
       "source": "/api/(.*)",

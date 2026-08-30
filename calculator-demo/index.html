@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOL REViBE | Calculator Funnel Showcase (Deliverables 1 & 2)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #05090b;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .demo-bar {
+            background: #0d1519;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .demo-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .demo-title span { color: #00e599; }
+        .demo-tabs {
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .demo-tab-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .demo-tab-btn.active {
+            background: #00e599;
+            color: #04140d;
+            box-shadow: 0 0 15px rgba(0, 229, 153, 0.4);
+        }
+        .frame-container {
+            flex-grow: 1;
+            width: 100%;
+            height: calc(100vh - 75px);
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-bar">
+        <div class="demo-title">
+            ⚡ SOL <span>REViBE</span> &bull; 2-Stage Revenue Funnel Showcase
+        </div>
+        <div class="demo-tabs">
+            <button class="demo-tab-btn active" onclick="switchView('/hero-preview', this)">
+                Deliverable 1: Hero Preview
+            </button>
+            <button class="demo-tab-btn" onclick="switchView('/roi-calculator', this)">
+                Deliverable 2: Dedicated Full Calculator
+            </button>
+        </div>
+    </div>
+
+    <iframe id="preview-frame" class="frame-container" src="/hero-preview"></iframe>
+
+    <script>
+        function switchView(url, btn) {
+            document.getElementById('preview-frame').src = url;
+            document.querySelectorAll('.demo-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>
