@@ -1,4 +1,11 @@
 {
   "cleanUrls": true,
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "rewrites": [
+    { "source": "/calculator-demo", "destination": "/solrevibe/calculator-demo/index.html" },
+    { "source": "/roi-calculator", "destination": "/solrevibe/roi-calculator/index.html" },
+    { "source": "/hero-preview", "destination": "/solrevibe/hero-preview/index.html" },
+    { "source": "/landing", "destination": "/solrevibe/landing/index.html" },
+    { "source": "/payment", "destination": "/solrevibe/payment.html" }
+  ]
 }

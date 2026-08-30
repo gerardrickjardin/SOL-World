@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOL REViBE | Make $10,000+ Monthly with Turnkey Wellness Stations</title>
+    <meta name="description" content="Discover how clinic, spa, and gym owners make $10,000+ monthly by placing a SOL REViBE wellness station in their facility with minimal staff setup.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #080d0f;
+            --bg-surface: #0e171b;
+            --bg-card: rgba(18, 28, 33, 0.75);
+            --bg-card-hover: rgba(24, 38, 44, 0.85);
+            --accent-green: #00e599;
+            --accent-green-glow: rgba(0, 229, 153, 0.35);
+            --accent-green-dark: #059669;
+            --accent-cyan: #06b6d4;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(0, 229, 153, 0.3);
+            --font-display: 'Montserrat', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ambient Glow Background */
+        .ambient-glow-top {
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 850px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(0, 229, 153, 0.12) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 80%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .ambient-glow-side {
+            position: absolute;
+            top: 30%;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 229, 153, 0.08) 0%, transparent 70%);
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Navigation */
+        .site-nav {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1280px;
+            margin: 0 auto;
+            width: 90%;
+            padding: 1.75rem 0;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .brand-logo .logo-mark {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #00e599, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.1rem;
+            color: #080d0f;
+            box-shadow: 0 0 20px var(--accent-green-glow);
+        }
+
+        .brand-logo .logo-text {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .brand-logo .logo-text span {
+            color: var(--accent-green);
+        }
+
+        .nav-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 229, 153, 0.1);
+            border: 1px solid var(--border-highlight);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            letter-spacing: 0.04em;
+        }
+
+        .nav-badge .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse-ring 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 153, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(0, 229, 153, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 153, 0); }
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            z-index: 5;
+            max-width: 1280px;
+            margin: 1.5rem auto 4rem;
+            width: 90%;
+            display: grid;
+            grid-template-columns: 1.15fr 0.95fr;
+            gap: 3.5rem;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        /* Left Column Copy */
+        .hero-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-tag span {
+            color: var(--accent-green);
+        }
+
+        .hero-headline {
+            font-family: var(--font-display);
+            font-size: clamp(2.3rem, 4vw, 3.6rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .hero-headline .highlight {
+            background: linear-gradient(135deg, #00e599 0%, #34d399 40%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .hero-subheadline {
+            font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+            line-height: 1.6;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .hero-subheadline strong {
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .hero-benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        .benefit-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0, 229, 153, 0.15);
+            border: 1px solid rgba(0, 229, 153, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .benefit-icon svg {
+            width: 13px;
+            height: 13px;
+            stroke-width: 2.5;
+        }
+
+        /* Right Column Mini-Calculator Card */
+        .preview-card-wrapper {
+            position: relative;
+        }
+
+        .preview-card-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(145deg, rgba(0, 229, 153, 0.4), rgba(6, 182, 212, 0.2), rgba(255, 255, 255, 0.05));
+            border-radius: 28px;
+            z-index: 0;
+            filter: blur(12px);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .preview-card-wrapper:hover::before {
+            opacity: 0.85;
+        }
+
+        .preview-card {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(165deg, rgba(16, 26, 31, 0.92) 0%, rgba(10, 16, 19, 0.96) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 26px;
+            padding: 2.25rem;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 1.25rem;
+        }
+
+        .card-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .card-header p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .live-tag {
+            background: rgba(0, 229, 153, 0.12);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 229, 153, 0.25);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        /* Slider Block */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .slider-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slider-badge-val {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--accent-green);
+            background: rgba(0, 229, 153, 0.1);
+            border: 1px solid rgba(0, 229, 153, 0.25);
+            padding: 4px 12px;
+            border-radius: 8px;
+            min-width: 68px;
+            text-align: center;
+        }
+
+        /* Stylized Range Slider */
+        .range-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: #1e293b;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: all 0.2s ease;
+        }
+
+        /* Slider track styling */
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 10px;
+            border-radius: 999px;
+        }
+
+        input[type="range"]::-moz-range-track {
+            height: 10px;
+            border-radius: 999px;
+        }
+
+        /* Slider thumb styling */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid var(--accent-green);
+            box-shadow: 0 0 15px var(--accent-green-glow), 0 2px 8px rgba(0,0,0,0.5);
+            cursor: grab;
+            margin-top: -8px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 22px rgba(0, 229, 153, 0.8), 0 4px 12px rgba(0,0,0,0.6);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+            cursor: grabbing;
+            transform: scale(1.25);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid var(--accent-green);
+            box-shadow: 0 0 15px var(--accent-green-glow);
+            cursor: grab;
+            box-sizing: border-box;
+        }
+
+        .range-scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Output Revenue Display */
+        .output-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 229, 153, 0.2);
+            border-radius: 18px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .output-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+        }
+
+        .output-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .revenue-figure-wrap {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .revenue-number {
+            font-family: var(--font-display);
+            font-size: clamp(2.4rem, 3.5vw, 3.2rem);
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 30px rgba(0, 229, 153, 0.3);
+            transition: color 0.2s ease;
+        }
+
+        .revenue-period {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .output-assumptions {
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .output-assumptions span {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #00e599 0%, #059669 100%);
+            color: #04140d;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 800;
+            padding: 1.15rem 1.75rem;
+            border-radius: 14px;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(0, 229, 153, 0.35);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 229, 153, 0.55);
+            background: linear-gradient(135deg, #1bf4ac 0%, #05a876 100%);
+        }
+
+        .cta-btn:active {
+            transform: translateY(0);
+        }
+
+        .cta-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.5;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .cta-btn:hover svg {
+            transform: translateX(4px);
+        }
+
+        .zip-lock-hint {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .zip-lock-hint svg {
+            width: 13px;
+            height: 13px;
+            stroke: var(--accent-green);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 960px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+                margin-top: 1rem;
+            }
+
+            .hero-copy {
+                text-align: center;
+                align-items: center;
+            }
+
+            .hero-tag {
+                align-self: center;
+            }
+
+            .hero-benefits-list {
+                align-items: flex-start;
+                max-width: 480px;
+                margin: 0 auto;
+                text-align: left;
+            }
+
+            .preview-card {
+                padding: 1.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .site-nav {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .hero-headline {
+                font-size: 2rem;
+            }
+            .preview-card {
+                padding: 1.35rem;
+            }
+            .cta-btn {
+                font-size: 0.92rem;
+                padding: 1rem 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient background glow -->
+    <div class="ambient-glow-top"></div>
+    <div class="ambient-glow-side"></div>
+
+    <!-- Navigation Header -->
+    <header class="site-nav">
+        <a href="index.html" class="brand-logo" title="SOL REViBE Homepage">
+            <div class="logo-mark">⚡</div>
+            <div class="logo-text">SOL <span>REViBE</span></div>
+        </a>
+        <div class="nav-badge">
+            <span class="pulse-dot"></span>
+            Territory Availability: 1 Station Per ZIP
+        </div>
+    </header>
+
+    <!-- Main Hero Section -->
+    <main class="hero-section">
+        
+        <!-- Left Column: Copy & Value Hook -->
+        <section class="hero-copy">
+            <div class="hero-tag">
+                <span>✦</span> B2B Turnkey Wellness Expansion
+            </div>
+
+            <h1 class="hero-headline">
+                Make <span class="highlight">$10,000+ Monthly</span> by Placing a SOL REViBE Station in Your Business.
+            </h1>
+
+            <p class="hero-subheadline">
+                Transform your existing client foot traffic into a high-margin recurring profit center. 
+                <strong>Minimal staff setup required</strong> — automated 20-minute sessions featuring synchronized PEMF, terahertz, and restorative soundscapes.
+            </p>
+
+            <div class="hero-benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <span><strong>Hands-off operation</strong> — zero dedicated technician or masseuse needed</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <span><strong>Territory exclusivity</strong> — strictly only 1 showcase station per ZIP code</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <span><strong>High margin</strong> — estimated 85%+ net retention on daily sessions</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Column: Interactive Teaser Mini-Calculator -->
+        <section class="preview-card-wrapper">
+            <div class="preview-card">
+                
+                <div class="card-header">
+                    <div>
+                        <h2>Quick Revenue Teaser</h2>
+                        <p>Estimate your location's untapped monthly revenue</p>
+                    </div>
+                    <span class="live-tag">Interactive</span>
+                </div>
+
+                <!-- Single Range Slider: Foot Traffic -->
+                <div class="slider-group">
+                    <div class="slider-meta">
+                        <label for="hero-traffic-slider" class="slider-label">
+                            Daily Client Foot Traffic
+                        </label>
+                        <div class="slider-badge-val" id="hero-traffic-val">50</div>
+                    </div>
+
+                    <div class="range-container">
+                        <input 
+                            type="range" 
+                            id="hero-traffic-slider" 
+                            min="10" 
+                            max="200" 
+                            step="5" 
+                            value="50"
+                            aria-label="Daily Client Foot Traffic"
+                        >
+                        <div class="range-scale-labels">
+                            <span>10 visitors/day</span>
+                            <span>100 visitors/day</span>
+                            <span>200+ visitors/day</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculated Output Box -->
+                <div class="output-box">
+                    <div class="output-label">Potential Monthly Revenue</div>
+                    <div class="revenue-figure-wrap">
+                        <span class="revenue-number" id="hero-revenue-display">$8,100</span>
+                        <span class="revenue-period">/ mo</span>
+                    </div>
+                    <div class="output-assumptions">
+                        <span>Based on:</span> 15% conversion &bull; $45/session &bull; 24 days/mo
+                    </div>
+                </div>
+
+                <!-- Direct CTA to Deliverable 2 -->
+                <a href="roi-calculator.html?traffic=50" id="hero-unlock-btn" class="cta-btn">
+                    <span>Unlock Full ROI Calculator & Secure Your ZIP Code</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+
+                <div class="zip-lock-hint">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>ZIP code reservations are locked on a first-come basis</span>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Vanilla JavaScript for Instant Hero Calculator -->
+    <script>
+        (function() {
+            const trafficSlider = document.getElementById('hero-traffic-slider');
+            const trafficVal = document.getElementById('hero-traffic-val');
+            const revenueDisplay = document.getElementById('hero-revenue-display');
+            const unlockBtn = document.getElementById('hero-unlock-btn');
+
+            const STATIC_PRICE = 45;
+            const STATIC_CONVERSION_RATE = 0.15;
+            const OPERATIONAL_DAYS = 24;
+
+            const currencyFormatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                maximumFractionDigits: 0
+            });
+
+            function updateSliderBackground(slider) {
+                const min = parseFloat(slider.min) || 0;
+                const max = parseFloat(slider.max) || 100;
+                const val = parseFloat(slider.value);
+                const percentage = ((val - min) / (max - min)) * 100;
+                slider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${percentage}%, #1e293b ${percentage}%, #1e293b 100%)`;
+            }
+
+            function calculateHeroRevenue() {
+                const traffic = parseInt(trafficSlider.value, 10);
+                trafficVal.textContent = traffic;
+
+                // Formula: Traffic * Conversion (15%) * Price ($45) * 24 Days
+                const monthlyRevenue = traffic * STATIC_CONVERSION_RATE * STATIC_PRICE * OPERATIONAL_DAYS;
+                
+                revenueDisplay.textContent = currencyFormatter.format(Math.round(monthlyRevenue));
+
+                // Dynamic query param forward to Deliverable 2
+                unlockBtn.href = `roi-calculator.html?traffic=${traffic}`;
+
+                updateSliderBackground(trafficSlider);
+            }
+
+            // Real-time responsive event listener
+            trafficSlider.addEventListener('input', calculateHeroRevenue);
+
+            // Initial calculation on load
+            calculateHeroRevenue();
+        })();
+    </script>
+</body>
+</html>
