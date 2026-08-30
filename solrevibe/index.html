@@ -1744,6 +1744,12 @@
             }
         }
 
+
+        @keyframes roiReveal {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
         /* --- SOL REViBE Station ROI Calculator Section Styles --- */
         .roi-calculator-section {
             max-width: 1240px;
@@ -2035,7 +2041,7 @@
         </div>
         <div class="vibe-nav-links" id="vibeNavLinks">
             <a href="#experience">EXPERIENCE</a>
-            <a href="#roi-section">ROI CALCULATOR</a>
+            <a href="#roi-section" onclick="(function(e){ var s=document.getElementById('roi-section'); var w=document.getElementById('roi-cta-wrapper'); if(s.style.display==='none'){ s.style.display='block'; s.style.animation='roiReveal 0.5s cubic-bezier(0.16,1,0.3,1) both'; if(w) w.style.display='none'; } })(event)">ROI CALCULATOR</a>
             <a href="locations/index.html">LOCATIONS</a>
             <a href="#science">SCIENCE</a>
             <a href="#payment">PAYMENT</a>
@@ -2093,8 +2099,38 @@
                     </div>
                 </div>
             </div>
+        <!-- ── Calculate ROI CTA ──────────────────────────────── -->
+        <div id="roi-cta-wrapper" style="text-align:center; margin: 2rem auto 0; position:relative; z-index:20;">
+            <button id="show-roi-btn"
+                onclick="(function(){
+                    var s=document.getElementById('roi-section');
+                    var w=document.getElementById('roi-cta-wrapper');
+                    s.style.display='block';
+                    s.style.animation='roiReveal 0.5s cubic-bezier(0.16,1,0.3,1) both';
+                    w.style.display='none';
+                    setTimeout(function(){ s.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+                })()"
+                style="display:inline-flex; align-items:center; gap:12px;
+                    background: linear-gradient(135deg, #00e599 0%, #059669 100%);
+                    color: #04140d; font-family: 'Inter', sans-serif; font-size: 1rem;
+                    font-weight: 800; padding: 1rem 2.2rem; border-radius: 999px;
+                    border: none; cursor: pointer; letter-spacing: 0.01em;
+                    box-shadow: 0 8px 28px rgba(0,229,153,0.4);
+                    transition: all 0.2s ease;"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 34px rgba(0,229,153,0.55)'"
+                onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 28px rgba(0,229,153,0.4)'"
+            >
+                <i class="fa-solid fa-calculator"></i>
+                Calculate Your ROI
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <div style="font-size:0.78rem; color:#64748b; margin-top:0.75rem;">
+                Customized projection based on your facility's foot traffic & pricing
+            </div>
+        </div>
+
         <!-- SOL REViBE ROI & Revenue Calculator Section -->
-        <section class="roi-calculator-section" id="roi-section">
+        <section class="roi-calculator-section" id="roi-section" style="display:none;">
             <div class="section-header" style="margin-bottom: 2.5rem; max-width: none; text-align: center;">
                 <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 229, 153, 0.12); border: 1px solid rgba(0, 229, 153, 0.35); padding: 6px 16px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; color: #00e599; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem;">
                     ✦ Commercial Revenue Engine
