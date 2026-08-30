@@ -32,14 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
         zonesData = zoneMap;
         initMap();
         initSearch();
-        initRoiCalculator();
     })
     .catch(err => {
         console.error("Error loading territory dataset indices:", err);
         showSearchError("Error initializing map database. Please refresh.");
     });
-    // Ensure ROI calculator initializes even if map fetch takes time
-    initRoiCalculator();
 });
 
 // Initialize Leaflet Map
@@ -477,107 +474,3 @@ function showFlagshipOnMap(lat, lon, businessName, address) {
         duration: 1.5
     });
 }
-
-// -------------------------------------------------------------
-// Interactive SOL REViBE ROI Calculator Controller
-// -------------------------------------------------------------
-function initRoiCalculator() {
-    const trafficSlider = document.getElementById('main-slider-traffic');
-    const conversionSlider = document.getElementById('main-slider-conversion');
-    const priceSlider = document.getElementById('main-slider-price');
-
-    if (!trafficSlider || !conversionSlider || !priceSlider) return;
-
-    const trafficVal = document.getElementById('main-traffic-val');
-    const conversionVal = document.getElementById('main-conversion-val');
-    const priceVal = document.getElementById('main-price-val');
-
-    const monthlyRevenueDisplay = document.getElementById('main-monthly-revenue');
-    const milestoneBadge = document.getElementById('main-milestone-badge');
-    const gaugeFill = document.getElementById('main-gauge-fill');
-    const gaugeLabel = document.getElementById('main-gauge-label');
-    const dailyRevenueDisplay = document.getElementById('main-daily-revenue');
-    const annualRevenueDisplay = document.getElementById('main-annual-revenue');
-
-    const OPERATIONAL_DAYS = 24;
-    const GOAL_BENCHMARK = 10000;
-
-    const currencyFmt = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 0
-    });
-
-    function updateSliderTrack(slider) {
-        const min = parseFloat(slider.min) || 0;
-        const max = parseFloat(slider.max) || 100;
-        const val = parseFloat(slider.value);
-        const percent = ((val - min) / (max - min)) * 100;
-        slider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${percent}%, #1e293b ${percent}%, #1e293b 100%)`;
-    }
-
-    function calculate() {
-        const traffic = parseInt(trafficSlider.value, 10);
-        const conversionPct = parseInt(conversionSlider.value, 10);
-        const price = parseInt(priceSlider.value, 10);
-
-        if (trafficVal) trafficVal.textContent = traffic;
-        if (conversionVal) conversionVal.textContent = `${conversionPct}%`;
-        if (priceVal) priceVal.textContent = `$${price}`;
-
-        const conversionRate = conversionPct / 100;
-        const monthlyGross = traffic * conversionRate * price * OPERATIONAL_DAYS;
-        const dailyGross = monthlyGross / OPERATIONAL_DAYS;
-        const annualGross = monthlyGross * 12;
-
-        if (monthlyRevenueDisplay) {
-            monthlyRevenueDisplay.textContent = currencyFmt.format(Math.round(monthlyGross));
-        }
-        if (dailyRevenueDisplay) {
-            dailyRevenueDisplay.textContent = currencyFmt.format(Math.round(dailyGross));
-        }
-        if (annualRevenueDisplay) {
-            annualRevenueDisplay.textContent = currencyFmt.format(Math.round(annualGross));
-        }
-
-        const pctOfGoal = Math.round((monthlyGross / GOAL_BENCHMARK) * 100);
-        if (gaugeFill) {
-            gaugeFill.style.width = `${Math.min(pctOfGoal, 100)}%`;
-        }
-
-        if (monthlyGross >= GOAL_BENCHMARK) {
-            if (milestoneBadge) {
-                milestoneBadge.className = 'roi-milestone-tag achieved';
-                milestoneBadge.innerHTML = '🔥 $10,000+ Goal Reached';
-            }
-            if (gaugeLabel) {
-                gaugeLabel.textContent = `${pctOfGoal}% of Goal (Target Surpassed)`;
-            }
-            if (monthlyRevenueDisplay) {
-                monthlyRevenueDisplay.classList.add('surpassed-glow');
-            }
-        } else {
-            if (milestoneBadge) {
-                milestoneBadge.className = 'roi-milestone-tag pending';
-                milestoneBadge.innerHTML = `$${(GOAL_BENCHMARK - monthlyGross).toLocaleString()} to $10k Mark`;
-            }
-            if (gaugeLabel) {
-                gaugeLabel.textContent = `${pctOfGoal}% of $10,000 Target`;
-            }
-            if (monthlyRevenueDisplay) {
-                monthlyRevenueDisplay.classList.remove('surpassed-glow');
-            }
-        }
-
-        updateSliderTrack(trafficSlider);
-        updateSliderTrack(conversionSlider);
-        updateSliderTrack(priceSlider);
-    }
-
-    [trafficSlider, conversionSlider, priceSlider].forEach(slider => {
-        slider.addEventListener('input', calculate);
-    });
-
-    calculate();
-}
-

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful | SOL REViBE</title>
+    <meta name="description" content="Your payment was successful. Your SOL REViBE showcase position is secured.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f0f9ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.06);
+            padding: 3rem 2.5rem;
+            max-width: 540px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo {
+            max-height: 52px;
+            margin-bottom: 2rem;
+        }
+        .success-ring {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.75rem;
+            box-shadow: 0 8px 24px rgba(16,185,129,0.35);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+        .success-ring svg { width: 38px; height: 38px; stroke: white; stroke-width: 2.5; }
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+        }
+        .subtitle {
+            font-size: 1rem;
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .detail-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.4rem 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #dcfce7;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: #64748b; font-weight: 500; }
+        .detail-value { color: #0f172a; font-weight: 700; font-family: monospace; font-size: 0.82rem; }
+        .next-steps {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        .next-steps h3 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+        }
+        .next-steps ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .next-steps li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.92rem;
+            color: #334155;
+            line-height: 1.45;
+        }
+        .next-steps li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .home-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.85rem 2rem;
+            border-radius: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px rgba(16,185,129,0.35);
+        }
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16,185,129,0.45);
+        }
+        .tx-note {
+            margin-top: 1.25rem;
+            font-size: 0.78rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img src="assets/SOL REViBE Logo.png" alt="SOL REViBE" class="logo"
+             onerror="this.style.display='none'">
+
+        <div class="success-ring">
+            <svg viewBox="0 0 24 24" fill="none">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>
+        </div>
+
+        <h1>Showcase Position Secured!</h1>
+        <p class="subtitle">
+            Your payment of <strong>$3,000 USD</strong> has been successfully processed
+            through Authorize.net. Your SOUL REViBE Business-in-a-Box Station order is confirmed.
+        </p>
+
+        <div class="detail-box" id="detailBox">
+            <div class="detail-row">
+                <span class="detail-label">Status</span>
+                <span class="detail-value" style="font-family:inherit;color:#059669;font-size:0.9rem;">✓ Approved</span>
+            </div>
+            <div class="detail-row" id="txRow" style="display:none">
+                <span class="detail-label">Transaction ID</span>
+                <span class="detail-value" id="txId">—</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Amount</span>
+                <span class="detail-value" style="font-family:inherit">$3,000.00 USD</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Product</span>
+                <span class="detail-value" style="font-family:inherit;font-size:0.85rem;">SOUL REViBE Business-in-a-Box</span>
+            </div>
+        </div>
+
+        <div class="next-steps">
+            <h3>What Happens Next</h3>
+            <ul>
+                <li>A confirmation email will be sent to you from Authorize.net.</li>
+                <li>Our team will reach out within 1 business day to schedule your onboarding.</li>
+                <li>Your showcase zone will be marked as reserved on the SOL REViBE map.</li>
+                <li>You will receive your Station setup guide and access credentials.</li>
+            </ul>
+        </div>
+
+        <a href="/" class="home-btn">Return to SOL REViBE</a>
+
+        <p class="tx-note">
+            Questions? Contact us at support@solrevibe.com &nbsp;|&nbsp;
+            Processed securely via Authorize.net
+        </p>
+    </div>
+
+    <script>
+        // Show transaction ID if present in URL query string
+        (function() {
+            var params = new URLSearchParams(window.location.search);
+            var txid = params.get('txid');
+            if (txid) {
+                document.getElementById('txId').textContent = txid;
+                document.getElementById('txRow').style.display = 'flex';
+            }
+        })();
+    </script>
+</body>
+</html>

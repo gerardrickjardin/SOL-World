@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--
+  iframeCommunicator.html
+  Required by Authorize.net Accept Hosted (lightbox mode).
+  This page is loaded inside the Accept Hosted iframe and allows
+  Authorize.net to communicate back to our parent window via postMessage.
+  Do NOT remove or modify this file.
+-->
+<html>
+<head><meta charset="UTF-8"></head>
+<body>
+<script type="text/javascript">
+  (function() {
+    "use strict";
+    function receiveMessage(event) {
+      if (event && event.data) {
+        var data;
+        try {
+          data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+        } catch(e) {
+          return;
+        }
+        // Forward the Authorize.net message to the parent/top window
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage(event.data, event.origin || "*");
+        } else if (window.top && window.top !== window) {
+          window.top.postMessage(event.data, event.origin || "*");
+        }
+      }
+    }
+    window.addEventListener("message", receiveMessage, false);
+  })();
+</script>
+</body>
+</html>

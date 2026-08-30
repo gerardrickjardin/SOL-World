@@ -3,3 +3,13 @@
 
 # Large asset files exceeding GitHub 100MB limit
 *SOL GaMES Hands.png
+
+# Authorize.net & environment secrets — NEVER commit these
+.env
+.env.local
+node_modules/
+*.png
+venv/
+.venv/
+zone_builder_engine/venv/
+
