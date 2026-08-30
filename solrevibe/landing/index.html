@@ -529,6 +529,162 @@
         .blue-text { color: #5b8dff; }
         .orange-text { color: #ff9d4d; }
 
+        /* Preview Calculator in Landing Right Panel */
+        .landing-calculator-card {
+            background: rgba(14, 26, 33, 0.7);
+            border: 1px solid rgba(0, 229, 153, 0.3);
+            border-radius: 16px;
+            padding: 1.25rem 1.4rem;
+            margin: 1rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .calc-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calc-card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .calc-card-badge {
+            background: rgba(0, 229, 153, 0.15);
+            border: 1px solid rgba(0, 229, 153, 0.35);
+            color: #00e599;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .slider-labels-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .slider-val-badge {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #00e599;
+            background: rgba(0, 229, 153, 0.12);
+            border: 1px solid rgba(0, 229, 153, 0.3);
+            padding: 2px 10px;
+            border-radius: 6px;
+        }
+
+        .landing-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            background: #1e293b;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .landing-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #00e599;
+            box-shadow: 0 0 12px rgba(0, 229, 153, 0.6);
+            cursor: grab;
+            margin-top: -7px;
+            transition: transform 0.15s ease;
+        }
+
+        .landing-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .landing-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #00e599;
+            cursor: grab;
+        }
+
+        .landing-output-box {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(0, 229, 153, 0.2);
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .output-title-label {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .output-val-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 20px rgba(0, 229, 153, 0.4);
+        }
+
+        .unlock-roi-btn {
+            background: linear-gradient(135deg, #00e599 0%, #059669 100%);
+            color: #04140d !important;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 800;
+            padding: 0.85rem 1.25rem;
+            border-radius: 999px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(0, 229, 153, 0.35);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            text-align: center;
+        }
+
+        .unlock-roi-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0, 229, 153, 0.5);
+            background: linear-gradient(135deg, #1bf4ac 0%, #05a876 100%);
+        }
+
         .gate-form {
             display: flex;
             flex-direction: column;
@@ -719,6 +875,42 @@
                                 <li>Only one showcase position per ZIP code</li>
                             </ul>
 
+                            <!-- Interactive Teaser Revenue Calculator (Deliverable 1) -->
+                            <div class="landing-calculator-card">
+                                <div class="calc-card-header">
+                                    <span class="calc-card-title">
+                                        ⚡ Quick Revenue Teaser
+                                    </span>
+                                    <span class="calc-card-badge">Interactive</span>
+                                </div>
+                                <div class="slider-row">
+                                    <div class="slider-labels-top">
+                                        <span>Daily Client Foot Traffic:</span>
+                                        <span class="slider-val-badge" id="landing-traffic-val">50</span>
+                                    </div>
+                                    <input 
+                                        type="range" 
+                                        id="landing-traffic-slider" 
+                                        class="landing-slider" 
+                                        min="10" 
+                                        max="200" 
+                                        step="5" 
+                                        value="50"
+                                        aria-label="Daily Client Foot Traffic"
+                                    >
+                                </div>
+                                <div class="landing-output-box">
+                                    <div>
+                                        <div class="output-title-label">Potential Monthly Revenue</div>
+                                        <div style="font-size: 0.72rem; color: #94a3b8;">15% conversion &bull; $45/session &bull; 24 days</div>
+                                    </div>
+                                    <div class="output-val-num" id="landing-revenue-val">$8,100</div>
+                                </div>
+                                <a href="../roi-calculator.html?traffic=50" id="landing-unlock-roi-btn" class="unlock-roi-btn">
+                                    <span>Unlock Full ROI Calculator & Secure Your ZIP Code &rarr;</span>
+                                </a>
+                            </div>
+
                             <!-- Territory Showcase Map Card -->
                             <div class="territory-map-container">
                                 <div id="mini-map"></div>
@@ -773,6 +965,37 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Landing Teaser Calculator
+            const trafficSlider = document.getElementById('landing-traffic-slider');
+            const trafficVal = document.getElementById('landing-traffic-val');
+            const revenueVal = document.getElementById('landing-revenue-val');
+            const unlockBtn = document.getElementById('landing-unlock-roi-btn');
+
+            if (trafficSlider && trafficVal && revenueVal && unlockBtn) {
+                const currencyFmt = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    maximumFractionDigits: 0
+                });
+
+                function updateLandingCalc() {
+                    const traffic = parseInt(trafficSlider.value, 10);
+                    trafficVal.textContent = traffic;
+                    // Formula: Traffic * 15% conversion * $45 price * 24 operational days
+                    const monthlyGross = traffic * 0.15 * 45 * 24;
+                    revenueVal.textContent = currencyFmt.format(Math.round(monthlyGross));
+                    unlockBtn.href = `../roi-calculator.html?traffic=${traffic}`;
+
+                    const min = parseFloat(trafficSlider.min) || 10;
+                    const max = parseFloat(trafficSlider.max) || 200;
+                    const percent = ((traffic - min) / (max - min)) * 100;
+                    trafficSlider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${percent}%, #1e293b ${percent}%, #1e293b 100%)`;
+                }
+
+                trafficSlider.addEventListener('input', updateLandingCalc);
+                updateLandingCalc();
+            }
+
             const markerInstances = {};
             // Calculate the offset center coordinates so the map is fully static from frame 1.
             // We want Denver [39.7392, -104.9903] to be positioned 126px to the left and 31px above the center of the container.
