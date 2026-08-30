@@ -5,29 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOL REViBE | Dedicated ROI & Revenue Calculator</title>
     <meta name="description" content="Calculate your customized monthly revenue potential by adding a SOL REViBE wellness station to your spa, clinic, or gym. Secure your exclusive ZIP code territory.">
-    <!-- Google Fonts -->
+    <!-- Google Fonts (matching home page) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
+        /* ── Design tokens matching home page ───────────────────── */
         :root {
-            --bg-base: #070c0e;
-            --bg-surface: #0c1417;
-            --bg-card: rgba(15, 24, 28, 0.75);
-            --bg-card-hover: rgba(22, 34, 40, 0.85);
-            --bg-card-inner: rgba(7, 12, 14, 0.65);
+            --bg-page: linear-gradient(160deg, #ebf7eb 0%, #faf2e6 30%, #fbf1e6 60%, #e9edfa 100%);
+            --bg-card: rgba(255, 255, 255, 0.55);
+            --bg-card-inner: rgba(10, 18, 24, 0.88);
+            --bg-card-dark: linear-gradient(165deg, #101c22 0%, #080f12 100%);
             --accent-green: #00e599;
             --accent-green-glow: rgba(0, 229, 153, 0.35);
             --accent-green-dark: #059669;
             --accent-cyan: #06b6d4;
             --accent-amber: #f59e0b;
-            --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
+            --accent-purple: #a855f7;
+            --text-primary: #111827;
+            --text-on-dark: #ffffff;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-light: rgba(0,0,0,0.06);
             --border-glass: rgba(255, 255, 255, 0.08);
-            --border-highlight: rgba(0, 229, 153, 0.28);
-            --font-display: 'Montserrat', sans-serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --border-highlight: rgba(0, 229, 153, 0.35);
+            --font-display: 'Outfit', 'Inter', sans-serif;
+            --font-body: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            --font-nav: 'Inter', sans-serif;
         }
 
         * {
@@ -38,7 +44,8 @@
         }
 
         body {
-            background-color: var(--bg-base);
+            background: var(--bg-page);
+            background-attachment: fixed;
             color: var(--text-primary);
             font-family: var(--font-body);
             min-height: 100vh;
@@ -48,101 +55,123 @@
             flex-direction: column;
         }
 
-        /* Ambient Lighting */
-        .ambient-sphere-center {
-            position: absolute;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 900px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0, 229, 153, 0.13) 0%, rgba(6, 182, 212, 0.04) 50%, transparent 75%);
-            filter: blur(90px);
-            pointer-events: none;
-            z-index: 0;
+
+
+        /* ── Navbar (matches home page vibe-navbar) ──────────────────── */
+        @keyframes liquidFlow {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .ambient-sphere-bottom {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1000px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(0, 229, 153, 0.06) 0%, transparent 70%);
-            filter: blur(100px);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Header Navigation */
-        .top-navbar {
+        .vibe-navbar {
+            background: linear-gradient(to right, #ebf7eb, #faf2e6, #fbf1e6, #e9edfa);
+            padding: 1rem 4rem;
             position: relative;
-            z-index: 20;
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.75rem 0;
+            z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.04);
         }
 
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .vibe-navbar .logo a {
             text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .brand-logo .logo-mark {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #00e599, #06b6d4);
+            color: inherit;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: 1.15rem;
-            color: #080d0f;
-            box-shadow: 0 0 22px var(--accent-green-glow);
+            gap: 0.85rem;
         }
 
-        .brand-logo .logo-text {
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: 1.25rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
+        .vibe-navbar .nav-logo-img {
+            height: 76px;
+            object-fit: contain;
+            filter: none;
+            mix-blend-mode: multiply;
         }
 
-        .brand-logo .logo-text span {
-            color: var(--accent-green);
+        .vibe-nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
         }
 
-        .nav-back-link {
+        .vibe-nav-links a {
+            text-decoration: none;
+            color: #1f2937;
+            font-size: 0.85rem;
+            font-family: var(--font-nav);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            transition: color 0.2s ease;
+        }
+
+        .vibe-nav-links a:hover { color: #8b5cf6; }
+
+        .vibe-nav-links a.active-page { color: #00a86b; border-bottom: 2px solid #00e599; }
+
+        .vibe-reserve-btn {
+            background: linear-gradient(270deg, #22c55e, #3b82f6, #a855f7, #3b82f6, #22c55e);
+            background-size: 200% 200%;
+            animation: liquidFlow 8s ease infinite;
+            color: white !important;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-family: var(--font-nav);
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 999px;
-            border: 1px solid var(--border-glass);
-            background: rgba(255, 255, 255, 0.03);
-            transition: all 0.2s ease;
+            gap: 0.5rem;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
         }
 
-        .nav-back-link:hover {
-            color: #ffffff;
-            border-color: var(--border-highlight);
-            background: rgba(0, 229, 153, 0.08);
-            transform: translateX(-2px);
+        .vibe-reserve-btn:hover { opacity: 0.9; }
+
+        .hamburger-menu {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+            padding: 5px;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #1f2937;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-only-btn { display: none; }
+        .desktop-reserve-container { display: flex; }
+
+        @media (max-width: 1024px) {
+            .vibe-navbar { padding: 1rem 1.5rem; }
+            .vibe-nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(to bottom, #ebf7eb, #faf2e6);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                border-top: 1px solid rgba(0,0,0,0.05);
+                box-sizing: border-box;
+            }
+            .vibe-nav-links.active { display: flex; }
+            .desktop-reserve-container { display: none; }
+            .mobile-only-btn { display: inline-flex; margin-top: 1rem; justify-content: center; width: 100%; }
+            .hamburger-menu { display: flex; }
         }
 
         /* Container Layout */
@@ -173,13 +202,13 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(0, 229, 153, 0.1);
-            border: 1px solid var(--border-highlight);
+            background: rgba(0, 168, 107, 0.1);
+            border: 1px solid rgba(0, 168, 107, 0.35);
             padding: 6px 16px;
             border-radius: 999px;
             font-size: 0.82rem;
             font-weight: 700;
-            color: var(--accent-green);
+            color: #00a86b;
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
@@ -198,6 +227,7 @@
             font-weight: 900;
             line-height: 1.15;
             letter-spacing: -0.02em;
+            color: #111827;
         }
 
         .calc-title .green-text {
@@ -209,7 +239,7 @@
         .calc-subtitle {
             font-size: 1.05rem;
             line-height: 1.6;
-            color: var(--text-secondary);
+            color: #475569;
         }
 
         /* Dashboard Grid Layout */
@@ -217,12 +247,11 @@
             display: grid;
             grid-template-columns: 1.1fr 1fr;
             gap: 2rem;
-            background: linear-gradient(170deg, rgba(16, 26, 31, 0.85) 0%, rgba(10, 16, 19, 0.95) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(165deg, #101c22 0%, #080f12 100%);
+            border: 1px solid rgba(0, 229, 153, 0.25);
             border-radius: 32px;
             padding: 2.75rem;
-            box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 229, 153, 0.1);
-            backdrop-filter: blur(25px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 229, 153, 0.12), 0 0 60px rgba(0,229,153,0.05);
             position: relative;
         }
 
@@ -683,13 +712,13 @@
             font-family: var(--font-display);
             font-size: 1.5rem;
             font-weight: 800;
-            color: #ffffff;
+            color: #111827;
             letter-spacing: -0.01em;
         }
 
         .value-prop-header p {
             font-size: 0.9rem;
-            color: var(--text-secondary);
+            color: #475569;
             margin-top: 4px;
         }
 
@@ -755,11 +784,11 @@
         /* Site Footer */
         .calc-footer {
             margin-top: auto;
-            border-top: 1px solid var(--border-glass);
+            border-top: 1px solid rgba(0,0,0,0.08);
             padding: 2rem 0;
             text-align: center;
             font-size: 0.82rem;
-            color: var(--text-muted);
+            color: #94a3b8;
             position: relative;
             z-index: 10;
         }
@@ -949,20 +978,31 @@
 </head>
 <body>
 
-    <!-- Ambient Glow Background Spheres -->
-    <div class="ambient-sphere-center"></div>
-    <div class="ambient-sphere-bottom"></div>
-
-    <!-- Navigation Header -->
-    <header class="top-navbar">
-        <a href="index.html" class="brand-logo" title="SOL REViBE Home">
-            <div class="logo-mark">⚡</div>
-            <div class="logo-text">SOL <span>REViBE</span></div>
-        </a>
-        <a href="hero-preview.html" class="nav-back-link">
-            <span>&larr;</span> Back to Preview
-        </a>
-    </header>
+    <!-- Navigation (matches home page vibe-navbar) -->
+    <nav class="navbar vibe-navbar">
+        <div class="logo">
+            <a href="index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:0.85rem;">
+                <img src="assets/SOL%20REViBE%20Logo.png" alt="SOL REViBE Logo" class="nav-logo-img">
+            </a>
+        </div>
+        <div class="vibe-nav-links" id="vibeNavLinks">
+            <a href="index.html#experience">EXPERIENCE</a>
+            <a href="/roi-calculator" class="active-page">ROI CALCULATOR</a>
+            <a href="locations/index.html">LOCATIONS</a>
+            <a href="index.html#science">SCIENCE</a>
+            <a href="index.html#payment">PAYMENT</a>
+            <a href="index.html#partnership">PARTNERSHIP</a>
+            <a href="index.html#about">ABOUT</a>
+            <a href="landing" class="vibe-reserve-btn mobile-only-btn">JOIN THE WAITLIST &rarr;</a>
+        </div>
+        <div class="desktop-reserve-container">
+            <a href="landing" class="vibe-reserve-btn">JOIN THE WAITLIST &rarr;</a>
+        </div>
+        <button class="hamburger-menu" id="hamburgerMenu" aria-label="Toggle Navigation"
+            onclick="document.getElementById('vibeNavLinks').classList.toggle('active')">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
 
     <main class="calculator-container">
 
