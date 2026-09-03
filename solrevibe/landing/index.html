@@ -75,52 +75,25 @@
         }
 
         .split-box-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
-            background: linear-gradient(135deg, #55b6ab, #60a5fa, #b44cff); /* pastel teal, blue, purple */
-            border-radius: 20px;
-            z-index: -1;
-            filter: blur(35px); /* 20-40px blur radius */
-            opacity: 0.4; /* subtle, elegant outer glow */
-            pointer-events: none;
+            display: none;
         }
 
         .split-box {
             position: relative;
             width: 100%;
-            max-width: 1360px;
+            max-width: 1600px;
             margin: 0 auto;
             height: auto;
-            background: linear-gradient(135deg, #55b6ab, #60a5fa, #b44cff);
             border-radius: 20px;
             overflow: hidden;
-            padding: 2px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
         }
 
-        /* Rotating single subtle highlight on top of permanent border */
         .split-box::before {
-            content: '';
-            position: absolute;
-            width: 180%;
-            height: 180%;
-            top: -40%;
-            left: -40%;
-            background: conic-gradient(
-                from 0deg,
-                transparent 60%,
-                rgba(255, 255, 255, 0.05) 75%,
-                rgba(255, 255, 255, 0.9) 90%,
-                rgba(255, 255, 255, 0.05) 95%,
-                transparent 100%
-            );
-            animation: borderRotate 6s linear infinite;
-            z-index: 1;
+            display: none;
         }
 
         @keyframes borderRotate {
@@ -148,8 +121,8 @@
         .left-panel {
             position: relative;
             background-color: #f5f5f0;
-            flex: 0 0 52%;
-            aspect-ratio: 1597 / 1198;
+            flex: 0 0 54%;
+            aspect-ratio: 1108 / 831;
             min-width: 0;
             overflow: hidden;
             display: flex;
@@ -165,8 +138,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            /* Exact aspect ratio matching: 0px letterbox, 0px space below, 100% full frame */
+            object-fit: contain;
+            /* Never crop or cut off the video */
             object-position: center;
             opacity: 1;
             transition: opacity 0.4s ease-in;
