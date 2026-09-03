@@ -698,7 +698,7 @@
             const MAX_TRAFFIC = 100;
             const MIN_DAYS = 1;
             const MAX_DAYS = 7;
-            const SWEEP_DURATION = 7000; // Slower, relaxed and buttery seamless pace (7.0s)
+            const SWEEP_DURATION = 10000; // Gentle, elegant, slower seamless pace (10.0s)
             const REPLAY_INTERVAL = 5000; // Holds at maximum and replays after 5s
 
             function startRaisingAnimation() {
@@ -759,7 +759,7 @@
                     const fromTraffic = parseFloat(trafficSlider.value);
                     const fromDays = parseFloat(daysSlider.value);
                     const startTime = performance.now();
-                    const RESET_DURATION = 1500;
+                    const RESET_DURATION = 2000;
 
                     function resetStep(currentTime) {
                         if (!isRaisingActive) return;
