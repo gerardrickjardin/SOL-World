@@ -160,6 +160,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
         }
 
         .left-panel img,
@@ -174,6 +175,7 @@
             object-position: center;
             opacity: 1;
             transition: opacity 0.4s ease-in;
+            pointer-events: none;
         }
         .left-panel img.loaded,
         .left-panel video.loaded {
@@ -866,7 +868,7 @@
             <div class="split-box">
                 <div class="split-box-inner">
                     <div class="left-panel">
-                        <video autoplay loop muted playsinline preload="auto" poster="../assets/Final_Hero.jpg">
+                        <video loop muted playsinline preload="auto" poster="../assets/Final_Hero.jpg">
                             <source src="../assets/UPDATED%20SOL%20REViBE%20Landing%20Page.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -1165,9 +1167,33 @@
                 setActiveMarkerDot(denverSpot.name);
             }
 
-            // Video/Image smooth fade-in once ready
+            // Video hover-to-play: moves on mouseover, stops on mouseoff
+            const leftPanel = document.querySelector('.left-panel');
             const leftVideo = document.querySelector('.left-panel video');
-            if (leftVideo) {
+            if (leftVideo && leftPanel) {
+                leftVideo.muted = true;
+                leftVideo.pause();
+
+                leftPanel.addEventListener('mouseenter', () => {
+                    const playPromise = leftVideo.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(() => {});
+                    }
+                });
+
+                leftPanel.addEventListener('mouseleave', () => {
+                    leftVideo.pause();
+                });
+
+                // Touch devices (tap to play/pause)
+                leftPanel.addEventListener('click', () => {
+                    if (leftVideo.paused) {
+                        leftVideo.play().catch(() => {});
+                    } else {
+                        leftVideo.pause();
+                    }
+                });
+
                 if (leftVideo.readyState >= 3) {
                     leftVideo.classList.add('loaded');
                 } else {
