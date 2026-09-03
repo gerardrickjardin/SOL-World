@@ -556,7 +556,7 @@
                                             <span class="teaser-val-badge" id="t-traffic-val">25</span>
                                         </div>
                                         <input type="range" id="t-traffic-slider" class="teaser-range"
-                                            min="5" max="100" step="1" value="25">
+                                            min="5" max="100" step="any" value="25">
                                         <div class="teaser-tick-row">
                                             <span>5 / day</span>
                                             <span>100 / day</span>
@@ -569,7 +569,7 @@
                                             <span class="teaser-val-badge" id="t-days-val">5</span>
                                         </div>
                                         <input type="range" id="t-days-slider" class="teaser-range"
-                                            min="1" max="7" step="1" value="5">
+                                            min="1" max="7" step="any" value="5">
                                         <div class="teaser-tick-row">
                                             <span>1 day</span>
                                             <span>7 days</span>
@@ -641,49 +641,56 @@
 
             if (trafficSlider && trafficVal && daysSlider && daysVal && revenueVal) {
                 updateRevenue = () => {
-                    const visitors = parseInt(trafficSlider.value, 10);
-                    const days = parseInt(daysSlider.value, 10);
-                    trafficVal.textContent = visitors;
-                    daysVal.textContent = days;
+                    const visitors = parseFloat(trafficSlider.value);
+                    const days = parseFloat(daysSlider.value);
+                    const displayTraffic = Math.round(visitors);
+                    const displayDays = Math.round(days);
+
+                    trafficVal.textContent = displayTraffic;
+                    daysVal.textContent = displayDays;
 
                     // Active operational days in month = days open per week * 4 weeks
-                    const monthlyDays = days * 4;
-                    const monthlyRev = Math.round(visitors * CONVERSION_RATE * PER_SESSION_RATE * monthlyDays);
+                    const monthlyDays = displayDays * 4;
+                    const monthlyRev = Math.round(displayTraffic * CONVERSION_RATE * PER_SESSION_RATE * monthlyDays);
                     revenueVal.textContent = '$' + monthlyRev.toLocaleString();
 
                     if (subText) {
-                        subText.textContent = `15% conversion • $${PER_SESSION_RATE}/session • ${monthlyDays} active days/mo (${days} days/wk)`;
+                        subText.textContent = `15% conversion • $${PER_SESSION_RATE}/session • ${monthlyDays} active days/mo (${displayDays} days/wk)`;
                     }
 
                     if (unlockBtn) {
-                        unlockBtn.href = `/roi-calculator?traffic=${visitors}&days=${days}`;
+                        unlockBtn.href = `/roi-calculator?traffic=${displayTraffic}&days=${displayDays}`;
                     }
 
-                    // Update slider track gradient fill
+                    // Update slider track gradient fill with float precision for seamless line
                     const tMin = parseFloat(trafficSlider.min) || 5;
                     const tMax = parseFloat(trafficSlider.max) || 100;
-                    const tPct = ((visitors - tMin) / (tMax - tMin)) * 100;
+                    const tPct = Math.max(0, Math.min(100, ((visitors - tMin) / (tMax - tMin)) * 100));
                     trafficSlider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${tPct}%, #1e293b ${tPct}%, #1e293b 100%)`;
 
                     const dMin = parseFloat(daysSlider.min) || 1;
                     const dMax = parseFloat(daysSlider.max) || 7;
-                    const dPct = ((days - dMin) / (dMax - dMin)) * 100;
+                    const dPct = Math.max(0, Math.min(100, ((days - dMin) / (dMax - dMin)) * 100));
                     daysSlider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${dPct}%, #1e293b ${dPct}%, #1e293b 100%)`;
                 };
 
-                // Manual slider input stops auto-animation
-                trafficSlider.addEventListener('input', () => {
+                let manualResumeTimer = null;
+                const onManualInput = () => {
                     stopRaisingAnimation();
                     updateRevenue();
-                });
-                daysSlider.addEventListener('input', () => {
-                    stopRaisingAnimation();
-                    updateRevenue();
-                });
+                    if (manualResumeTimer) clearTimeout(manualResumeTimer);
+                    // Resume raising animation after 10s of inactivity
+                    manualResumeTimer = setTimeout(() => {
+                        startRaisingAnimation();
+                    }, 10000);
+                };
+
+                trafficSlider.addEventListener('input', onManualInput);
+                daysSlider.addEventListener('input', onManualInput);
                 updateRevenue();
             }
 
-            // ── Raising Animation ("GIF Effect") on hover ──────────
+            // ── Seamless Raising Animation ("GIF Effect") ───────────
             let sliderAnimId = null;
             let pauseTimeoutId = null;
             let isRaisingActive = false;
@@ -692,10 +699,11 @@
             const MAX_TRAFFIC = 100;
             const MIN_DAYS = 1;
             const MAX_DAYS = 7;
-            const ANIM_DURATION = 1800; // 1.8s smooth sweep to maximum
+            const SWEEP_DURATION = 4000; // Calm, steady pace across the line (4.0s)
+            const REPLAY_INTERVAL = 10000; // Holds at maximum and replays after 10s
 
             function startRaisingAnimation() {
-                if (isRaisingActive) return; // Already raising, don't restart!
+                if (isRaisingActive) return;
                 isRaisingActive = true;
 
                 function runSweep() {
@@ -713,13 +721,13 @@
                         if (!isRaisingActive) return;
 
                         const elapsed = currentTime - startTime;
-                        const progress = Math.min(elapsed / ANIM_DURATION, 1);
+                        const progress = Math.min(elapsed / SWEEP_DURATION, 1);
 
-                        // Smooth easeOutCubic
-                        const ease = 1 - Math.pow(1 - progress, 3);
+                        // Buttery smooth easeInOutSine for a continuous, seamless line motion
+                        const ease = -(Math.cos(Math.PI * progress) - 1) / 2;
 
-                        const curTraffic = Math.round(fromTraffic + (MAX_TRAFFIC - fromTraffic) * ease);
-                        const curDays = Math.round(fromDays + (MAX_DAYS - fromDays) * ease);
+                        const curTraffic = fromTraffic + (MAX_TRAFFIC - fromTraffic) * ease;
+                        const curDays = fromDays + (MAX_DAYS - fromDays) * ease;
 
                         trafficSlider.value = curTraffic;
                         daysSlider.value = curDays;
@@ -728,17 +736,63 @@
                         if (progress < 1) {
                             sliderAnimId = requestAnimationFrame(step);
                         } else {
-                            // Reached maximum (100 & 7, $18,900/mo)!
-                            // Hold at maximum for 1.4s, then loop like an animated GIF
+                            // Ensure exact maximum
+                            trafficSlider.value = MAX_TRAFFIC;
+                            daysSlider.value = MAX_DAYS;
+                            updateRevenue();
+
+                            // Reached maximum ($18,900/mo)! Hold for 10 seconds then replay seamlessly
                             pauseTimeoutId = setTimeout(() => {
                                 if (isRaisingActive) {
-                                    runSweep();
+                                    runResetTransition();
                                 }
-                            }, 1400);
+                            }, REPLAY_INTERVAL);
                         }
                     }
 
                     sliderAnimId = requestAnimationFrame(step);
+                }
+
+                function runResetTransition() {
+                    if (!isRaisingActive) return;
+
+                    // Smooth 1.1s gentle glide back to baseline before next sweep
+                    const fromTraffic = parseFloat(trafficSlider.value);
+                    const fromDays = parseFloat(daysSlider.value);
+                    const startTime = performance.now();
+                    const RESET_DURATION = 1100;
+
+                    function resetStep(currentTime) {
+                        if (!isRaisingActive) return;
+
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / RESET_DURATION, 1);
+                        const ease = -(Math.cos(Math.PI * progress) - 1) / 2;
+
+                        const curTraffic = fromTraffic - (fromTraffic - MIN_TRAFFIC) * ease;
+                        const curDays = fromDays - (fromDays - MIN_DAYS) * ease;
+
+                        trafficSlider.value = curTraffic;
+                        daysSlider.value = curDays;
+                        updateRevenue();
+
+                        if (progress < 1) {
+                            sliderAnimId = requestAnimationFrame(resetStep);
+                        } else {
+                            trafficSlider.value = MIN_TRAFFIC;
+                            daysSlider.value = MIN_DAYS;
+                            updateRevenue();
+
+                            // Pause briefly (350ms) then begin next 4s upward sweep
+                            pauseTimeoutId = setTimeout(() => {
+                                if (isRaisingActive) {
+                                    runSweep();
+                                }
+                            }, 350);
+                        }
+                    }
+
+                    sliderAnimId = requestAnimationFrame(resetStep);
                 }
 
                 runSweep();
@@ -800,6 +854,11 @@
                     });
                 }
             }
+
+            // Also auto-start the smooth raising animation on page load so visitors see the demo immediately
+            setTimeout(() => {
+                startRaisingAnimation();
+            }, 1000);
 
             const leftImg = document.querySelector('.left-panel img');
             if (leftImg) {
