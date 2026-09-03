@@ -637,8 +637,10 @@
             const PER_SESSION_RATE = 45; // Constant per session rate ($45)
             const CONVERSION_RATE = 0.15; // 15% conversion
 
+            let updateRevenue = () => {};
+
             if (trafficSlider && trafficVal && daysSlider && daysVal && revenueVal) {
-                const updateRevenue = () => {
+                updateRevenue = () => {
                     const visitors = parseInt(trafficSlider.value, 10);
                     const days = parseInt(daysSlider.value, 10);
                     trafficVal.textContent = visitors;
@@ -669,38 +671,127 @@
                     daysSlider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${dPct}%, #1e293b ${dPct}%, #1e293b 100%)`;
                 };
 
-                trafficSlider.addEventListener('input', updateRevenue);
-                daysSlider.addEventListener('input', updateRevenue);
+                // Manual slider input stops auto-animation
+                trafficSlider.addEventListener('input', () => {
+                    stopRaisingAnimation();
+                    updateRevenue();
+                });
+                daysSlider.addEventListener('input', () => {
+                    stopRaisingAnimation();
+                    updateRevenue();
+                });
                 updateRevenue();
             }
 
-                        // Video hover-to-play: moves on mouseover, stops on mouseoff
+            // ── Raising Animation ("GIF Effect") on hover ──────────
+            let sliderAnimId = null;
+            let pauseTimeoutId = null;
+            let isRaisingActive = false;
+
+            const MIN_TRAFFIC = 5;
+            const MAX_TRAFFIC = 100;
+            const MIN_DAYS = 1;
+            const MAX_DAYS = 7;
+            const ANIM_DURATION = 1800; // 1.8s smooth sweep to maximum
+
+            function startRaisingAnimation() {
+                if (isRaisingActive) return; // Already raising, don't restart!
+                isRaisingActive = true;
+
+                function runSweep() {
+                    if (!isRaisingActive) return;
+
+                    const fromTraffic = MIN_TRAFFIC;
+                    const fromDays = MIN_DAYS;
+                    trafficSlider.value = fromTraffic;
+                    daysSlider.value = fromDays;
+                    updateRevenue();
+
+                    const startTime = performance.now();
+
+                    function step(currentTime) {
+                        if (!isRaisingActive) return;
+
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / ANIM_DURATION, 1);
+
+                        // Smooth easeOutCubic
+                        const ease = 1 - Math.pow(1 - progress, 3);
+
+                        const curTraffic = Math.round(fromTraffic + (MAX_TRAFFIC - fromTraffic) * ease);
+                        const curDays = Math.round(fromDays + (MAX_DAYS - fromDays) * ease);
+
+                        trafficSlider.value = curTraffic;
+                        daysSlider.value = curDays;
+                        updateRevenue();
+
+                        if (progress < 1) {
+                            sliderAnimId = requestAnimationFrame(step);
+                        } else {
+                            // Reached maximum (100 & 7, $18,900/mo)!
+                            // Hold at maximum for 1.4s, then loop like an animated GIF
+                            pauseTimeoutId = setTimeout(() => {
+                                if (isRaisingActive) {
+                                    runSweep();
+                                }
+                            }, 1400);
+                        }
+                    }
+
+                    sliderAnimId = requestAnimationFrame(step);
+                }
+
+                runSweep();
+            }
+
+            function stopRaisingAnimation() {
+                isRaisingActive = false;
+                if (sliderAnimId) {
+                    cancelAnimationFrame(sliderAnimId);
+                    sliderAnimId = null;
+                }
+                if (pauseTimeoutId) {
+                    clearTimeout(pauseTimeoutId);
+                    pauseTimeoutId = null;
+                }
+            }
+
+            // ── Video & Slider Synchronized Hover Interaction ──────
             const leftPanel = document.querySelector('.left-panel');
             const leftVideo = document.querySelector('.left-panel video');
-            if (leftVideo && leftPanel) {
-                leftVideo.muted = true;
-                leftVideo.pause();
 
+            if (leftPanel) {
                 leftPanel.addEventListener('mouseenter', () => {
-                    const playPromise = leftVideo.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(() => {});
+                    if (leftVideo) {
+                        leftVideo.muted = true;
+                        leftVideo.play().catch(() => {});
                     }
+                    startRaisingAnimation();
                 });
 
                 leftPanel.addEventListener('mouseleave', () => {
-                    leftVideo.pause();
-                });
-
-                // Touch devices (tap to play/pause)
-                leftPanel.addEventListener('click', () => {
-                    if (leftVideo.paused) {
-                        leftVideo.play().catch(() => {});
-                    } else {
+                    if (leftVideo) {
                         leftVideo.pause();
                     }
+                    stopRaisingAnimation();
                 });
 
+                // Touch devices (tap to toggle play & raising animation)
+                leftPanel.addEventListener('click', () => {
+                    if (leftVideo && leftVideo.paused) {
+                        leftVideo.muted = true;
+                        leftVideo.play().catch(() => {});
+                        startRaisingAnimation();
+                    } else if (leftVideo) {
+                        leftVideo.pause();
+                        stopRaisingAnimation();
+                    }
+                });
+            }
+
+            if (leftVideo) {
+                leftVideo.muted = true;
+                leftVideo.pause();
                 if (leftVideo.readyState >= 3) {
                     leftVideo.classList.add('loaded');
                 } else {
