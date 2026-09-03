@@ -392,11 +392,20 @@
             color: #94a3b8;
             margin: -0.5rem 0 0.1rem;
         }
+        .teaser-sliders-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .teaser-slider-group {
+            display: flex;
+            flex-direction: column;
+        }
         .teaser-slider-label {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.84rem;
+            font-size: 0.82rem;
             font-weight: 600;
             color: #e2e8f0;
             margin-bottom: 4px;
@@ -540,27 +549,41 @@
                                 </div>
                                 <div class="teaser-subtitle">Estimate your location's untapped monthly revenue</div>
 
-                                <div>
-                                    <div class="teaser-slider-label">
-                                        <span>Daily Client Foot Traffic</span>
-                                        <span class="teaser-val-badge" id="t-traffic-val">50</span>
+                                <div class="teaser-sliders-row">
+                                    <div class="teaser-slider-group">
+                                        <div class="teaser-slider-label">
+                                            <span>Daily Client Foot Traffic</span>
+                                            <span class="teaser-val-badge" id="t-traffic-val">25</span>
+                                        </div>
+                                        <input type="range" id="t-traffic-slider" class="teaser-range"
+                                            min="5" max="100" step="1" value="25">
+                                        <div class="teaser-tick-row">
+                                            <span>5 / day</span>
+                                            <span>100 / day</span>
+                                        </div>
                                     </div>
-                                    <input type="range" id="t-traffic-slider" class="teaser-range"
-                                        min="10" max="200" step="5" value="50">
-                                    <div class="teaser-tick-row">
-                                        <span>10 visitors/day</span>
-                                        <span>100 visitors/day</span>
-                                        <span>200+ visitors/day</span>
+
+                                    <div class="teaser-slider-group">
+                                        <div class="teaser-slider-label">
+                                            <span>Days open per week</span>
+                                            <span class="teaser-val-badge" id="t-days-val">5</span>
+                                        </div>
+                                        <input type="range" id="t-days-slider" class="teaser-range"
+                                            min="1" max="7" step="1" value="5">
+                                        <div class="teaser-tick-row">
+                                            <span>1 day</span>
+                                            <span>7 days</span>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="teaser-output">
                                     <div>
                                         <div class="teaser-output-label">Potential Monthly Revenue</div>
-                                        <div class="teaser-output-sub">15% conversion • $45/session • 24 days/mo</div>
+                                        <div class="teaser-output-sub" id="t-revenue-sub">15% conversion • $45/session • 20 active days/mo</div>
                                     </div>
                                     <div>
-                                        <span class="teaser-output-num" id="t-revenue-val">$8,100</span>
+                                        <span class="teaser-output-num" id="t-revenue-val">$3,375</span>
                                         <span class="teaser-output-unit">/mo</span>
                                     </div>
                                 </div>
@@ -602,26 +625,52 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // Quick Revenue Teaser slider interactivity
+            // Quick Revenue Teaser slider interactivity (Daily Foot Traffic & Days Open Per Week, Constant $45/session)
             const trafficSlider = document.getElementById('t-traffic-slider');
             const trafficVal = document.getElementById('t-traffic-val');
+            const daysSlider = document.getElementById('t-days-slider');
+            const daysVal = document.getElementById('t-days-val');
             const revenueVal = document.getElementById('t-revenue-val');
+            const subText = document.getElementById('t-revenue-sub');
             const unlockBtn = document.getElementById('t-unlock-btn');
 
-            if (trafficSlider && trafficVal && revenueVal) {
+            const PER_SESSION_RATE = 45; // Constant per session rate ($45)
+            const CONVERSION_RATE = 0.15; // 15% conversion
+
+            if (trafficSlider && trafficVal && daysSlider && daysVal && revenueVal) {
                 const updateRevenue = () => {
                     const visitors = parseInt(trafficSlider.value, 10);
+                    const days = parseInt(daysSlider.value, 10);
                     trafficVal.textContent = visitors;
-                    const monthlyRev = Math.round(visitors * 0.15 * 45 * 24);
+                    daysVal.textContent = days;
+
+                    // Active operational days in month = days open per week * 4 weeks
+                    const monthlyDays = days * 4;
+                    const monthlyRev = Math.round(visitors * CONVERSION_RATE * PER_SESSION_RATE * monthlyDays);
                     revenueVal.textContent = '$' + monthlyRev.toLocaleString();
-                    if (unlockBtn) {
-                        unlockBtn.href = '/roi-calculator?traffic=' + visitors;
+
+                    if (subText) {
+                        subText.textContent = `15% conversion • $${PER_SESSION_RATE}/session • ${monthlyDays} active days/mo (${days} days/wk)`;
                     }
-                    const percent = ((visitors - 10) / (200 - 10)) * 100;
-                    trafficSlider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${percent}%, #1e293b ${percent}%, #1e293b 100%)`;
+
+                    if (unlockBtn) {
+                        unlockBtn.href = `/roi-calculator?traffic=${visitors}&days=${days}`;
+                    }
+
+                    // Update slider track gradient fill
+                    const tMin = parseFloat(trafficSlider.min) || 5;
+                    const tMax = parseFloat(trafficSlider.max) || 100;
+                    const tPct = ((visitors - tMin) / (tMax - tMin)) * 100;
+                    trafficSlider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${tPct}%, #1e293b ${tPct}%, #1e293b 100%)`;
+
+                    const dMin = parseFloat(daysSlider.min) || 1;
+                    const dMax = parseFloat(daysSlider.max) || 7;
+                    const dPct = ((days - dMin) / (dMax - dMin)) * 100;
+                    daysSlider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${dPct}%, #1e293b ${dPct}%, #1e293b 100%)`;
                 };
 
                 trafficSlider.addEventListener('input', updateRevenue);
+                daysSlider.addEventListener('input', updateRevenue);
                 updateRevenue();
             }
 
