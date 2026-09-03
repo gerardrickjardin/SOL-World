@@ -92,12 +92,9 @@
         .split-box {
             position: relative;
             width: 100%;
-            max-width: 1760px;
+            max-width: 1360px;
             margin: 0 auto;
-            /* Height = viewport minus headline and padding — everything on one screen */
-            height: calc(100vh - 130px);
-            max-height: 900px;
-            min-height: 600px;
+            height: auto;
             background: linear-gradient(135deg, #55b6ab, #60a5fa, #b44cff);
             border-radius: 20px;
             overflow: hidden;
@@ -139,7 +136,6 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            height: 100%;
             background: linear-gradient(135deg, #427588 0%, #2f5669 100%);
             border-radius: 18px;
             display: flex;
@@ -151,8 +147,9 @@
 
         .left-panel {
             position: relative;
-            background-color: #1a2e3a;
-            flex: 0 0 50%;
+            background-color: #f5f5f0;
+            flex: 0 0 52%;
+            aspect-ratio: 1597 / 1198;
             min-width: 0;
             overflow: hidden;
             display: flex;
@@ -168,8 +165,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            /* Show full video frame — no zoom/crop */
+            object-fit: cover;
+            /* Exact aspect ratio matching: 0px letterbox, 0px space below, 100% full frame */
             object-position: center;
             opacity: 1;
             transition: opacity 0.4s ease-in;
@@ -183,15 +180,13 @@
         .right-panel {
             flex: 1;
             min-width: 0;
-            height: 100%;
-            padding: 1.2rem 1.6rem 1.2rem 1.8rem;
+            padding: 1.4rem 1.8rem 1.4rem 2rem;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: flex-start;
             box-sizing: border-box;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow: visible;
         }
 
         .right-panel-content {
