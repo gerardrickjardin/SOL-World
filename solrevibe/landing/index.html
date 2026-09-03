@@ -7,8 +7,6 @@
     <title>SOL REViBE | Waitlist</title>
     <link rel="preload" href="../assets/Final_Hero.jpg" as="image">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
         body,
         html {
@@ -235,320 +233,11 @@
             line-height: 1;
             top: -4px;
         }
-
-        /* Territory Showcase Map Card Styles */
-        .territory-map-container {
-            width: 100%;
-            height: 110px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            border-radius: 18px;
-            overflow: hidden;
-            position: relative;
-            background-color: #f8f4ee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        #mini-map {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .leaflet-marker-icon.hotspot-marker {
-            background: transparent !important;
-            border: none !important;
-            outline: none !important;
-            overflow: visible !important;
-        }
-
-        .territory-card {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 0.8rem 1.2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            width: 90%;
-            max-width: 440px;
-            height: 90px;
-            box-sizing: border-box;
-            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.2s ease;
-            cursor: pointer;
-            position: relative;
-            z-index: 2;
-        }
-
-        .territory-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
-        }
-
-        .card-left {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 54px;
-            height: 100%;
-            position: relative;
-            margin-right: 1rem;
-            flex-shrink: 0;
-        }
-
-        .pin-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        .location-pin {
-            width: 32px;
-            height: 32px;
-            z-index: 2;
-            filter: drop-shadow(0 2px 5px rgba(168, 85, 247, 0.4));
-            animation: pinPulse 2.5s ease-in-out infinite;
-            transition: filter 0.3s ease;
-        }
-
-        .territory-card:hover .location-pin {
-            filter: drop-shadow(0 4px 10px rgba(168, 85, 247, 0.7));
-        }
-
-        @keyframes pinPulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-        }
-
-        .pulse-ring {
-            position: absolute;
-            width: 48px;
-            height: 24px;
-            border: 1.5px solid #8B5CF6;
-            border-radius: 50%;
-            background: transparent;
-            z-index: 1;
-            transform: scale(0.5);
-            opacity: 0.6;
-            animation: ringPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-            pointer-events: none;
-            bottom: 4px;
-        }
-
-        @keyframes ringPulse {
-            0% {
-                transform: scale(0.5);
-                opacity: 0.6;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
-        }
-
-        .card-divider {
-            width: 1px;
-            height: 46px;
-            background-color: #e2e8f0;
-            margin-right: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .card-right {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .map-card-title {
-            margin: 0;
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #1a2f3c;
-            line-height: 1.25;
-            letter-spacing: -0.01em;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .brand-gradient-text {
-            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-
-        /* Pulsating Hotspots on Map Card */
-        .hotspot-inner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 28px;
-            height: 28px;
-            background: transparent;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 10;
-            cursor: pointer;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-
-        .hotspot-inner:hover {
-            transform: scale(1.2);
-        }
-
-        .hotspot-inner.expanded {
-            background: white;
-            border-radius: 16px;
-            padding: 14px 18px;
-            width: 280px;
-            height: auto;
-            z-index: 2000;
-            box-shadow: 0 18px 50px rgba(0, 0, 0, .18);
-            transform: translateY(-4px);
-            align-items: flex-start;
-            justify-content: flex-start;
-            gap: 12px;
-            cursor: default;
-            overflow: visible;
-        }
-
-        .hotspot-inner.expanded:hover {
-            transform: translateY(-4px);
-        }
-
-        .hotspot-dot {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.9);
-            flex-shrink: 0;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        .hotspot-dot.active {
-            transform: scale(1.25);
-            border-color: #ffffff;
-            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.55), 0 0 15px rgba(255, 255, 255, 0.95) !important;
-        }
-
-        /* Pulsating animations and dot colors */
-        .purple .hotspot-dot {
-            background: #b44cff;
-            box-shadow: 0 0 0 6px rgba(180, 76, 255, .25), 0 0 0 12px rgba(180, 76, 255, .1);
-            animation: dotPulse 2s ease-in-out infinite;
-        }
-
-        .green .hotspot-dot {
-            background: #32d583;
-            box-shadow: 0 0 0 6px rgba(50, 213, 131, .25), 0 0 0 12px rgba(50, 213, 131, .1);
-            animation: dotPulseGreen 2s ease-in-out infinite;
-        }
-
-        .blue .hotspot-dot {
-            background: #5b8dff;
-            box-shadow: 0 0 0 6px rgba(91, 141, 255, .25), 0 0 0 12px rgba(91, 141, 255, .1);
-            animation: dotPulseBlue 2s ease-in-out infinite;
-        }
-
-        .orange .hotspot-dot {
-            background: #ff9d4d;
-            box-shadow: 0 0 0 6px rgba(255, 157, 77, .25), 0 0 0 12px rgba(255, 157, 77, .1);
-            animation: dotPulseOrange 2s ease-in-out infinite;
-        }
-
-        @keyframes dotPulse {
-            0% { box-shadow: 0 0 0 0 rgba(180, 76, 255, .4); transform: scale(1); }
-            50% { box-shadow: 0 0 0 10px rgba(180, 76, 255, .15), 0 0 0 20px rgba(180, 76, 255, .05); transform: scale(1.15); }
-            100% { box-shadow: 0 0 0 0 rgba(180, 76, 255, .4); transform: scale(1); }
-        }
-
-        @keyframes dotPulseGreen {
-            0% { box-shadow: 0 0 0 0 rgba(50, 213, 131, .4); transform: scale(1); }
-            50% { box-shadow: 0 0 0 10px rgba(50, 213, 131, .15), 0 0 0 20px rgba(50, 213, 131, .05); transform: scale(1.15); }
-            100% { box-shadow: 0 0 0 0 rgba(50, 213, 131, .4); transform: scale(1); }
-        }
-
-        @keyframes dotPulseBlue {
-            0% { box-shadow: 0 0 0 0 rgba(91, 141, 255, .4); transform: scale(1); }
-            50% { box-shadow: 0 0 0 10px rgba(91, 141, 255, .15), 0 0 0 20px rgba(91, 141, 255, .05); transform: scale(1.15); }
-            100% { box-shadow: 0 0 0 0 rgba(91, 141, 255, .4); transform: scale(1); }
-        }
-
-        @keyframes dotPulseOrange {
-            0% { box-shadow: 0 0 0 0 rgba(255, 157, 77, .4); transform: scale(1); }
-            50% { box-shadow: 0 0 0 10px rgba(255, 157, 77, .15), 0 0 0 20px rgba(255, 157, 77, .05); transform: scale(1.15); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 157, 77, .4); transform: scale(1); }
-        }
-
-        /* Card details structure */
-        .hotspot-details {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            font-family: 'Inter', sans-serif;
-            text-align: left;
-            flex-grow: 1;
-            box-sizing: border-box;
-        }
-
-        .hotspot-inner.expanded .hotspot-details {
-            display: flex;
-        }
-
-        .hotspot-details strong {
-            font-size: 14px;
-            font-weight: 700;
-            color: #0f172a;
-            line-height: 1.2;
-        }
-
-        .hotspot-address {
-            font-size: 12px;
-            color: #64748b;
-            font-weight: 400;
-            line-height: 1.4;
-        }
-
-        .hotspot-status {
-            font-size: 11px;
-            font-weight: 700;
-            margin-top: 4px;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 6px;
-            display: block;
-            text-transform: uppercase;
-        }
-
-        .green-text { color: #32d583; }
-        .purple-text { color: #b44cff; }
-        .blue-text { color: #5b8dff; }
-        .orange-text { color: #ff9d4d; }
         .gate-form {
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
+            gap: 0.5rem;
+            margin-top: 0.6rem;
         }
 
         .form-row {
@@ -653,10 +342,7 @@
                 align-items: center;
             }
 
-            .territory-map-container {
-                max-width: 100%;
-                margin: 24px auto;
-            }
+
         }
 
         .desktop-text {
@@ -689,14 +375,7 @@
                 word-spacing: 0.05em;
             }
 
-            .territory-card {
-                width: 95%;
-                padding: 0.6rem 1rem;
-            }
 
-            .map-card-title {
-                font-size: 1.05rem;
-            }
 
             .form-row {
                 flex-direction: column;
@@ -927,34 +606,7 @@
                                 </div>
                             </div>
 
-                            <!-- Territory Showcase Map Card -->
-                            <div class="territory-map-container">
-                                <div id="mini-map"></div>
-                                <div class="territory-card" id="active-territory-card">
-                                    <div class="card-left">
-                                        <div class="pin-wrapper">
-                                            <div class="pulse-ring"></div>
-                                            <div class="pulse-ring" style="animation-delay: 0.8s;"></div>
-                                            <div class="pulse-ring" style="animation-delay: 1.6s;"></div>
-                                            <svg class="location-pin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px; z-index: 2; filter: drop-shadow(0 2px 5px rgba(168, 85, 247, 0.4));">
-                                                <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="url(#pin-grad)"/>
-                                                <defs>
-                                                    <linearGradient id="pin-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                        <stop id="pin-grad-stop1" offset="0%" stop-color="#A855F7" />
-                                                        <stop id="pin-grad-stop2" offset="100%" stop-color="#8B5CF6" />
-                                                    </linearGradient>
-                                                </defs>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="card-divider"></div>
-                                    <div class="card-right">
-                                        <h3 class="map-card-title" id="card-title">SOL REViBE Mile High</h3>
-                                        <span class="hotspot-address" id="card-address">789 Altitude Ave, Denver, CO</span>
-                                        <span class="hotspot-status purple-text" id="card-status">● Priority Market</span>
-                                    </div>
-                                </div>
-                            </div>
+
 
                             <form class="gate-form" id="leadForm">
                                 <div class="form-row">
@@ -982,192 +634,30 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            const markerInstances = {};
-            // Calculate the offset center coordinates so the map is fully static from frame 1.
-            // We want Denver [39.7392, -104.9903] to be positioned 126px to the left and 31px above the center of the container.
-            // We can calculate the exact LatLng using Leaflet's projection system on a temporary map instance.
-            const tempMap = L.map(document.createElement('div'), {
-                center: [39.7392, -104.9903],
-                zoom: 3.5
-            });
-            const denverPoint = tempMap.project([39.7392, -104.9903], 3.5);
-            const offsetPoint = denverPoint.add([126, 31]);
-            const offsetCenter = tempMap.unproject(offsetPoint, 3.5);
-            tempMap.remove();
+            // Quick Revenue Teaser slider interactivity
+            const trafficSlider = document.getElementById('t-traffic-slider');
+            const trafficVal = document.getElementById('t-traffic-val');
+            const revenueVal = document.getElementById('t-revenue-val');
+            const unlockBtn = document.getElementById('t-unlock-btn');
 
-            // Initialize mini map as a fully static display at the calculated offset center
-            const miniMap = L.map('mini-map', {
-                center: offsetCenter,
-                zoom: 3.5,
-                zoomSnap: 0.5,
-                zoomControl: false,
-                attributionControl: false,
-                dragging: false,
-                scrollWheelZoom: false,
-                doubleClickZoom: false,
-                touchZoom: false,
-                boxZoom: false,
-                keyboard: false
-            });
-
-            // Highlight the default (Denver) marker dot on load
-            setTimeout(function() {
-                const denverMarker = markerInstances['SOL REViBE Mile High'];
-                if (denverMarker) {
-                    const dot = denverMarker.getElement().querySelector('.hotspot-dot');
-                    if (dot) dot.classList.add('active');
-                }
-            }, 100);
-
-            // Add CartoDB Positron tile layer
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                maxZoom: 18,
-                minZoom: 3
-            }).addTo(miniMap);
-
-            // Define hotspots (stations) coordinates representing the live locations with detailed info
-            const hotspots = [
-                { 
-                    lat: 30.2672, lng: -97.7431, color: 'green',
-                    name: 'SOL REViBE Flagship',
-                    address: '100 SOL Plaza, Austin, TX',
-                    status: 'Launching Soon',
-                    textClass: 'green-text'
-                },
-                { 
-                    lat: 40.7128, lng: -74.0060, color: 'purple',
-                    name: 'SOL REViBE Manhattan',
-                    address: '45 Rockefeller Plaza, New York, NY',
-                    status: 'Priority Market',
-                    textClass: 'purple-text'
-                },
-                { 
-                    lat: 34.0522, lng: -118.2437, color: 'purple',
-                    name: 'SOL REViBE City of Angels',
-                    address: '500 Sunset Blvd, Los Angeles, CA',
-                    status: 'Priority Market',
-                    textClass: 'purple-text'
-                },
-                { 
-                    lat: 25.7617, lng: -80.1918, color: 'green',
-                    name: 'SOL REViBE Ocean Drive',
-                    address: '1100 Collins Ave, Miami, FL',
-                    status: 'Launching Soon',
-                    textClass: 'green-text'
-                },
-                { 
-                    lat: 41.8781, lng: -87.6298, color: 'purple',
-                    name: 'SOL REViBE Lakefront',
-                    address: '321 Recharge Dr, Chicago, IL',
-                    status: 'Priority Market',
-                    textClass: 'purple-text'
-                },
-                { 
-                    lat: 47.6062, lng: -122.3321, color: 'blue',
-                    name: 'SOL REViBE Pacific',
-                    address: '1200 Wellness Way, Seattle, WA',
-                    status: 'Priority Market',
-                    textClass: 'blue-text'
-                },
-                { 
-                    lat: 39.7392, lng: -104.9903, color: 'purple',
-                    name: 'SOL REViBE Mile High',
-                    address: '789 Altitude Ave, Denver, CO',
-                    status: 'Priority Market',
-                    textClass: 'purple-text'
-                }
-            ];
-
-            // Render hotspots as Leaflet markers with click expand behavior
-            hotspots.forEach(function(spot) {
-                const markerHtml = `
-                    <div class="hotspot-inner ${spot.color}">
-                        <span class="hotspot-dot"></span>
-                    </div>
-                `;
-
-                const customIcon = L.divIcon({
-                    className: 'hotspot-marker',
-                    html: markerHtml,
-                    iconSize: [28, 28],
-                    iconAnchor: [14, 14]
-                });
-
-                const marker = L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(miniMap);
-                markerInstances[spot.name] = marker;
-
-                // Setup marker click event to toggle popup details without moving the map
-                marker.on('click', function(e) {
-                    updateFloatingCard(spot);
-                    setActiveMarkerDot(spot.name);
-                    L.DomEvent.stopPropagation(e);
-                });
-            });
-
-            // Reset details to Denver on map click
-            miniMap.on('click', function() {
-                resetToDenver();
-            });
-
-            // Prevent map clicks from bubbling up to document
-            L.DomEvent.on(miniMap.getContainer(), 'click', L.DomEvent.stopPropagation);
-
-            function updateFloatingCard(spot) {
-                const card = document.getElementById('active-territory-card');
-                if (!card) return;
-
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(8px)';
-
-                setTimeout(function() {
-                    document.getElementById('card-title').innerText = spot.name;
-                    document.getElementById('card-address').innerText = spot.address;
-
-                    const statusEl = document.getElementById('card-status');
-                    statusEl.innerText = '● ' + spot.status;
-                    statusEl.className = 'hotspot-status ' + spot.textClass;
-
-                    // Update pin gradient based on spot color
-                    const stop1 = document.getElementById('pin-grad-stop1');
-                    const stop2 = document.getElementById('pin-grad-stop2');
-                    
-                    if (spot.color === 'green') {
-                        stop1.setAttribute('stop-color', '#34D399');
-                        stop2.setAttribute('stop-color', '#059669');
-                    } else if (spot.color === 'blue') {
-                        stop1.setAttribute('stop-color', '#60A5FA');
-                        stop2.setAttribute('stop-color', '#2563EB');
-                    } else { // purple
-                        stop1.setAttribute('stop-color', '#A855F7');
-                        stop2.setAttribute('stop-color', '#8B5CF6');
+            if (trafficSlider && trafficVal && revenueVal) {
+                const updateRevenue = () => {
+                    const visitors = parseInt(trafficSlider.value, 10);
+                    trafficVal.textContent = visitors;
+                    const monthlyRev = Math.round(visitors * 0.15 * 45 * 24);
+                    revenueVal.textContent = '$' + monthlyRev.toLocaleString();
+                    if (unlockBtn) {
+                        unlockBtn.href = '/roi-calculator?traffic=' + visitors;
                     }
+                    const percent = ((visitors - 10) / (200 - 10)) * 100;
+                    trafficSlider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${percent}%, #1e293b ${percent}%, #1e293b 100%)`;
+                };
 
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, 150);
+                trafficSlider.addEventListener('input', updateRevenue);
+                updateRevenue();
             }
 
-            function setActiveMarkerDot(activeName) {
-                Object.keys(markerInstances).forEach(name => {
-                    const marker = markerInstances[name];
-                    const dot = marker.getElement()?.querySelector('.hotspot-dot');
-                    if (dot) {
-                        if (name === activeName) {
-                            dot.classList.add('active');
-                        } else {
-                            dot.classList.remove('active');
-                        }
-                    }
-                });
-            }
-
-            function resetToDenver() {
-                const denverSpot = hotspots.find(h => h.name === 'SOL REViBE Mile High');
-                updateFloatingCard(denverSpot);
-                setActiveMarkerDot(denverSpot.name);
-            }
-
-            // Video hover-to-play: moves on mouseover, stops on mouseoff
+                        // Video hover-to-play: moves on mouseover, stops on mouseoff
             const leftPanel = document.querySelector('.left-panel');
             const leftVideo = document.querySelector('.left-panel video');
             if (leftVideo && leftPanel) {
