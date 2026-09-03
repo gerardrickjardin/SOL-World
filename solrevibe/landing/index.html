@@ -679,10 +679,10 @@
                     stopRaisingAnimation();
                     updateRevenue();
                     if (manualResumeTimer) clearTimeout(manualResumeTimer);
-                    // Resume raising animation after 10s of inactivity
+                    // Resume raising animation after 5s of inactivity
                     manualResumeTimer = setTimeout(() => {
                         startRaisingAnimation();
-                    }, 10000);
+                    }, 5000);
                 };
 
                 trafficSlider.addEventListener('input', onManualInput);
@@ -700,7 +700,7 @@
             const MIN_DAYS = 1;
             const MAX_DAYS = 7;
             const SWEEP_DURATION = 4000; // Calm, steady pace across the line (4.0s)
-            const REPLAY_INTERVAL = 10000; // Holds at maximum and replays after 10s
+            const REPLAY_INTERVAL = 5000; // Holds at maximum and replays after 5s
 
             function startRaisingAnimation() {
                 if (isRaisingActive) return;
