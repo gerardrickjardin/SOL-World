@@ -809,7 +809,7 @@
                 }
             }
 
-            // ── Video & Slider Synchronized Hover Interaction ──────
+            // ── Left Video Hover-to-Play (Independent of Auto Slider Animation) ──────
             const leftPanel = document.querySelector('.left-panel');
             const leftVideo = document.querySelector('.left-panel video');
 
@@ -819,25 +819,23 @@
                         leftVideo.muted = true;
                         leftVideo.play().catch(() => {});
                     }
-                    startRaisingAnimation();
                 });
 
                 leftPanel.addEventListener('mouseleave', () => {
                     if (leftVideo) {
                         leftVideo.pause();
                     }
-                    stopRaisingAnimation();
                 });
 
-                // Touch devices (tap to toggle play & raising animation)
+                // Touch devices (tap to play/pause video)
                 leftPanel.addEventListener('click', () => {
-                    if (leftVideo && leftVideo.paused) {
-                        leftVideo.muted = true;
-                        leftVideo.play().catch(() => {});
-                        startRaisingAnimation();
-                    } else if (leftVideo) {
-                        leftVideo.pause();
-                        stopRaisingAnimation();
+                    if (leftVideo) {
+                        if (leftVideo.paused) {
+                            leftVideo.muted = true;
+                            leftVideo.play().catch(() => {});
+                        } else {
+                            leftVideo.pause();
+                        }
                     }
                 });
             }
@@ -854,10 +852,9 @@
                 }
             }
 
-            // Also auto-start the smooth raising animation on page load so visitors see the demo immediately
-            setTimeout(() => {
-                startRaisingAnimation();
-            }, 1000);
+            // ── Auto-Start Slider Animation Immediately (No Hover Required) ──────
+            // Starts automatically on page load and continuously replays every 5 seconds
+            startRaisingAnimation();
 
             const leftImg = document.querySelector('.left-panel img');
             if (leftImg) {
