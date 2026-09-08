@@ -9,6 +9,8 @@
 .env.local
 node_modules/
 *.png
+!*SOL_REViBE_Star_Logo.png
+!*SOL REViBE Logo.png
 venv/
 .venv/
 zone_builder_engine/venv/
