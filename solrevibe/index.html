@@ -26,11 +26,27 @@
     
     <link rel="stylesheet" href="style.css">
     <style>
+        :root {
+            --sol-deep: #000814;
+            --deep-navy: #0E1320;
+            --sol-violet: #6C3AED;
+            --revibe-magenta: #FF2F90;
+            --soft-pink: #FF7AB8;
+            --energy-cyan: #00E5FF;
+            --light-gray: #E6E7EC;
+            --white: #FFFFFF;
+        }
+
         html, body {
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
-            background: linear-gradient(180deg, #ebf7eb 0%, #faf2e6 25%, #fbf1e6 50%, #e9edfa 75%, #ebf7eb 100%) !important;
-            background-color: #f5f5f0 !important;
+            background-color: #000814 !important;
+            background-image: 
+                radial-gradient(circle at 50% -10%, rgba(108, 58, 237, 0.28) 0%, transparent 55%),
+                radial-gradient(circle at 100% 40%, rgba(255, 47, 144, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 0% 70%, rgba(0, 229, 255, 0.12) 0%, transparent 45%) !important;
+            background-attachment: fixed !important;
+            color: #FFFFFF !important;
         }
 
         #starfield, .glow-effect, .glow-effect-2 {
@@ -38,11 +54,14 @@
         }
 
         .section-title, .section-subtitle, .callout-form-prompt {
-            color: #1f2937 !important;
+            color: #FFFFFF !important;
         }
 
         .vibe-navbar {
-            background: linear-gradient(to right, #ebf7eb, #faf2e6, #fbf1e6, #e9edfa);
+            background: rgba(0, 8, 20, 0.85) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(108, 58, 237, 0.3) !important;
             padding: 1rem 4rem !important;
             position: relative;
             z-index: 100;
@@ -59,7 +78,7 @@
 
         .vibe-nav-links a {
             text-decoration: none;
-            color: #1f2937;
+            color: #E6E7EC;
             font-size: 0.85rem;
             font-family: 'Gotham', sans-serif;
             font-weight: 700;
@@ -68,19 +87,11 @@
         }
 
         .vibe-nav-links a:hover {
-            color: #8b5cf6;
-        }
-
-        @keyframes liquidFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            color: #00E5FF;
         }
 
         .vibe-reserve-btn {
-            background: linear-gradient(270deg, #22c55e, #3b82f6, #a855f7, #3b82f6, #22c55e);
-            background-size: 200% 200%;
-            animation: liquidFlow 8s ease infinite;
+            background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #6C3AED 100%) !important;
             color: white !important;
             text-decoration: none;
             padding: 0.75rem 1.5rem;
@@ -92,12 +103,13 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            transition: opacity 0.2s ease;
-            box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 4px 18px rgba(255, 47, 144, 0.45);
         }
 
         .vibe-reserve-btn:hover {
-            opacity: 0.9;
+            opacity: 0.92;
+            transform: translateY(-1px);
         }
         
         .mobile-only-btn {
@@ -117,7 +129,7 @@
             display: block;
             width: 25px;
             height: 3px;
-            background-color: #1f2937;
+            background-color: #ffffff;
             border-radius: 3px;
             transition: all 0.3s ease;
         }
@@ -129,11 +141,11 @@
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background: linear-gradient(to bottom, #ebf7eb, #faf2e6);
+                background: rgba(14, 19, 32, 0.98) !important;
+                border-top: 1px solid rgba(108, 58, 237, 0.3);
                 flex-direction: column;
                 padding: 2rem;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-                border-top: 1px solid rgba(0,0,0,0.05);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.5);
                 box-sizing: border-box;
             }
             .vibe-nav-links.active {
@@ -157,8 +169,8 @@
         }
         
         .vibe-navbar .nav-logo-img {
-            filter: none !important;
-            mix-blend-mode: multiply; /* Helps hide the white background of the logo */
+            filter: invert(1) brightness(1.2) !important;
+            mix-blend-mode: screen !important;
         }
 
         .vibe-hero {
@@ -226,7 +238,7 @@
             /* Explicitly enforce 16:9 ratio based on width */
             max-height: 1080px !important;
             overflow: hidden;
-            background-color: #f5f5f0;
+            background-color: var(--sol-deep);
         }
 
         .hero-background-video {
@@ -270,13 +282,13 @@
         }
 
         .hero-text-block .dark-text {
-            color: #111;
+            color: #FFFFFF;
             display: block;
             margin-bottom: 0.3em; /* Gap scales with font-size for robustness */
         }
 
         .hero-text-block .gradient-text-hero {
-            background: linear-gradient(to right, #22c55e, #3b82f6, #a855f7);
+            background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #00E5FF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1142,12 +1154,7 @@
         /* Mind Shift Section styling */
         .mind-shift-section{
             padding:120px 6%;
-            background:
-            linear-gradient(
-            135deg,
-            #f7f4ef 0%,
-            #eef8f0 40%,
-            #f2efff 100%);
+            background: transparent;
         }
 
         .section-header{
@@ -1162,18 +1169,13 @@
         .section-header h2{
             font-size: clamp(32px, 3.3vw, 72px);
             line-height:1.05;
-            color:#111827;
+            color: #FFFFFF;
             font-weight:700;
             white-space:nowrap;
         }
 
         .mind-shift-section .gradient-text{
-            background:
-            linear-gradient(
-            90deg,
-            #5ec9a6,
-            #6388ff,
-            #b05cff);
+            background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #00E5FF 100%);
             -webkit-background-clip:text;
             -webkit-text-fill-color:transparent;
             color:transparent;
@@ -1181,7 +1183,7 @@
 
         .section-header p{
             margin-top:25px;
-            color:#64748b;
+            color: #E6E7EC;
             font-size:22px;
             line-height:1.7;
         }
@@ -1191,13 +1193,13 @@
             max-width: 1400px;
             margin-left: auto;
             margin-right: auto;
-            background: rgba(255, 255, 255, .35);
+            background: linear-gradient(145deg, #0E1320 0%, #080D18 100%);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border-radius: 40px;
             padding: 25px;
-            border: 1px solid rgba(255, 255, 255, .7);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, .06);
+            border: 1px solid rgba(108, 58, 237, 0.35);
+            box-shadow: 0 25px 60px rgba(0, 4, 10, 0.8), 0 0 35px rgba(108, 58, 237, 0.18);
         }
 
         .transformation-row{
@@ -1206,7 +1208,7 @@
             border-radius: 30px;
             overflow: hidden;
             position: relative;
-            background: #f7f4ef;
+            background: #000814;
         }
 
         .transformation-video{
@@ -1233,13 +1235,13 @@
         }
 
         .benefit-card {
-            background: rgba(255, 255, 255, 0.45);
+            background: linear-gradient(145deg, #0E1320 0%, #080D18 100%);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(108, 58, 237, 0.3);
             padding: 30px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, .03);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: center;
             gap: 25px;
@@ -1248,9 +1250,10 @@
         }
 
         .benefit-card:hover {
-            background: rgba(255, 255, 255, 0.6);
+            background: linear-gradient(145deg, #131b2e 0%, #0b1120 100%);
             transform: translateY(-2px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, .05);
+            border-color: rgba(0, 229, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 229, 255, 0.1);
         }
 
         .benefit-card-logo {
@@ -1274,33 +1277,33 @@
         }
 
         .benefit-card h4.relax-title {
-            color: #22c55e;
+            color: #00E5FF;
         }
 
         .benefit-card h4.recharge-title {
-            color: #f97316;
+            color: #FF2F90;
         }
 
         .benefit-card h4.revibe-title {
-            color: #8b5cf6;
+            color: #6C3AED;
         }
 
         .benefit-card p {
             margin: 0;
-            color: #475569;
+            color: #E6E7EC;
             font-size: 15px;
             line-height: 1.5;
         }
 
         .technology-bar {
             margin-top: 50px;
-            background: rgba(255, 255, 255, 0.45);
+            background: linear-gradient(145deg, #0E1320 0%, #080D18 100%);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(108, 58, 237, 0.3);
             border-radius: 30px;
             padding: 35px 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
         }
 
         .technology-bar h5 {
@@ -1309,7 +1312,7 @@
             margin-bottom: 35px;
             font-size: 13px;
             font-weight: 800;
-            color: #475569;
+            color: #00E5FF;
             text-transform: uppercase;
         }
 
@@ -1325,7 +1328,7 @@
             align-items: center;
             gap: 16px;
             padding: 10px 25px;
-            border-right: 1px solid rgba(15, 23, 42, 0.08);
+            border-right: 1px solid rgba(108, 58, 237, 0.25);
         }
 
         .tech-item:last-child {
@@ -1349,12 +1352,12 @@
             display: block;
             margin: 0;
             font-size: 15px;
-            color: #0f172a;
+            color: #FFFFFF;
             font-weight: 800;
         }
 
         .tech-item span {
-            color: #475569;
+            color: #E6E7EC;
             font-size: 13px;
             line-height: 1.4;
         }
@@ -1377,7 +1380,7 @@
             }
             .tech-item {
                 border-right: none;
-                border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+                border-bottom: 1px solid rgba(108, 58, 237, 0.25);
                 padding: 15px 10px;
             }
             .tech-item:last-child {
@@ -1505,7 +1508,7 @@
         /* Homepage Payment Section styling */
         .homepage-payment-section {
             padding: 100px 6%;
-            background: linear-gradient(135deg, #f8f4ee 0%, #eef8f0 40%, #f2efff 100%);
+            background: transparent;
             position: relative;
             z-index: 20;
         }
@@ -1515,12 +1518,12 @@
             align-items: center;
             gap: 8px;
             padding: 8px 18px;
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.25);
+            background: rgba(108, 58, 237, 0.15);
+            border: 1px solid rgba(108, 58, 237, 0.4);
             border-radius: 50px;
             font-size: 13px;
             font-weight: 700;
-            color: #3b82f6;
+            color: #00E5FF;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             margin-bottom: 20px;
@@ -1529,19 +1532,19 @@
         .payment-card-wrapper {
             max-width: 1240px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.55);
+            background: linear-gradient(145deg, #0E1320 0%, #080D18 100%);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border-radius: 36px;
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(108, 58, 237, 0.35);
             padding: 45px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 25px 60px rgba(0, 4, 10, 0.8), 0 0 35px rgba(108, 58, 237, 0.18);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .payment-card-wrapper:hover {
-            box-shadow: 0 25px 60px rgba(59, 130, 246, 0.12);
-            border-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 30px 70px rgba(0, 4, 10, 0.9), 0 0 45px rgba(0, 229, 255, 0.2);
+            border-color: rgba(0, 229, 255, 0.4);
         }
 
         .payment-grid {
@@ -1560,14 +1563,14 @@
             font-weight: 800;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: #10b981;
+            color: #00E5FF;
             margin-bottom: 8px;
         }
 
         .payment-details-col h3 {
             font-size: clamp(26px, 3vw, 38px);
             font-weight: 800;
-            color: #0f172a;
+            color: #FFFFFF;
             line-height: 1.2;
             margin-bottom: 16px;
             letter-spacing: -0.02em;
@@ -1579,13 +1582,13 @@
             gap: 10px;
             margin-bottom: 24px;
             padding-bottom: 20px;
-            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+            border-bottom: 1px solid rgba(108, 58, 237, 0.25);
         }
 
         .payment-price-box .price-num {
             font-size: clamp(42px, 4.5vw, 56px);
             font-weight: 900;
-            color: #0f172a;
+            color: #FFFFFF;
             letter-spacing: -0.03em;
             line-height: 1;
         }
@@ -1593,13 +1596,13 @@
         .payment-price-box .price-unit {
             font-size: 18px;
             font-weight: 700;
-            color: #64748b;
+            color: #E6E7EC;
         }
 
         .payment-price-box .price-badge {
-            background: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            border: 1px solid rgba(16, 185, 129, 0.25);
+            background: rgba(255, 47, 144, 0.15);
+            color: #FF2F90;
+            border: 1px solid rgba(255, 47, 144, 0.35);
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 12px;
@@ -1626,21 +1629,21 @@
             width: 26px;
             height: 26px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #10b981, #3b82f6);
-            color: white;
+            background: #00E5FF;
+            color: #000814;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 13px;
             flex-shrink: 0;
             margin-top: 2px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 4px 12px rgba(0, 229, 255, 0.35);
         }
 
         .payment-features-list strong {
             display: block;
             font-size: 16px;
-            color: #0f172a;
+            color: #FFFFFF;
             font-weight: 700;
             margin-bottom: 2px;
         }
@@ -1648,15 +1651,15 @@
         .payment-features-list p {
             margin: 0;
             font-size: 14px;
-            color: #64748b;
+            color: #E6E7EC;
             line-height: 1.4;
         }
 
         .payment-action-card {
-            background: #ffffff;
+            background: rgba(0, 8, 20, 0.8);
             border-radius: 28px;
             padding: 36px 30px;
-            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(79, 124, 255, 0.12);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(108, 58, 237, 0.3);
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -1673,16 +1676,16 @@
             left: 0;
             right: 0;
             height: 6px;
-            background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+            background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #00E5FF 100%);
         }
 
         .security-badge-pill {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            color: #059669;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            color: #00E5FF;
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
@@ -1691,9 +1694,7 @@
 
         .payment-cta-button {
             width: 100%;
-            background: linear-gradient(270deg, #22c55e, #3b82f6, #a855f7, #3b82f6, #22c55e);
-            background-size: 200% 200%;
-            animation: liquidFlow 8s ease infinite;
+            background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #6C3AED 100%) !important;
             color: white !important;
             text-decoration: none;
             padding: 18px 28px;
@@ -1706,7 +1707,7 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 24px rgba(255, 47, 144, 0.45);
             transition: all 0.3s ease;
             box-sizing: border-box;
         }
@@ -1796,20 +1797,20 @@
                 grid-template-columns: 1fr;
             }
         }
-        /* ── ROI Calculator Overview Section (Light Theme Matching Home Page) ──── */
+        /* ── ROI Calculator Overview Section (Dark Brand Theme Matching Landing Page) ──── */
         .roi-overview-section {
             max-width: 1280px;
             margin: 6rem auto;
             padding: 3.5rem 3rem;
             position: relative;
             z-index: 20;
-            background: rgba(255, 255, 255, 0.62);
+            background: linear-gradient(145deg, #0E1320 0%, #080D18 100%);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(108, 58, 237, 0.35);
             border-radius: 32px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
-            color: #111827;
+            box-shadow: 0 25px 60px rgba(0, 4, 10, 0.8), 0 0 35px rgba(108, 58, 237, 0.18);
+            color: #FFFFFF;
             font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
         }
 
@@ -1831,19 +1832,19 @@
             align-items: center;
             gap: 8px;
             align-self: flex-start;
-            background: rgba(0, 168, 107, 0.1);
-            border: 1px solid rgba(0, 168, 107, 0.3);
+            background: rgba(108, 58, 237, 0.15);
+            border: 1px solid rgba(108, 58, 237, 0.4);
             padding: 6px 14px;
             border-radius: 999px;
             font-size: 0.82rem;
             font-weight: 700;
-            color: #00875a;
+            color: #00E5FF;
             letter-spacing: 0.03em;
             text-transform: uppercase;
         }
 
         .roi-tag-badge .sparkle {
-            color: #00a86b;
+            color: #FF2F90;
         }
 
         .roi-overview-headline {
@@ -1852,12 +1853,12 @@
             font-weight: 800;
             line-height: 1.15;
             letter-spacing: -0.02em;
-            color: #111827;
+            color: #FFFFFF;
             margin: 0;
         }
 
         .roi-overview-headline .green-gradient {
-            background: linear-gradient(135deg, #00a86b 0%, #059669 45%, #2563eb 100%);
+            background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #00E5FF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             display: inline-block;
@@ -1866,12 +1867,12 @@
         .roi-overview-sub {
             font-size: 1.05rem;
             line-height: 1.6;
-            color: #475569;
+            color: #E6E7EC;
             margin: 0;
         }
 
         .roi-overview-sub strong {
-            color: #0f172a;
+            color: #FFFFFF;
             font-weight: 600;
         }
 
@@ -1887,23 +1888,23 @@
             align-items: center;
             gap: 12px;
             font-size: 0.95rem;
-            color: #334155;
+            color: #E6E7EC;
         }
 
         .roi-check-item strong {
-            color: #0f172a;
+            color: #FFFFFF;
         }
 
         .roi-check-icon {
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            background: rgba(0, 229, 153, 0.2);
-            border: 1px solid rgba(0, 168, 107, 0.4);
+            background: rgba(0, 229, 255, 0.15);
+            border: 1px solid rgba(0, 229, 255, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #00875a;
+            color: #00E5FF;
             font-size: 0.72rem;
             flex-shrink: 0;
         }
@@ -1917,7 +1918,7 @@
             content: '';
             position: absolute;
             inset: -2px;
-            background: linear-gradient(145deg, rgba(0, 229, 153, 0.3), rgba(59, 130, 246, 0.15), rgba(255, 255, 255, 0.8));
+            background: linear-gradient(145deg, rgba(255, 47, 144, 0.4), rgba(108, 58, 237, 0.3), rgba(0, 229, 255, 0.2));
             border-radius: 28px;
             z-index: 0;
             filter: blur(10px);
@@ -1932,13 +1933,13 @@
         .roi-teaser-card {
             position: relative;
             z-index: 1;
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(0, 8, 20, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 229, 153, 0.4);
+            border: 1px solid rgba(108, 58, 237, 0.35);
             border-radius: 26px;
             padding: 2.25rem;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08), 0 0 25px rgba(0, 229, 153, 0.1), inset 0 1px 0 rgba(255,255,255,0.9);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(108, 58, 237, 0.15);
             display: flex;
             flex-direction: column;
             gap: 1.6rem;
@@ -1948,7 +1949,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+            border-bottom: 1px solid rgba(108, 58, 237, 0.25);
             padding-bottom: 1.1rem;
         }
 
@@ -1956,20 +1957,20 @@
             font-family: 'Outfit', 'Inter', sans-serif;
             font-size: 1.25rem;
             font-weight: 700;
-            color: #111827;
+            color: #FFFFFF;
             margin: 0 0 4px 0;
         }
 
         .teaser-card-sub {
             font-size: 0.82rem;
-            color: #64748b;
+            color: #94A3B8;
             margin: 0;
         }
 
         .teaser-interactive-badge {
-            background: rgba(0, 168, 107, 0.12);
-            color: #00875a;
-            border: 1px solid rgba(0, 168, 107, 0.3);
+            background: rgba(255, 47, 144, 0.15);
+            color: #FF2F90;
+            border: 1px solid rgba(255, 47, 144, 0.35);
             font-size: 0.72rem;
             font-weight: 800;
             text-transform: uppercase;
@@ -1994,16 +1995,16 @@
         .teaser-slider-label {
             font-size: 0.92rem;
             font-weight: 600;
-            color: #1e293b;
+            color: #FFFFFF;
         }
 
         .teaser-slider-val {
             font-family: 'Outfit', 'Inter', sans-serif;
             font-size: 1.2rem;
             font-weight: 800;
-            color: #00875a;
-            background: rgba(0, 229, 153, 0.12);
-            border: 1px solid rgba(0, 168, 107, 0.35);
+            color: #00E5FF;
+            background: rgba(108, 58, 237, 0.15);
+            border: 1px solid rgba(108, 58, 237, 0.4);
             padding: 3px 12px;
             border-radius: 8px;
             min-width: 48px;
@@ -2016,7 +2017,7 @@
             width: 100%;
             height: 8px;
             border-radius: 999px;
-            background: rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             outline: none;
             cursor: pointer;
         }
@@ -2026,9 +2027,9 @@
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            background: #ffffff;
-            border: 3px solid #00a86b;
-            box-shadow: 0 0 12px rgba(0, 168, 107, 0.5);
+            background: #00E5FF;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
             cursor: grab;
             margin-top: -7px;
             transition: transform 0.15s ease;
@@ -2042,8 +2043,8 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #ffffff;
-            border: 3px solid #00a86b;
+            background: #00E5FF;
+            border: 3px solid #FFFFFF;
             cursor: grab;
         }
 
@@ -2051,26 +2052,25 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.72rem;
-            color: #64748b;
+            color: #94A3B8;
             font-weight: 500;
         }
 
         .teaser-revenue-box {
-            background: rgba(240, 253, 248, 0.85);
-            border: 1px solid rgba(0, 229, 153, 0.4);
+            background: rgba(14, 19, 32, 0.9);
+            border: 1px solid rgba(108, 58, 237, 0.35);
             border-radius: 18px;
             padding: 1.35rem 1.25rem;
             text-align: center;
             display: flex;
             flex-direction: column;
             gap: 6px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
         .teaser-rev-label {
             font-size: 0.72rem;
             font-weight: 700;
-            color: #475569;
+            color: #E6E7EC;
             letter-spacing: 0.08em;
             text-transform: uppercase;
         }
@@ -2080,27 +2080,27 @@
             font-size: clamp(2.5rem, 3.5vw, 3.2rem);
             font-weight: 900;
             line-height: 1;
-            color: #0f172a;
+            color: #FFFFFF;
             letter-spacing: -0.03em;
-            text-shadow: 0 0 25px rgba(0, 229, 153, 0.25);
+            text-shadow: 0 0 25px rgba(255, 47, 144, 0.35);
         }
 
         .teaser-rev-unit {
             font-size: 1.1rem;
             font-weight: 500;
-            color: #64748b;
+            color: #94A3B8;
             margin-left: 2px;
         }
 
         .teaser-rev-meta {
             font-size: 0.76rem;
-            color: #64748b;
+            color: #94A3B8;
             margin-top: 2px;
         }
 
         .teaser-unlock-cta {
-            background: linear-gradient(135deg, #00e599 0%, #059669 100%);
-            color: #04140d !important;
+            background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #6C3AED 100%);
+            color: #FFFFFF !important;
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             font-weight: 800;
@@ -2111,20 +2111,20 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 8px 24px rgba(0, 229, 153, 0.35);
+            box-shadow: 0 8px 24px rgba(255, 47, 144, 0.45);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
         }
 
         .teaser-unlock-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0, 229, 153, 0.5);
-            background: linear-gradient(135deg, #1bf4ac 0%, #05a876 100%);
+            box-shadow: 0 12px 30px rgba(255, 47, 144, 0.6);
+            background: linear-gradient(135deg, #ff47a1 0%, #ff8ec2 45%, #7e4eed 100%);
         }
 
         .teaser-lock-footnote {
             font-size: 0.74rem;
-            color: #64748b;
+            color: #94A3B8;
             text-align: center;
             display: flex;
             align-items: center;
@@ -2133,7 +2133,7 @@
         }
 
         .teaser-lock-footnote i {
-            color: #00875a;
+            color: #FF2F90;
             font-size: 0.72rem;
         }
 
@@ -2186,12 +2186,12 @@
         </button>
     </nav>
 
-    <div class="banner-container" style="background: linear-gradient(to right, #ebf7eb, #faf2e6, #fbf1e6, #e9edfa); width: 100%; text-align: center; box-sizing: border-box; z-index: 20; position: relative;">
-        <h2 class="banner-text" style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #111111; letter-spacing: -0.01em;">
-            <span class="banner-text-desktop">The first hands-free recharge station designed for <span style="color: #32d583;">social</span> <span style="color: #3b82f6;">wellness</span> <span style="color: #b44cff;">spaces</span></span>
+    <div class="banner-container" style="background: rgba(14, 19, 32, 0.7); border-bottom: 1px solid rgba(108, 58, 237, 0.25); width: 100%; text-align: center; box-sizing: border-box; z-index: 20; position: relative;">
+        <h2 class="banner-text" style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF; letter-spacing: -0.01em;">
+            <span class="banner-text-desktop">The first hands-free recharge station designed for <span style="color: #FF2F90;">social</span> <span style="color: #00E5FF;">wellness</span> <span style="color: #6C3AED;">spaces</span></span>
             <span class="banner-text-mobile">
                 <span style="display: block; white-space: nowrap;">The first hands-free recharge station</span>
-                <span style="display: block; white-space: nowrap;">designed for <span style="color: #32d583;">social</span> <span style="color: #3b82f6;">wellness</span> <span style="color: #b44cff;">spaces</span></span>
+                <span style="display: block; white-space: nowrap;">designed for <span style="color: #FF2F90;">social</span> <span style="color: #00E5FF;">wellness</span> <span style="color: #6C3AED;">spaces</span></span>
             </span>
         </h2>
     </div>
@@ -2205,7 +2205,7 @@
         <!-- Audio Control -->
         <div class="hero-audio-wrapper">
             <div id="hero-audio-control" class="audio-btn-glow-wrapper">
-                <span class="vibe-reserve-btn audio-btn-inner" style="font-size: 0.95cqw; padding: 0.6cqw 1.2cqw; border-radius: 0.6cqw; white-space: nowrap; box-shadow: 0 0.3cqw 1.2cqw rgba(34, 197, 94, 0.3); pointer-events: none;">START HERE</span>
+                <span class="vibe-reserve-btn audio-btn-inner" style="font-size: 0.95cqw; padding: 0.6cqw 1.2cqw; border-radius: 0.6cqw; white-space: nowrap; box-shadow: 0 0.3cqw 1.2cqw rgba(255, 47, 144, 0.45); pointer-events: none;">START HERE</span>
             </div>
         </div>
 </header>
@@ -2213,16 +2213,16 @@
         <!-- Steak Video Section -->
         <section class="steak-video-section" style="max-width: 1200px; margin: 6rem auto; padding: 0 2rem; text-align: center; position: relative; z-index: 20;">
             <div class="section-header" style="margin-bottom: 3rem; max-width: none;">
-                <h2>Experience the <span style="background: linear-gradient(90deg, #5ec9a6, #6388ff, #b05cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">Energy Recharging</span> Wellness</h2>
-                <p>Discover how the frequency recharging station harmonizes <br> physical recovery and cellular renewal.</p>
+                <h2 style="color: #FFFFFF;">Experience the <span style="background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #00E5FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">Energy Recharging</span> Wellness</h2>
+                <p style="color: #E6E7EC;">Discover how the frequency recharging station harmonizes <br> physical recovery and cellular renewal.</p>
             </div>
             
-            <div class="video-card-container" id="videoContainer" style="position: relative; border-radius: 24px; overflow: hidden; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-width: 960px; margin: 0 auto; aspect-ratio: 16 / 9; cursor: pointer;">
+            <div class="video-card-container" id="videoContainer" style="position: relative; border-radius: 24px; overflow: hidden; background: linear-gradient(145deg, #0E1320 0%, #080D18 100%); border: 1px solid rgba(108, 58, 237, 0.35); box-shadow: 0 25px 60px rgba(0, 4, 10, 0.8), 0 0 35px rgba(108, 58, 237, 0.18); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-width: 960px; margin: 0 auto; aspect-ratio: 16 / 9; cursor: pointer;">
                 <video id="steakVideo" src="assets/steak_video.mp4" loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 24px; transform: scale(1.025); will-change: transform;"></video>
                 <!-- Play Button Overlay Mockup -->
-                <div class="video-play-overlay" id="videoOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.2); transition: opacity 0.4s ease; z-index: 5;">
-                    <div class="play-btn-circle" style="width: 84px; height: 84px; border-radius: 50%; background: rgba(255, 255, 255, 0.95); display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px rgba(0,0,0,0.25); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: pulsePlay 2s infinite;">
-                        <i class="fa-solid fa-play" style="color: #3b82f6; font-size: 2.2rem; margin-left: 8px;"></i>
+                <div class="video-play-overlay" id="videoOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.35); transition: opacity 0.4s ease; z-index: 5;">
+                    <div class="play-btn-circle" style="width: 84px; height: 84px; border-radius: 50%; background: linear-gradient(135deg, #FF2F90, #6C3AED); display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px rgba(255, 47, 144, 0.5); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: pulsePlay 2s infinite;">
+                        <i class="fa-solid fa-play" style="color: #FFFFFF; font-size: 2.2rem; margin-left: 8px;"></i>
                     </div>
                 </div>
             </div>
@@ -2493,8 +2493,8 @@
                 <div class="payment-badge-pill">
                     <i class="fa-solid fa-credit-card"></i> Direct B2B Purchase
                 </div>
-                <h2 style="font-size: clamp(32px, 3.3vw, 56px); line-height: 1.15; font-weight: 700; color: #0f172a;">Order & Reserve Your <span class="gradient-text">SOUL REViBE Station</span></h2>
-                <p style="margin-top: 20px; color: #64748b; font-size: 20px; line-height: 1.6;">Ready to bring SOL REViBE to your facility? Access our single-page PCI-encrypted checkout portal to secure your commercial station order instantly.</p>
+                <h2 style="font-size: clamp(32px, 3.3vw, 56px); line-height: 1.15; font-weight: 700; color: #FFFFFF;">Order & Reserve Your <span class="gradient-text">SOUL REViBE Station</span></h2>
+                <p style="margin-top: 20px; color: #E6E7EC; font-size: 20px; line-height: 1.6;">Ready to bring SOL REViBE to your facility? Access our single-page PCI-encrypted checkout portal to secure your commercial station order instantly.</p>
             </div>
 
             <div class="payment-card-wrapper">
@@ -2549,8 +2549,8 @@
                         </div>
 
                         <div style="text-align: center; margin: 10px 0;">
-                            <img src="assets/SOL%20REViBE%20Logo.png" alt="SOL REViBE" style="height: 48px; object-fit: contain; mix-blend-mode: multiply;">
-                            <p style="font-weight: 700; color: #0f172a; margin-top: 8px; font-size: 15px;">Official B2B Order Portal</p>
+                            <img src="assets/SOL%20REViBE%20Logo.png" alt="SOL REViBE" style="height: 48px; object-fit: contain; filter: invert(1) brightness(1.2); mix-blend-mode: screen;">
+                            <p style="font-weight: 700; color: #FFFFFF; margin-top: 8px; font-size: 15px;">Official B2B Order Portal</p>
                         </div>
 
                         <a href="payment.html" class="payment-cta-button">
@@ -2563,11 +2563,11 @@
                             <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
                             <i class="fa-brands fa-cc-amex" title="American Express"></i>
                             <i class="fa-brands fa-cc-discover" title="Discover"></i>
-                            <i class="fa-solid fa-lock" title="PCI Tokenized Security" style="font-size: 16px; color: #10b981;"></i>
+                            <i class="fa-solid fa-lock" title="PCI Tokenized Security" style="font-size: 16px; color: #00E5FF;"></i>
                         </div>
 
                         <p class="payment-note-text">
-                            Click above to open the secure single-page payment portal at <strong style="color: #0f172a;">solrevibe.com/payment</strong>
+                            Click above to open the secure single-page payment portal at <strong style="color: #00E5FF;">solrevibe.com/payment</strong>
                         </p>
                     </div>
                 </div>

@@ -1,41 +1,51 @@
 :root {
-    --bg-dark: #050505;
+    --bg-dark: #000814;
     --bg-glass: rgba(255, 255, 255, 0.03);
-    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-glass: rgba(108, 58, 237, 0.3);
     --text-main: #ffffff;
-    --text-muted: #a0a0a0;
-    --accent: #ffffff;
+    --text-muted: #E6E7EC;
+    --accent: #FF2F90;
     --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
+    /* SOL REViBE Brand Guidelines Colors */
+    --sol-deep: #000814;
+    --deep-navy: #0E1320;
+    --sol-violet: #6C3AED;
+    --revibe-magenta: #FF2F90;
+    --soft-pink: #FF7AB8;
+    --energy-cyan: #00E5FF;
+    --light-gray: #E6E7EC;
+    --white: #FFFFFF;
+
     /* Territory Availability Map Variables */
-    --accent-emerald: #10b981;
-    --accent-emerald-hover: #059669;
-    --accent-emerald-light: rgba(16, 185, 129, 0.1);
-    --accent-emerald-glow: rgba(16, 185, 129, 0.25);
+    --accent-emerald: #00E5FF;
+    --accent-emerald-hover: #00b4d8;
+    --accent-emerald-light: rgba(0, 229, 255, 0.1);
+    --accent-emerald-glow: rgba(0, 229, 255, 0.25);
     
-    --accent-purple: #a855f7;
-    --accent-purple-hover: #9333ea;
-    --accent-purple-light: rgba(168, 85, 247, 0.1);
-    --accent-purple-glow: rgba(168, 85, 247, 0.25);
+    --accent-purple: #6C3AED;
+    --accent-purple-hover: #5b21b6;
+    --accent-purple-light: rgba(108, 58, 237, 0.1);
+    --accent-purple-glow: rgba(108, 58, 237, 0.25);
     
-    --bg-page: #f8fafc;
-    --bg-card: #ffffff;
-    --bg-header: rgba(255, 255, 255, 0.85);
+    --bg-page: #000814;
+    --bg-card: #0E1320;
+    --bg-header: rgba(0, 8, 20, 0.85);
     
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
+    --text-primary: #FFFFFF;
+    --text-secondary: #E6E7EC;
     --text-muted-map: #94a3b8;
     
-    --border-light: #e2e8f0;
-    --border-focus: #10b981;
+    --border-light: rgba(108, 58, 237, 0.3);
+    --border-focus: #00E5FF;
     
-    --shadow-sm: 0 2px 4px rgba(148, 163, 184, 0.08);
-    --shadow-md: 0 10px 25px -5px rgba(148, 163, 184, 0.15), 0 8px 10px -6px rgba(148, 163, 184, 0.1);
-    --shadow-lg: 0 20px 40px -10px rgba(15, 23, 42, 0.08), 0 10px 20px -8px rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 10px 20px -8px rgba(0, 0, 0, 0.5);
     
-    --glass-bg: rgba(255, 255, 255, 0.9);
-    --glass-border: 1px solid rgba(255, 255, 255, 0.8);
-    --glass-blur: blur(12px);
+    --glass-bg: rgba(14, 19, 32, 0.85);
+    --glass-border: 1px solid rgba(108, 58, 237, 0.35);
+    --glass-blur: blur(16px);
     
     --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -1207,10 +1217,17 @@ body {
     font-family: var(--font-body);
     font-size: 0.95rem;
     padding: 10px 14px;
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #FFFFFF;
     border: 1px solid var(--border-light);
     border-radius: 8px;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: #94A3B8;
 }
 
 .input-group textarea {
@@ -1220,7 +1237,7 @@ body {
 .input-group input:focus, 
 .input-group textarea:focus {
     border-color: var(--border-focus);
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.2);
 }
 
 .input-row {
@@ -1230,8 +1247,8 @@ body {
 }
 
 .readonly-input {
-    background-color: var(--bg-page);
-    color: var(--text-secondary);
+    background-color: rgba(0, 8, 20, 0.6) !important;
+    color: var(--energy-cyan) !important;
     border-style: dashed !important;
     font-weight: 600;
     cursor: not-allowed;
@@ -1242,7 +1259,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    background-color: var(--accent-emerald);
+    background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #6C3AED 100%);
     color: #ffffff;
     border: none;
     border-radius: 10px;
@@ -1251,13 +1268,12 @@ body {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 14px rgba(255, 47, 144, 0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .submit-form-btn:hover {
-    background-color: var(--accent-emerald-hover);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 6px 20px rgba(255, 47, 144, 0.6);
     transform: translateY(-1px);
 }
 
