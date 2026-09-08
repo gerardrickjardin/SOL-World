@@ -1470,6 +1470,14 @@
             display: inline-block;
             white-space: nowrap;
         }
+        .banner-gradient-text {
+            background: linear-gradient(90deg, #FF2F90 0%, #00E5FF 50%, #6C3AED 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            font-weight: 700;
+        }
         .banner-text-mobile {
             display: none;
         }
@@ -2188,10 +2196,10 @@
 
     <div class="banner-container" style="background: rgba(14, 19, 32, 0.7); border-bottom: 1px solid rgba(108, 58, 237, 0.25); width: 100%; text-align: center; box-sizing: border-box; z-index: 20; position: relative;">
         <h2 class="banner-text" style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #FFFFFF; letter-spacing: -0.01em;">
-            <span class="banner-text-desktop">The first hands-free recharge station designed for <span style="color: #FF2F90;">social</span> <span style="color: #00E5FF;">wellness</span> <span style="color: #6C3AED;">spaces</span></span>
+            <span class="banner-text-desktop">The first hands-free recharge station designed for <span class="banner-gradient-text">social wellness spaces</span></span>
             <span class="banner-text-mobile">
                 <span style="display: block; white-space: nowrap;">The first hands-free recharge station</span>
-                <span style="display: block; white-space: nowrap;">designed for <span style="color: #FF2F90;">social</span> <span style="color: #00E5FF;">wellness</span> <span style="color: #6C3AED;">spaces</span></span>
+                <span style="display: block; white-space: nowrap;">designed for <span class="banner-gradient-text">social wellness spaces</span></span>
             </span>
         </h2>
     </div>
