@@ -169,8 +169,13 @@
         }
         
         .vibe-navbar .nav-logo-img {
-            filter: invert(1) brightness(1.2) !important;
-            mix-blend-mode: screen !important;
+            filter: drop-shadow(0 0 10px rgba(108, 58, 237, 0.35));
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .vibe-navbar .nav-logo-img:hover {
+            transform: scale(1.04);
+            filter: drop-shadow(0 0 18px rgba(255, 47, 144, 0.65));
         }
 
         .vibe-hero {
