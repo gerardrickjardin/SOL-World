@@ -283,26 +283,10 @@
         }
 
         .gate-form {
-            display: none;
+            display: flex;
             flex-direction: column;
             gap: 0.5rem;
-            margin-top: 0.8rem;
-        }
-
-        .gate-form.active {
-            display: flex;
-            animation: formReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes formReveal {
-            from {
-                opacity: 0;
-                transform: translateY(-8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            margin-top: 0.6rem;
         }
 
         .form-row {
@@ -835,14 +819,13 @@
                 updateRevenue();
             }
 
-            // ── Reveal Details Form when "First Button" (Unlock ROI) is Clicked ──────
+            // ── Focus Details Form when "First Button" (Unlock ROI) is Clicked ──────
             const unlockBtn = document.getElementById('t-unlock-btn');
             const leadForm = document.getElementById('leadForm');
 
             if (unlockBtn && leadForm) {
                 unlockBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    leadForm.classList.add('active');
                     leadForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     const nameInput = document.getElementById('name');
                     if (nameInput) {
