@@ -560,7 +560,7 @@
             <div class="split-box">
                 <div class="split-box-inner">
                     <div class="left-panel">
-                        <video loop muted playsinline preload="auto" poster="../assets/Final_Hero.jpg">
+                        <video autoplay loop muted playsinline preload="auto" poster="../assets/Final_Hero.jpg">
                             <source src="../assets/Final%20SOL%20REViBE.mp4" type="video/mp4">
                             <source src="../assets/New%20SOL%20REViBE%20Landing%20Video.mov" type="video/mp4">
                             Your browser does not support the video tag.
@@ -860,40 +860,27 @@
                 }
             }
 
-            // ── Left Video Hover-to-Play (Independent of Auto Slider Animation) ──────
-            const leftPanel = document.querySelector('.left-panel');
+            // ── Left Video Continuous Autoplay (Muted by Default) ──────
             const leftVideo = document.querySelector('.left-panel video');
-
-            if (leftPanel) {
-                leftPanel.addEventListener('mouseenter', () => {
-                    if (leftVideo) {
-                        leftVideo.muted = true;
-                        leftVideo.play().catch(() => {});
-                    }
-                });
-
-                leftPanel.addEventListener('mouseleave', () => {
-                    if (leftVideo) {
-                        leftVideo.pause();
-                    }
-                });
-
-                // Touch devices (tap to play/pause video)
-                leftPanel.addEventListener('click', () => {
-                    if (leftVideo) {
-                        if (leftVideo.paused) {
-                            leftVideo.muted = true;
-                            leftVideo.play().catch(() => {});
-                        } else {
-                            leftVideo.pause();
-                        }
-                    }
-                });
-            }
 
             if (leftVideo) {
                 leftVideo.muted = true;
-                leftVideo.pause();
+                const startPlay = () => {
+                    leftVideo.muted = true;
+                    const p = leftVideo.play();
+                    if (p !== undefined) {
+                        p.catch(() => {
+                            // In case browser policy requires user interaction before media plays
+                            document.addEventListener('click', () => {
+                                leftVideo.muted = true;
+                                leftVideo.play().catch(() => {});
+                            }, { once: true });
+                        });
+                    }
+                };
+
+                startPlay();
+
                 if (leftVideo.readyState >= 3) {
                     leftVideo.classList.add('loaded');
                 } else {
