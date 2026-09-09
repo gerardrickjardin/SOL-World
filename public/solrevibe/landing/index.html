@@ -546,15 +546,21 @@
             border: 3px solid var(--energy-cyan);
             box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
             cursor: grab;
-            transition: transform 0.15s;
         }
-        .teaser-range::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        .teaser-range::-webkit-slider-thumb:active {
+            cursor: grabbing;
+        }
         .teaser-range::-moz-range-thumb {
-            width: 18px; height: 18px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: #fff; border: 3px solid var(--energy-cyan);
+            background: #ffffff;
+            border: 3px solid var(--energy-cyan);
             box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
             cursor: grab;
+        }
+        .teaser-range::-moz-range-thumb:active {
+            cursor: grabbing;
         }
         .teaser-tick-row {
             display: flex;
@@ -678,7 +684,7 @@
                                             <span class="teaser-val-badge" id="t-traffic-val">25</span>
                                         </div>
                                         <input type="range" id="t-traffic-slider" class="teaser-range"
-                                            min="5" max="100" step="any" value="25">
+                                            min="5" max="100" step="1" value="25">
                                         <div class="teaser-tick-row">
                                             <span>5 / day</span>
                                             <span>100 / day</span>
@@ -691,7 +697,7 @@
                                             <span class="teaser-val-badge" id="t-days-val">5</span>
                                         </div>
                                         <input type="range" id="t-days-slider" class="teaser-range"
-                                            min="1" max="7" step="any" value="5">
+                                            min="1" max="7" step="1" value="5">
                                         <div class="teaser-tick-row">
                                             <span>1 day</span>
                                             <span>7 days</span>
@@ -807,140 +813,9 @@
                     daysSlider.style.background = `linear-gradient(to right, #6C3AED 0%, #00E5FF ${dPct}%, #1a2234 ${dPct}%, #1a2234 100%)`;
                 };
 
-                let manualResumeTimer = null;
-                const onManualInput = () => {
-                    stopRaisingAnimation();
-                    updateRevenue();
-                    if (manualResumeTimer) clearTimeout(manualResumeTimer);
-                    // Resume raising animation after 5s of inactivity
-                    manualResumeTimer = setTimeout(() => {
-                        startRaisingAnimation();
-                    }, 5000);
-                };
-
-                trafficSlider.addEventListener('input', onManualInput);
-                daysSlider.addEventListener('input', onManualInput);
+                trafficSlider.addEventListener('input', updateRevenue);
+                daysSlider.addEventListener('input', updateRevenue);
                 updateRevenue();
-            }
-
-            // ── Seamless Raising Animation ("GIF Effect") ───────────
-            let sliderAnimId = null;
-            let pauseTimeoutId = null;
-            let isRaisingActive = false;
-
-            const MIN_TRAFFIC = 5;
-            const MAX_TRAFFIC = 100;
-            const MIN_DAYS = 1;
-            const MAX_DAYS = 7;
-            const SWEEP_DURATION = 10000; // Gentle, elegant, slower seamless pace (10.0s)
-            const REPLAY_INTERVAL = 5000; // Holds at maximum and replays after 5s
-
-            function startRaisingAnimation() {
-                if (isRaisingActive) return;
-                isRaisingActive = true;
-
-                function runSweep() {
-                    if (!isRaisingActive) return;
-
-                    const fromTraffic = MIN_TRAFFIC;
-                    const fromDays = MIN_DAYS;
-                    trafficSlider.value = fromTraffic;
-                    daysSlider.value = fromDays;
-                    updateRevenue();
-
-                    const startTime = performance.now();
-
-                    function step(currentTime) {
-                        if (!isRaisingActive) return;
-
-                        const elapsed = currentTime - startTime;
-                        const progress = Math.min(elapsed / SWEEP_DURATION, 1);
-
-                        // Buttery smooth easeInOutSine for a continuous, seamless line motion
-                        const ease = -(Math.cos(Math.PI * progress) - 1) / 2;
-
-                        const curTraffic = fromTraffic + (MAX_TRAFFIC - fromTraffic) * ease;
-                        const curDays = fromDays + (MAX_DAYS - fromDays) * ease;
-
-                        trafficSlider.value = curTraffic;
-                        daysSlider.value = curDays;
-                        updateRevenue();
-
-                        if (progress < 1) {
-                            sliderAnimId = requestAnimationFrame(step);
-                        } else {
-                            // Ensure exact maximum
-                            trafficSlider.value = MAX_TRAFFIC;
-                            daysSlider.value = MAX_DAYS;
-                            updateRevenue();
-
-                            // Reached maximum ($18,900/mo)! Hold for 10 seconds then replay seamlessly
-                            pauseTimeoutId = setTimeout(() => {
-                                if (isRaisingActive) {
-                                    runResetTransition();
-                                }
-                            }, REPLAY_INTERVAL);
-                        }
-                    }
-
-                    sliderAnimId = requestAnimationFrame(step);
-                }
-
-                function runResetTransition() {
-                    if (!isRaisingActive) return;
-
-                    // Smooth 1.1s gentle glide back to baseline before next sweep
-                    const fromTraffic = parseFloat(trafficSlider.value);
-                    const fromDays = parseFloat(daysSlider.value);
-                    const startTime = performance.now();
-                    const RESET_DURATION = 2000;
-
-                    function resetStep(currentTime) {
-                        if (!isRaisingActive) return;
-
-                        const elapsed = currentTime - startTime;
-                        const progress = Math.min(elapsed / RESET_DURATION, 1);
-                        const ease = -(Math.cos(Math.PI * progress) - 1) / 2;
-
-                        const curTraffic = fromTraffic - (fromTraffic - MIN_TRAFFIC) * ease;
-                        const curDays = fromDays - (fromDays - MIN_DAYS) * ease;
-
-                        trafficSlider.value = curTraffic;
-                        daysSlider.value = curDays;
-                        updateRevenue();
-
-                        if (progress < 1) {
-                            sliderAnimId = requestAnimationFrame(resetStep);
-                        } else {
-                            trafficSlider.value = MIN_TRAFFIC;
-                            daysSlider.value = MIN_DAYS;
-                            updateRevenue();
-
-                            // Pause briefly (350ms) then begin next 4s upward sweep
-                            pauseTimeoutId = setTimeout(() => {
-                                if (isRaisingActive) {
-                                    runSweep();
-                                }
-                            }, 350);
-                        }
-                    }
-
-                    sliderAnimId = requestAnimationFrame(resetStep);
-                }
-
-                runSweep();
-            }
-
-            function stopRaisingAnimation() {
-                isRaisingActive = false;
-                if (sliderAnimId) {
-                    cancelAnimationFrame(sliderAnimId);
-                    sliderAnimId = null;
-                }
-                if (pauseTimeoutId) {
-                    clearTimeout(pauseTimeoutId);
-                    pauseTimeoutId = null;
-                }
             }
 
             // ── Left Video Continuous Autoplay (Muted by Default) ──────
@@ -1023,10 +898,6 @@
                     });
                 }
             }
-
-            // ── Auto-Start Slider Animation Immediately (No Hover Required) ──────
-            // Starts automatically on page load and continuously replays every 5 seconds
-            startRaisingAnimation();
 
             const leftImg = document.querySelector('.left-panel img');
             if (leftImg) {
