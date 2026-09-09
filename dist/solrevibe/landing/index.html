@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         :root {
             --sol-deep: #000814;
@@ -655,9 +656,9 @@
                             </iframe>
                         </div>
                         <div class="video-cta-wrapper">
-                            <button type="button" class="video-play-trigger-btn" id="videoPlayTriggerBtn" aria-label="Click to Unmute">
-                                <i class="fa-solid fa-volume-high"></i>
-                                <span>Click to Unmute</span>
+                            <button type="button" class="video-play-trigger-btn" id="videoPlayTriggerBtn" aria-label="Click to restart and unmute">
+                                <i class="fa-solid fa-arrow-rotate-left"></i>
+                                <span>Click to restart and unmute</span>
                             </button>
                         </div>
                     </div>
@@ -840,7 +841,7 @@
                 });
             }
 
-            // ── YouTube Video Player Control (Unmute / Mute Audio) ──────
+            // ── YouTube Video Player Control (Restart & Unmute / Mute Audio) ──────
             const videoPlayTriggerBtn = document.getElementById('videoPlayTriggerBtn');
             const ytIframe = document.getElementById('youtubePlayer');
             let isAudioMuted = true;
@@ -858,14 +859,16 @@
             if (videoPlayTriggerBtn) {
                 videoPlayTriggerBtn.addEventListener('click', () => {
                     if (isAudioMuted) {
+                        sendYouTubeCommand('seekTo', [0, true]);
                         sendYouTubeCommand('unMute');
                         sendYouTubeCommand('setVolume', [100]);
+                        sendYouTubeCommand('playVideo');
                         isAudioMuted = false;
                         videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i><span>Mute Audio</span>';
                     } else {
                         sendYouTubeCommand('mute');
                         isAudioMuted = true;
-                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i><span>Click to Unmute</span>';
+                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-arrow-rotate-left"></i><span>Click to restart and unmute</span>';
                     }
                 });
             }
