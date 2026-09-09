@@ -195,17 +195,29 @@
         }
 
         .left-panel img,
-        .left-panel video {
+        .left-panel video,
+        .left-panel iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            border: none;
+        }
+
+        .left-panel img,
+        .left-panel video {
             object-fit: cover;
             object-position: center;
             opacity: 1;
             transition: opacity 0.4s ease-in;
             pointer-events: none;
+        }
+
+        .left-panel iframe {
+            z-index: 10;
+            border-radius: inherit;
+            pointer-events: auto;
         }
         .left-panel img.loaded,
         .left-panel video.loaded {
@@ -960,30 +972,54 @@
                     });
                 }
 
-                // ── Video "Click to Play" Controls ──────
+                // ── Video "Click to Play" (Replaces Preview with YouTube Video) ──────
                 const videoPlayTriggerBtn = document.getElementById('videoPlayTriggerBtn');
                 const leftPanel = document.querySelector('.left-panel');
+                const YOUTUBE_VIDEO_ID = '1O3Phy5kOV4';
+                let isYouTubeLoaded = false;
 
-                function playFromStartWithSound() {
-                    leftVideo.currentTime = 0;
-                    leftVideo.muted = false;
-                    leftVideo.play().catch(() => {});
-                    leftVideo.controls = true;
+                function loadYouTubeVideo() {
+                    if (!leftPanel) return;
+
+                    let ytIframe = leftPanel.querySelector('iframe');
+                    if (!ytIframe) {
+                        if (leftVideo) {
+                            leftVideo.pause();
+                            leftVideo.style.display = 'none';
+                        }
+                        const leftImg = leftPanel.querySelector('img');
+                        if (leftImg) {
+                            leftImg.style.display = 'none';
+                        }
+
+                        ytIframe = document.createElement('iframe');
+                        ytIframe.src = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
+                        ytIframe.title = 'SOL REViBE Video Presentation';
+                        ytIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                        ytIframe.allowFullscreen = true;
+                        leftPanel.appendChild(ytIframe);
+                        isYouTubeLoaded = true;
+                    } else {
+                        ytIframe.src = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
+                    }
+
                     if (videoPlayTriggerBtn) {
-                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-rotate-left"></i><span>Restart &amp; Play</span>';
+                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-rotate-left"></i><span>Replay Video</span>';
                     }
                 }
 
                 if (videoPlayTriggerBtn) {
                     videoPlayTriggerBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        playFromStartWithSound();
+                        loadYouTubeVideo();
                     });
                 }
 
                 if (leftPanel) {
                     leftPanel.addEventListener('click', () => {
-                        playFromStartWithSound();
+                        if (!isYouTubeLoaded) {
+                            loadYouTubeVideo();
+                        }
                     });
                 }
             }
