@@ -753,11 +753,6 @@
                                         <input type="tel" class="form-input" id="phone" name="phone" placeholder="Phone Number (Optional)">
                                     </div>
                                 </div>
-
-                                <button type="submit" class="submit-btn" id="submitBtn">
-                                    <span id="btnText">Calculate my ROI and claim my zip code</span>
-                                    <div class="spinner" id="btnSpinner"></div>
-                                </button>
                             </form>
                         </div>
                     </div>
@@ -819,18 +814,28 @@
                 updateRevenue();
             }
 
-            // ── Focus Details Form when "First Button" (Unlock ROI) is Clicked ──────
+            // ── Form Submission via Unlock ROI Button or Enter Key ──────
             const unlockBtn = document.getElementById('t-unlock-btn');
             const leadForm = document.getElementById('leadForm');
 
             if (unlockBtn && leadForm) {
                 unlockBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    leadForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    const nameInput = document.getElementById('name');
-                    if (nameInput) {
-                        setTimeout(() => nameInput.focus(), 150);
+                    if (!leadForm.reportValidity()) {
+                        return;
                     }
+                    leadForm.dispatchEvent(new Event('submit', { cancelable: true }));
+                });
+
+                leadForm.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            if (leadForm.reportValidity()) {
+                                leadForm.dispatchEvent(new Event('submit', { cancelable: true }));
+                            }
+                        }
+                    });
                 });
             }
 
@@ -931,15 +936,20 @@
             e.preventDefault();
 
             // Basic validation is handled by HTML5 attributes (required, type="email", pattern for phone)
+            if (!this.checkValidity()) {
+                this.reportValidity();
+                return;
+            }
 
-            const btn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-            const btnSpinner = document.getElementById('btnSpinner');
+            const btn = document.getElementById('submitBtn') || document.getElementById('t-unlock-btn');
+            const origContent = btn ? btn.innerHTML : '';
 
             // Show loading state
-            btn.disabled = true;
-            btnText.style.display = 'none';
-            btnSpinner.style.display = 'block';
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.75';
+                btn.innerHTML = '<span>Processing...</span>';
+            }
 
             // Gather form data
             const formData = {
@@ -980,9 +990,11 @@
                 alert("Something went wrong. Please try again.");
 
                 // Reset button state on failure
-                btn.disabled = false;
-                btnText.style.display = 'block';
-                btnSpinner.style.display = 'none';
+                if (btn) {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.innerHTML = origContent;
+                }
             }
         });
     </script>
