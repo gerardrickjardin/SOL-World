@@ -2296,14 +2296,14 @@
                                 type="range" 
                                 id="teaser-traffic-slider" 
                                 class="teaser-slider-input" 
-                                min="10" 
+                                min="20" 
                                 max="200" 
                                 step="5" 
                                 value="50"
                                 aria-label="Daily Client Foot Traffic"
                             >
                             <div class="teaser-slider-ticks">
-                                <span>10 visitors/day</span>
+                                <span>20 visitors/day</span>
                                 <span>100 visitors/day</span>
                                 <span>200+ visitors/day</span>
                             </div>
@@ -2873,7 +2873,7 @@
 
                 unlockBtn.href = `/roi-calculator?traffic=${traffic}`;
 
-                const min = parseFloat(slider.min) || 10;
+                const min = parseFloat(slider.min) || 20;
                 const max = parseFloat(slider.max) || 200;
                 const pct = ((traffic - min) / (max - min)) * 100;
                 slider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${pct}%, #1e293b ${pct}%, #1e293b 100%)`;
