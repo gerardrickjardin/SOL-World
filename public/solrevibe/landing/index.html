@@ -646,17 +646,18 @@
                 <div class="split-box-inner">
                     <div class="left-panel-wrapper">
                         <div class="left-panel">
-                            <video autoplay loop muted playsinline preload="auto" poster="../assets/Final_Hero.jpg">
-                                <source src="../assets/NEW%20GIF%20FOR%20SOL%20REViBE%20Landing%20Page.mp4" type="video/mp4">
-                                <source src="../assets/Final%20SOL%20REViBE.mp4" type="video/mp4">
-                                <source src="../assets/New%20SOL%20REViBE%20Landing%20Video.mov" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
+                            <iframe 
+                                id="youtubePlayer"
+                                src="https://www.youtube.com/embed/1O3Phy5kOV4?autoplay=1&mute=1&loop=1&playlist=1O3Phy5kOV4&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" 
+                                title="SOL REViBE Video Presentation" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
                         </div>
                         <div class="video-cta-wrapper">
-                            <button type="button" class="video-play-trigger-btn" id="videoPlayTriggerBtn" aria-label="Click to Play">
-                                <i class="fa-solid fa-play"></i>
-                                <span>Click to Play</span>
+                            <button type="button" class="video-play-trigger-btn" id="videoPlayTriggerBtn" aria-label="Click to Unmute">
+                                <i class="fa-solid fa-volume-high"></i>
+                                <span>Click to Unmute</span>
                             </button>
                         </div>
                     </div>
@@ -839,96 +840,34 @@
                 });
             }
 
-            // ── Left Video Continuous Autoplay (Muted by Default) ──────
-            const leftVideo = document.querySelector('.left-panel video');
+            // ── YouTube Video Player Control (Unmute / Mute Audio) ──────
+            const videoPlayTriggerBtn = document.getElementById('videoPlayTriggerBtn');
+            const ytIframe = document.getElementById('youtubePlayer');
+            let isAudioMuted = true;
 
-            if (leftVideo) {
-                leftVideo.muted = true;
-                const startPlay = () => {
-                    leftVideo.muted = true;
-                    const p = leftVideo.play();
-                    if (p !== undefined) {
-                        p.catch(() => {
-                            // In case browser policy requires user interaction before media plays
-                            document.addEventListener('click', () => {
-                                leftVideo.muted = true;
-                                leftVideo.play().catch(() => {});
-                            }, { once: true });
-                        });
-                    }
-                };
-
-                startPlay();
-
-                if (leftVideo.readyState >= 3) {
-                    leftVideo.classList.add('loaded');
-                } else {
-                    leftVideo.addEventListener('canplay', () => {
-                        leftVideo.classList.add('loaded');
-                    });
-                }
-
-                // ── Video "Click to Play" (Replaces Preview with YouTube Video) ──────
-                const videoPlayTriggerBtn = document.getElementById('videoPlayTriggerBtn');
-                const leftPanel = document.querySelector('.left-panel');
-                const YOUTUBE_VIDEO_ID = '1O3Phy5kOV4';
-                let isYouTubeLoaded = false;
-
-                function loadYouTubeVideo() {
-                    if (!leftPanel) return;
-
-                    let ytIframe = leftPanel.querySelector('iframe');
-                    if (!ytIframe) {
-                        if (leftVideo) {
-                            leftVideo.pause();
-                            leftVideo.style.display = 'none';
-                        }
-                        const leftImg = leftPanel.querySelector('img');
-                        if (leftImg) {
-                            leftImg.style.display = 'none';
-                        }
-
-                        ytIframe = document.createElement('iframe');
-                        ytIframe.src = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
-                        ytIframe.title = 'SOL REViBE Video Presentation';
-                        ytIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-                        ytIframe.allowFullscreen = true;
-                        leftPanel.appendChild(ytIframe);
-                        isYouTubeLoaded = true;
-                    } else {
-                        ytIframe.src = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
-                    }
-
-                    if (videoPlayTriggerBtn) {
-                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-rotate-left"></i><span>Replay Video</span>';
-                    }
-                }
-
-                if (videoPlayTriggerBtn) {
-                    videoPlayTriggerBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        loadYouTubeVideo();
-                    });
-                }
-
-                if (leftPanel) {
-                    leftPanel.addEventListener('click', () => {
-                        if (!isYouTubeLoaded) {
-                            loadYouTubeVideo();
-                        }
-                    });
+            function sendYouTubeCommand(func, args = '') {
+                if (ytIframe && ytIframe.contentWindow) {
+                    ytIframe.contentWindow.postMessage(JSON.stringify({
+                        event: 'command',
+                        func: func,
+                        args: args
+                    }), '*');
                 }
             }
 
-            const leftImg = document.querySelector('.left-panel img');
-            if (leftImg) {
-                if (leftImg.complete) {
-                    leftImg.classList.add('loaded');
-                } else {
-                    leftImg.addEventListener('load', () => {
-                        leftImg.classList.add('loaded');
-                    });
-                }
+            if (videoPlayTriggerBtn) {
+                videoPlayTriggerBtn.addEventListener('click', () => {
+                    if (isAudioMuted) {
+                        sendYouTubeCommand('unMute');
+                        sendYouTubeCommand('setVolume', [100]);
+                        isAudioMuted = false;
+                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i><span>Mute Audio</span>';
+                    } else {
+                        sendYouTubeCommand('mute');
+                        isAudioMuted = true;
+                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i><span>Click to Unmute</span>';
+                    }
+                });
             }
         });
 
