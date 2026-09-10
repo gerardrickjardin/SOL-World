@@ -464,6 +464,14 @@
                 flex-direction: column;
                 gap: 0.6rem;
             }
+
+            .teaser-output-label {
+                font-size: 0.95rem;
+            }
+
+            .teaser-output-num {
+                font-size: 1.75rem;
+            }
         }
 
         /* ── Full Station ROI & Gross Revenue Calculator ─────── */
@@ -534,34 +542,64 @@
             width: 100%;
             height: 6px;
             border-radius: 999px;
-            background: linear-gradient(to right, #6C3AED 0%, #FF2F90 25%, #1a2234 25%, #1a2234 100%);
+            background: #1a2234;
             outline: none;
             cursor: pointer;
+            margin: 6px 0;
+            padding: 0;
+        }
+        .teaser-range::-webkit-slider-runnable-track {
+            height: 6px;
+            border-radius: 999px;
+            background: transparent;
+        }
+        .teaser-range::-moz-range-track {
+            height: 6px;
+            border-radius: 999px;
+            background: transparent;
         }
         .teaser-range::-webkit-slider-thumb {
             -webkit-appearance: none;
+            appearance: none;
             width: 20px;
             height: 20px;
             border-radius: 50%;
             background: #ffffff;
             border: 3px solid var(--energy-cyan);
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
             cursor: grab;
+            margin-top: -7px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .teaser-range::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 16px rgba(0, 229, 255, 0.95);
         }
         .teaser-range::-webkit-slider-thumb:active {
             cursor: grabbing;
+            transform: scale(1.25);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 1);
         }
         .teaser-range::-moz-range-thumb {
+            appearance: none;
             width: 20px;
             height: 20px;
             border-radius: 50%;
             background: #ffffff;
             border: 3px solid var(--energy-cyan);
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
             cursor: grab;
+            border: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .teaser-range::-moz-range-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 16px rgba(0, 229, 255, 0.95);
         }
         .teaser-range::-moz-range-thumb:active {
             cursor: grabbing;
+            transform: scale(1.25);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 1);
         }
         .teaser-tick-row {
             display: flex;
@@ -574,22 +612,37 @@
             background: rgba(0, 8, 20, 0.65);
             border: 1px solid rgba(108, 58, 237, 0.28);
             border-radius: 12px;
-            padding: 0.9rem 1rem;
+            padding: 1rem 1.15rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1rem;
         }
-        .teaser-output-label { font-size: 0.68rem; color: var(--light-gray); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
-        .teaser-output-sub { font-size: 0.65rem; color: #718096; margin-top: 2px; }
+        .teaser-output-label {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.15rem;
+            color: var(--white);
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            line-height: 1.2;
+        }
+        .teaser-output-amount {
+            flex-shrink: 0;
+            white-space: nowrap;
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+        }
         .teaser-output-num {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 2rem;
+            font-size: 2.1rem;
             font-weight: 900;
             color: var(--white);
             letter-spacing: -0.03em;
             text-shadow: 0 0 25px rgba(255, 47, 144, 0.45), 0 0 10px rgba(0, 229, 255, 0.25);
         }
-        .teaser-output-unit { font-size: 0.9rem; font-weight: 500; color: var(--light-gray); }
+        .teaser-output-unit { font-size: 0.92rem; font-weight: 500; color: var(--light-gray); }
         .teaser-cta {
             background: linear-gradient(135deg, #FF2F90 0%, #6C3AED 100%);
             color: var(--white) !important;
@@ -691,7 +744,8 @@
                                             <span class="teaser-val-badge" id="t-traffic-val">20</span>
                                         </div>
                                         <input type="range" id="t-traffic-slider" class="teaser-range"
-                                            min="20" max="100" step="1" value="20">
+                                            min="20" max="100" step="1" value="20"
+                                            style="background: linear-gradient(to right, #6C3AED 0%, #FF2F90 calc(0% + 10px), #1a2234 calc(0% + 10px), #1a2234 100%);">
                                         <div class="teaser-tick-row">
                                             <span>20 / day</span>
                                             <span>100 / day</span>
@@ -704,7 +758,8 @@
                                             <span class="teaser-val-badge" id="t-days-val">5</span>
                                         </div>
                                         <input type="range" id="t-days-slider" class="teaser-range"
-                                            min="1" max="7" step="1" value="5">
+                                            min="1" max="7" step="1" value="5"
+                                            style="background: linear-gradient(to right, #6C3AED 0%, #00E5FF calc(66.67% - 3.33px), #1a2234 calc(66.67% - 3.33px), #1a2234 100%);">
                                         <div class="teaser-tick-row">
                                             <span>1 day</span>
                                             <span>7 days</span>
@@ -713,11 +768,8 @@
                                 </div>
 
                                 <div class="teaser-output">
-                                    <div>
-                                        <div class="teaser-output-label">Potential Monthly Revenue</div>
-                                        <div class="teaser-output-sub" id="t-revenue-sub">15% conversion • $45/session • 20 active days/mo</div>
-                                    </div>
-                                    <div>
+                                    <div class="teaser-output-label">Potential Monthly Revenue</div>
+                                    <div class="teaser-output-amount">
                                         <span class="teaser-output-num" id="t-revenue-val">$3,375</span>
                                         <span class="teaser-output-unit">/mo</span>
                                     </div>
@@ -764,7 +816,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        function initLandingPage() {
 
             // Quick Revenue Teaser slider interactivity (Daily Foot Traffic & Days Open Per Week, Constant $45/session)
             const trafficSlider = document.getElementById('t-traffic-slider');
@@ -772,7 +824,6 @@
             const daysSlider = document.getElementById('t-days-slider');
             const daysVal = document.getElementById('t-days-val');
             const revenueVal = document.getElementById('t-revenue-val');
-            const subText = document.getElementById('t-revenue-sub');
             const unlockBtn = document.getElementById('t-unlock-btn');
 
             const PER_SESSION_RATE = 45; // Constant per session rate ($45)
@@ -795,29 +846,32 @@
                     const monthlyRev = Math.round(displayTraffic * CONVERSION_RATE * PER_SESSION_RATE * monthlyDays);
                     revenueVal.textContent = '$' + monthlyRev.toLocaleString();
 
-                    if (subText) {
-                        subText.textContent = `15% conversion • $${PER_SESSION_RATE}/session • ${monthlyDays} active days/mo (${displayDays} days/wk)`;
-                    }
-
-                    // Update slider track gradient fill with official brand colors (#6C3AED -> #FF2F90 / #00E5FF)
+                    // Update slider track gradient fill with seamless thumb-center alignment (20px thumb)
                     const tMin = parseFloat(trafficSlider.min) || 20;
                     const tMax = parseFloat(trafficSlider.max) || 100;
-                    const tPct = Math.max(0, Math.min(100, ((visitors - tMin) / (tMax - tMin)) * 100));
-                    trafficSlider.style.background = `linear-gradient(to right, #6C3AED 0%, #FF2F90 ${tPct}%, #1a2234 ${tPct}%, #1a2234 100%)`;
+                    const tRatio = Math.max(0, Math.min(1, (visitors - tMin) / (tMax - tMin)));
+                    const tPct = (tRatio * 100).toFixed(2);
+                    const tOffset = ((0.5 - tRatio) * 20).toFixed(2);
+                    const tFill = `calc(${tPct}% + ${tOffset}px)`;
+                    trafficSlider.style.background = `linear-gradient(to right, #6C3AED 0%, #FF2F90 ${tFill}, #1a2234 ${tFill}, #1a2234 100%)`;
 
                     const dMin = parseFloat(daysSlider.min) || 1;
                     const dMax = parseFloat(daysSlider.max) || 7;
-                    const dPct = Math.max(0, Math.min(100, ((days - dMin) / (dMax - dMin)) * 100));
-                    daysSlider.style.background = `linear-gradient(to right, #6C3AED 0%, #00E5FF ${dPct}%, #1a2234 ${dPct}%, #1a2234 100%)`;
+                    const dRatio = Math.max(0, Math.min(1, (days - dMin) / (dMax - dMin)));
+                    const dPct = (dRatio * 100).toFixed(2);
+                    const dOffset = ((0.5 - dRatio) * 20).toFixed(2);
+                    const dFill = `calc(${dPct}% + ${dOffset}px)`;
+                    daysSlider.style.background = `linear-gradient(to right, #6C3AED 0%, #00E5FF ${dFill}, #1a2234 ${dFill}, #1a2234 100%)`;
                 };
 
-                trafficSlider.addEventListener('input', updateRevenue);
-                daysSlider.addEventListener('input', updateRevenue);
+                ['input', 'change'].forEach(evt => {
+                    trafficSlider.addEventListener(evt, updateRevenue);
+                    daysSlider.addEventListener(evt, updateRevenue);
+                });
                 updateRevenue();
             }
 
             // ── Form Submission via Unlock ROI Button or Enter Key ──────
-            const unlockBtn = document.getElementById('t-unlock-btn');
             const leadForm = document.getElementById('leadForm');
 
             if (unlockBtn && leadForm) {
@@ -872,7 +926,6 @@
                     }
                 });
             }
-        });
 
         document.getElementById('leadForm').addEventListener('submit', async function (e) {
             e.preventDefault();
@@ -931,7 +984,6 @@
                 console.error('Submission failed:', error);
                 alert("Something went wrong. Please try again.");
 
-                // Reset button state on failure
                 if (btn) {
                     btn.disabled = false;
                     btn.style.opacity = '1';
@@ -939,6 +991,13 @@
                 }
             }
         });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLandingPage);
+    } else {
+        initLandingPage();
+    }
     </script>
 </body>
 
