@@ -84,7 +84,7 @@ export default async function handler(req) {
             phoneNumber: phone || '',
           },
           order: {
-            description: 'SOUL REViBE Business-in-a-Box Station — Direct B2B Purchase',
+            description: 'SOL REViBE Business-in-a-Box Station — Direct B2B Purchase',
           },
           userFields: {
             userField: [

@@ -102,7 +102,7 @@ export default function CheckoutPage() {
               <h2>Showcase Position Reserved!</h2>
               <p className="conf-subtitle">
                 Thank you, <strong>{formData.contactName || 'Valued Business Partner'}</strong>. Your order for the{' '}
-                <strong>SOUL REViBE Business-in-a-Box Station</strong> ($3,000 USD) has been successfully placed.
+                <strong>SOL REViBE Business-in-a-Box Station</strong> ($3,000 USD) has been successfully placed.
               </p>
               <div className="token-details-box">
                 <div className="token-row">
@@ -131,7 +131,7 @@ export default function CheckoutPage() {
               {/* Left Column: Product Summary */}
               <section className="product-summary-pane">
                 <div className="product-tag">High-Ticket B2B Package</div>
-                <h2 className="product-title">SOUL REViBE Business-in-a-Box Station</h2>
+                <h2 className="product-title">SOL REViBE Business-in-a-Box Station</h2>
                 <div className="price-display">
                   <span className="price-currency">$</span>
                   <span className="price-amount">3,000</span>
@@ -543,7 +543,7 @@ export default function CheckoutPage() {
               {activeModal === 'terms' && (
                 <div>
                   <p>
-                    <strong>B2B Terms of Service:</strong> All commercial orders for the SOUL REViBE Business-in-a-Box Station are processed as direct commercial purchases.
+                    <strong>B2B Terms of Service:</strong> All commercial orders for the SOL REViBE Business-in-a-Box Station are processed as direct commercial purchases.
                   </p>
                   <p>
                     By placing your showcase reservation order, your business entity agrees to the commercial usage rights, priority station dispatch schedule, and platform deployment guidelines provided upon confirmation.
@@ -563,7 +563,7 @@ export default function CheckoutPage() {
               {activeModal === 'shipping' && (
                 <div>
                   <p>
-                    <strong>Freight & Dispatch Policy:</strong> The SOUL REViBE Business-in-a-Box Station includes white-glove commercial crate handling.
+                    <strong>Freight & Dispatch Policy:</strong> The SOL REViBE Business-in-a-Box Station includes white-glove commercial crate handling.
                   </p>
                   <p>
                     Dispatches occur within 3–5 business days from showcase reservation. Includes tracking, insurance, and setup orientation materials for your wellness facility.

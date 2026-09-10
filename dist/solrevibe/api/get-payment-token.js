@@ -136,13 +136,13 @@ module.exports = async function handler(req, res) {
           email: email,
         },
         order: {
-          description:   'SOUL REViBE Business-in-a-Box Station',
+          description:   'SOL REViBE Business-in-a-Box Station',
           invoiceNumber: `SOL-${Date.now()}`,
         },
         lineItems: {
           lineItem: {
             itemId:      'REVIBE-BOX-001',
-            name:        'SOUL REViBE Business-in-a-Box Station',
+            name:        'SOL REViBE Business-in-a-Box Station',
             description: 'Direct B2B purchase — showcase position',
             quantity:    '1',
             unitPrice:   '3000.00',
