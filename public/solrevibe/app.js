@@ -15,6 +15,7 @@ function getZoneColor(zoneId) {
 
 // Load Data Indexes on Startup
 document.addEventListener("DOMContentLoaded", () => {
+    initApplicationForm();
     // Add cache buster query parameter to force loading the latest regenerated JSON index files
     const cacheBuster = `?t=${Date.now()}`;
     Promise.all([
@@ -586,4 +587,80 @@ function initRoiCalculator() {
 
     calculate();
 }
+
+// Claimed Territory Application Form Webhook Integration
+function initApplicationForm() {
+    const form = document.getElementById('franchise-application-form');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'Submit Territory Application <i class="fa-solid fa-paper-plane"></i>';
+
+        const firstName = document.getElementById('first-name')?.value.trim() || '';
+        const lastName = document.getElementById('last-name')?.value.trim() || '';
+        const email = document.getElementById('email')?.value.trim() || '';
+        const phone = document.getElementById('phone')?.value.trim() || '';
+        const companyName = document.getElementById('company-name')?.value.trim() || '';
+        const selectedZoneId = document.getElementById('claimed-zone')?.value.trim() || '';
+        const territoryCityState = document.getElementById('claimed-city')?.value.trim() || '';
+        const businessBackground = document.getElementById('experience')?.value.trim() || '';
+
+        const payload = {
+            firstName,
+            lastName,
+            name: `${firstName} ${lastName}`.trim(),
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            phone,
+            companyName,
+            company_name: companyName,
+            selectedZoneId,
+            selected_zone_id: selectedZoneId,
+            territoryCityState,
+            territory_city_state: territoryCityState,
+            businessBackground,
+            business_background: businessBackground,
+            source: 'Claimed Territory Application',
+            submittedAt: new Date().toISOString()
+        };
+
+        try {
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Submitting Application... <i class="fa-solid fa-spinner fa-spin"></i>';
+            }
+
+            const webhookUrl = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a0ed9157-3bda-482a-a958-e19cf7559ae2';
+
+            const response = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Webhook submission returned status ${response.status}`);
+            }
+
+            alert('Application submitted successfully! Our team will reach out shortly to finalize your discovery call.');
+            form.reset();
+        } catch (error) {
+            console.error('Error submitting application form:', error);
+            alert('There was an issue submitting your application. Please try again or contact support.');
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+            }
+        }
+    });
+}
+
 
