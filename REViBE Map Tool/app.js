@@ -528,7 +528,7 @@ function initApplicationForm() {
                 submitBtn.innerHTML = 'Submitting Application... <i class="fa-solid fa-spinner fa-spin"></i>';
             }
 
-            const webhookUrl = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/3b242fd0-624c-4b77-aee7-edb46d024b6c';
+            const webhookUrl = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/38f6dfbc-6b9f-4ced-8983-bd80dca3a5ca';
 
             const response = await fetch(webhookUrl, {
                 method: 'POST',
