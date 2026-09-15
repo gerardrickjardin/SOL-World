@@ -9,7 +9,7 @@
             window.location.href = '/landing';
         }
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>SOL REViBE | Frequency Recharging Wellness Station</title>
     <meta name="description" content="A Frequency Recharging Wellness Station">
     <link rel="preload" href="assets/SOL_REViBE_Elevate_Frequency_Hero.jpg" as="image">
@@ -47,6 +47,12 @@
                 radial-gradient(circle at 0% 70%, rgba(0, 229, 255, 0.12) 0%, transparent 45%) !important;
             background-attachment: fixed !important;
             color: #FFFFFF !important;
+        }
+
+        @media (max-width: 768px) {
+            html, body {
+                background-attachment: scroll !important;
+            }
         }
 
         #starfield, .glow-effect, .glow-effect-2 {
@@ -164,7 +170,7 @@
                 display: flex;
             }
             .vibe-navbar {
-                padding: 1rem 1.5rem !important;
+                padding: max(1rem, calc(env(safe-area-inset-top) + 0.5rem)) max(1.25rem, env(safe-area-inset-right)) 1rem max(1.25rem, env(safe-area-inset-left)) !important;
             }
         }
         
