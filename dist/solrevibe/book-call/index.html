@@ -182,509 +182,153 @@
             align-items: stretch;
             width: 100%;
             box-sizing: border-box;
+            min-height: 720px;
         }
 
         /* ==========================================================================
-           LEFT PANEL: Calendar & Booking Interface (Inverted Layout)
+           LEFT PANEL: Vision Control Booking Calendar Embed
            ========================================================================== */
         .left-booking-panel {
-            flex: 0 0 52%;
+            flex: 0 0 58%;
             min-width: 0;
-            padding: 1.8rem 2.2rem;
+            padding: 1.2rem;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             box-sizing: border-box;
             border-right: 1px solid rgba(108, 58, 237, 0.22);
-            background: rgba(14, 19, 32, 0.75);
+            background: rgba(14, 19, 32, 0.85);
             backdrop-filter: blur(12px);
         }
 
-        .badge-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            align-self: flex-start;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            background: rgba(108, 58, 237, 0.18);
-            border: 1px solid rgba(108, 58, 237, 0.4);
-            color: #d8b4fe;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-        }
-
-        .panel-title {
-            font-size: clamp(17px, 1.4vw, 22px);
-            font-weight: 800;
-            color: var(--white);
-            margin: 0 0 0.4rem 0;
-        }
-
-        .call-meta-pills {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 1.2rem;
-            flex-wrap: wrap;
-        }
-
-        .meta-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            font-weight: 500;
-        }
-
-        .meta-tag i {
-            color: var(--energy-cyan);
-            font-size: 0.82rem;
-        }
-
-        /* Calendar Controls Header */
-        .calendar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            padding-bottom: 0.6rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .current-month-display {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--white);
-            letter-spacing: 0.02em;
-        }
-
-        .cal-nav-buttons {
-            display: flex;
-            gap: 6px;
-        }
-
-        .cal-nav-btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: var(--white);
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .cal-nav-btn:hover {
-            background: rgba(108, 58, 237, 0.35);
-            border-color: var(--sol-violet);
-        }
-
-        /* Days Grid */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            margin-bottom: 1.2rem;
-        }
-
-        .weekday-label {
-            text-align: center;
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            padding-bottom: 4px;
-        }
-
-        .cal-day-cell {
-            aspect-ratio: 1;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            background: rgba(255, 255, 255, 0.02);
-            color: #94a3b8;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .calendar-iframe-wrapper {
             position: relative;
-        }
-
-        .cal-day-cell.other-month {
-            opacity: 0.25;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .cal-day-cell.past-day {
-            opacity: 0.3;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .cal-day-cell.available {
-            background: rgba(255, 255, 255, 0.06);
-            color: var(--white);
-            border-color: rgba(255, 255, 255, 0.08);
-        }
-
-        .cal-day-cell.available:hover {
-            background: rgba(108, 58, 237, 0.35);
-            border-color: var(--sol-violet);
-            transform: translateY(-1px);
-        }
-
-        .cal-day-cell.selected {
-            background: linear-gradient(135deg, var(--revibe-magenta) 0%, var(--sol-violet) 100%) !important;
-            color: #ffffff !important;
-            font-weight: 800;
-            border-color: transparent !important;
-            box-shadow: 0 4px 15px rgba(255, 47, 144, 0.45);
-        }
-
-        .cal-day-cell.today::after {
-            content: '';
-            position: absolute;
-            bottom: 4px;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--energy-cyan);
-        }
-
-        /* Time Slots Section */
-        .time-slots-section {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            margin-bottom: 1.2rem;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .slots-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: #cbd5e1;
-            font-weight: 600;
-        }
-
-        .timezone-indicator {
-            font-size: 0.75rem;
-            color: #64748b;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .time-slots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 8px;
-        }
-
-        .time-slot-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #e2e8f0;
-            padding: 8px 10px;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .time-slot-btn:hover {
-            background: rgba(0, 229, 255, 0.12);
-            border-color: var(--energy-cyan);
-            color: var(--white);
-        }
-
-        .time-slot-btn.selected {
-            background: linear-gradient(135deg, #00E5FF 0%, #0088cc 100%);
-            color: #000814;
-            font-weight: 800;
-            border-color: var(--energy-cyan);
-            box-shadow: 0 4px 14px rgba(0, 229, 255, 0.35);
-        }
-
-        /* Attendee Confirmation Form */
-        .attendee-confirm-card {
-            background: rgba(0, 8, 20, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 1rem 1.2rem;
-            margin-top: 0.4rem;
-        }
-
-        .confirm-summary-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(16, 185, 129, 0.12);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #34d399;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            margin-bottom: 0.85rem;
-        }
-
-        .confirm-fields-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 0.85rem;
-        }
-
-        .confirm-input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: var(--white);
-            font-family: inherit;
-            font-size: 0.82rem;
-            padding: 7px 10px;
-            border-radius: 6px;
-            box-sizing: border-box;
-            outline: none;
+            flex: 1;
+            min-height: 680px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .confirm-input:focus {
-            border-color: var(--revibe-magenta);
-        }
-
-        .book-call-btn {
+        .calendar-iframe-wrapper iframe {
             width: 100%;
-            background: linear-gradient(135deg, var(--revibe-magenta) 0%, var(--sol-violet) 100%);
+            height: 100%;
+            min-height: 680px;
             border: none;
-            color: var(--white);
-            padding: 0.85rem 1.4rem;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 800;
-            font-family: inherit;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(255, 47, 144, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.25s ease;
-        }
-
-        .book-call-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 25px rgba(255, 47, 144, 0.55);
-        }
-
-        .book-call-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* Success Card View */
-        .success-booking-card {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 2.5rem 1.5rem;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .success-icon-wrap {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: rgba(16, 185, 129, 0.18);
-            border: 2px solid #10b981;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: #10b981;
-            margin-bottom: 1.2rem;
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);
-        }
-
-        .success-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--white);
-            margin: 0 0 0.5rem 0;
-        }
-
-        .success-subtitle {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            max-width: 440px;
-            margin: 0 0 1.5rem 0;
-            line-height: 1.5;
-        }
-
-        .appointment-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 12px 18px;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            color: var(--energy-cyan);
-            font-size: 0.95rem;
-        }
-
-        .explore-map-btn {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 0.85rem 1.6rem;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
-            transition: all 0.2s ease;
-        }
-
-        .explore-map-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(16, 185, 129, 0.5);
+            display: block;
         }
 
         /* ==========================================================================
-           RIGHT PANEL: Video Showcase & Clinical Bullets (Inverted Layout)
+           RIGHT PANEL: Video Placeholder
            ========================================================================== */
         .right-video-panel {
-            flex: 0 0 48%;
+            flex: 0 0 42%;
             min-width: 0;
-            padding: 1.8rem 2.2rem;
+            padding: 2.2rem 2rem;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
+            align-items: center;
             box-sizing: border-box;
-            background: rgba(8, 13, 24, 0.6);
+            background: rgba(8, 13, 24, 0.65);
+            text-align: center;
         }
 
-        .video-box-wrap {
+        .video-placeholder-card {
             position: relative;
             width: 100%;
-            border-radius: 14px;
+            border-radius: 18px;
             overflow: hidden;
-            background: #000;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            margin-bottom: 1rem;
+            background: radial-gradient(circle at 50% 40%, rgba(108, 58, 237, 0.2) 0%, rgba(14, 19, 32, 0.95) 75%);
+            border: 1px solid rgba(108, 58, 237, 0.35);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(108, 58, 237, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3.5rem 1.8rem;
+            box-sizing: border-box;
         }
 
-        .video-aspect-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-        }
-
-        .video-aspect-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .video-unmute-btn {
-            width: 100%;
+        .play-icon-glow {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
             background: linear-gradient(135deg, var(--revibe-magenta) 0%, var(--sol-violet) 100%);
-            border: none;
-            color: var(--white);
-            padding: 0.65rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 1.4rem;
-            box-shadow: 0 4px 15px rgba(255, 47, 144, 0.3);
-            transition: all 0.2s ease;
+            font-size: 2rem;
+            color: #ffffff;
+            padding-left: 6px;
+            box-shadow: 0 0 35px rgba(255, 47, 144, 0.65), 0 0 70px rgba(108, 58, 237, 0.35);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
 
-        .video-unmute-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(255, 47, 144, 0.45);
+        .play-icon-glow:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 45px rgba(255, 47, 144, 0.8), 0 0 90px rgba(108, 58, 237, 0.5);
         }
 
-        .highlights-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 12px;
-            padding: 1.2rem 1.4rem;
-            box-sizing: border-box;
-        }
-
-        .highlights-title {
-            font-size: 0.85rem;
+        .placeholder-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 9999px;
+            background: rgba(0, 229, 255, 0.12);
+            border: 1px solid rgba(0, 229, 255, 0.35);
+            color: var(--energy-cyan);
+            font-size: 0.74rem;
             font-weight: 800;
             letter-spacing: 0.08em;
             text-transform: uppercase;
+            margin-bottom: 0.9rem;
+        }
+
+        .placeholder-title {
+            font-size: clamp(18px, 1.4vw, 24px);
+            font-weight: 800;
             color: var(--white);
-            margin: 0 0 0.85rem 0;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.3;
+        }
+
+        .placeholder-desc {
+            font-size: 0.88rem;
+            color: #94a3b8;
+            max-width: 380px;
+            margin: 0 0 1.6rem 0;
+            line-height: 1.55;
+        }
+
+        .feature-pills-row {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 8px;
+            justify-content: center;
         }
 
-        .highlights-title i {
-            color: var(--energy-cyan);
-        }
-
-        .highlights-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 0.7rem;
-        }
-
-        .highlights-list li {
-            position: relative;
-            padding-left: 1.4rem;
-            font-size: 0.84rem;
-            line-height: 1.45;
+        .feature-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
             color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 5px 11px;
+            border-radius: 8px;
+            font-weight: 600;
         }
 
-        .highlights-list li::before {
-            content: '✦';
-            position: absolute;
-            left: 0;
-            color: var(--revibe-magenta);
-            font-size: 0.95rem;
-            top: -1px;
-            text-shadow: 0 0 8px rgba(255, 47, 144, 0.6);
+        .feature-pill i {
+            color: var(--energy-cyan);
+            font-size: 0.75rem;
         }
 
         /* ==========================================================================
@@ -693,28 +337,32 @@
         @media (max-width: 980px) {
             .split-box-inner {
                 flex-direction: column;
+                min-height: auto;
             }
 
             .left-booking-panel {
                 flex: 1 1 100%;
                 border-right: none;
                 border-bottom: 1px solid rgba(108, 58, 237, 0.25);
-                padding: 1.4rem 1.2rem;
+                padding: 0.8rem;
+            }
+
+            .calendar-iframe-wrapper {
+                min-height: 620px;
+            }
+
+            .calendar-iframe-wrapper iframe {
+                min-height: 620px;
             }
 
             .right-video-panel {
                 flex: 1 1 100%;
-                padding: 1.4rem 1.2rem;
+                padding: 1.8rem 1.2rem;
             }
 
-            .confirm-fields-grid {
-                grid-template-columns: 1fr;
+            .video-placeholder-card {
+                padding: 2.5rem 1.2rem;
             }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -742,160 +390,47 @@
             Select your preferred date &amp; time below to review clinical study data, market exclusivity, and turn-key operational deployment with our executive team.
         </p>
 
-        <!-- Main Split Box (Inverted: Calendar Left, Video Right) -->
+        <!-- Main Split Box (Inverted: Calendar on Left, Video Placeholder on Right) -->
         <div class="split-box-wrapper">
             <div class="split-box">
                 <div class="split-box-inner">
                     
                     <!-- =====================================================
-                         LEFT PANEL: Interactive Calendar & Booking Interface
+                         LEFT PANEL: Vision Control Calendar Embed
                          ===================================================== -->
                     <div class="left-booking-panel">
-                        
-                        <!-- Initial Booking View -->
-                        <div id="booking-interface-view">
-                            <div class="badge-pill">
-                                <i class="fa-solid fa-calendar-check"></i> Executive Discovery Call
-                            </div>
-                            <h2 class="panel-title">Schedule a 30-Minute 1-on-1 Overview</h2>
-                            <div class="call-meta-pills">
-                                <span class="meta-tag"><i class="fa-regular fa-clock"></i> 30 Min Session</span>
-                                <span class="meta-tag"><i class="fa-solid fa-video"></i> Private Zoom Conference</span>
-                                <span class="meta-tag"><i class="fa-solid fa-shield-halved"></i> 1-on-1 Market Review</span>
-                            </div>
-
-                            <!-- Calendar Month Navigation -->
-                            <div class="calendar-header">
-                                <span class="current-month-display" id="month-year-label">September 2026</span>
-                                <div class="cal-nav-buttons">
-                                    <button type="button" class="cal-nav-btn" id="prev-month-btn" aria-label="Previous Month">
-                                        <i class="fa-solid fa-chevron-left"></i>
-                                    </button>
-                                    <button type="button" class="cal-nav-btn" id="next-month-btn" aria-label="Next Month">
-                                        <i class="fa-solid fa-chevron-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Calendar Grid -->
-                            <div class="calendar-grid" id="calendar-days-grid">
-                                <!-- Weekday Labels -->
-                                <div class="weekday-label">Mon</div>
-                                <div class="weekday-label">Tue</div>
-                                <div class="weekday-label">Wed</div>
-                                <div class="weekday-label">Thu</div>
-                                <div class="weekday-label">Fri</div>
-                                <div class="weekday-label">Sat</div>
-                                <div class="weekday-label">Sun</div>
-                                <!-- Day cells will be generated dynamically by JS -->
-                            </div>
-
-                            <!-- Time Slots Picker (Appears when a date is selected) -->
-                            <div class="time-slots-section" id="time-slots-section">
-                                <div class="slots-header">
-                                    <span id="selected-date-label">Select a Time Slot</span>
-                                    <span class="timezone-indicator">
-                                        <i class="fa-solid fa-earth-americas"></i> <span id="detected-tz">Local Time</span>
-                                    </span>
-                                </div>
-                                <div class="time-slots-grid" id="time-slots-container">
-                                    <!-- Dynamic Time Slots -->
-                                </div>
-                            </div>
-
-                            <!-- Confirmation Form (Pre-filled from Session Storage) -->
-                            <form id="call-booking-form" class="attendee-confirm-card">
-                                <div class="confirm-summary-pill" id="booking-summary-pill">
-                                    <i class="fa-solid fa-calendar-check"></i>
-                                    <span id="booking-summary-text">Please pick a date &amp; time slot above</span>
-                                </div>
-
-                                <div class="confirm-fields-grid">
-                                    <input type="text" id="attendee-first-name" class="confirm-input" placeholder="First Name" required>
-                                    <input type="text" id="attendee-last-name" class="confirm-input" placeholder="Last Name" required>
-                                </div>
-                                <div class="confirm-fields-grid">
-                                    <input type="email" id="attendee-email" class="confirm-input" placeholder="Email Address" required>
-                                    <input type="tel" id="attendee-phone" class="confirm-input" placeholder="Phone Number">
-                                </div>
-                                <div style="margin-bottom: 0.85rem;">
-                                    <input type="text" id="attendee-company" class="confirm-input" placeholder="Company / Practice Name (Optional)">
-                                </div>
-
-                                <button type="submit" class="book-call-btn" id="confirm-booking-btn">
-                                    <span>Confirm Discovery Call &amp; Reserve Slot</span>
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </button>
-                            </form>
+                        <div class="calendar-iframe-wrapper">
+                            <iframe 
+                                id="visioncontrol-calendar-iframe"
+                                src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7" 
+                                style="width: 100%; border: none; overflow: hidden;" 
+                                scrolling="yes"
+                                title="Book Discovery Call with Doug Cundiff">
+                            </iframe>
                         </div>
-
-                        <!-- Success View (Shown after booking) -->
-                        <div id="booking-success-view" class="success-booking-card">
-                            <div class="success-icon-wrap">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <h3 class="success-title">Your Discovery Call is Confirmed!</h3>
-                            <p class="success-subtitle">
-                                A calendar invitation and Zoom conference link have been sent to your email. We look forward to exploring the science and commercial model with you.
-                            </p>
-                            <div class="appointment-badge" id="confirmed-time-badge">
-                                📅 Thursday, Sep 17, 2026 @ 10:30 AM EST
-                            </div>
-                            <a href="/" class="explore-map-btn">
-                                <span>Proceed to Full Territory Map &amp; Calculator</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        </div>
-
                     </div>
 
-
                     <!-- =====================================================
-                         RIGHT PANEL: Video Showcase & Clinical Bullets
+                         RIGHT PANEL: Video Placeholder
                          ===================================================== -->
                     <div class="right-video-panel">
-                        
-                        <!-- 16:9 Video Player -->
-                        <div class="video-box-wrap">
-                            <div class="video-aspect-container">
-                                <iframe 
-                                    id="yt-video-frame" 
-                                    src="https://www.youtube.com/embed/hIs9X-F3lbw?enablejsapi=1&autoplay=1&mute=1&controls=1&rel=0&playsinline=1&modestbranding=1" 
-                                    title="SOL REViBE Science &amp; Business Model" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen>
-                                </iframe>
+                        <div class="video-placeholder-card">
+                            <div class="placeholder-badge">
+                                <i class="fa-solid fa-film"></i> Video Overview
+                            </div>
+                            <div class="play-icon-glow">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                            <h2 class="placeholder-title">Executive Briefing Video</h2>
+                            <p class="placeholder-desc">
+                                Watch our in-depth walkthrough on synchronized cellular frequency recharging, clinical studies, and commercial territory ROI.
+                            </p>
+                            <div class="feature-pills-row">
+                                <span class="feature-pill"><i class="fa-solid fa-wave-square"></i> PEMF &amp; Terahertz</span>
+                                <span class="feature-pill"><i class="fa-solid fa-shield-halved"></i> 1 Flagship Per ZIP</span>
+                                <span class="feature-pill"><i class="fa-solid fa-bolt"></i> 15-Min Protocols</span>
                             </div>
                         </div>
-
-                        <!-- Video Audio Toggle Button -->
-                        <button type="button" class="video-unmute-btn" id="video-unmute-btn">
-                            <i class="fa-solid fa-arrow-rotate-left"></i>
-                            <span>Click to restart and unmute audio</span>
-                        </button>
-
-                        <!-- Key Science & Business Highlights -->
-                        <div class="highlights-card">
-                            <h3 class="highlights-title">
-                                <i class="fa-solid fa-atom"></i>
-                                Clinical Science &amp; Business Architecture
-                            </h3>
-                            <ul class="highlights-list">
-                                <li>
-                                    <strong>Synchronized Frequency Recharging:</strong> Combines Pulsed Electromagnetic Field (PEMF), Terahertz frequency, Visual Interactive Program (VIPs), and acoustic resonance.
-                                </li>
-                                <li>
-                                    <strong>Zero Consumable Overhead:</strong> Standalone contactless design with automated 15-minute regenerative protocols requiring minimal staff intervention.
-                                </li>
-                                <li>
-                                    <strong>Guaranteed ZIP Code Exclusivity:</strong> Only one flagship showcase station awarded per target territory to protect revenue dominance.
-                                </li>
-                                <li>
-                                    <strong>Turnkey Cash-Pay Monetization:</strong> Designed for wellness spaces, clinics, medspas, and athletic training centers generating an estimated $10,000+ monthly revenue.
-                                </li>
-                            </ul>
-                        </div>
-
                     </div>
 
                 </div>
@@ -904,337 +439,41 @@
 
     </div>
 
-    <!-- Interactive Calendar & Submission Logic -->
+    <!-- Pre-fill URL query params from session storage if available -->
+    <script src="https://link.visioncontrol.io/js/form_embed.js" type="text/javascript"></script>
     <script>
         (function() {
-            // Endpoints
-            const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
-            const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzh-Ev0POWeoD3mSoSIeqDzqt_dMjyxpuiiBIBZAXW1ZI7oBkjCqY4M-UwS8Cih6KlM/exec';
+            const iframe = document.getElementById('visioncontrol-calendar-iframe');
+            if (!iframe) return;
 
-            // State
-            let currentDate = new Date();
-            let selectedDate = null;
-            let selectedTimeSlot = null;
+            const baseCalendarUrl = 'https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7';
+            const params = new URLSearchParams();
 
-            // DOM Elements
-            const monthYearLabel = document.getElementById('month-year-label');
-            const prevMonthBtn = document.getElementById('prev-month-btn');
-            const nextMonthBtn = document.getElementById('next-month-btn');
-            const daysGrid = document.getElementById('calendar-days-grid');
-            const timeSlotsContainer = document.getElementById('time-slots-container');
-            const selectedDateLabel = document.getElementById('selected-date-label');
-            const detectedTzSpan = document.getElementById('detected-tz');
-            const bookingSummaryText = document.getElementById('booking-summary-text');
-            const bookingForm = document.getElementById('call-booking-form');
-            const confirmBtn = document.getElementById('confirm-booking-btn');
-            const bookingInterfaceView = document.getElementById('booking-interface-view');
-            const bookingSuccessView = document.getElementById('booking-success-view');
-            const confirmedTimeBadge = document.getElementById('confirmed-time-badge');
+            const firstName = sessionStorage.getItem('solrevibe_lead_firstname');
+            const lastName = sessionStorage.getItem('solrevibe_lead_lastname');
+            const email = sessionStorage.getItem('solrevibe_lead_email');
+            const phone = sessionStorage.getItem('solrevibe_lead_phone');
+            const company = sessionStorage.getItem('solrevibe_lead_company');
 
-            // Detect Timezone
-            try {
-                const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                if (userTz) detectedTzSpan.textContent = userTz.replace('_', ' ');
-            } catch (e) {
-                detectedTzSpan.textContent = 'Local Time';
+            if (firstName) {
+                params.set('first_name', firstName);
+                params.set('firstName', firstName);
+            }
+            if (lastName) {
+                params.set('last_name', lastName);
+                params.set('lastName', lastName);
+            }
+            if (email) params.set('email', email);
+            if (phone) params.set('phone', phone);
+            if (company) {
+                params.set('company_name', company);
+                params.set('companyName', company);
             }
 
-            // Pre-fill attendee details from sessionStorage if arriving from /landing
-            const firstNameInput = document.getElementById('attendee-first-name');
-            const lastNameInput = document.getElementById('attendee-last-name');
-            const emailInput = document.getElementById('attendee-email');
-            const phoneInput = document.getElementById('attendee-phone');
-            const companyInput = document.getElementById('attendee-company');
-
-            if (firstNameInput && sessionStorage.getItem('solrevibe_lead_firstname')) {
-                firstNameInput.value = sessionStorage.getItem('solrevibe_lead_firstname');
+            const queryString = params.toString();
+            if (queryString) {
+                iframe.src = `${baseCalendarUrl}?${queryString}`;
             }
-            if (lastNameInput && sessionStorage.getItem('solrevibe_lead_lastname')) {
-                lastNameInput.value = sessionStorage.getItem('solrevibe_lead_lastname');
-            }
-            if (emailInput && sessionStorage.getItem('solrevibe_lead_email')) {
-                emailInput.value = sessionStorage.getItem('solrevibe_lead_email');
-            }
-            if (phoneInput && sessionStorage.getItem('solrevibe_lead_phone')) {
-                phoneInput.value = sessionStorage.getItem('solrevibe_lead_phone');
-            }
-            if (companyInput && sessionStorage.getItem('solrevibe_lead_company')) {
-                companyInput.value = sessionStorage.getItem('solrevibe_lead_company');
-            }
-
-            // Available Time Slots template
-            const DEFAULT_SLOTS = [
-                '9:00 AM',
-                '10:30 AM',
-                '1:00 PM',
-                '2:30 PM',
-                '4:00 PM',
-                '5:15 PM'
-            ];
-
-            // Render Calendar
-            function renderCalendar() {
-                const year = currentDate.getFullYear();
-                const month = currentDate.getMonth();
-
-                const monthNames = [
-                    'January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'
-                ];
-                monthYearLabel.textContent = `${monthNames[month]} ${year}`;
-
-                // Remove existing day cells (keep first 7 weekday headers)
-                while (daysGrid.children.length > 7) {
-                    daysGrid.removeChild(daysGrid.lastChild);
-                }
-
-                const firstDayOfMonth = new Date(year, month, 1);
-                const lastDayOfMonth = new Date(year, month + 1, 0);
-
-                // Convert JS Sunday=0 to Monday=0
-                let startDay = firstDayOfMonth.getDay() - 1;
-                if (startDay === -1) startDay = 6;
-
-                const daysInMonth = lastDayOfMonth.getDate();
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                // Empty cells for previous month padding
-                for (let i = 0; i < startDay; i++) {
-                    const cell = document.createElement('div');
-                    cell.className = 'cal-day-cell other-month';
-                    daysGrid.appendChild(cell);
-                }
-
-                // Days of current month
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const cellDate = new Date(year, month, day);
-                    cellDate.setHours(0, 0, 0, 0);
-
-                    const cell = document.createElement('button');
-                    cell.type = 'button';
-                    cell.className = 'cal-day-cell';
-                    cell.textContent = day;
-
-                    const isPast = cellDate < today;
-                    const dayOfWeek = cellDate.getDay();
-                    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
-
-                    if (isPast) {
-                        cell.classList.add('past-day');
-                    } else if (isWeekend) {
-                        // Weekends dimmed slightly or allowed
-                        cell.classList.add('available');
-                    } else {
-                        cell.classList.add('available');
-                    }
-
-                    if (cellDate.getTime() === today.getTime()) {
-                        cell.classList.add('today');
-                    }
-
-                    if (selectedDate && cellDate.getTime() === selectedDate.getTime()) {
-                        cell.classList.add('selected');
-                    }
-
-                    if (!isPast) {
-                        cell.addEventListener('click', () => {
-                            selectDay(cellDate, cell);
-                        });
-                    }
-
-                    daysGrid.appendChild(cell);
-                }
-            }
-
-            // Day Selection
-            function selectDay(dateObj, cellElem) {
-                selectedDate = dateObj;
-                selectedTimeSlot = null; // reset slot selection
-
-                // Update UI selection
-                document.querySelectorAll('.cal-day-cell').forEach(c => c.classList.remove('selected'));
-                cellElem.classList.add('selected');
-
-                // Render slots
-                renderTimeSlots(dateObj);
-                updateSummary();
-            }
-
-            // Render Time Slots
-            function renderTimeSlots(dateObj) {
-                const dateOptions = { weekday: 'short', month: 'short', day: 'numeric' };
-                selectedDateLabel.textContent = `Available Slots for ${dateObj.toLocaleDateString('en-US', dateOptions)}`;
-                timeSlotsContainer.innerHTML = '';
-
-                DEFAULT_SLOTS.forEach(slot => {
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'time-slot-btn';
-                    btn.textContent = slot;
-
-                    btn.addEventListener('click', () => {
-                        document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
-                        btn.classList.add('selected');
-                        selectedTimeSlot = slot;
-                        updateSummary();
-                    });
-
-                    timeSlotsContainer.appendChild(btn);
-                });
-            }
-
-            // Update Summary Pill
-            function updateSummary() {
-                if (!selectedDate) {
-                    bookingSummaryText.textContent = 'Please pick a date on the calendar above';
-                    return;
-                }
-                const dateStr = selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-                if (!selectedTimeSlot) {
-                    bookingSummaryText.textContent = `Selected: ${dateStr} (Now choose a time slot)`;
-                } else {
-                    bookingSummaryText.innerHTML = `<strong>Selected:</strong> ${dateStr} @ ${selectedTimeSlot}`;
-                }
-            }
-
-            // Month Navigation
-            prevMonthBtn.addEventListener('click', () => {
-                currentDate.setMonth(currentDate.getMonth() - 1);
-                renderCalendar();
-            });
-
-            nextMonthBtn.addEventListener('click', () => {
-                currentDate.setMonth(currentDate.getMonth() + 1);
-                renderCalendar();
-            });
-
-            // Initial render: Auto-select tomorrow or today
-            renderCalendar();
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(0, 0, 0, 0);
-            selectDay(tomorrow, document.querySelectorAll('.cal-day-cell.available')[0] || document.querySelector('.cal-day-cell.today'));
-
-            // Handle Booking Form Submit
-            bookingForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-
-                if (!selectedDate || !selectedTimeSlot) {
-                    alert('Please select both a date and a time slot for your discovery call.');
-                    return;
-                }
-
-                const firstName = (firstNameInput?.value || '').trim();
-                const lastName = (lastNameInput?.value || '').trim();
-                const fullName = `${firstName} ${lastName}`.trim();
-                const email = (emailInput?.value || '').trim();
-                const phone = (phoneInput?.value || '').trim();
-                const company = (companyInput?.value || '').trim();
-                const formattedDate = selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-
-                const payload = {
-                    firstName,
-                    lastName,
-                    first_name: firstName,
-                    last_name: lastName,
-                    name: fullName,
-                    full_name: fullName,
-                    email,
-                    phone,
-                    phone_number: phone,
-                    companyName: company,
-                    company_name: company,
-                    company,
-                    appointmentDate: formattedDate,
-                    appointmentTime: selectedTimeSlot,
-                    appointmentDateTime: `${formattedDate} @ ${selectedTimeSlot}`,
-                    timezone: detectedTzSpan.textContent,
-                    source: 'Executive Discovery Call Booking',
-                    tags: ['solrevibe-booked-call', 'discovery-call'],
-                    submittedAt: new Date().toISOString()
-                };
-
-                const origBtnText = confirmBtn.innerHTML;
-                confirmBtn.disabled = true;
-                confirmBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Confirming Call Reservation...';
-
-                try {
-                    // Send to Vision Control Automation Webhook & Google Sheets
-                    const ghlPromise = fetch(GHL_WEBHOOK_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    }).catch(err => console.error('Booking GHL webhook error:', err));
-
-                    const sheetsPromise = fetch(GOOGLE_SHEETS_WEBAPP_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        cache: 'no-cache',
-                        headers: {
-                            'Content-Type': 'text/plain;charset=utf-8'
-                        },
-                        body: JSON.stringify({
-                            ...payload,
-                            businessBackground: `Booked Call: ${formattedDate} @ ${selectedTimeSlot}`
-                        })
-                    }).catch(err => console.error('Booking Sheets error:', err));
-
-                    // 2.5s safety timeout
-                    const timeoutPromise = new Promise(resolve => setTimeout(resolve, 2500));
-                    await Promise.race([
-                        Promise.all([ghlPromise, sheetsPromise]),
-                        timeoutPromise
-                    ]);
-
-                    // Switch to Success View
-                    confirmedTimeBadge.textContent = `📅 ${formattedDate} @ ${selectedTimeSlot} (${detectedTzSpan.textContent})`;
-                    bookingInterfaceView.style.display = 'none';
-                    bookingSuccessView.style.display = 'flex';
-
-                } catch (error) {
-                    console.error('Booking failed:', error);
-                    confirmBtn.disabled = false;
-                    confirmBtn.innerHTML = origBtnText;
-                    alert('There was an issue reserving your call. Please try again.');
-                }
-            });
-
-            // YouTube Video Controls
-            const ytIframe = document.getElementById('yt-video-frame');
-            const unmuteBtn = document.getElementById('video-unmute-btn');
-            let isMuted = true;
-
-            function sendYouTubeCommand(func, args = '') {
-                if (ytIframe && ytIframe.contentWindow) {
-                    ytIframe.contentWindow.postMessage(JSON.stringify({
-                        event: 'command',
-                        func: func,
-                        args: args
-                    }), '*');
-                }
-            }
-
-            if (unmuteBtn) {
-                unmuteBtn.addEventListener('click', () => {
-                    if (isMuted) {
-                        sendYouTubeCommand('seekTo', [0, true]);
-                        sendYouTubeCommand('unMute');
-                        sendYouTubeCommand('setVolume', [100]);
-                        sendYouTubeCommand('playVideo');
-                        isMuted = false;
-                        unmuteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i><span>Mute Audio</span>';
-                    } else {
-                        sendYouTubeCommand('mute');
-                        isMuted = true;
-                        unmuteBtn.innerHTML = '<i class="fa-solid fa-arrow-rotate-left"></i><span>Click to restart and unmute audio</span>';
-                    }
-                });
-            }
-
         })();
     </script>
 </body>
