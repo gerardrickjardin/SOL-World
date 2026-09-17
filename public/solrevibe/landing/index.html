@@ -1184,10 +1184,17 @@
                     btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Success! Unlocking Science & Business Model...</span>';
                 }
 
-                // Grant access and smoothly redirect after a brief visual confirmation
+                // Store lead info for booking calendar pre-fill
                 sessionStorage.setItem('solrevibe_access_granted', 'true');
+                sessionStorage.setItem('solrevibe_lead_firstname', firstName);
+                sessionStorage.setItem('solrevibe_lead_lastname', lastName);
+                sessionStorage.setItem('solrevibe_lead_name', fullName);
+                sessionStorage.setItem('solrevibe_lead_email', email);
+                sessionStorage.setItem('solrevibe_lead_phone', phone);
+                sessionStorage.setItem('solrevibe_lead_company', company);
+
                 setTimeout(() => {
-                    window.location.href = '/';
+                    window.location.href = '/book-call';
                 }, 750);
 
             } catch (error) {
