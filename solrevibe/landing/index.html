@@ -957,11 +957,11 @@
                                 <div class="form-row">
                                     <div class="input-wrap">
                                         <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                        <input type="text" class="form-input" id="name" name="name" placeholder="Full Name" required>
+                                        <input type="text" class="form-input" id="first-name" name="firstName" placeholder="First Name" required>
                                     </div>
                                     <div class="input-wrap">
                                         <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                        <input type="text" class="form-input" id="company" name="company" placeholder="Business / Company Name (Optional)">
+                                        <input type="text" class="form-input" id="last-name" name="lastName" placeholder="Last Name" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -972,6 +972,12 @@
                                     <div class="input-wrap">
                                         <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                                         <input type="tel" class="form-input" id="phone" name="phone" placeholder="Phone Number (Optional)">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-wrap">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                        <input type="text" class="form-input" id="company" name="company" placeholder="Business / Company Name (Optional)">
                                     </div>
                                 </div>
                             </form>
@@ -1113,35 +1119,57 @@
                 btn.innerHTML = '<span>Processing...</span>';
             }
 
-            // Gather form data
-            const formData = {
-                name: document.getElementById('name').value,
-                company: document.getElementById('company').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                timestamp: new Date().toISOString()
+            // Webhook Endpoints
+            const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
+            const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzh-Ev0POWeoD3mSoSIeqDzqt_dMjyxpuiiBIBZAXW1ZI7oBkjCqY4M-UwS8Cih6KlM/exec';
+
+            const firstName = (document.getElementById('first-name')?.value || '').trim();
+            const lastName = (document.getElementById('last-name')?.value || '').trim();
+            const fullName = `${firstName} ${lastName}`.trim();
+            const email = (document.getElementById('email')?.value || '').trim();
+            const phone = (document.getElementById('phone')?.value || '').trim();
+            const company = (document.getElementById('company')?.value || '').trim();
+
+            const payload = {
+                firstName,
+                lastName,
+                first_name: firstName,
+                last_name: lastName,
+                name: fullName,
+                full_name: fullName,
+                email,
+                phone,
+                phone_number: phone,
+                companyName: company,
+                company_name: company,
+                company,
+                source: 'Landing Page Gate',
+                tags: ['solrevibe-applicant', 'landing-gate'],
+                submittedAt: new Date().toISOString()
             };
 
-            // Mock Google Sheets Integration
-            // To make this fully functional later, you would replace this URL with your Google Apps Script Web App URL
-            const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwYOUR_APP_ID/exec';
-
             try {
-                // We'll simulate a network request here since we don't have a real backend URL yet
-                await new Promise(resolve => setTimeout(resolve, 800));
+                // Submit to Vision Control Automation (LeadConnector) and Google Sheets simultaneously
+                const ghlPromise = fetch(GHL_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                }).catch(err => console.error('Vision Control Automation webhook error:', err));
 
-                /* 
-                // Actual fetch code to use when ready:
-                await fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+                const sheetsPromise = fetch(GOOGLE_SHEETS_WEBAPP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     cache: 'no-cache',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'text/plain;charset=utf-8'
                     },
-                    body: JSON.stringify(formData)
-                });
-                */
+                    body: JSON.stringify(payload)
+                }).catch(err => console.error('Google Sheets submission error:', err));
+
+                await Promise.all([ghlPromise, sheetsPromise]);
 
                 // Grant access and redirect to the main presentation page
                 sessionStorage.setItem('solrevibe_access_granted', 'true');

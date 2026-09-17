@@ -612,19 +612,26 @@ function initApplicationForm() {
             firstName,
             lastName,
             name: `${firstName} ${lastName}`.trim(),
+            full_name: `${firstName} ${lastName}`.trim(),
             first_name: firstName,
             last_name: lastName,
             email,
             phone,
+            phone_number: phone,
             companyName,
             company_name: companyName,
+            company: companyName,
             selectedZoneId,
             selected_zone_id: selectedZoneId,
+            zone: selectedZoneId,
             territoryCityState,
             territory_city_state: territoryCityState,
             businessBackground,
             business_background: businessBackground,
+            message: businessBackground,
+            notes: businessBackground,
             source: 'Claimed Territory Application',
+            tags: ['solrevibe-applicant', 'claimed-territory'],
             submittedAt: new Date().toISOString()
         };
 
@@ -635,8 +642,20 @@ function initApplicationForm() {
             }
 
             const webhookUrl = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
+            const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbzh-Ev0POWeoD3mSoSIeqDzqt_dMjyxpuiiBIBZAXW1ZI7oBkjCqY4M-UwS8Cih6KlM/exec';
 
-            const response = await fetch(webhookUrl, {
+            // Send to Google Sheets (using text/plain and no-cors to prevent preflight CORS blocking)
+            const sheetsPromise = fetch(googleSheetsUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error('Error logging to Google Sheets:', err));
+
+            // Send to GoHighLevel Webhook
+            const ghlPromise = fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -644,6 +663,8 @@ function initApplicationForm() {
                 },
                 body: JSON.stringify(payload)
             });
+
+            const [response] = await Promise.all([ghlPromise, sheetsPromise]);
 
             if (!response.ok) {
                 throw new Error(`Webhook submission returned status ${response.status}`);
