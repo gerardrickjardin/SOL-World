@@ -1112,11 +1112,11 @@
             const btn = document.getElementById('submitBtn') || document.getElementById('t-unlock-btn');
             const origContent = btn ? btn.innerHTML : '';
 
-            // Show loading state
+            // Show active loading state with spinner
             if (btn) {
                 btn.disabled = true;
-                btn.style.opacity = '0.75';
-                btn.innerHTML = '<span>Processing...</span>';
+                btn.style.opacity = '0.85';
+                btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-spinner fa-spin"></i> Processing Your Request...</span>';
             }
 
             // Webhook Endpoints
@@ -1169,21 +1169,37 @@
                     body: JSON.stringify(payload)
                 }).catch(err => console.error('Google Sheets submission error:', err));
 
-                await Promise.all([ghlPromise, sheetsPromise]);
+                // 2.5s timeout race so the user is never stuck waiting on slow external webhook servers
+                const timeoutPromise = new Promise(resolve => setTimeout(resolve, 2500));
+                await Promise.race([
+                    Promise.all([ghlPromise, sheetsPromise]),
+                    timeoutPromise
+                ]);
 
-                // Grant access and redirect to the main presentation page
+                // Show clear success confirmation
+                if (btn) {
+                    btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    btn.style.boxShadow = '0 0 25px rgba(16, 185, 129, 0.5)';
+                    btn.style.color = '#ffffff';
+                    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Success! Unlocking Territory Model...</span>';
+                }
+
+                // Grant access and smoothly redirect after a brief visual confirmation
                 sessionStorage.setItem('solrevibe_access_granted', 'true');
-                window.location.href = '/';
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 750);
 
             } catch (error) {
                 console.error('Submission failed:', error);
-                alert("Something went wrong. Please try again.");
-
                 if (btn) {
                     btn.disabled = false;
                     btn.style.opacity = '1';
+                    btn.style.background = '';
+                    btn.style.boxShadow = '';
                     btn.innerHTML = origContent;
                 }
+                alert("There was an issue submitting. Please try again.");
             }
         });
     }
