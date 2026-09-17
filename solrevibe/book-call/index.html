@@ -23,7 +23,11 @@
             --card-glow: rgba(108, 58, 237, 0.18);
         }
 
-        html {
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -31,14 +35,6 @@
             overflow-x: hidden;
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100vh;
-            height: 100dvh;
             font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--sol-deep);
             background-image: 
@@ -48,31 +44,44 @@
             background-attachment: fixed;
             color: var(--white);
             letter-spacing: 0.015em;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            overflow: hidden;
+        }
+
+        /* Desktop: single screen viewport fit with no window scroll */
+        @media (min-width: 1025px) and (min-height: 700px) {
+            body {
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .booking-container {
+                height: 100vh;
+                height: 100dvh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 0.8rem 1.5rem !important;
+            }
+
+            .split-box {
+                height: calc(100vh - 120px) !important;
+                max-height: 740px !important;
+                min-height: 580px !important;
+            }
         }
 
         .booking-container {
             width: 100%;
-            max-width: 100%;
-            height: 100vh;
-            height: 100dvh;
-            padding: 1rem 1.25rem;
-            padding-top: max(1rem, calc(env(safe-area-inset-top) + 0.4rem));
-            padding-bottom: max(1rem, calc(env(safe-area-inset-bottom) + 0.4rem));
-            padding-left: max(1rem, env(safe-area-inset-left));
-            padding-right: max(1rem, env(safe-area-inset-right));
-            box-sizing: border-box;
+            max-width: 1680px;
             margin: 0 auto;
+            padding: 1rem 1.25rem 2rem;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
         }
 
         /* Top Bar / Mini Brand Accent */
@@ -82,13 +91,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.35rem;
             padding: 0 0.5rem;
             box-sizing: border-box;
         }
 
         .brand-logo-mini {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 900;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -106,32 +115,37 @@
         }
 
         .return-link {
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             color: #94a3b8;
             text-decoration: none;
-            transition: color 0.2s ease;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 7px;
             font-weight: 600;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 5px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .return-link:hover {
             color: var(--energy-cyan);
+            border-color: rgba(0, 229, 255, 0.35);
+            background: rgba(0, 229, 255, 0.08);
+            transform: translateX(2px);
         }
 
         /* Main Headline - identical to landing page proportions */
         .headline {
             text-align: center;
             font-weight: 800;
-            font-size: clamp(16px, 1.65vw, 30px);
+            font-size: clamp(16px, 1.6vw, 28px);
             line-height: 1.3;
             letter-spacing: 0.02em;
-            word-spacing: 0.12em;
-            margin: 0 auto 0.75rem auto;
-            max-width: min(1760px, 100%);
+            margin: 0 auto 0.6rem auto;
+            max-width: 1600px;
             width: 100%;
-            box-sizing: border-box;
             padding: 0 1rem;
             color: var(--white);
         }
@@ -147,7 +161,7 @@
         .split-box-wrapper {
             position: relative;
             width: 100%;
-            max-width: min(1760px, 100%);
+            max-width: 1600px;
             margin: 0 auto;
             z-index: 1;
             box-sizing: border-box;
@@ -159,195 +173,238 @@
             position: relative;
             width: 100%;
             max-width: 1600px;
-            height: clamp(520px, 72vh, 640px);
+            margin: 0 auto;
             border-radius: 20px;
             overflow: hidden;
+            padding: 0;
             border: 1px solid var(--card-border);
             box-shadow: 0 25px 60px rgba(0, 4, 10, 0.8), 0 0 35px var(--card-glow);
             background: linear-gradient(145deg, #0E1320 0%, #080D18 100%);
             box-sizing: border-box;
+            display: flex;
         }
 
         .split-box-inner {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: row;
             align-items: stretch;
-            width: 100%;
-            height: 100%;
+            overflow: hidden;
             box-sizing: border-box;
         }
 
         /* ==========================================================================
-           LEFT PANEL: Vision Control Calendar Embed (54% width, matching landing page)
+           LEFT PANEL: Vision Control Calendar Embed (54% width)
            ========================================================================== */
         .left-booking-panel {
             flex: 0 0 54%;
             min-width: 0;
-            height: 100%;
-            padding: 0.75rem;
+            padding: 0.85rem;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: stretch;
             box-sizing: border-box;
             border-right: 1px solid rgba(108, 58, 237, 0.25);
-            background: rgba(14, 19, 32, 0.85);
+            background: rgba(14, 19, 32, 0.65);
             backdrop-filter: blur(12px);
-            overflow: hidden;
         }
 
-        .calendar-iframe-wrapper {
+        .calendar-card {
             position: relative;
             width: 100%;
             height: 100%;
+            min-height: 540px;
             border-radius: 14px;
             overflow: hidden;
             background: #ffffff;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
         }
 
-        .calendar-iframe-wrapper iframe {
+        .calendar-card iframe {
             width: 100%;
             height: 100%;
+            flex: 1 1 auto;
             border: none;
             display: block;
         }
 
         /* ==========================================================================
-           RIGHT PANEL: Video Placeholder (46% width, matching landing page)
+           RIGHT PANEL: Video Placeholder (46% width, cleanly centered)
            ========================================================================== */
         .right-video-panel {
             flex: 0 0 46%;
             min-width: 0;
-            height: 100%;
-            padding: 1.5rem 1.8rem;
+            padding: 2rem 2.2rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
-            background: rgba(8, 13, 24, 0.65);
+            background: linear-gradient(180deg, rgba(14, 19, 32, 0.4) 0%, rgba(8, 13, 24, 0.8) 100%);
+            gap: 1.25rem;
             text-align: center;
-            overflow: hidden;
         }
 
-        .video-placeholder-card {
+        .video-wrapper-inner {
+            width: 100%;
+            max-width: 580px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* 16:9 Video Placeholder Frame - Matches Landing Page Video Style */
+        .video-placeholder-frame {
             position: relative;
             width: 100%;
-            max-width: 520px;
-            border-radius: 18px;
+            aspect-ratio: 16 / 9;
+            background-color: #000814;
+            border-radius: 16px;
             overflow: hidden;
-            background: radial-gradient(circle at 50% 35%, rgba(108, 58, 237, 0.22) 0%, rgba(14, 19, 32, 0.95) 75%);
-            border: 1px solid rgba(108, 58, 237, 0.35);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(108, 58, 237, 0.15);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2.2rem 1.6rem;
-            box-sizing: border-box;
+            border: 1px solid rgba(108, 58, 237, 0.45);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(108, 58, 237, 0.22);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
         }
 
-        .placeholder-badge {
+        .video-placeholder-frame:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 229, 255, 0.6);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 40px rgba(0, 229, 255, 0.35);
+        }
+
+        .video-bg-art {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(108, 58, 237, 0.28) 0%, rgba(0, 8, 20, 0.96) 75%),
+                radial-gradient(circle at 85% 20%, rgba(255, 47, 144, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 15% 80%, rgba(0, 229, 255, 0.18) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .video-overlay-elements {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 1.5rem;
+        }
+
+        .video-tag-pill {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: 9999px;
             background: rgba(0, 229, 255, 0.12);
             border: 1px solid rgba(0, 229, 255, 0.35);
             color: var(--energy-cyan);
-            font-size: 0.72rem;
+            font-size: 0.74rem;
             font-weight: 800;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            margin-bottom: 1rem;
         }
 
-        .play-icon-glow {
-            width: 76px;
-            height: 76px;
+        .video-play-button {
+            width: 78px;
+            height: 78px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--revibe-magenta) 0%, var(--sol-violet) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.85rem;
             color: #ffffff;
             padding-left: 5px;
             box-shadow: 0 0 35px rgba(255, 47, 144, 0.65), 0 0 70px rgba(108, 58, 237, 0.35);
-            margin-bottom: 1.2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
         }
 
-        .play-icon-glow:hover {
-            transform: scale(1.06);
-            box-shadow: 0 0 45px rgba(255, 47, 144, 0.8), 0 0 90px rgba(108, 58, 237, 0.5);
+        .video-placeholder-frame:hover .video-play-button {
+            transform: scale(1.08);
+            box-shadow: 0 0 45px rgba(255, 47, 144, 0.85), 0 0 90px rgba(108, 58, 237, 0.55);
         }
 
-        .placeholder-title {
-            font-size: clamp(17px, 1.35vw, 22px);
-            font-weight: 800;
-            color: var(--white);
-            margin: 0 0 0.4rem 0;
-            line-height: 1.3;
+        .video-duration-badge {
+            font-size: 0.78rem;
+            color: #cbd5e1;
+            font-weight: 600;
+            letter-spacing: 0.04em;
         }
 
-        .placeholder-desc {
-            font-size: 0.84rem;
-            color: #94a3b8;
-            max-width: 380px;
-            margin: 0 0 1.4rem 0;
-            line-height: 1.5;
-        }
-
-        .feature-pills-row {
+        /* Video CTA Trigger Button - Identical to Landing Page */
+        .video-cta-wrapper {
+            width: 100%;
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+            align-items: center;
             justify-content: center;
         }
 
-        .feature-pill {
+        .video-play-trigger-btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.72rem;
-            color: #cbd5e1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 5px 11px;
-            border-radius: 8px;
-            font-weight: 600;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #FF2F90 0%, #6C3AED 100%);
+            color: #FFFFFF;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            padding: 0.75rem 2rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 47, 144, 0.4), 0 0 20px rgba(108, 58, 237, 0.25);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .feature-pill i {
-            color: var(--energy-cyan);
-            font-size: 0.72rem;
+        .video-play-trigger-btn:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 10px 28px rgba(255, 47, 144, 0.55), 0 0 25px rgba(0, 229, 255, 0.4);
+            border-color: rgba(0, 229, 255, 0.5);
+        }
+
+        .video-caption-text {
+            font-size: 0.84rem;
+            color: #94a3b8;
+            max-width: 480px;
+            margin: 0.25rem 0 0 0;
+            line-height: 1.5;
         }
 
         /* ==========================================================================
            RESPONSIVE MOBILE STYLING
            ========================================================================== */
-        @media (max-width: 980px) {
-            html, body {
-                height: auto;
-                min-height: 100%;
-                overflow-y: auto;
+        @media (max-width: 1024px) {
+            body {
+                overflow-y: auto !important;
+                height: auto !important;
             }
 
             .booking-container {
-                height: auto;
-                min-height: 100vh;
-                min-height: 100dvh;
-                justify-content: flex-start;
-                padding: 1.2rem 1rem 2rem;
-                overflow-y: auto;
+                height: auto !important;
+                padding: 1rem 0.8rem 2.5rem !important;
             }
 
             .split-box {
-                height: auto;
-                max-height: none;
+                height: auto !important;
+                max-height: none !important;
             }
 
             .split-box-inner {
@@ -357,25 +414,46 @@
 
             .left-booking-panel {
                 flex: 1 1 100%;
-                height: 620px;
                 border-right: none;
                 border-bottom: 1px solid rgba(108, 58, 237, 0.25);
-                padding: 0.6rem;
+                padding: 0.75rem;
             }
 
-            .calendar-iframe-wrapper {
-                height: 100%;
-                min-height: 590px;
+            .calendar-card {
+                min-height: 640px;
+            }
+
+            .calendar-card iframe {
+                min-height: 640px;
             }
 
             .right-video-panel {
                 flex: 1 1 100%;
-                height: auto;
-                padding: 1.8rem 1.2rem;
+                padding: 2.2rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .booking-container {
+                padding: 0.8rem 0.5rem 2rem !important;
             }
 
-            .video-placeholder-card {
-                padding: 2.2rem 1.2rem;
+            .left-booking-panel {
+                padding: 0.4rem;
+            }
+
+            .calendar-card {
+                min-height: 600px;
+                border-radius: 10px;
+            }
+
+            .calendar-card iframe {
+                min-height: 600px;
+            }
+
+            .headline {
+                font-size: 18px;
+                padding: 0 0.5rem;
             }
         }
     </style>
@@ -408,7 +486,7 @@
                     
                     <!-- LEFT PANEL: Vision Control Calendar Embed (54% width) -->
                     <div class="left-booking-panel">
-                        <div class="calendar-iframe-wrapper">
+                        <div class="calendar-card">
                             <iframe 
                                 id="visioncontrol-calendar-iframe"
                                 src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7" 
@@ -421,22 +499,34 @@
 
                     <!-- RIGHT PANEL: Video Placeholder (46% width) -->
                     <div class="right-video-panel">
-                        <div class="video-placeholder-card">
-                            <div class="placeholder-badge">
-                                <i class="fa-solid fa-film"></i> Executive Overview
+                        <div class="video-wrapper-inner">
+                            <!-- 16:9 Video Placeholder Frame -->
+                            <div class="video-placeholder-frame" role="button" aria-label="Play presentation video placeholder">
+                                <div class="video-bg-art"></div>
+                                <div class="video-overlay-elements">
+                                    <div class="video-tag-pill">
+                                        <i class="fa-solid fa-play-circle"></i> Executive Presentation
+                                    </div>
+                                    <div class="video-play-button">
+                                        <i class="fa-solid fa-play"></i>
+                                    </div>
+                                    <div class="video-duration-badge">
+                                        <i class="fa-solid fa-circle" style="font-size: 0.5rem; color: #00E5FF; margin-right: 4px;"></i> 12:45 • 4K UHD Master
+                                    </div>
+                                </div>
                             </div>
-                            <div class="play-icon-glow">
-                                <i class="fa-solid fa-play"></i>
+
+                            <!-- Video CTA Button -->
+                            <div class="video-cta-wrapper">
+                                <button type="button" class="video-play-trigger-btn" id="videoPlayTriggerBtn" aria-label="Executive Briefing Video">
+                                    <i class="fa-solid fa-play"></i>
+                                    <span>Watch Executive Briefing</span>
+                                </button>
                             </div>
-                            <h2 class="placeholder-title">Executive Briefing Video</h2>
-                            <p class="placeholder-desc">
+
+                            <p class="video-caption-text">
                                 Watch our in-depth walkthrough on synchronized cellular frequency recharging, clinical studies, and commercial territory ROI.
                             </p>
-                            <div class="feature-pills-row">
-                                <span class="feature-pill"><i class="fa-solid fa-wave-square"></i> PEMF &amp; Terahertz</span>
-                                <span class="feature-pill"><i class="fa-solid fa-shield-halved"></i> 1 Flagship Per ZIP</span>
-                                <span class="feature-pill"><i class="fa-solid fa-bolt"></i> 15-Min Protocols</span>
-                            </div>
                         </div>
                     </div>
 
