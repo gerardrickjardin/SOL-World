@@ -261,7 +261,7 @@
             gap: 16px;
         }
 
-        /* 16:9 Video Placeholder Frame - Matches Landing Page Video Style */
+        /* 16:9 Video Frame */
         .video-placeholder-frame {
             position: relative;
             width: 100%;
@@ -269,83 +269,24 @@
             background-color: #000814;
             border-radius: 16px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             border: 1px solid rgba(108, 58, 237, 0.45);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(108, 58, 237, 0.22);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
+            transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .video-placeholder-frame:hover {
-            transform: translateY(-2px);
             border-color: rgba(0, 229, 255, 0.6);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 40px rgba(0, 229, 255, 0.35);
         }
 
-        .video-bg-art {
+        .video-placeholder-frame iframe {
             position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(circle at 50% 50%, rgba(108, 58, 237, 0.28) 0%, rgba(0, 8, 20, 0.96) 75%),
-                radial-gradient(circle at 85% 20%, rgba(255, 47, 144, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 15% 80%, rgba(0, 229, 255, 0.18) 0%, transparent 50%);
-            z-index: 1;
-        }
-
-        .video-overlay-elements {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            padding: 1.5rem;
-        }
-
-        .video-tag-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 14px;
-            border-radius: 9999px;
-            background: rgba(0, 229, 255, 0.12);
-            border: 1px solid rgba(0, 229, 255, 0.35);
-            color: var(--energy-cyan);
-            font-size: 0.74rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .video-play-button {
-            width: 78px;
-            height: 78px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--revibe-magenta) 0%, var(--sol-violet) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.85rem;
-            color: #ffffff;
-            padding-left: 5px;
-            box-shadow: 0 0 35px rgba(255, 47, 144, 0.65), 0 0 70px rgba(108, 58, 237, 0.35);
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
-        }
-
-        .video-placeholder-frame:hover .video-play-button {
-            transform: scale(1.08);
-            box-shadow: 0 0 45px rgba(255, 47, 144, 0.85), 0 0 90px rgba(108, 58, 237, 0.55);
-        }
-
-        .video-duration-badge {
-            font-size: 0.78rem;
-            color: #cbd5e1;
-            font-weight: 600;
-            letter-spacing: 0.04em;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: inherit;
         }
 
         /* Video CTA Trigger Button - Identical to Landing Page */
@@ -499,30 +440,25 @@
                         </div>
                     </div>
 
-                    <!-- RIGHT PANEL: Video Placeholder (42% width) -->
+                    <!-- RIGHT PANEL: Video Panel (42% width) -->
                     <div class="right-video-panel">
                         <div class="video-wrapper-inner">
-                            <!-- 16:9 Video Placeholder Frame -->
-                            <div class="video-placeholder-frame" role="button" aria-label="Play presentation video placeholder">
-                                <div class="video-bg-art"></div>
-                                <div class="video-overlay-elements">
-                                    <div class="video-tag-pill">
-                                        <i class="fa-solid fa-play-circle"></i> Executive Presentation
-                                    </div>
-                                    <div class="video-play-button">
-                                        <i class="fa-solid fa-play"></i>
-                                    </div>
-                                    <div class="video-duration-badge">
-                                        <i class="fa-solid fa-circle" style="font-size: 0.5rem; color: #00E5FF; margin-right: 4px;"></i> 12:45 • 4K UHD Master
-                                    </div>
-                                </div>
+                            <!-- 16:9 Video Frame -->
+                            <div class="video-placeholder-frame">
+                                <iframe 
+                                    id="youtubePlayer"
+                                    src="https://www.youtube.com/embed/RYwGnhl-lpU?autoplay=1&mute=1&loop=1&playlist=RYwGnhl-lpU&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" 
+                                    title="Steak Video Presentation" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    allowfullscreen>
+                                </iframe>
                             </div>
 
                             <!-- Video CTA Button -->
                             <div class="video-cta-wrapper">
-                                <button type="button" class="video-play-trigger-btn" id="videoPlayTriggerBtn" aria-label="Executive Briefing Video">
-                                    <i class="fa-solid fa-play"></i>
-                                    <span>Watch Executive Briefing</span>
+                                <button type="button" class="video-play-trigger-btn" id="videoPlayTriggerBtn" aria-label="Click to Restart and Unmute">
+                                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                                    <span>Click to Restart and Unmute</span>
                                 </button>
                             </div>
 
@@ -572,6 +508,49 @@
             const queryString = params.toString();
             if (queryString) {
                 iframe.src = `${baseCalendarUrl}?${queryString}`;
+            }
+        })();
+    </script>
+
+    <!-- YouTube Video Player Control (Restart & Unmute / Mute Audio) -->
+    <script>
+        (function() {
+            const videoPlayTriggerBtn = document.getElementById('videoPlayTriggerBtn');
+            const ytIframe = document.getElementById('youtubePlayer');
+            let isAudioMuted = true;
+
+            function sendYouTubeCommand(func, args = '') {
+                if (ytIframe && ytIframe.contentWindow) {
+                    ytIframe.contentWindow.postMessage(JSON.stringify({
+                        event: 'command',
+                        func: func,
+                        args: args
+                    }), '*');
+                }
+            }
+
+            if (ytIframe) {
+                ytIframe.addEventListener('load', function() {
+                    sendYouTubeCommand('mute');
+                    sendYouTubeCommand('playVideo');
+                });
+            }
+
+            if (videoPlayTriggerBtn) {
+                videoPlayTriggerBtn.addEventListener('click', function() {
+                    if (isAudioMuted) {
+                        sendYouTubeCommand('seekTo', [0, true]);
+                        sendYouTubeCommand('unMute');
+                        sendYouTubeCommand('setVolume', [100]);
+                        sendYouTubeCommand('playVideo');
+                        isAudioMuted = false;
+                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i><span>Mute Audio</span>';
+                    } else {
+                        sendYouTubeCommand('mute');
+                        isAudioMuted = true;
+                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-arrow-rotate-left"></i><span>Click to Restart and Unmute</span>';
+                    }
+                });
             }
         })();
     </script>
