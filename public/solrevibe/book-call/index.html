@@ -447,9 +447,10 @@
                             <div class="video-placeholder-frame">
                                 <iframe 
                                     id="youtubePlayer"
-                                    src="https://www.youtube.com/embed/RYwGnhl-lpU?autoplay=1&mute=1&loop=1&playlist=RYwGnhl-lpU&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" 
+                                    src="https://www.youtube.com/embed/RYwGnhl-lpU?autoplay=1&mute=1&loop=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" 
                                     title="SOL REViBE Steak Video" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    referrerpolicy="strict-origin-when-cross-origin"
                                     allowfullscreen>
                                 </iframe>
                             </div>
@@ -531,10 +532,24 @@
 
             if (ytIframe) {
                 ytIframe.addEventListener('load', function() {
+                    ytIframe.contentWindow.postMessage(JSON.stringify({
+                        event: 'listening'
+                    }), '*');
                     sendYouTubeCommand('mute');
                     sendYouTubeCommand('playVideo');
                 });
             }
+
+            // Seamlessly loop video when playback ends
+            window.addEventListener('message', function(e) {
+                try {
+                    const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+                    if (data && data.event === 'infoDelivery' && data.info && data.info.playerState === 0) {
+                        sendYouTubeCommand('seekTo', [0, true]);
+                        sendYouTubeCommand('playVideo');
+                    }
+                } catch (_) {}
+            });
 
             if (videoPlayTriggerBtn) {
                 videoPlayTriggerBtn.addEventListener('click', function() {
