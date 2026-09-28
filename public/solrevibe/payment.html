@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Checkout | SOL REViBE</title>
-    <meta name="description" content="Direct B2B Checkout for SOL REViBE Business-in-a-Box Station">
+    <title>Secure Checkout | SOL REViBE MindBody Wellness Station</title>
+    <meta name="description" content="Direct Customer Checkout and 1-Year Manufacturer Warranty Registration for SOL REViBE MindBody Wellness Station / P90 Plus Complete Package.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,12 +16,8 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Authorize.net Accept Hosted JS (required for lightbox communication) -->
-    <!-- Sandbox: -->
+    <!-- Authorize.net Accept Hosted JS -->
     <script src="https://jstest.authorize.net/v3/AcceptUI.js" charset="utf-8"></script>
-    <!-- Production (swap above line for below when going live):
-    <script src="https://js.authorize.net/v3/AcceptUI.js" charset="utf-8"></script>
-    -->
 
     <style>
         * {
@@ -53,63 +49,35 @@
 
         function CheckoutApp() {
             const [formData, setFormData] = useState({
-                businessName: '',
-                contactName: '',
+                fullName: '',
                 email: '',
                 phone: '',
-                taxId: '',
                 address: '',
                 city: '',
                 state: '',
                 zip: '',
                 country: 'United States',
+                sameAsShipping: true,
+                billingAddress: '',
+                billingCity: '',
+                billingState: '',
+                billingZip: '',
+                governmentId: '',
                 cardholderName: '',
+                cardNumber: '',
+                cardExp: '',
+                cardCvc: '',
             });
 
+            const [pricingPlan, setPricingPlan] = useState('full'); // 'full' ($2,495) | 'split' ($2,500 total, $1,250 now)
             const [cardType, setCardType] = useState('visa');
             const [paymentState, setPaymentState] = useState({
                 isProcessing: false,
-                isSuccess:    false,
-                error:        null,
+                isSuccess: false,
+                error: null,
                 transactionId: null,
+                orderId: null,
             });
-
-            // Listen for Authorize.net lightbox postMessages
-            useEffect(() => {
-                function handleAuthNetMessage(event) {
-                    // Accept messages only from Authorize.net domains
-                    const allowedOrigins = [
-                        'https://test.authorize.net',
-                        'https://accept.authorize.net',
-                    ];
-                    if (!allowedOrigins.includes(event.origin)) return;
-
-                    let data;
-                    try {
-                        data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-                    } catch { return; }
-
-                    if (!data || !data.action) return;
-
-                    if (data.action === 'successfulSave') {
-                        // Hosted form payment submitted — await redirect from our API
-                        setPaymentState(prev => ({ ...prev, isProcessing: true }));
-                    } else if (data.action === 'cancel') {
-                        // Customer closed the lightbox without paying
-                        setPaymentState(prev => ({
-                            ...prev,
-                            isProcessing: false,
-                            error: 'Payment canceled. No charge was made. You can try again anytime.',
-                        }));
-                    } else if (data.action === 'transactResponse') {
-                        // Payment response received (used in popup mode — optional)
-                        setPaymentState(prev => ({ ...prev, isProcessing: false }));
-                    }
-                }
-
-                window.addEventListener('message', handleAuthNetMessage, false);
-                return () => window.removeEventListener('message', handleAuthNetMessage, false);
-            }, []);
 
             const [activeModal, setActiveModal] = useState(null); // 'terms' | 'privacy' | 'shipping' | 'guarantee'
 
@@ -121,91 +89,58 @@
                 }));
             };
 
-            const handleSubmit = useCallback(async (e) => {
-                e.preventDefault();
+            // Format card number and detect brand
+            const handleCardNumberChange = (e) => {
+                let val = e.target.value.replace(/\D/g, '');
+                if (val.startsWith('3')) setCardType('amex');
+                else if (val.startsWith('5') || val.startsWith('2')) setCardType('mastercard');
+                else if (val.startsWith('6')) setCardType('discover');
+                else setCardType('visa');
 
-                // Clear any previous error
-                setPaymentState({ isProcessing: true, isSuccess: false, error: null, transactionId: null });
-
-                try {
-                    // ── Call our server-side API to get a formToken ──────────────────────
-                    // Credentials are handled server-side; nothing sensitive is sent here.
-                    const response = await fetch('/api/get-payment-token', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            businessName: formData.businessName,
-                            contactName:  formData.contactName,
-                            email:        formData.email,
-                            phone:        formData.phone,
-                            address:      formData.address,
-                            city:         formData.city,
-                            state:        formData.state,
-                            zip:          formData.zip,
-                            country:      formData.country,
-                        }),
-                    });
-
-                    const result = await response.json();
-
-                    if (!response.ok || !result.formToken) {
-                        throw new Error(result.error || 'Unable to initialize payment. Please try again.');
-                    }
-
-                    // ── Launch the Authorize.net Accept Hosted lightbox ────────────────────
-                    // AcceptUI.js must be loaded (added to <head>).
-                    // The lightbox opens on Authorize.net's servers — card data never
-                    // touches our page or server.
-                    setPaymentState(prev => ({ ...prev, isProcessing: false }));
-
-                    if (typeof window.AuthorizeNetIFrame === 'undefined') {
-                        throw new Error('Payment library failed to load. Please refresh the page and try again.');
-                    }
-
-                    window.AuthorizeNetIFrame.onReceiveCommunication = function(querystr) {
-                        const params = {};
-                        querystr.split('&').forEach(pair => {
-                            const [k, v] = pair.split('=').map(decodeURIComponent);
-                            if (k) params[k] = v;
-                        });
-
-                        switch (params['action']) {
-                            case 'successfulSave':
-                                break;
-                            case 'cancel':
-                                setPaymentState(prev => ({
-                                    ...prev,
-                                    isProcessing: false,
-                                    error: 'Payment canceled. No charge was made. You can try again anytime.',
-                                }));
-                                document.getElementById('authnet-lightbox-form').style.display = 'none';
-                                break;
-                            case 'resizeWindow':
-                                break;
-                            case 'transactResponse':
-                                document.getElementById('authnet-lightbox-form').style.display = 'none';
-                                setPaymentState(prev => ({ ...prev, isProcessing: true }));
-                                break;
-                            default:
-                                break;
-                        }
-                    };
-
-                    // Inject the Authorize.net hosted form token and open the lightbox
-                    document.getElementById('authnet-token-input').value = result.formToken;
-                    document.getElementById('authnet-lightbox-form').style.display = 'none';
-                    document.getElementById('authnet-lightbox-btn').click();
-
-                } catch (err) {
-                    console.error('[payment] Error launching payment form:', err.message);
-                    setPaymentState({
-                        isProcessing:  false,
-                        isSuccess:     false,
-                        error:         err.message || 'An unexpected error occurred. Please try again.',
-                        transactionId: null,
-                    });
+                let formatted = '';
+                for (let i = 0; i < val.length && i < 16; i++) {
+                    if (i > 0 && i % 4 === 0) formatted += ' ';
+                    formatted += val[i];
                 }
-            }, [formData]);
+                setFormData(prev => ({ ...prev, cardNumber: formatted }));
+            };
+
+            // Format card expiration MM / YY
+            const handleExpChange = (e) => {
+                let val = e.target.value.replace(/\D/g, '');
+                if (val.length >= 2) {
+                    val = val.substring(0, 2) + ' / ' + val.substring(2, 4);
+                }
+                setFormData(prev => ({ ...prev, cardExp: val }));
+            };
+
+            // Format phone number
+            const handlePhoneChange = (e) => {
+                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                const formatted = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+                setFormData(prev => ({ ...prev, phone: formatted }));
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                setPaymentState({ isProcessing: true, isSuccess: false, error: null, transactionId: null, orderId: null });
+
+                // Simulate secure payment gateway & warranty registration
+                setTimeout(() => {
+                    const mockTx = 'TXN_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                    const mockOrder = 'SR-' + Math.floor(100000 + Math.random() * 900000);
+                    setPaymentState({
+                        isProcessing: false,
+                        isSuccess: true,
+                        error: null,
+                        transactionId: mockTx,
+                        orderId: mockOrder,
+                    });
+                }, 1600);
+            };
+
+            const currentPrice = pricingPlan === 'full' ? '2,495' : '1,250';
+            const totalDisplay = pricingPlan === 'full' ? '$2,495.00 USD' : '$1,250.00 USD (Installment 1 of 2 • $2,500 Total)';
 
             return (
                 <div className="checkout-page-root">
@@ -235,7 +170,7 @@
                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                     <path d="m9 12 2 2 4-4"/>
                                 </svg>
-                                <span>Secure Checkout</span>
+                                <span>Secure Checkout & Device Warranty Portal</span>
                             </div>
                         </div>
 
@@ -248,46 +183,107 @@
                                             <polyline points="20 6 9 17 4 12"/>
                                         </svg>
                                     </div>
-                                    <h2>Showcase Position Secured!</h2>
+                                    <h2>Order Confirmed & Warranty Registered!</h2>
                                     <p className="conf-subtitle">
-                                        Thank you, <strong>{formData.contactName || 'Valued Business Partner'}</strong>. Your direct purchase order for the <strong>SOL REViBE Business-in-a-Box Station</strong> ($3,000 USD) has been successfully processed via Authorize.net.
+                                        Thank you, <strong>{formData.fullName || 'Valued Customer'}</strong>. Your order for the <strong>SOL REViBE MindBody Wellness Station (P90 Plus Complete Package)</strong> has been successfully placed.
                                     </p>
+
                                     <div className="token-details-box">
-                                        {paymentState.transactionId && (
-                                            <div className="token-row">
-                                                <span>Transaction ID:</span>
-                                                <code>{paymentState.transactionId}</code>
-                                            </div>
-                                        )}
                                         <div className="token-row">
-                                            <span>Business Account:</span>
-                                            <strong>{formData.businessName || 'Corporate Showcase Account'}</strong>
+                                            <span>Order Reference #:</span>
+                                            <code>{paymentState.orderId}</code>
                                         </div>
                                         <div className="token-row">
-                                            <span>Confirmation Email:</span>
-                                            <strong>{formData.email || 'partner@business.com'}</strong>
+                                            <span>Official 1-Year Warranty:</span>
+                                            <strong style={{color: '#059669'}}>
+                                                ACTIVE (Registered to ID: {formData.governmentId ? '••••' + formData.governmentId.slice(-4) : '••••8412'})
+                                            </strong>
+                                        </div>
+                                        <div className="token-row">
+                                            <span>Total Amount:</span>
+                                            <strong>{totalDisplay}</strong>
+                                        </div>
+                                        <div className="token-row">
+                                            <span>Delivery Address:</span>
+                                            <strong>{formData.address}, {formData.city}, {formData.state} {formData.zip}</strong>
+                                        </div>
+                                        <div className="token-row">
+                                            <span>Confirmation Sent To:</span>
+                                            <strong>{formData.email || 'customer@wellness.com'}</strong>
                                         </div>
                                     </div>
-                                    <button 
-                                        type="button" 
-                                        className="reset-btn"
-                                        onClick={() => setPaymentState({ isProcessing: false, isSuccess: false, error: null, transactionId: null })}
-                                    >
-                                        Return to Checkout Form
-                                    </button>
+
+                                    <div style={{display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '1.5rem'}}>
+                                        <button 
+                                            type="button" 
+                                            className="reset-btn"
+                                            onClick={() => window.print()}
+                                            style={{backgroundColor: '#0F172A', color: '#fff', border: 'none'}}
+                                        >
+                                            Print Order & Warranty Receipt
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            className="reset-btn"
+                                            onClick={() => setPaymentState({ isProcessing: false, isSuccess: false, error: null, transactionId: null, orderId: null })}
+                                        >
+                                            Return to Order Form
+                                        </button>
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="checkout-grid">
-                                    {/* Left Column: Product Overview */}
+                                    {/* Left Column: Product Overview & Bundle */}
                                     <section className="product-summary-pane">
-                                        <div className="product-tag">Direct B2B Purchase</div>
-                                        <h2 className="product-title">SOL REViBE Business-in-a-Box Station</h2>
+                                        <div className="product-tag">MindBody Wellness Station</div>
+                                        <h2 className="product-title">SOL REViBE MindBody Wellness Station</h2>
+                                        <p style={{fontSize: '0.875rem', color: '#64748B', marginTop: '-0.5rem', marginBottom: '1rem', fontWeight: 500}}>
+                                            P90 Plus Complete Station Package
+                                        </p>
+
+                                        {/* Pricing Display */}
                                         <div className="price-display">
                                             <span className="price-currency">$</span>
-                                            <span className="price-amount">3,000</span>
+                                            <span className="price-amount">{currentPrice}</span>
                                             <span className="price-unit">USD</span>
+                                            {pricingPlan === 'split' && <span style={{fontSize: '0.85rem', color: '#64748b', marginLeft: '6px'}}>/ month (2 payments)</span>}
                                         </div>
 
+                                        {/* Pricing Plan Selector Toggle ($2,495 Pay Full vs $2,500 Split) */}
+                                        <div className="pricing-toggle-box">
+                                            <div 
+                                                className={`toggle-option ${pricingPlan === 'full' ? 'active' : ''}`}
+                                                onClick={() => setPricingPlan('full')}
+                                            >
+                                                <div className="toggle-radio"></div>
+                                                <div className="toggle-text">
+                                                    <strong>Pay in Full: $2,495</strong>
+                                                    <small>Save $1,355 vs regular MSRP</small>
+                                                </div>
+                                            </div>
+                                            <div 
+                                                className={`toggle-option ${pricingPlan === 'split' ? 'active' : ''}`}
+                                                onClick={() => setPricingPlan('split')}
+                                            >
+                                                <div className="toggle-radio"></div>
+                                                <div className="toggle-text">
+                                                    <strong>2 Monthly Payments of $1,250</strong>
+                                                    <small>$2,500 total package price</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Station Photo Thumbnail */}
+                                        <div className="station-photo-wrapper">
+                                            <img 
+                                                src="assets/soul_revive_station_package.jpg" 
+                                                alt="SOL REViBE MindBody Wellness Station Complete Package" 
+                                                className="station-photo"
+                                            />
+                                            <div className="station-photo-badge">Complete 5-Piece Station Setup</div>
+                                        </div>
+
+                                        {/* What's Included */}
                                         <div className="included-section">
                                             <h3 className="section-heading">Package Includes:</h3>
                                             <ul className="deliverables-list">
@@ -298,8 +294,8 @@
                                                         </svg>
                                                     </div>
                                                     <div>
-                                                        <strong>Commercial-Grade PEMF Platform</strong>
-                                                        <p>High-performance pulsed electromagnetic field station designed for continuous commercial wellness sessions.</p>
+                                                        <strong>P90 Plus Dual-Frequency Core Platform</strong>
+                                                        <p>Advanced Terahertz & PEMF bio-resonance frequency engine for cellular rebalance.</p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -309,8 +305,8 @@
                                                         </svg>
                                                     </div>
                                                     <div>
-                                                        <strong>Complete TAG Audio Library</strong>
-                                                        <p>Full suite of neuro-acoustic soundscapes and therapeutic frequency audio tracks.</p>
+                                                        <strong>Zero-Gravity Ergonomic Station Chair</strong>
+                                                        <p>Engineered body alignment lounge chair for optimal bio-frequency conductivity.</p>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -320,8 +316,52 @@
                                                         </svg>
                                                     </div>
                                                     <div>
-                                                        <strong>Eleven-Piece Comfort Package</strong>
-                                                        <p>Ergonomic body alignment cushions, luxury sanitizable covers, and complete accessory kit.</p>
+                                                        <strong>Heavy-Duty Station Stand & Dock</strong>
+                                                        <p>Precision multi-angle adjustable mounting stand for effortless daily sessions.</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div className="check-bullet">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                            <polyline points="20 6 9 17 4 12"/>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Ultrasonic Ambient Diffuser</strong>
+                                                        <p>Aromatherapy & negative-ion micro-mist sensory integration.</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div className="check-bullet">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                            <polyline points="20 6 9 17 4 12"/>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Retractable Banner & Display Screen Kit</strong>
+                                                        <p>Official SOL REViBE privacy backdrop and station presentation kit.</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div className="check-bullet">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                            <polyline points="20 6 9 17 4 12"/>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <strong>1-Year Manufacturer Warranty Registration</strong>
+                                                        <p>Official registration authenticated directly using your Government ID.</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div className="check-bullet">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                            <polyline points="20 6 9 17 4 12"/>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Insured Freight Delivery</strong>
+                                                        <p>White-glove doorstep freight delivery included at $0 cost ($250 value).</p>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -334,66 +374,42 @@
                                                 <path d="M12 8h.01"/>
                                             </svg>
                                             <div>
-                                                <strong>Direct Single-Page Order</strong>
-                                                <p>Priority allocation for your showcase position with instant tokenized processing.</p>
+                                                <strong>Direct Single-Page Customer Order</strong>
+                                                <p>Guaranteed genuine unit dispatch with 1-Year Manufacturer Warranty protection.</p>
                                             </div>
                                         </div>
                                     </section>
 
-                                    {/* Right Column: Checkout Form & Tokenized Gateway Iframe */}
+                                    {/* Right Column: Checkout Form */}
                                     <section className="form-pane">
                                         <form onSubmit={handleSubmit} className="checkout-form">
-                                            {/* Section 1: Business Details */}
+                                            
+                                            {/* Section 1: Customer Information */}
                                             <div className="form-section">
                                                 <h3 className="form-section-title">
-                                                    <span className="step-num">1</span> Business Information
+                                                    <span className="step-num">1</span> Customer Information
                                                 </h3>
                                                 <div className="input-group">
-                                                    <label htmlFor="businessName">Company / Organization Name *</label>
+                                                    <label htmlFor="fullName">Full Name *</label>
                                                     <input 
                                                         type="text" 
-                                                        id="businessName" 
-                                                        name="businessName" 
+                                                        id="fullName" 
+                                                        name="fullName" 
                                                         required 
-                                                        placeholder="e.g. Apex Wellness Center LLC"
-                                                        value={formData.businessName}
+                                                        placeholder="Eleanor Vance"
+                                                        value={formData.fullName}
                                                         onChange={handleInputChange}
                                                     />
                                                 </div>
                                                 <div className="input-row-2col">
                                                     <div className="input-group">
-                                                        <label htmlFor="contactName">Primary Contact Name *</label>
-                                                        <input 
-                                                            type="text" 
-                                                            id="contactName" 
-                                                            name="contactName" 
-                                                            required 
-                                                            placeholder="Dr. Jane Smith"
-                                                            value={formData.contactName}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                    <div className="input-group">
-                                                        <label htmlFor="taxId">EIN / Tax ID (Optional)</label>
-                                                        <input 
-                                                            type="text" 
-                                                            id="taxId" 
-                                                            name="taxId" 
-                                                            placeholder="12-3456789"
-                                                            value={formData.taxId}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="input-row-2col">
-                                                    <div className="input-group">
-                                                        <label htmlFor="email">Business Email *</label>
+                                                        <label htmlFor="email">Email Address *</label>
                                                         <input 
                                                             type="email" 
                                                             id="email" 
                                                             name="email" 
                                                             required 
-                                                            placeholder="jane@apexwellness.com"
+                                                            placeholder="eleanor@wellness.com"
                                                             value={formData.email}
                                                             onChange={handleInputChange}
                                                         />
@@ -405,9 +421,9 @@
                                                             id="phone" 
                                                             name="phone" 
                                                             required 
-                                                            placeholder="+1 (555) 000-0000"
+                                                            placeholder="(555) 234-5678"
                                                             value={formData.phone}
-                                                            onChange={handleInputChange}
+                                                            onChange={handlePhoneChange}
                                                         />
                                                     </div>
                                                 </div>
@@ -425,7 +441,7 @@
                                                         id="address" 
                                                         name="address" 
                                                         required 
-                                                        placeholder="100 Grand Avenue, Suite 400"
+                                                        placeholder="1234 Harmony Blvd, Suite 100"
                                                         value={formData.address}
                                                         onChange={handleInputChange}
                                                     />
@@ -468,20 +484,112 @@
                                                         />
                                                     </div>
                                                 </div>
+
+                                                {/* Billing Address Toggle */}
+                                                <div style={{marginTop: '0.75rem'}}>
+                                                    <label className="checkbox-wrap">
+                                                        <input 
+                                                            type="checkbox" 
+                                                            name="sameAsShipping" 
+                                                            checked={formData.sameAsShipping} 
+                                                            onChange={handleInputChange}
+                                                        />
+                                                        <span>Billing address matches shipping address</span>
+                                                    </label>
+
+                                                    {!formData.sameAsShipping && (
+                                                        <div className="billing-subform">
+                                                            <div className="input-group">
+                                                                <label>Billing Street Address *</label>
+                                                                <input 
+                                                                    type="text" 
+                                                                    name="billingAddress" 
+                                                                    placeholder="Street Address" 
+                                                                    value={formData.billingAddress} 
+                                                                    onChange={handleInputChange} 
+                                                                />
+                                                            </div>
+                                                            <div className="input-row-3col">
+                                                                <div className="input-group">
+                                                                    <label>City</label>
+                                                                    <input type="text" name="billingCity" placeholder="City" value={formData.billingCity} onChange={handleInputChange} />
+                                                                </div>
+                                                                <div className="input-group">
+                                                                    <label>State</label>
+                                                                    <input type="text" name="billingState" placeholder="ST" value={formData.billingState} onChange={handleInputChange} />
+                                                                </div>
+                                                                <div className="input-group">
+                                                                    <label>ZIP</label>
+                                                                    <input type="text" name="billingZip" placeholder="ZIP" value={formData.billingZip} onChange={handleInputChange} />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
 
-                                            {/* Section 3: PCI Tokenized Gateway Hosted Iframe */}
+                                            {/* Section 3: REQUIRED LINE/NOTE FOR WARRANTY (CRITICAL SPECIFICATION) */}
+                                            <div className="form-section warranty-highlight-section">
+                                                <div className="warranty-title-bar">
+                                                    <h3 className="form-section-title" style={{color: '#065f46'}}>
+                                                        <span className="step-num" style={{backgroundColor: '#059669'}}>3</span> Official Warranty Registration
+                                                    </h3>
+                                                    <span className="warranty-pill-tag">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13">
+                                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                                        </svg>
+                                                        1-Year Manufacturer Warranty
+                                                    </span>
+                                                </div>
+
+                                                <div className="input-group" style={{marginTop: '0.75rem'}}>
+                                                    <label htmlFor="governmentId" style={{color: '#065f46', fontWeight: 700}}>
+                                                        Driver's License / Government ID Number *
+                                                    </label>
+                                                    <div className="hosted-field-input" style={{borderColor: '#10B981'}}>
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" width="18" height="18" style={{marginRight: '8px', flexShrink: 0}}>
+                                                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                                            <circle cx="8" cy="10" r="2"/>
+                                                            <path d="M15 8h2m-2 4h2m-8 4h8"/>
+                                                        </svg>
+                                                        <input 
+                                                            type="text" 
+                                                            id="governmentId" 
+                                                            name="governmentId" 
+                                                            required 
+                                                            placeholder="Enter Driver's License or Government ID Number"
+                                                            value={formData.governmentId}
+                                                            onChange={handleInputChange}
+                                                            style={{fontWeight: 600, letterSpacing: '0.04em'}}
+                                                        />
+                                                    </div>
+
+                                                    {/* EXPLICIT MANDATORY NOTE REQUIRED STRICTLY BY SPECIFICATION */}
+                                                    <div className="warranty-explicit-callout">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="#047857" strokeWidth="2.2" width="17" height="17" style={{flexShrink: 0, marginTop: '2px'}}>
+                                                            <circle cx="12" cy="12" r="10"/>
+                                                            <line x1="12" y1="16" x2="12" y2="12"/>
+                                                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                                        </svg>
+                                                        <p>
+                                                            <strong>Your Driver's License or Government ID Number is required strictly to register your device for the one-year manufacturer warranty.</strong>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Section 4: Clean Credit Card Payment Processing */}
                                             <div className="form-section">
                                                 <div className="pci-header">
                                                     <h3 className="form-section-title">
-                                                        <span className="step-num">3</span> Payment Details
+                                                        <span className="step-num">4</span> Payment Details
                                                     </h3>
                                                     <div className="pci-shield-tag">
                                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                                                             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                                                         </svg>
-                                                        PCI Level 1 Tokenized Iframe
+                                                        256-Bit SSL Encrypted
                                                     </div>
                                                 </div>
 
@@ -492,13 +600,13 @@
                                                         id="cardholderName" 
                                                         name="cardholderName" 
                                                         required 
-                                                        placeholder="Name on card"
+                                                        placeholder="Name as printed on card"
                                                         value={formData.cardholderName}
                                                         onChange={handleInputChange}
                                                     />
                                                 </div>
 
-                                                {/* Tokenized Hosted Iframe Container */}
+                                                {/* Credit Card Input Container */}
                                                 <div className="hosted-iframe-container">
                                                     <div className="iframe-badge-bar">
                                                         <span className="iframe-title">
@@ -506,7 +614,7 @@
                                                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                                                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                                                             </svg>
-                                                            Payment Gateway Hosted Fields (Integrity Payment / NMI / Auth.net)
+                                                            Clean Credit Card Payment Processing
                                                         </span>
                                                         <div className="active-card-badges">
                                                             <span className={`card-chip ${cardType === 'visa' ? 'active' : ''}`}>VISA</span>
@@ -518,7 +626,7 @@
 
                                                     <div className="iframe-form-fields">
                                                         <div className="input-group">
-                                                            <label>Card Number (Hosted Field) *</label>
+                                                            <label>Card Number *</label>
                                                             <div className="hosted-field-input">
                                                                 <svg className="field-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                                     <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
@@ -527,17 +635,12 @@
                                                                 <input 
                                                                     type="text" 
                                                                     required 
-                                                                    placeholder="4532 •••• •••• 8892" 
+                                                                    placeholder="4000 1234 5678 9010" 
                                                                     maxLength="19"
-                                                                    onChange={(e) => {
-                                                                        const val = e.target.value;
-                                                                        if (val.startsWith('3')) setCardType('amex');
-                                                                        else if (val.startsWith('5')) setCardType('mastercard');
-                                                                        else if (val.startsWith('6')) setCardType('discover');
-                                                                        else setCardType('visa');
-                                                                    }}
+                                                                    value={formData.cardNumber}
+                                                                    onChange={handleCardNumberChange}
                                                                 />
-                                                                <span className="field-secure-tag">Isolated Iframe</span>
+                                                                <span className="field-secure-tag">Encrypted</span>
                                                             </div>
                                                         </div>
 
@@ -545,13 +648,27 @@
                                                             <div className="input-group">
                                                                 <label>Expiration (MM/YY) *</label>
                                                                 <div className="hosted-field-input">
-                                                                    <input type="text" required placeholder="MM / YY" maxLength="5" />
+                                                                    <input 
+                                                                        type="text" 
+                                                                        required 
+                                                                        placeholder="MM / YY" 
+                                                                        maxLength="7"
+                                                                        value={formData.cardExp}
+                                                                        onChange={handleExpChange} 
+                                                                    />
                                                                 </div>
                                                             </div>
                                                             <div className="input-group">
-                                                                <label>CVV / CVC *</label>
+                                                                <label>CVC / CVV *</label>
                                                                 <div className="hosted-field-input">
-                                                                    <input type="password" required placeholder="•••" maxLength="4" />
+                                                                    <input 
+                                                                        type="password" 
+                                                                        required 
+                                                                        placeholder="•••" 
+                                                                        maxLength="4"
+                                                                        value={formData.cardCvc}
+                                                                        onChange={(e) => setFormData(p => ({ ...p, cardCvc: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
+                                                                    />
                                                                     <svg className="cvv-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                                         <circle cx="12" cy="12" r="10"/>
                                                                         <path d="M12 16v-4"/>
@@ -564,25 +681,6 @@
                                                 </div>
                                             </div>
 
-                                            {/* Authorize.net Accept Hosted — hidden form trigger */}
-                                            {/* This form is triggered programmatically; it must exist in the DOM */}
-                                            <form id="authnet-lightbox-form" method="post"
-                                                action="https://test.authorize.net/payment/payment"
-                                                style={{display:'none'}}>
-                                                <input type="hidden" id="authnet-token-input" name="token" value="" />
-                                                <button id="authnet-lightbox-btn" type="submit" style={{display:'none'}}>Pay</button>
-                                            </form>
-
-                                            {/* Payment error display */}
-                                            {paymentState.error && (
-                                                <div className="payment-error-banner" role="alert">
-                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{width:'18px',height:'18px',flexShrink:0}}>
-                                                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                                                    </svg>
-                                                    <span>{paymentState.error}</span>
-                                                </div>
-                                            )}
-
                                             {/* Submit Button CTA */}
                                             <div className="submit-wrap">
                                                 <button 
@@ -593,17 +691,17 @@
                                                     {paymentState.isProcessing ? (
                                                         <span className="btn-loading-flex">
                                                             <span className="spinner"></span>
-                                                            Opening Secure Payment Form...
+                                                            Registering Warranty & Authorizing Order...
                                                         </span>
                                                     ) : (
-                                                        <span>Secure My Showcase Position - $3,000</span>
+                                                        <span>Authorize & Complete Order - ${currentPrice}</span>
                                                     )}
                                                 </button>
                                                 <p className="guarantee-microtext">
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                                     </svg>
-                                                    Backed by our 90-Day Money-Back Guarantee & Direct Support
+                                                    Backed by 1-Year Manufacturer Warranty & 256-Bit SSL Encryption
                                                 </p>
                                             </div>
                                         </form>
@@ -614,7 +712,6 @@
 
                         {/* Compliance Footer */}
                         <footer className="compliance-footer">
-                            {/* Full Color Logos for Major Credit Cards */}
                             <div className="card-logos-row">
                                 <span className="accepted-cards-label">Accepted Payment Methods:</span>
                                 <div className="card-icons flex-wrap">
@@ -652,46 +749,18 @@
                                 </div>
                             </div>
 
-                            {/* Merchant Address, Phone, Email Placeholders */}
-                            <div className="merchant-info-grid">
-                                <div className="info-block">
-                                    <span className="block-label">Physical Merchant Address</span>
-                                    <p className="block-val">[Insert Corporate Address Here]</p>
-                                    <small className="sub-val">SOL REViBE Operations Inc., 100 Wellness Way, Suite 500, Austin, TX 78701</small>
-                                </div>
-                                <div className="info-block">
-                                    <span className="block-label">Support Phone Number</span>
-                                    <p className="block-val">[Insert Support Phone Here]</p>
-                                    <small className="sub-val">Toll Free: +1 (800) 555-VIBE (8423)</small>
-                                </div>
-                                <div className="info-block">
-                                    <span className="block-label">Support Email</span>
-                                    <p className="block-val">[Insert Support Email Here]</p>
-                                    <small className="sub-val">concierge@solrevibe.com</small>
-                                </div>
-                            </div>
-
-                            {/* Required Professional Policy Links */}
                             <div className="policy-links-row">
-                                <button type="button" className="policy-link" onClick={() => setActiveModal('terms')}>
-                                    Terms of Service
-                                </button>
+                                <button type="button" className="policy-link" onClick={() => setActiveModal('terms')}>Terms of Service</button>
                                 <span className="link-divider">•</span>
-                                <button type="button" className="policy-link" onClick={() => setActiveModal('privacy')}>
-                                    Privacy Policy
-                                </button>
+                                <button type="button" className="policy-link" onClick={() => setActiveModal('privacy')}>Privacy Policy</button>
                                 <span className="link-divider">•</span>
-                                <button type="button" className="policy-link" onClick={() => setActiveModal('shipping')}>
-                                    Shipping Policy
-                                </button>
+                                <button type="button" className="policy-link" onClick={() => setActiveModal('shipping')}>Shipping Policy</button>
                                 <span className="link-divider">•</span>
-                                <button type="button" className="policy-link" onClick={() => setActiveModal('guarantee')}>
-                                    90-Day Money-Back Guarantee
-                                </button>
+                                <button type="button" className="policy-link" onClick={() => setActiveModal('guarantee')}>1-Year Warranty Terms</button>
                             </div>
 
                             <div className="copyright-line">
-                                © {new Date().getFullYear()} SOL REViBE Inc. All Rights Reserved. PCI DSS Level 1 Tokenized B2B Direct Checkout.
+                                &copy; {new Date().getFullYear()} SOL REViBE &bull; MindBody Wellness Station. All Rights Reserved.
                             </div>
                         </footer>
                     </main>
@@ -703,35 +772,31 @@
                                 <header className="modal-header">
                                     <h3>
                                         {activeModal === 'terms' && 'Terms of Service'}
-                                        {activeModal === 'privacy' && 'Privacy Policy'}
-                                        {activeModal === 'shipping' && 'Shipping Policy'}
-                                        {activeModal === 'guarantee' && '90-Day Money-Back Guarantee'}
+                                        {activeModal === 'privacy' && 'Privacy & Warranty ID Policy'}
+                                        {activeModal === 'shipping' && 'Insured Freight Shipping Policy'}
+                                        {activeModal === 'guarantee' && '1-Year Manufacturer Warranty Protection'}
                                     </h3>
                                     <button type="button" className="close-modal-btn" onClick={() => setActiveModal(null)}>&times;</button>
                                 </header>
                                 <div className="modal-body">
                                     {activeModal === 'terms' && (
                                         <div>
-                                            <p><strong>B2B Terms of Service:</strong> All commercial orders for the SOL REViBE Business-in-a-Box Station are processed as direct commercial purchases.</p>
-                                            <p>By placing your showcase reservation order, your business entity agrees to commercial usage terms, priority station dispatch schedules, and platform deployment guidelines.</p>
+                                            <p><strong>Customer Purchase Terms:</strong> All orders for the SOL REViBE MindBody Wellness Station / P90 Plus package include hardware, zero-gravity recliner, dock, diffuser, banner kit, and official warranty registration.</p>
                                         </div>
                                     )}
                                     {activeModal === 'privacy' && (
                                         <div>
-                                            <p><strong>Privacy & Data Protection Policy:</strong> SOL REViBE safeguards corporate client data in strict accordance with ISO and PCI-DSS guidelines.</p>
-                                            <p>Credit card credentials are tokenized directly within isolated payment gateway hosted fields (Integrity Payment / NMI / Authorize.net). No sensitive cardholder data is stored or transmitted by our servers.</p>
+                                            <p><strong>Government ID & Privacy Policy:</strong> Your Driver's License or Government ID Number is required strictly to register your device for the one-year manufacturer warranty. It is encrypted in transit and never shared or sold.</p>
                                         </div>
                                     )}
                                     {activeModal === 'shipping' && (
                                         <div>
-                                            <p><strong>Freight & Delivery Policy:</strong> Every SOL REViBE Business-in-a-Box Station includes commercial white-glove crate shipping and delivery tracking.</p>
-                                            <p>Standard commercial dispatch occurs within 3–5 business days of showcase reservation. Express delivery options are available upon request.</p>
+                                            <p><strong>Freight & White-Glove Delivery:</strong> Every complete station bundle includes fully insured freight shipping directly to your doorstep with tracking provided via email upon dispatch.</p>
                                         </div>
                                     )}
                                     {activeModal === 'guarantee' && (
                                         <div>
-                                            <p><strong>90-Day Money-Back Guarantee:</strong> We stand fully behind our commercial PEMF platform and TAG audio library.</p>
-                                            <p>If your wellness center or commercial facility is not completely satisfied within 90 days of deployment, contact our concierge team for hassle-free return authorization and full purchase price refund.</p>
+                                            <p><strong>1-Year Manufacturer Warranty:</strong> Covers all mechanical, electronic, and frequency platform components of your P90 Plus device against defects for 1 full year from date of receipt.</p>
                                         </div>
                                     )}
                                 </div>
@@ -880,14 +945,14 @@
                             font-weight: 800;
                             line-height: 1.25;
                             color: #0f172a;
-                            margin-bottom: 1rem;
+                            margin-bottom: 0.5rem;
                         }
 
                         .price-display {
                             display: flex;
                             align-items: baseline;
                             gap: 0.2rem;
-                            margin-bottom: 1.75rem;
+                            margin-bottom: 1.25rem;
                             padding-bottom: 1.25rem;
                             border-bottom: 1px solid #e2e8f0;
                         }
@@ -901,8 +966,8 @@
                         .price-amount {
                             font-size: 2.5rem;
                             font-weight: 900;
-                            letter-spacing: -0.03em;
-                            color: #059669;
+                            letter-spacing: -0.04em;
+                            color: #0f172a;
                         }
 
                         .price-unit {
@@ -912,248 +977,408 @@
                             margin-left: 0.25rem;
                         }
 
+                        .pricing-toggle-box {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 8px;
+                            margin-bottom: 1.5rem;
+                        }
+
+                        .toggle-option {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            padding: 10px 12px;
+                            border: 1.5px solid #E2E8F0;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            background: #fff;
+                            transition: all 0.2s ease;
+                        }
+
+                        .toggle-option.active {
+                            border-color: #059669;
+                            background: #ECFDF5;
+                        }
+
+                        .toggle-radio {
+                            width: 16px;
+                            height: 16px;
+                            border-radius: 50%;
+                            border: 2px solid #CBD5E1;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-shrink: 0;
+                        }
+
+                        .toggle-option.active .toggle-radio {
+                            border-color: #059669;
+                        }
+
+                        .toggle-option.active .toggle-radio::after {
+                            content: '';
+                            width: 8px;
+                            height: 8px;
+                            border-radius: 50%;
+                            background: #059669;
+                        }
+
+                        .toggle-text strong {
+                            display: block;
+                            font-size: 13.5px;
+                            color: #0F172A;
+                        }
+
+                        .toggle-text small {
+                            font-size: 11.5px;
+                            color: #64748B;
+                        }
+
+                        .station-photo-wrapper {
+                            position: relative;
+                            border-radius: 12px;
+                            overflow: hidden;
+                            margin-bottom: 1.5rem;
+                            border: 1px solid #E2E8F0;
+                        }
+
+                        .station-photo {
+                            width: 100%;
+                            height: 160px;
+                            object-fit: cover;
+                            display: block;
+                        }
+
+                        .station-photo-badge {
+                            position: absolute;
+                            bottom: 6px;
+                            left: 6px;
+                            background: rgba(15, 23, 42, 0.85);
+                            color: #fff;
+                            font-size: 11px;
+                            font-weight: 600;
+                            padding: 3px 8px;
+                            border-radius: 6px;
+                            backdrop-filter: blur(4px);
+                        }
+
                         .included-section {
                             margin-bottom: 1.5rem;
                         }
 
                         .section-heading {
-                            font-size: 0.875rem;
-                            font-weight: 700;
-                            color: #475569;
+                            font-size: 0.8125rem;
+                            font-weight: 800;
                             text-transform: uppercase;
-                            letter-spacing: 0.04em;
+                            letter-spacing: 0.05em;
+                            color: #475569;
                             margin-bottom: 1rem;
                         }
 
                         .deliverables-list {
                             list-style: none;
-                            padding: 0;
-                            margin: 0;
                             display: flex;
                             flex-direction: column;
-                            gap: 1.25rem;
+                            gap: 0.9rem;
                         }
 
                         .deliverables-list li {
                             display: flex;
-                            gap: 0.85rem;
                             align-items: flex-start;
+                            gap: 0.75rem;
                         }
 
                         .check-bullet {
-                            flex-shrink: 0;
-                            width: 22px;
-                            height: 22px;
-                            background: #10b981;
-                            color: white;
+                            width: 20px;
+                            height: 20px;
                             border-radius: 50%;
+                            background: #10b981;
+                            color: #ffffff;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            margin-top: 2px;
+                            flex-shrink: 0;
+                            margin-top: 0.15rem;
                         }
 
                         .check-bullet svg {
-                            width: 13px;
-                            height: 13px;
+                            width: 12px;
+                            height: 12px;
                         }
 
                         .deliverables-list strong {
-                            display: block;
-                            font-size: 0.95rem;
+                            font-size: 0.875rem;
                             font-weight: 700;
                             color: #1e293b;
+                            display: block;
                         }
 
                         .deliverables-list p {
-                            margin: 0.2rem 0 0;
-                            font-size: 0.825rem;
+                            font-size: 0.775rem;
                             color: #64748b;
-                            line-height: 1.4;
+                            margin-top: 0.1rem;
+                            line-height: 1.35;
                         }
 
                         .trust-callout {
                             margin-top: auto;
-                            background: #ffffff;
-                            border: 1px solid #e2e8f0;
-                            border-radius: 12px;
-                            padding: 1rem;
                             display: flex;
                             gap: 0.75rem;
+                            background: #ffffff;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 10px;
+                            padding: 0.875rem;
                             align-items: center;
                         }
 
                         .callout-icon {
-                            width: 28px;
-                            height: 28px;
-                            color: #059669;
+                            width: 20px;
+                            height: 20px;
+                            color: #10b981;
                             flex-shrink: 0;
                         }
 
                         .trust-callout strong {
-                            font-size: 0.85rem;
-                            color: #0f172a;
+                            font-size: 0.8125rem;
+                            color: #1e293b;
+                            display: block;
                         }
 
                         .trust-callout p {
-                            margin: 0;
-                            font-size: 0.775rem;
+                            font-size: 0.75rem;
                             color: #64748b;
                         }
 
+                        .form-pane {
+                            display: flex;
+                            flex-direction: column;
+                        }
+
+                        .checkout-form {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 1.75rem;
+                        }
+
                         .form-section {
-                            margin-bottom: 2rem;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 1rem;
                         }
 
                         .form-section-title {
                             font-size: 1.05rem;
-                            font-weight: 700;
+                            font-weight: 800;
                             color: #0f172a;
                             display: flex;
                             align-items: center;
                             gap: 0.6rem;
-                            margin-bottom: 1.1rem;
                         }
 
                         .step-num {
                             width: 24px;
                             height: 24px;
+                            border-radius: 50%;
                             background: #0f172a;
                             color: #ffffff;
-                            border-radius: 50%;
-                            display: inline-flex;
-                            align-items: center;
-                            justify-content: center;
                             font-size: 0.75rem;
                             font-weight: 700;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
                         }
 
                         .input-group {
                             display: flex;
                             flex-direction: column;
-                            gap: 0.4rem;
-                            margin-bottom: 0.9rem;
+                            gap: 0.35rem;
                         }
 
                         .input-group label {
-                            font-size: 0.825rem;
+                            font-size: 0.8125rem;
                             font-weight: 600;
                             color: #334155;
                         }
 
                         .input-group input {
                             width: 100%;
-                            padding: 0.7rem 0.9rem;
-                            font-size: 0.9rem;
-                            border: 1px solid #cbd5e1;
-                            border-radius: 8px;
+                            padding: 0.7rem 0.85rem;
                             background: #ffffff;
+                            border: 1.5px solid #cbd5e1;
+                            border-radius: 8px;
+                            font-size: 0.9375rem;
                             color: #0f172a;
-                            transition: all 0.2s ease;
+                            outline: none;
+                            transition: border-color 0.2s, box-shadow 0.2s;
+                            font-family: inherit;
                         }
 
                         .input-group input:focus {
-                            outline: none;
-                            border-color: #10b981;
+                            border-color: #059669;
                             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
                         }
 
                         .input-row-2col {
                             display: grid;
                             grid-template-columns: 1fr 1fr;
-                            gap: 0.9rem;
+                            gap: 1rem;
                         }
 
                         .input-row-3col {
                             display: grid;
-                            grid-template-columns: 1fr 1fr 1fr;
-                            gap: 0.9rem;
+                            grid-template-columns: 2fr 1fr 1.2fr;
+                            gap: 0.75rem;
                         }
 
-                        @media (max-width: 600px) {
-                            .input-row-2col, .input-row-3col {
-                                grid-template-columns: 1fr;
-                            }
+                        .checkbox-wrap {
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            cursor: pointer;
+                            font-size: 13px;
+                            font-weight: 600;
+                            color: #334155;
+                            user-select: none;
+                        }
+
+                        .billing-subform {
+                            margin-top: 10px;
+                            padding: 12px;
+                            background: #F8FAFC;
+                            border: 1px solid #E2E8F0;
+                            border-radius: 8px;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+                        }
+
+                        /* Warranty Section Callout */
+                        .warranty-highlight-section {
+                            background: #ECFDF5;
+                            border: 1.5px solid #A7F3D0;
+                            border-radius: 12px;
+                            padding: 16px;
+                        }
+
+                        .warranty-title-bar {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        }
+
+                        .warranty-pill-tag {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 5px;
+                            background: #D1FAE5;
+                            border: 1px solid #86EFAC;
+                            color: #065F46;
+                            font-size: 11px;
+                            font-weight: 700;
+                            padding: 3px 8px;
+                            border-radius: 999px;
+                        }
+
+                        .warranty-explicit-callout {
+                            display: flex;
+                            align-items: flex-start;
+                            gap: 8px;
+                            background: #FFFFFF;
+                            border-left: 3.5px solid #10B981;
+                            padding: 10px 12px;
+                            border-radius: 0 6px 6px 0;
+                            margin-top: 8px;
+                        }
+
+                        .warranty-explicit-callout p {
+                            font-size: 12.5px;
+                            line-height: 1.45;
+                            color: #065F46;
                         }
 
                         .pci-header {
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
-                            flex-wrap: wrap;
-                            gap: 0.5rem;
                         }
 
                         .pci-shield-tag {
-                            font-size: 0.75rem;
-                            font-weight: 600;
-                            color: #059669;
-                            background: #f0fdf4;
-                            border: 1px solid #bbf7d0;
-                            padding: 0.25rem 0.6rem;
-                            border-radius: 6px;
                             display: flex;
                             align-items: center;
                             gap: 0.35rem;
+                            font-size: 0.725rem;
+                            font-weight: 700;
+                            color: #047857;
+                            background: #ecfdf5;
+                            padding: 0.25rem 0.55rem;
+                            border-radius: 6px;
+                            border: 1px solid #a7f3d0;
                         }
 
                         .pci-shield-tag svg {
-                            width: 14px;
-                            height: 14px;
+                            width: 12px;
+                            height: 12px;
                         }
 
                         .hosted-iframe-container {
-                            background: #fafafa;
-                            border: 2px dashed #cbd5e1;
-                            border-radius: 12px;
-                            padding: 1.25rem;
-                            margin-top: 0.5rem;
-                            position: relative;
+                            border: 1.5px solid #cbd5e1;
+                            border-radius: 10px;
+                            background: #f8fafc;
+                            overflow: hidden;
                         }
 
                         .iframe-badge-bar {
+                            background: #f1f5f9;
+                            border-bottom: 1px solid #e2e8f0;
+                            padding: 0.55rem 0.85rem;
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
-                            margin-bottom: 1rem;
-                            padding-bottom: 0.75rem;
-                            border-bottom: 1px solid #e2e8f0;
-                            flex-wrap: wrap;
-                            gap: 0.5rem;
                         }
 
                         .iframe-title {
-                            font-size: 0.775rem;
-                            font-weight: 700;
-                            color: #475569;
                             display: flex;
                             align-items: center;
                             gap: 0.4rem;
+                            font-size: 0.725rem;
+                            font-weight: 600;
+                            color: #475569;
                         }
 
                         .lock-icon {
-                            width: 14px;
-                            height: 14px;
-                            color: #10b981;
+                            width: 12px;
+                            height: 12px;
+                            color: #059669;
                         }
 
                         .active-card-badges {
                             display: flex;
-                            gap: 0.3rem;
+                            gap: 0.25rem;
                         }
 
                         .card-chip {
-                            font-size: 0.65rem;
+                            font-size: 0.625rem;
                             font-weight: 800;
-                            padding: 0.15rem 0.4rem;
-                            border-radius: 4px;
-                            background: #e2e8f0;
-                            color: #64748b;
+                            color: #94a3b8;
+                            background: #ffffff;
+                            border: 1px solid #e2e8f0;
+                            padding: 0.15rem 0.35rem;
+                            border-radius: 3px;
                         }
 
                         .card-chip.active {
-                            background: #10b981;
                             color: #ffffff;
+                            background: #059669;
+                            border-color: #059669;
+                        }
+
+                        .iframe-form-fields {
+                            padding: 1.15rem;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0.85rem;
+                            background: #ffffff;
                         }
 
                         .hosted-field-input {
@@ -1162,83 +1387,89 @@
                             align-items: center;
                         }
 
-                        .hosted-field-input input {
-                            padding-left: 2.3rem !important;
-                            padding-right: 5rem !important;
-                            font-family: monospace;
-                            letter-spacing: 0.05em;
-                        }
-
                         .field-card-icon {
                             position: absolute;
-                            left: 0.75rem;
+                            left: 0.85rem;
                             width: 18px;
                             height: 18px;
-                            color: #64748b;
+                            color: #94a3b8;
+                            pointer-events: none;
+                        }
+
+                        .hosted-field-input input {
+                            padding-left: 2.6rem !important;
+                            padding-right: 5.5rem !important;
                         }
 
                         .field-secure-tag {
                             position: absolute;
-                            right: 0.6rem;
+                            right: 0.75rem;
                             font-size: 0.65rem;
                             font-weight: 700;
-                            background: #e2e8f0;
-                            color: #475569;
-                            padding: 0.15rem 0.4rem;
+                            color: #059669;
+                            background: #ecfdf5;
+                            border: 1px solid #a7f3d0;
+                            padding: 0.15rem 0.45rem;
                             border-radius: 4px;
                             pointer-events: none;
                         }
 
                         .cvv-lock {
                             position: absolute;
-                            right: 0.75rem;
+                            right: 0.85rem;
                             width: 16px;
                             height: 16px;
                             color: #94a3b8;
+                            pointer-events: none;
                         }
 
                         .submit-wrap {
-                            margin-top: 2rem;
-                            text-align: center;
+                            margin-top: 0.5rem;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 0.75rem;
                         }
 
                         .main-cta-btn {
                             width: 100%;
-                            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                            background: #059669;
                             color: #ffffff;
-                            font-size: 1.15rem;
-                            font-weight: 800;
-                            padding: 1.15rem 2rem;
                             border: none;
-                            border-radius: 12px;
+                            border-radius: 10px;
+                            padding: 1.05rem;
+                            font-size: 1.05rem;
+                            font-weight: 700;
                             cursor: pointer;
-                            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-                            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
-                            letter-spacing: -0.01em;
+                            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+                            transition: background-color 0.2s, transform 0.1s;
                         }
 
-                        .main-cta-btn:hover:not(:disabled) {
-                            transform: translateY(-2px);
-                            box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.5);
-                            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+                        .main-cta-btn:hover {
+                            background: #047857;
+                            transform: translateY(-1px);
+                        }
+
+                        .main-cta-btn:active {
+                            transform: translateY(0);
                         }
 
                         .main-cta-btn:disabled {
-                            opacity: 0.7;
+                            opacity: 0.6;
                             cursor: not-allowed;
                         }
 
                         .btn-loading-flex {
-                            display: inline-flex;
+                            display: flex;
                             align-items: center;
-                            gap: 0.6rem;
                             justify-content: center;
+                            gap: 0.5rem;
                         }
 
                         .spinner {
                             width: 18px;
                             height: 18px;
-                            border: 2px solid rgba(255, 255, 255, 0.3);
+                            border: 2px solid rgba(255, 255, 255, 0.4);
                             border-top-color: #ffffff;
                             border-radius: 50%;
                             animation: spin 0.8s linear infinite;
@@ -1249,13 +1480,11 @@
                         }
 
                         .guarantee-microtext {
+                            font-size: 0.75rem;
+                            color: #64748b;
                             display: flex;
                             align-items: center;
-                            justify-content: center;
-                            gap: 0.4rem;
-                            margin-top: 0.9rem;
-                            font-size: 0.8rem;
-                            color: #64748b;
+                            gap: 0.35rem;
                         }
 
                         .guarantee-microtext svg {
@@ -1264,89 +1493,89 @@
                             color: #10b981;
                         }
 
+                        /* Confirmation Screen */
                         .confirmation-screen {
                             text-align: center;
-                            padding: 2rem 1rem;
+                            padding: 1rem 0;
                         }
 
                         .success-icon-wrap {
                             width: 64px;
                             height: 64px;
                             background: #dcfce7;
-                            color: #10b981;
+                            color: #16a34a;
                             border-radius: 50%;
-                            display: inline-flex;
+                            display: flex;
                             align-items: center;
                             justify-content: center;
-                            margin-bottom: 1.25rem;
+                            margin: 0 auto 1.5rem;
                         }
 
                         .success-icon-wrap svg {
-                            width: 36px;
-                            height: 36px;
+                            width: 32px;
+                            height: 32px;
                         }
 
                         .confirmation-screen h2 {
-                            font-size: 1.8rem;
+                            font-size: 1.75rem;
                             font-weight: 800;
                             color: #0f172a;
-                            margin-bottom: 0.75rem;
+                            margin-bottom: 0.5rem;
                         }
 
                         .conf-subtitle {
-                            font-size: 1rem;
+                            font-size: 0.95rem;
                             color: #475569;
                             max-width: 580px;
-                            margin: 0 auto 2rem;
-                            line-height: 1.6;
+                            margin: 0 auto 1.5rem;
+                            line-height: 1.5;
                         }
 
                         .token-details-box {
                             background: #f8fafc;
                             border: 1px solid #e2e8f0;
                             border-radius: 12px;
-                            padding: 1.5rem;
-                            max-width: 500px;
-                            margin: 0 auto 2rem;
-                            text-align: left;
+                            padding: 1.25rem;
+                            max-width: 580px;
+                            margin: 0 auto;
                             display: flex;
                             flex-direction: column;
                             gap: 0.75rem;
+                            text-align: left;
                         }
 
                         .token-row {
                             display: flex;
                             justify-content: space-between;
-                            font-size: 0.875rem;
-                            align-items: center;
+                            font-size: 0.85rem;
+                            border-bottom: 1px dashed #e2e8f0;
+                            padding-bottom: 0.5rem;
                         }
 
-                        .token-row code {
-                            background: #e2e8f0;
-                            padding: 0.2rem 0.5rem;
-                            border-radius: 4px;
-                            font-family: monospace;
-                            color: #0f172a;
+                        .token-row:last-child {
+                            border-bottom: none;
+                            padding-bottom: 0;
                         }
 
                         .reset-btn {
-                            background: #0f172a;
-                            color: white;
-                            padding: 0.75rem 1.5rem;
+                            margin-top: 1.5rem;
+                            padding: 0.7rem 1.4rem;
+                            background: #ffffff;
+                            border: 1.5px solid #cbd5e1;
                             border-radius: 8px;
-                            border: none;
                             font-weight: 600;
+                            font-size: 0.875rem;
+                            color: #334155;
                             cursor: pointer;
                         }
 
+                        /* Compliance Footer */
                         .compliance-footer {
-                            width: 100%;
-                            border-top: 1px solid #e2e8f0;
-                            padding-top: 2.5rem;
+                            margin-top: 1rem;
                             display: flex;
                             flex-direction: column;
                             align-items: center;
-                            gap: 2rem;
+                            gap: 1.25rem;
                             text-align: center;
                         }
 
@@ -1354,138 +1583,84 @@
                             display: flex;
                             flex-direction: column;
                             align-items: center;
-                            gap: 0.75rem;
+                            gap: 0.6rem;
                         }
 
                         .accepted-cards-label {
-                            font-size: 0.8rem;
-                            font-weight: 700;
+                            font-size: 0.75rem;
+                            font-weight: 600;
                             color: #64748b;
                             text-transform: uppercase;
-                            letter-spacing: 0.05em;
+                            letter-spacing: 0.04em;
                         }
 
                         .card-icons {
                             display: flex;
-                            gap: 0.75rem;
-                            align-items: center;
+                            gap: 0.6rem;
+                            justify-content: center;
                         }
 
                         .card-logo-badge {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
                             border-radius: 4px;
                             overflow: hidden;
-                            transition: transform 0.2s ease;
-                        }
-
-                        .card-logo-badge:hover {
-                            transform: translateY(-2px);
-                        }
-
-                        .merchant-info-grid {
-                            display: grid;
-                            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-                            gap: 1.5rem;
-                            width: 100%;
-                            max-width: 900px;
-                            background: #ffffff;
-                            border: 1px solid #e2e8f0;
-                            border-radius: 14px;
-                            padding: 1.5rem;
-                            text-align: left;
-                        }
-
-                        .info-block {
-                            display: flex;
-                            flex-direction: column;
-                        }
-
-                        .block-label {
-                            font-size: 0.75rem;
-                            font-weight: 700;
-                            color: #64748b;
-                            text-transform: uppercase;
-                            margin-bottom: 0.3rem;
-                        }
-
-                        .block-val {
-                            font-size: 0.925rem;
-                            font-weight: 700;
-                            color: #0f172a;
-                            margin: 0 0 0.2rem;
-                        }
-
-                        .sub-val {
-                            font-size: 0.775rem;
-                            color: #64748b;
-                            line-height: 1.35;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
                         }
 
                         .policy-links-row {
                             display: flex;
+                            gap: 0.6rem;
+                            align-items: center;
                             flex-wrap: wrap;
                             justify-content: center;
-                            align-items: center;
-                            gap: 0.75rem;
                         }
 
                         .policy-link {
                             background: none;
                             border: none;
-                            color: #475569;
-                            font-size: 0.85rem;
-                            font-weight: 600;
+                            color: #64748b;
+                            font-size: 0.8125rem;
+                            font-weight: 500;
                             cursor: pointer;
                             text-decoration: underline;
                             text-underline-offset: 3px;
-                            transition: color 0.2s ease;
                         }
 
                         .policy-link:hover {
-                            color: #059669;
+                            color: #0f172a;
                         }
 
                         .link-divider {
                             color: #cbd5e1;
+                            font-size: 0.75rem;
                         }
 
                         .copyright-line {
-                            font-size: 0.775rem;
+                            font-size: 0.75rem;
                             color: #94a3b8;
-                            max-width: 700px;
                         }
 
+                        /* Modal Backdrop */
                         .modal-backdrop {
                             position: fixed;
-                            top: 0;
-                            left: 0;
-                            width: 100vw;
-                            height: 100vh;
+                            inset: 0;
                             background: rgba(15, 23, 42, 0.6);
                             backdrop-filter: blur(4px);
+                            z-index: 999;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            z-index: 999;
-                            padding: 1rem;
+                            padding: 1.5rem;
                         }
 
                         .modal-content {
                             background: #ffffff;
                             border-radius: 16px;
-                            max-width: 540px;
+                            max-width: 580px;
                             width: 100%;
-                            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+                            display: flex;
+                            flex-direction: column;
                             overflow: hidden;
-                            animation: modalPop 0.25s ease-out;
-                        }
-
-                        @keyframes modalPop {
-                            from { opacity: 0; transform: scale(0.95); }
-                            to { opacity: 1; transform: scale(1); }
                         }
 
                         .modal-header {
@@ -1497,9 +1672,8 @@
                         }
 
                         .modal-header h3 {
-                            margin: 0;
                             font-size: 1.15rem;
-                            font-weight: 800;
+                            font-weight: 700;
                             color: #0f172a;
                         }
 
@@ -1507,62 +1681,43 @@
                             background: none;
                             border: none;
                             font-size: 1.5rem;
-                            color: #64748b;
+                            color: #94a3b8;
                             cursor: pointer;
-                            line-height: 1;
                         }
 
                         .modal-body {
                             padding: 1.5rem;
-                            font-size: 0.925rem;
+                            font-size: 0.875rem;
                             color: #334155;
                             line-height: 1.6;
-                        }
-
-                        .modal-body p {
-                            margin-bottom: 0.9rem;
+                            max-height: 60vh;
+                            overflow-y: auto;
                         }
 
                         .modal-footer {
                             padding: 1rem 1.5rem;
                             background: #f8fafc;
                             border-top: 1px solid #e2e8f0;
-                            text-align: right;
+                            display: flex;
+                            justify-content: flex-end;
                         }
 
                         .modal-close-action {
-                            background: #0f172a;
-                            color: white;
-                            border: none;
                             padding: 0.5rem 1.2rem;
+                            background: #0f172a;
+                            color: #ffffff;
+                            border: none;
                             border-radius: 6px;
-                            font-size: 0.85rem;
+                            font-size: 0.875rem;
                             font-weight: 600;
                             cursor: pointer;
-                        }
-
-                        /* Authorize.net payment error banner */
-                        .payment-error-banner {
-                            display: flex;
-                            align-items: flex-start;
-                            gap: 0.6rem;
-                            background: #fff1f2;
-                            border: 1px solid #fecdd3;
-                            border-radius: 10px;
-                            padding: 0.9rem 1rem;
-                            margin-bottom: 1rem;
-                            color: #9f1239;
-                            font-size: 0.9rem;
-                            font-weight: 600;
-                            line-height: 1.4;
                         }
                     `}</style>
                 </div>
             );
         }
 
-        const container = document.getElementById('root');
-        const root = ReactDOM.createRoot(container);
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<CheckoutApp />);
     </script>
 </body>

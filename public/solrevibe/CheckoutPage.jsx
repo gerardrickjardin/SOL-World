@@ -1,36 +1,42 @@
 import React, { useState } from 'react';
 
 /**
- * SOL REViBE B2B High-Ticket Checkout Component
+ * SOL REViBE MindBody Wellness Station Customer Checkout & Warranty Registration
  * Designed for Next.js / React single-page direct checkout.
- * PCI Compliant Hosted Iframe Tokenization integration.
  */
 export default function CheckoutPage() {
   const [formData, setFormData] = useState({
-    businessName: '',
-    contactName: '',
+    fullName: '',
     email: '',
     phone: '',
-    taxId: '',
     address: '',
     city: '',
     state: '',
     zip: '',
     country: 'United States',
-    cardholderName: '',
     sameAsShipping: true,
-    agreeTerms: true,
+    billingAddress: '',
+    billingCity: '',
+    billingState: '',
+    billingZip: '',
+    governmentId: '',
+    cardholderName: '',
+    cardNumber: '',
+    cardExp: '',
+    cardCvc: '',
   });
 
+  const [pricingPlan, setPricingPlan] = useState('full'); // 'full' ($2,495) | 'split' ($2,500 total, $1,250 now)
   const [cardType, setCardType] = useState('visa');
-  const [tokenizedState, setTokenizedState] = useState({
-    isTokenized: false,
-    token: null,
+  const [paymentState, setPaymentState] = useState({
     isProcessing: false,
     isSuccess: false,
+    error: null,
+    transactionId: null,
+    orderId: null,
   });
 
-  const [activeModal, setActiveModal] = useState(null); // 'terms' | 'privacy' | 'shipping' | 'guarantee'
+  const [activeModal, setActiveModal] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -40,30 +46,61 @@ export default function CheckoutPage() {
     }));
   };
 
+  const handleCardNumberChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '');
+    if (val.startsWith('3')) setCardType('amex');
+    else if (val.startsWith('5') || val.startsWith('2')) setCardType('mastercard');
+    else if (val.startsWith('6')) setCardType('discover');
+    else setCardType('visa');
+
+    let formatted = '';
+    for (let i = 0; i < val.length && i < 16; i++) {
+      if (i > 0 && i % 4 === 0) formatted += ' ';
+      formatted += val[i];
+    }
+    setFormData((prev) => ({ ...prev, cardNumber: formatted }));
+  };
+
+  const handleExpChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '');
+    if (val.length >= 2) {
+      val = val.substring(0, 2) + ' / ' + val.substring(2, 4);
+    }
+    setFormData((prev) => ({ ...prev, cardExp: val }));
+  };
+
+  const handlePhoneChange = (e) => {
+    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+    const formatted = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    setFormData((prev) => ({ ...prev, phone: formatted }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTokenizedState((prev) => ({ ...prev, isProcessing: true }));
+    setPaymentState({ isProcessing: true, isSuccess: false, error: null, transactionId: null, orderId: null });
 
-    // Simulate Payment Gateway Tokenization (Integrity Payment / NMI / Authorize.net)
     setTimeout(() => {
-      const mockToken = 'TOK_PAYMENT_' + Math.random().toString(36).substr(2, 9).toUpperCase();
-      setTokenizedState({
-        isTokenized: true,
-        token: mockToken,
+      const mockTx = 'TXN_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+      const mockOrder = 'SR-' + Math.floor(100000 + Math.random() * 900000);
+      setPaymentState({
         isProcessing: false,
         isSuccess: true,
+        error: null,
+        transactionId: mockTx,
+        orderId: mockOrder,
       });
-    }, 1800);
+    }, 1600);
   };
+
+  const currentPrice = pricingPlan === 'full' ? '2,495' : '1,250';
+  const totalDisplay = pricingPlan === 'full' ? '$2,495.00 USD' : '$1,250.00 USD (Installment 1 of 2 • $2,500 Total)';
 
   return (
     <div className="checkout-page-root">
-      {/* Background Ambience */}
       <div className="bg-decor-blob blob-1"></div>
       <div className="bg-decor-blob blob-2"></div>
 
       <main className="checkout-main-container">
-        {/* Top Logo */}
         <header className="brand-header">
           <img
             src="assets/SOL REViBE Logo.png"
@@ -79,67 +116,130 @@ export default function CheckoutPage() {
           </h1>
         </header>
 
-        {/* Secure Checkout Badge */}
         <div className="secure-badge-wrapper">
           <div className="secure-badge">
-            <svg className="badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               <path d="m9 12 2 2 4-4" />
             </svg>
-            <span>Secure B2B Checkout</span>
+            <span>Secure Checkout & Device Warranty Portal</span>
           </div>
         </div>
 
-        {/* White Center Card */}
         <div className="checkout-card">
-          {tokenizedState.isSuccess ? (
+          {paymentState.isSuccess ? (
             <div className="confirmation-screen">
               <div className="success-icon-wrap">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               </div>
-              <h2>Showcase Position Reserved!</h2>
+              <h2>Order Confirmed & Warranty Registered!</h2>
               <p className="conf-subtitle">
-                Thank you, <strong>{formData.contactName || 'Valued Business Partner'}</strong>. Your order for the{' '}
-                <strong>SOL REViBE Business-in-a-Box Station</strong> ($3,000 USD) has been successfully placed.
+                Thank you, <strong>{formData.fullName || 'Valued Customer'}</strong>. Your order for the{' '}
+                <strong>SOL REViBE MindBody Wellness Station (P90 Plus Complete Package)</strong> has been successfully placed.
               </p>
+
               <div className="token-details-box">
                 <div className="token-row">
-                  <span>Gateway Token (PCI Secure):</span>
-                  <code>{tokenizedState.token}</code>
+                  <span>Order Reference #:</span>
+                  <code>{paymentState.orderId}</code>
                 </div>
                 <div className="token-row">
-                  <span>Business Entity:</span>
-                  <strong>{formData.businessName || 'Corporate Showcase Account'}</strong>
+                  <span>Official 1-Year Warranty:</span>
+                  <strong style={{ color: '#059669' }}>
+                    ACTIVE (Registered to ID: {formData.governmentId ? '••••' + formData.governmentId.slice(-4) : '••••8412'})
+                  </strong>
                 </div>
                 <div className="token-row">
-                  <span>Confirmation Email:</span>
-                  <strong>{formData.email || 'partner@business.com'}</strong>
+                  <span>Total Amount:</span>
+                  <strong>{totalDisplay}</strong>
+                </div>
+                <div className="token-row">
+                  <span>Delivery Address:</span>
+                  <strong>
+                    {formData.address}, {formData.city}, {formData.state} {formData.zip}
+                  </strong>
+                </div>
+                <div className="token-row">
+                  <span>Confirmation Sent To:</span>
+                  <strong>{formData.email || 'customer@wellness.com'}</strong>
                 </div>
               </div>
-              <button
-                type="button"
-                className="reset-btn"
-                onClick={() => setTokenizedState({ isTokenized: false, token: null, isProcessing: false, isSuccess: false })}
-              >
-                Return to Order Form
-              </button>
+
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '1.5rem' }}>
+                <button
+                  type="button"
+                  className="reset-btn"
+                  onClick={() => window.print()}
+                  style={{ backgroundColor: '#0F172A', color: '#fff', border: 'none' }}
+                >
+                  Print Order & Warranty Receipt
+                </button>
+                <button
+                  type="button"
+                  className="reset-btn"
+                  onClick={() =>
+                    setPaymentState({ isProcessing: false, isSuccess: false, error: null, transactionId: null, orderId: null })
+                  }
+                >
+                  Return to Order Form
+                </button>
+              </div>
             </div>
           ) : (
             <div className="checkout-grid">
-              {/* Left Column: Product Summary */}
+              {/* Left Column: Product Overview & Bundle */}
               <section className="product-summary-pane">
-                <div className="product-tag">High-Ticket B2B Package</div>
-                <h2 className="product-title">SOL REViBE Business-in-a-Box Station</h2>
+                <div className="product-tag">MindBody Wellness Station</div>
+                <h2 className="product-title">SOL REViBE MindBody Wellness Station</h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748B', marginTop: '-0.5rem', marginBottom: '1rem', fontWeight: 500 }}>
+                  P90 Plus Complete Station Package
+                </p>
+
                 <div className="price-display">
                   <span className="price-currency">$</span>
-                  <span className="price-amount">3,000</span>
+                  <span className="price-amount">{currentPrice}</span>
                   <span className="price-unit">USD</span>
+                  {pricingPlan === 'split' && (
+                    <span style={{ fontSize: '0.85rem', color: '#64748b', marginLeft: '6px' }}>/ month (2 payments)</span>
+                  )}
+                </div>
+
+                <div className="pricing-toggle-box">
+                  <div
+                    className={`toggle-option ${pricingPlan === 'full' ? 'active' : ''}`}
+                    onClick={() => setPricingPlan('full')}
+                  >
+                    <div className="toggle-radio"></div>
+                    <div className="toggle-text">
+                      <strong>Pay in Full: $2,495</strong>
+                      <small>Save $1,355 vs regular MSRP</small>
+                    </div>
+                  </div>
+                  <div
+                    className={`toggle-option ${pricingPlan === 'split' ? 'active' : ''}`}
+                    onClick={() => setPricingPlan('split')}
+                  >
+                    <div className="toggle-radio"></div>
+                    <div className="toggle-text">
+                      <strong>2 Monthly Payments of $1,250</strong>
+                      <small>$2,500 total package price</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="station-photo-wrapper">
+                  <img
+                    src="assets/soul_revive_station_package.jpg"
+                    alt="SOL REViBE MindBody Wellness Station Complete Package"
+                    className="station-photo"
+                  />
+                  <div className="station-photo-badge">Complete 5-Piece Station Setup</div>
                 </div>
 
                 <div className="included-section">
-                  <h3 className="section-heading">Package Deliverables Included:</h3>
+                  <h3 className="section-heading">Package Includes:</h3>
                   <ul className="deliverables-list">
                     <li>
                       <div className="check-bullet">
@@ -148,8 +248,8 @@ export default function CheckoutPage() {
                         </svg>
                       </div>
                       <div>
-                        <strong>Commercial-Grade PEMF Platform</strong>
-                        <p>Industrial-strength pulse technology crafted for high-volume commercial recharge environments.</p>
+                        <strong>P90 Plus Dual-Frequency Core Platform</strong>
+                        <p>Advanced Terahertz & PEMF bio-resonance frequency engine for cellular rebalance.</p>
                       </div>
                     </li>
                     <li>
@@ -159,8 +259,8 @@ export default function CheckoutPage() {
                         </svg>
                       </div>
                       <div>
-                        <strong>Complete TAG Audio Library</strong>
-                        <p>Full suite of neuro-acoustic soundscapes and brainwave synchronization audio tracks.</p>
+                        <strong>Zero-Gravity Ergonomic Station Chair</strong>
+                        <p>Engineered body alignment lounge chair for optimal bio-frequency conductivity.</p>
                       </div>
                     </li>
                     <li>
@@ -170,8 +270,52 @@ export default function CheckoutPage() {
                         </svg>
                       </div>
                       <div>
-                        <strong>Eleven-Piece Comfort Package</strong>
-                        <p>Premium tactile accessories, contoured positioning cushions, and sanitized hygiene accessories.</p>
+                        <strong>Heavy-Duty Station Stand & Dock</strong>
+                        <p>Precision multi-angle adjustable mounting stand for effortless daily sessions.</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="check-bullet">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>Ultrasonic Ambient Diffuser</strong>
+                        <p>Aromatherapy & negative-ion micro-mist sensory integration.</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="check-bullet">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>Retractable Banner & Display Screen Kit</strong>
+                        <p>Official SOL REViBE privacy backdrop and station presentation kit.</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="check-bullet">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>1-Year Manufacturer Warranty Registration</strong>
+                        <p>Official registration authenticated directly using your Government ID.</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="check-bullet">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>Insured Freight Delivery</strong>
+                        <p>White-glove doorstep freight delivery included at $0 cost ($250 value).</p>
                       </div>
                     </li>
                   </ul>
@@ -184,66 +328,41 @@ export default function CheckoutPage() {
                     <path d="M12 8h.01" />
                   </svg>
                   <div>
-                    <strong>Direct B2B Purchase</strong>
-                    <p>Includes priority allocation for your showcase position with zero middleman cart fees.</p>
+                    <strong>Direct Single-Page Customer Order</strong>
+                    <p>Guaranteed genuine unit dispatch with 1-Year Manufacturer Warranty protection.</p>
                   </div>
                 </div>
               </section>
 
-              {/* Right Column: Checkout Form & Payment Gateway */}
+              {/* Right Column: Checkout Form */}
               <section className="form-pane">
                 <form onSubmit={handleSubmit} className="checkout-form">
-                  {/* Step 1: Business Details */}
+                  {/* Section 1: Customer Information */}
                   <div className="form-section">
                     <h3 className="form-section-title">
-                      <span className="step-num">1</span> B2B Organization Info
+                      <span className="step-num">1</span> Customer Information
                     </h3>
                     <div className="input-group">
-                      <label htmlFor="businessName">Company / Organization Name *</label>
+                      <label htmlFor="fullName">Full Name *</label>
                       <input
                         type="text"
-                        id="businessName"
-                        name="businessName"
+                        id="fullName"
+                        name="fullName"
                         required
-                        placeholder="e.g. Apex Wellness Center LLC"
-                        value={formData.businessName}
+                        placeholder="Eleanor Vance"
+                        value={formData.fullName}
                         onChange={handleInputChange}
                       />
                     </div>
                     <div className="input-row-2col">
                       <div className="input-group">
-                        <label htmlFor="contactName">Primary Contact Name *</label>
-                        <input
-                          type="text"
-                          id="contactName"
-                          name="contactName"
-                          required
-                          placeholder="Dr. Jane Smith"
-                          value={formData.contactName}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="input-group">
-                        <label htmlFor="taxId">EIN / Tax ID (Optional)</label>
-                        <input
-                          type="text"
-                          id="taxId"
-                          name="taxId"
-                          placeholder="12-3456789"
-                          value={formData.taxId}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="input-row-2col">
-                      <div className="input-group">
-                        <label htmlFor="email">Business Email *</label>
+                        <label htmlFor="email">Email Address *</label>
                         <input
                           type="email"
                           id="email"
                           name="email"
                           required
-                          placeholder="jane@apexwellness.com"
+                          placeholder="eleanor@wellness.com"
                           value={formData.email}
                           onChange={handleInputChange}
                         />
@@ -255,18 +374,18 @@ export default function CheckoutPage() {
                           id="phone"
                           name="phone"
                           required
-                          placeholder="+1 (555) 000-0000"
+                          placeholder="(555) 234-5678"
                           value={formData.phone}
-                          onChange={handleInputChange}
+                          onChange={handlePhoneChange}
                         />
                       </div>
                     </div>
                   </div>
 
-                  {/* Step 2: Shipping Address */}
+                  {/* Section 2: Delivery Address */}
                   <div className="form-section">
                     <h3 className="form-section-title">
-                      <span className="step-num">2</span> Station Delivery Address
+                      <span className="step-num">2</span> Delivery Address
                     </h3>
                     <div className="input-group">
                       <label htmlFor="address">Street Address *</label>
@@ -275,7 +394,7 @@ export default function CheckoutPage() {
                         id="address"
                         name="address"
                         required
-                        placeholder="100 Grand Avenue, Suite 400"
+                        placeholder="1234 Harmony Blvd, Suite 100"
                         value={formData.address}
                         onChange={handleInputChange}
                       />
@@ -294,7 +413,7 @@ export default function CheckoutPage() {
                         />
                       </div>
                       <div className="input-group">
-                        <label htmlFor="state">State / Province *</label>
+                        <label htmlFor="state">State *</label>
                         <input
                           type="text"
                           id="state"
@@ -306,7 +425,7 @@ export default function CheckoutPage() {
                         />
                       </div>
                       <div className="input-group">
-                        <label htmlFor="zip">ZIP / Postal Code *</label>
+                        <label htmlFor="zip">ZIP Code *</label>
                         <input
                           type="text"
                           id="zip"
@@ -318,20 +437,150 @@ export default function CheckoutPage() {
                         />
                       </div>
                     </div>
+
+                    <div style={{ marginTop: '0.75rem' }}>
+                      <label className="checkbox-wrap">
+                        <input
+                          type="checkbox"
+                          name="sameAsShipping"
+                          checked={formData.sameAsShipping}
+                          onChange={handleInputChange}
+                        />
+                        <span>Billing address matches shipping address</span>
+                      </label>
+
+                      {!formData.sameAsShipping && (
+                        <div className="billing-subform">
+                          <div className="input-group">
+                            <label>Billing Street Address *</label>
+                            <input
+                              type="text"
+                              name="billingAddress"
+                              placeholder="Street Address"
+                              value={formData.billingAddress}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                          <div className="input-row-3col">
+                            <div className="input-group">
+                              <label>City</label>
+                              <input
+                                type="text"
+                                name="billingCity"
+                                placeholder="City"
+                                value={formData.billingCity}
+                                onChange={handleInputChange}
+                              />
+                            </div>
+                            <div className="input-group">
+                              <label>State</label>
+                              <input
+                                type="text"
+                                name="billingState"
+                                placeholder="ST"
+                                value={formData.billingState}
+                                onChange={handleInputChange}
+                              />
+                            </div>
+                            <div className="input-group">
+                              <label>ZIP</label>
+                              <input
+                                type="text"
+                                name="billingZip"
+                                placeholder="ZIP"
+                                value={formData.billingZip}
+                                onChange={handleInputChange}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Step 3: PCI Gateway Tokenized Payment Iframe */}
+                  {/* Section 3: REQUIRED LINE/NOTE FOR WARRANTY */}
+                  <div className="form-section warranty-highlight-section">
+                    <div className="warranty-title-bar">
+                      <h3 className="form-section-title" style={{ color: '#065f46' }}>
+                        <span className="step-num" style={{ backgroundColor: '#059669' }}>
+                          3
+                        </span>{' '}
+                        Official Warranty Registration
+                      </h3>
+                      <span className="warranty-pill-tag">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        1-Year Manufacturer Warranty
+                      </span>
+                    </div>
+
+                    <div className="input-group" style={{ marginTop: '0.75rem' }}>
+                      <label htmlFor="governmentId" style={{ color: '#065f46', fontWeight: 700 }}>
+                        Driver's License / Government ID Number *
+                      </label>
+                      <div className="hosted-field-input" style={{ borderColor: '#10B981' }}>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#059669"
+                          strokeWidth="2"
+                          width="18"
+                          height="18"
+                          style={{ marginRight: '8px', flexShrink: 0 }}
+                        >
+                          <rect x="2" y="4" width="20" height="16" rx="2" />
+                          <circle cx="8" cy="10" r="2" />
+                          <path d="M15 8h2m-2 4h2m-8 4h8" />
+                        </svg>
+                        <input
+                          type="text"
+                          id="governmentId"
+                          name="governmentId"
+                          required
+                          placeholder="Enter Driver's License or Government ID Number"
+                          value={formData.governmentId}
+                          onChange={handleInputChange}
+                          style={{ fontWeight: 600, letterSpacing: '0.04em' }}
+                        />
+                      </div>
+
+                      <div className="warranty-explicit-callout">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#047857"
+                          strokeWidth="2.2"
+                          width="17"
+                          height="17"
+                          style={{ flexShrink: 0, marginTop: '2px' }}
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="16" x2="12" y2="12" />
+                          <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
+                        <p>
+                          <strong>
+                            Your Driver's License or Government ID Number is required strictly to register your device for the
+                            one-year manufacturer warranty.
+                          </strong>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 4: Clean Credit Card Payment Processing */}
                   <div className="form-section">
                     <div className="pci-header">
                       <h3 className="form-section-title">
-                        <span className="step-num">3</span> Secure Payment Information
+                        <span className="step-num">4</span> Payment Details
                       </h3>
                       <div className="pci-shield-tag">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                           <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                         </svg>
-                        PCI Level 1 Tokenized Iframe
+                        256-Bit SSL Encrypted
                       </div>
                     </div>
 
@@ -342,13 +591,12 @@ export default function CheckoutPage() {
                         id="cardholderName"
                         name="cardholderName"
                         required
-                        placeholder="Name as it appears on card"
+                        placeholder="Name as printed on card"
                         value={formData.cardholderName}
                         onChange={handleInputChange}
                       />
                     </div>
 
-                    {/* Simulated Gateway Hosted Iframe Container */}
                     <div className="hosted-iframe-container">
                       <div className="iframe-badge-bar">
                         <span className="iframe-title">
@@ -356,7 +604,7 @@ export default function CheckoutPage() {
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                           </svg>
-                          Encrypted Gateway Hosted Fields (Integrity Payment / NMI / Auth.net)
+                          Clean Credit Card Payment Processing
                         </span>
                         <div className="active-card-badges">
                           <span className={`card-chip ${cardType === 'visa' ? 'active' : ''}`}>VISA</span>
@@ -366,10 +614,9 @@ export default function CheckoutPage() {
                         </div>
                       </div>
 
-                      {/* Mock Hosted Iframe Input Fields */}
                       <div className="iframe-form-fields">
                         <div className="input-group">
-                          <label>Card Number (Hosted Field) *</label>
+                          <label>Card Number *</label>
                           <div className="hosted-field-input">
                             <svg className="field-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                               <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
@@ -378,17 +625,12 @@ export default function CheckoutPage() {
                             <input
                               type="text"
                               required
-                              placeholder="4532 •••• •••• 8892"
+                              placeholder="4000 1234 5678 9010"
                               maxLength="19"
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                if (val.startsWith('3')) setCardType('amex');
-                                else if (val.startsWith('5')) setCardType('mastercard');
-                                else if (val.startsWith('6')) setCardType('discover');
-                                else setCardType('visa');
-                              }}
+                              value={formData.cardNumber}
+                              onChange={handleCardNumberChange}
                             />
-                            <span className="field-secure-tag">Isolated Iframe</span>
+                            <span className="field-secure-tag">Encrypted</span>
                           </div>
                         </div>
 
@@ -396,13 +638,29 @@ export default function CheckoutPage() {
                           <div className="input-group">
                             <label>Expiration (MM/YY) *</label>
                             <div className="hosted-field-input">
-                              <input type="text" required placeholder="MM / YY" maxLength="5" />
+                              <input
+                                type="text"
+                                required
+                                placeholder="MM / YY"
+                                maxLength="7"
+                                value={formData.cardExp}
+                                onChange={handleExpChange}
+                              />
                             </div>
                           </div>
                           <div className="input-group">
-                            <label>CVV / CVC *</label>
+                            <label>CVC / CVV *</label>
                             <div className="hosted-field-input">
-                              <input type="password" required placeholder="•••" maxLength="4" />
+                              <input
+                                type="password"
+                                required
+                                placeholder="•••"
+                                maxLength="4"
+                                value={formData.cardCvc}
+                                onChange={(e) =>
+                                  setFormData((p) => ({ ...p, cardCvc: e.target.value.replace(/\D/g, '').slice(0, 4) }))
+                                }
+                              />
                               <svg className="cvv-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <circle cx="12" cy="12" r="10" />
                                 <path d="M12 16v-4" />
@@ -415,23 +673,22 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  {/* Submit Button */}
                   <div className="submit-wrap">
-                    <button type="submit" className="main-cta-btn" disabled={tokenizedState.isProcessing}>
-                      {tokenizedState.isProcessing ? (
+                    <button type="submit" className="main-cta-btn" disabled={paymentState.isProcessing}>
+                      {paymentState.isProcessing ? (
                         <span className="btn-loading-flex">
                           <span className="spinner"></span>
-                          Processing Tokenization...
+                          Registering Warranty & Authorizing Order...
                         </span>
                       ) : (
-                        <span>Secure My Showcase Position - $3,000</span>
+                        <span>Authorize & Complete Order - ${currentPrice}</span>
                       )}
                     </button>
                     <p className="guarantee-microtext">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                       </svg>
-                      Backed by our 90-Day Money-Back Guarantee & Direct Support
+                      Backed by 1-Year Manufacturer Warranty & 256-Bit SSL Encryption
                     </p>
                   </div>
                 </form>
@@ -440,66 +697,52 @@ export default function CheckoutPage() {
           )}
         </div>
 
-        {/* Compliance Footer */}
         <footer className="compliance-footer">
-          {/* Major Credit Card Logos */}
           <div className="card-logos-row">
             <span className="accepted-cards-label">Accepted Payment Methods:</span>
             <div className="card-icons flex-wrap">
-              {/* Visa */}
-              <div className="card-logo-badge visa">
-                <svg viewBox="0 0 36 24" width="46" height="30">
+              <div className="card-logo-badge visa" title="Visa">
+                <svg viewBox="0 0 36 24" width="48" height="32">
                   <rect width="36" height="24" rx="3" fill="#1A1F71" />
-                  <path d="M13.8 16.5h-2.3l1.4-8.7h2.3l-1.4 8.7zm7.5-8.5c-.5-.2-1.2-.4-2.1-.4-2.3 0-3.9 1.2-3.9 2.9 0 1.3 1.2 2 2.1 2.4.9.4 1.2.7 1.2 1.1 0 .6-.7.9-1.4.9-1 0-1.5-.1-2.3-.5l-.3-.2-.3 2c.6.3 1.7.5 2.8.5 2.5 0 4.1-1.2 4.1-3 0-1-.6-1.8-1.9-2.4-.8-.4-1.3-.7-1.3-1.1 0-.4.4-.7 1.3-.7.8 0 1.4.2 1.8.4l.2.1.4-1.9zm4.7 6.1l.9-2.5.5 2.5h-1.4zm2.1-6.3h-1.8c-.6 0-1 .2-1.2.8l-3.5 8.4h2.4l.5-1.3h3l.3 1.3h2.1l-1.8-9.2zm-17.7 0l-2.3 8.7H6l-1.1-6.1c-.1-.4-.2-.5-.5-.7-.6-.3-1.6-.7-2.4-.9l.1-.3h3.9c.5 0 .9.3 1 .9l.9 5.2 2.4-7.7h2.4z" fill="#FFF" />
+                  <path
+                    d="M13.8 16.5h-2.3l1.4-8.7h2.3l-1.4 8.7zm7.5-8.5c-.5-.2-1.2-.4-2.1-.4-2.3 0-3.9 1.2-3.9 2.9 0 1.3 1.2 2 2.1 2.4.9.4 1.2.7 1.2 1.1 0 .6-.7.9-1.4.9-1 0-1.5-.1-2.3-.5l-.3-.2-.3 2c.6.3 1.7.5 2.8.5 2.5 0 4.1-1.2 4.1-3 0-1-.6-1.8-1.9-2.4-.8-.4-1.3-.7-1.3-1.1 0-.4.4-.7 1.3-.7.8 0 1.4.2 1.8.4l.2.1.4-1.9zm4.7 6.1l.9-2.5.5 2.5h-1.4zm2.1-6.3h-1.8c-.6 0-1 .2-1.2.8l-3.5 8.4h2.4l.5-1.3h3l.3 1.3h2.1l-1.8-9.2zm-17.7 0l-2.3 8.7H6l-1.1-6.1c-.1-.4-.2-.5-.5-.7-.6-.3-1.6-.7-2.4-.9l.1-.3h3.9c.5 0 .9.3 1 .9l.9 5.2 2.4-7.7h2.4z"
+                    fill="#FFF"
+                  />
                 </svg>
               </div>
-              {/* Mastercard */}
-              <div className="card-logo-badge mastercard">
-                <svg viewBox="0 0 36 24" width="46" height="30">
+              <div className="card-logo-badge mastercard" title="Mastercard">
+                <svg viewBox="0 0 36 24" width="48" height="32">
                   <rect width="36" height="24" rx="3" fill="#0A0E27" />
                   <circle cx="14" cy="12" r="7" fill="#EB001B" />
                   <circle cx="22" cy="12" r="7" fill="#F79E1B" />
-                  <path d="M18 6.9A6.97 6.97 0 0015.4 12c0 2.1.9 4 2.6 5.1A6.97 6.97 0 0020.6 12c0-2.1-.9-4-2.6-5.1z" fill="#FF5F00" />
+                  <path
+                    d="M18 6.9A6.97 6.97 0 0015.4 12c0 2.1.9 4 2.6 5.1A6.97 6.97 0 0020.6 12c0-2.1-.9-4-2.6-5.1z"
+                    fill="#FF5F00"
+                  />
                 </svg>
               </div>
-              {/* American Express */}
-              <div className="card-logo-badge amex">
-                <svg viewBox="0 0 36 24" width="46" height="30">
+              <div className="card-logo-badge amex" title="American Express">
+                <svg viewBox="0 0 36 24" width="48" height="32">
                   <rect width="36" height="24" rx="3" fill="#006FCF" />
-                  <path d="M6 15.5l1.2-3.2h2.2l1.2 3.2h2l-2.8-7.2h-2.1L4.7 15.5H6zm10.7 0V8.3h-4.3v7.2h2.1v-2.7h2.2v-1.7h-2.2v-1.2h2.2v-1.6h-4.3zm6 0l1.9-4.2 1.9 4.2h2.4l-3.1-6.5 3-6h-2.3l-1.9 4-1.9-4h-2.3l3 6-3.1 6.5h2.4z" fill="#FFF" />
+                  <path
+                    d="M6 15.5l1.2-3.2h2.2l1.2 3.2h2l-2.8-7.2h-2.1L4.7 15.5H6zm10.7 0V8.3h-4.3v7.2h2.1v-2.7h2.2v-1.7h-2.2v-1.2h2.2v-1.6h-4.3zm6 0l1.9-4.2 1.9 4.2h2.4l-3.1-6.5 3-6h-2.3l-1.9 4-1.9-4h-2.3l3 6-3.1 6.5h2.4z"
+                    fill="#FFF"
+                  />
                 </svg>
               </div>
-              {/* Discover */}
-              <div className="card-logo-badge discover">
-                <svg viewBox="0 0 36 24" width="46" height="30">
+              <div className="card-logo-badge discover" title="Discover">
+                <svg viewBox="0 0 36 24" width="48" height="32">
                   <rect width="36" height="24" rx="3" fill="#231F20" />
-                  <path d="M4 15.5h3.2c2.1 0 3.6-1.3 3.6-3.6s-1.5-3.6-3.6-3.6H4v7.2zm2.1-5.6h1.1c1 0 1.6.5 1.6 1.9 0 1.4-.6 1.9-1.6 1.9H6.1v-3.8zm6.4 5.6h2.1V8.3h-2.1v7.2zm9 0c2.1 0 3.5-1.5 3.5-3.6 0-2.1-1.4-3.6-3.5-3.6s-3.5 1.5-3.5 3.6c0 2.1 1.4 3.6 3.5 3.6zm0-5.6c.9 0 1.5.8 1.5 2s-.6 2-1.5 2-1.5-.8-1.5-2 .6-2 1.5-2z" fill="#FFF" />
+                  <path
+                    d="M4 15.5h3.2c2.1 0 3.6-1.3 3.6-3.6s-1.5-3.6-3.6-3.6H4v7.2zm2.1-5.6h1.1c1 0 1.6.5 1.6 1.9 0 1.4-.6 1.9-1.6 1.9H6.1v-3.8zm6.4 5.6h2.1V8.3h-2.1v7.2zm9 0c2.1 0 3.5-1.5 3.5-3.6 0-2.1-1.4-3.6-3.5-3.6s-3.5 1.5-3.5 3.6c0 2.1 1.4 3.6 3.5 3.6zm0-5.6c.9 0 1.5.8 1.5 2s-.6 2-1.5 2-1.5-.8-1.5-2 .6-2 1.5-2z"
+                    fill="#FFF"
+                  />
                   <circle cx="21.5" cy="11.9" r="2" fill="#F48120" />
                 </svg>
               </div>
             </div>
           </div>
 
-          {/* Corporate Support & Address Placeholders */}
-          <div className="merchant-info-grid">
-            <div className="info-block">
-              <span className="block-label">Physical Merchant Address</span>
-              <p className="block-val">[Insert Corporate Address Here]</p>
-              <small className="sub-val">SOL REViBE Operations Inc., 100 Wellness Way, Suite 500, Austin, TX 78701</small>
-            </div>
-            <div className="info-block">
-              <span className="block-label">Support Phone Number</span>
-              <p className="block-val">[Insert Support Phone Here]</p>
-              <small className="sub-val">Toll Free: +1 (800) 555-VIBE (8423)</small>
-            </div>
-            <div className="info-block">
-              <span className="block-label">Support Email</span>
-              <p className="block-val">[Insert Support Email Here]</p>
-              <small className="sub-val">concierge@solrevibe.com</small>
-            </div>
-          </div>
-
-          {/* Policy Links */}
           <div className="policy-links-row">
             <button type="button" className="policy-link" onClick={() => setActiveModal('terms')}>
               Terms of Service
@@ -514,886 +757,15 @@ export default function CheckoutPage() {
             </button>
             <span className="link-divider">•</span>
             <button type="button" className="policy-link" onClick={() => setActiveModal('guarantee')}>
-              90-Day Money-Back Guarantee
+              1-Year Warranty Terms
             </button>
           </div>
 
           <div className="copyright-line">
-            © {new Date().getFullYear()} SOL REViBE Inc. All Rights Reserved. Fully PCI DSS Level 1 Compliant B2B Direct Checkout.
+            &copy; {new Date().getFullYear()} SOL REViBE &bull; MindBody Wellness Station. All Rights Reserved.
           </div>
         </footer>
       </main>
-
-      {/* Policy Modal Overlay */}
-      {activeModal && (
-        <div className="modal-backdrop" onClick={() => setActiveModal(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <header className="modal-header">
-              <h3>
-                {activeModal === 'terms' && 'Terms of Service'}
-                {activeModal === 'privacy' && 'Privacy Policy'}
-                {activeModal === 'shipping' && 'Shipping Policy'}
-                {activeModal === 'guarantee' && '90-Day Money-Back Guarantee'}
-              </h3>
-              <button type="button" className="close-modal-btn" onClick={() => setActiveModal(null)}>
-                &times;
-              </button>
-            </header>
-            <div className="modal-body">
-              {activeModal === 'terms' && (
-                <div>
-                  <p>
-                    <strong>B2B Terms of Service:</strong> All commercial orders for the SOL REViBE Business-in-a-Box Station are processed as direct commercial purchases.
-                  </p>
-                  <p>
-                    By placing your showcase reservation order, your business entity agrees to the commercial usage rights, priority station dispatch schedule, and platform deployment guidelines provided upon confirmation.
-                  </p>
-                </div>
-              )}
-              {activeModal === 'privacy' && (
-                <div>
-                  <p>
-                    <strong>Privacy & Data Protection Policy:</strong> SOL REViBE strictly safeguards all corporate client information.
-                  </p>
-                  <p>
-                    Payment credential data is tokenized directly via isolated PCI-DSS Level 1 payment gateway hosted fields (Integrity Payment / NMI / Authorize.net). No raw credit card data touches our application servers.
-                  </p>
-                </div>
-              )}
-              {activeModal === 'shipping' && (
-                <div>
-                  <p>
-                    <strong>Freight & Dispatch Policy:</strong> The SOL REViBE Business-in-a-Box Station includes white-glove commercial crate handling.
-                  </p>
-                  <p>
-                    Dispatches occur within 3–5 business days from showcase reservation. Includes tracking, insurance, and setup orientation materials for your wellness facility.
-                  </p>
-                </div>
-              )}
-              {activeModal === 'guarantee' && (
-                <div>
-                  <p>
-                    <strong>90-Day Money-Back Guarantee:</strong> We stand fully behind the transformational quality of our commercial PEMF platform and TAG audio library.
-                  </p>
-                  <p>
-                    If your commercial facility is not completely satisfied within 90 days of station deployment, contact our dedicated support team for return authorization and full refund assistance.
-                  </p>
-                </div>
-              )}
-            </div>
-            <footer className="modal-footer">
-              <button type="button" className="modal-close-action" onClick={() => setActiveModal(null)}>
-                Close Window
-              </button>
-            </footer>
-          </div>
-        </div>
-      )}
-
-      {/* Styled JSX / Embedded Component Styles */}
-      <style>{`
-        .checkout-page-root {
-          font-family: 'Inter', system-ui, -apple-system, sans-serif;
-          background-color: #f8fafc;
-          min-height: 100vh;
-          position: relative;
-          color: #0f172a;
-          padding: 2.5rem 1rem;
-          overflow-x: hidden;
-        }
-
-        .bg-decor-blob {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(80px);
-          opacity: 0.5;
-          z-index: 0;
-          pointer-events: none;
-        }
-
-        .blob-1 {
-          width: 500px;
-          height: 500px;
-          background: #dcfce7;
-          top: -100px;
-          left: -100px;
-        }
-
-        .blob-2 {
-          width: 500px;
-          height: 500px;
-          background: #e0e7ff;
-          bottom: -100px;
-          right: -100px;
-        }
-
-        .checkout-main-container {
-          position: relative;
-          z-index: 1;
-          max-width: 1080px;
-          margin: 0 auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .brand-header {
-          margin-bottom: 1.25rem;
-          text-align: center;
-        }
-
-        .brand-logo {
-          max-height: 52px;
-          object-fit: contain;
-        }
-
-        .brand-fallback-text {
-          font-size: 2rem;
-          font-weight: 800;
-          letter-spacing: -0.03em;
-          color: #059669;
-        }
-
-        .secure-badge-wrapper {
-          margin-bottom: 1.5rem;
-        }
-
-        .secure-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          background: #ecfdf5;
-          color: #047857;
-          border: 1px solid #a7f3d0;
-          padding: 0.4rem 1rem;
-          border-radius: 9999px;
-          font-size: 0.875rem;
-          font-weight: 600;
-          box-shadow: 0 2px 4px rgba(16, 185, 129, 0.06);
-        }
-
-        .badge-icon {
-          width: 16px;
-          height: 16px;
-        }
-
-        .checkout-card {
-          width: 100%;
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
-          border-radius: 20px;
-          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07);
-          padding: 2.5rem;
-          margin-bottom: 3rem;
-        }
-
-        .checkout-grid {
-          display: grid;
-          grid-template-columns: 1fr 1.2fr;
-          gap: 3rem;
-        }
-
-        @media (max-width: 868px) {
-          .checkout-grid {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-          }
-          .checkout-card {
-            padding: 1.5rem;
-          }
-        }
-
-        .product-summary-pane {
-          background: #f8fafc;
-          border: 1px solid #f1f5f9;
-          border-radius: 16px;
-          padding: 1.75rem;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .product-tag {
-          align-self: flex-start;
-          background: #e0e7ff;
-          color: #4338ca;
-          font-size: 0.75rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          padding: 0.25rem 0.65rem;
-          border-radius: 6px;
-          margin-bottom: 0.75rem;
-        }
-
-        .product-title {
-          font-size: 1.5rem;
-          font-weight: 800;
-          line-height: 1.25;
-          color: #0f172a;
-          margin-bottom: 1rem;
-        }
-
-        .price-display {
-          display: flex;
-          align-items: baseline;
-          gap: 0.2rem;
-          margin-bottom: 1.75rem;
-          padding-bottom: 1.25rem;
-          border-bottom: 1px solid #e2e8f0;
-        }
-
-        .price-currency {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #059669;
-        }
-
-        .price-amount {
-          font-size: 2.5rem;
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          color: #059669;
-        }
-
-        .price-unit {
-          font-size: 0.875rem;
-          font-weight: 700;
-          color: #64748b;
-          margin-left: 0.25rem;
-        }
-
-        .included-section {
-          margin-bottom: 1.5rem;
-        }
-
-        .section-heading {
-          font-size: 0.875rem;
-          font-weight: 700;
-          color: #475569;
-          text-transform: uppercase;
-          letter-spacing: 0.04em;
-          margin-bottom: 1rem;
-        }
-
-        .deliverables-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 1.25rem;
-        }
-
-        .deliverables-list li {
-          display: flex;
-          gap: 0.85rem;
-          align-items: flex-start;
-        }
-
-        .check-bullet {
-          flex-shrink: 0;
-          width: 22px;
-          height: 22px;
-          background: #10b981;
-          color: white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-top: 2px;
-        }
-
-        .check-bullet svg {
-          width: 13px;
-          height: 13px;
-        }
-
-        .deliverables-list strong {
-          display: block;
-          font-size: 0.95rem;
-          font-weight: 700;
-          color: #1e293b;
-        }
-
-        .deliverables-list p {
-          margin: 0.2rem 0 0;
-          font-size: 0.825rem;
-          color: #64748b;
-          line-height: 1.4;
-        }
-
-        .trust-callout {
-          margin-top: auto;
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
-          border-radius: 12px;
-          padding: 1rem;
-          display: flex;
-          gap: 0.75rem;
-          align-items: center;
-        }
-
-        .callout-icon {
-          width: 28px;
-          height: 28px;
-          color: #059669;
-          flex-shrink: 0;
-        }
-
-        .trust-callout strong {
-          font-size: 0.85rem;
-          color: #0f172a;
-        }
-
-        .trust-callout p {
-          margin: 0;
-          font-size: 0.775rem;
-          color: #64748b;
-        }
-
-        .form-section {
-          margin-bottom: 2rem;
-        }
-
-        .form-section-title {
-          font-size: 1.05rem;
-          font-weight: 700;
-          color: #0f172a;
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          margin-bottom: 1.1rem;
-        }
-
-        .step-num {
-          width: 24px;
-          height: 24px;
-          background: #0f172a;
-          color: #ffffff;
-          border-radius: 50%;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.75rem;
-          font-weight: 700;
-        }
-
-        .input-group {
-          display: flex;
-          flex-direction: column;
-          gap: 0.4rem;
-          margin-bottom: 0.9rem;
-        }
-
-        .input-group label {
-          font-size: 0.825rem;
-          font-weight: 600;
-          color: #334155;
-        }
-
-        .input-group input {
-          width: 100%;
-          padding: 0.7rem 0.9rem;
-          font-size: 0.9rem;
-          border: 1px solid #cbd5e1;
-          border-radius: 8px;
-          background: #ffffff;
-          color: #0f172a;
-          transition: all 0.2s ease;
-        }
-
-        .input-group input:focus {
-          outline: none;
-          border-color: #10b981;
-          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
-        }
-
-        .input-row-2col {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0.9rem;
-        }
-
-        .input-row-3col {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 0.9rem;
-        }
-
-        @media (max-width: 600px) {
-          .input-row-2col, .input-row-3col {
-            grid-template-columns: 1fr;
-          }
-        }
-
-        .pci-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-
-        .pci-shield-tag {
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: #059669;
-          background: #f0fdf4;
-          border: 1px solid #bbf7d0;
-          padding: 0.25rem 0.6rem;
-          border-radius: 6px;
-          display: flex;
-          align-items: center;
-          gap: 0.35rem;
-        }
-
-        .pci-shield-tag svg {
-          width: 14px;
-          height: 14px;
-        }
-
-        .hosted-iframe-container {
-          background: #fafafa;
-          border: 2px dashed #cbd5e1;
-          border-radius: 12px;
-          padding: 1.25rem;
-          margin-top: 0.5rem;
-          position: relative;
-        }
-
-        .iframe-badge-bar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1rem;
-          padding-bottom: 0.75rem;
-          border-bottom: 1px solid #e2e8f0;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-
-        .iframe-title {
-          font-size: 0.775rem;
-          font-weight: 700;
-          color: #475569;
-          display: flex;
-          align-items: center;
-          gap: 0.4rem;
-        }
-
-        .lock-icon {
-          width: 14px;
-          height: 14px;
-          color: #10b981;
-        }
-
-        .active-card-badges {
-          display: flex;
-          gap: 0.3rem;
-        }
-
-        .card-chip {
-          font-size: 0.65rem;
-          font-weight: 800;
-          padding: 0.15rem 0.4rem;
-          border-radius: 4px;
-          background: #e2e8f0;
-          color: #64748b;
-        }
-
-        .card-chip.active {
-          background: #10b981;
-          color: #ffffff;
-        }
-
-        .hosted-field-input {
-          position: relative;
-          display: flex;
-          align-items: center;
-        }
-
-        .hosted-field-input input {
-          padding-left: 2.3rem !important;
-          padding-right: 5rem !important;
-          font-family: monospace;
-          letter-spacing: 0.05em;
-        }
-
-        .field-card-icon {
-          position: absolute;
-          left: 0.75rem;
-          width: 18px;
-          height: 18px;
-          color: #64748b;
-        }
-
-        .field-secure-tag {
-          position: absolute;
-          right: 0.6rem;
-          font-size: 0.65rem;
-          font-weight: 700;
-          background: #e2e8f0;
-          color: #475569;
-          padding: 0.15rem 0.4rem;
-          border-radius: 4px;
-          pointer-events: none;
-        }
-
-        .cvv-lock {
-          position: absolute;
-          right: 0.75rem;
-          width: 16px;
-          height: 16px;
-          color: #94a3b8;
-        }
-
-        .submit-wrap {
-          margin-top: 2rem;
-          text-align: center;
-        }
-
-        .main-cta-btn {
-          width: 100%;
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-          color: #ffffff;
-          font-size: 1.15rem;
-          font-weight: 800;
-          padding: 1.15rem 2rem;
-          border: none;
-          border-radius: 12px;
-          cursor: pointer;
-          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-          box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
-          letter-spacing: -0.01em;
-        }
-
-        .main-cta-btn:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.5);
-          background: linear-gradient(135deg, #059669 0%, #047857 100%);
-        }
-
-        .main-cta-btn:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-
-        .btn-loading-flex {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.6rem;
-          justify-content: center;
-        }
-
-        .spinner {
-          width: 18px;
-          height: 18px;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          border-top-color: #ffffff;
-          border-radius: 50%;
-          animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-
-        .guarantee-microtext {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.4rem;
-          margin-top: 0.9rem;
-          font-size: 0.8rem;
-          color: #64748b;
-        }
-
-        .guarantee-microtext svg {
-          width: 14px;
-          height: 14px;
-          color: #10b981;
-        }
-
-        /* Confirmation Screen */
-        .confirmation-screen {
-          text-align: center;
-          padding: 2rem 1rem;
-        }
-
-        .success-icon-wrap {
-          width: 64px;
-          height: 64px;
-          background: #dcfce7;
-          color: #10b981;
-          border-radius: 50%;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          margin-bottom: 1.25rem;
-        }
-
-        .success-icon-wrap svg {
-          width: 36px;
-          height: 36px;
-        }
-
-        .confirmation-screen h2 {
-          font-size: 1.8rem;
-          font-weight: 800;
-          color: #0f172a;
-          margin-bottom: 0.75rem;
-        }
-
-        .conf-subtitle {
-          font-size: 1rem;
-          color: #475569;
-          max-width: 580px;
-          margin: 0 auto 2rem;
-          line-height: 1.6;
-        }
-
-        .token-details-box {
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          border-radius: 12px;
-          padding: 1.5rem;
-          max-width: 500px;
-          margin: 0 auto 2rem;
-          text-align: left;
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
-        .token-row {
-          display: flex;
-          justify-content: space-between;
-          font-size: 0.875rem;
-          align-items: center;
-        }
-
-        .token-row code {
-          background: #e2e8f0;
-          padding: 0.2rem 0.5rem;
-          border-radius: 4px;
-          font-family: monospace;
-          color: #0f172a;
-        }
-
-        .reset-btn {
-          background: #0f172a;
-          color: white;
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          border: none;
-          font-weight: 600;
-          cursor: pointer;
-        }
-
-        /* Compliance Footer */
-        .compliance-footer {
-          width: 100%;
-          border-top: 1px solid #e2e8f0;
-          padding-top: 2.5rem;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 2rem;
-          text-align: center;
-        }
-
-        .card-logos-row {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.75rem;
-        }
-
-        .accepted-cards-label {
-          font-size: 0.8rem;
-          font-weight: 700;
-          color: #64748b;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-
-        .card-icons {
-          display: flex;
-          gap: 0.75rem;
-          align-items: center;
-        }
-
-        .card-logo-badge {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-          border-radius: 4px;
-          overflow: hidden;
-          transition: transform 0.2s ease;
-        }
-
-        .card-logo-badge:hover {
-          transform: translateY(-2px);
-        }
-
-        .merchant-info-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-          gap: 1.5rem;
-          width: 100%;
-          max-width: 900px;
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
-          border-radius: 14px;
-          padding: 1.5rem;
-          text-align: left;
-        }
-
-        .info-block {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .block-label {
-          font-size: 0.75rem;
-          font-weight: 700;
-          color: #64748b;
-          text-transform: uppercase;
-          margin-bottom: 0.3rem;
-        }
-
-        .block-val {
-          font-size: 0.925rem;
-          font-weight: 700;
-          color: #0f172a;
-          margin: 0 0 0.2rem;
-        }
-
-        .sub-val {
-          font-size: 0.775rem;
-          color: #64748b;
-          line-height: 1.35;
-        }
-
-        .policy-links-row {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          align-items: center;
-          gap: 0.75rem;
-        }
-
-        .policy-link {
-          background: none;
-          border: none;
-          color: #475569;
-          font-size: 0.85rem;
-          font-weight: 600;
-          cursor: pointer;
-          text-decoration: underline;
-          text-underline-offset: 3px;
-          transition: color 0.2s ease;
-        }
-
-        .policy-link:hover {
-          color: #059669;
-        }
-
-        .link-divider {
-          color: #cbd5e1;
-        }
-
-        .copyright-line {
-          font-size: 0.775rem;
-          color: #94a3b8;
-          max-width: 700px;
-        }
-
-        /* Modal Styles */
-        .modal-backdrop {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: rgba(15, 23, 42, 0.6);
-          backdrop-filter: blur(4px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 999;
-          padding: 1rem;
-        }
-
-        .modal-content {
-          background: #ffffff;
-          border-radius: 16px;
-          max-width: 540px;
-          width: 100%;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-          overflow: hidden;
-          animation: modalPop 0.25s ease-out;
-        }
-
-        @keyframes modalPop {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-
-        .modal-header {
-          padding: 1.25rem 1.5rem;
-          border-bottom: 1px solid #e2e8f0;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .modal-header h3 {
-          margin: 0;
-          font-size: 1.15rem;
-          font-weight: 800;
-          color: #0f172a;
-        }
-
-        .close-modal-btn {
-          background: none;
-          border: none;
-          font-size: 1.5rem;
-          color: #64748b;
-          cursor: pointer;
-          line-height: 1;
-        }
-
-        .modal-body {
-          padding: 1.5rem;
-          font-size: 0.925rem;
-          color: #334155;
-          line-height: 1.6;
-        }
-
-        .modal-body p {
-          margin-bottom: 0.9rem;
-        }
-
-        .modal-footer {
-          padding: 1rem 1.5rem;
-          background: #f8fafc;
-          border-top: 1px solid #e2e8f0;
-          text-align: right;
-        }
-
-        .modal-close-action {
-          background: #0f172a;
-          color: white;
-          border: none;
-          padding: 0.5rem 1.2rem;
-          border-radius: 6px;
-          font-size: 0.85rem;
-          font-weight: 600;
-          cursor: pointer;
-        }
-      `}</style>
     </div>
   );
 }
