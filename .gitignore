@@ -18,3 +18,4 @@ zone_builder_engine/venv/
 * 2
 
 .vercel
+.env*
