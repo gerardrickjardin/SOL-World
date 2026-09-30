@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 /**
- * SOL REViBE MindBody Wellness Station Customer Checkout & Warranty Registration
+ * SOL REViBE Mind-Body Wellness Station Customer Checkout & Warranty Registration
  * Designed for Next.js / React single-page direct checkout.
  */
 export default function CheckoutPage() {
@@ -137,7 +137,7 @@ export default function CheckoutPage() {
               <h2>Order Confirmed & Warranty Registered!</h2>
               <p className="conf-subtitle">
                 Thank you, <strong>{formData.fullName || 'Valued Customer'}</strong>. Your order for the{' '}
-                <strong>SOL REViBE MindBody Wellness Station (P90 Plus Complete Package)</strong> has been successfully placed.
+                <strong>SOL REViBE Mind-Body Wellness Station (P90 Plus Complete Package)</strong> has been successfully placed.
               </p>
 
               <div className="token-details-box">
@@ -191,8 +191,8 @@ export default function CheckoutPage() {
             <div className="checkout-grid">
               {/* Left Column: Product Overview & Bundle */}
               <section className="product-summary-pane">
-                <div className="product-tag">MindBody Wellness Station</div>
-                <h2 className="product-title">SOL REViBE MindBody Wellness Station</h2>
+                <div className="product-tag">Mind-Body Wellness Station</div>
+                <h2 className="product-title">SOL REViBE Mind-Body Wellness Station</h2>
                 <p style={{ fontSize: '0.875rem', color: '#64748B', marginTop: '-0.5rem', marginBottom: '1rem', fontWeight: 500 }}>
                   P90 Plus Complete Station Package
                 </p>
@@ -232,7 +232,7 @@ export default function CheckoutPage() {
                 <div className="station-photo-wrapper">
                   <img
                     src="assets/soul_revive_station_package.jpg"
-                    alt="SOL REViBE MindBody Wellness Station Complete Package"
+                    alt="SOL REViBE Mind-Body Wellness Station Complete Package"
                     className="station-photo"
                   />
                   <div className="station-photo-badge">Complete 5-Piece Station Setup</div>
@@ -762,7 +762,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="copyright-line">
-            &copy; {new Date().getFullYear()} SOL REViBE &bull; MindBody Wellness Station. All Rights Reserved.
+            &copy; {new Date().getFullYear()} SOL REViBE &bull; Mind-Body Wellness Station. All Rights Reserved.
           </div>
         </footer>
       </main>
