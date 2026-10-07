@@ -215,10 +215,6 @@
                     <label class="opt"><input type="radio" name="barefoot" value="Yes"> Yes</label>
                     <label class="opt"><input type="radio" name="barefoot" value="No"> No</label>
                 </div>
-                <div class="field">
-                    <label class="lbl" for="notes">Notes (Optional)</label>
-                    <textarea id="notes" name="notes" rows="2"></textarea>
-                </div>
 
                 <p class="fine">The SOL REViBE Mind-Body Recharge Station uses PEMF (Pulsed Electromagnetic Field) and Terahertz energy. These devices are wellness devices and are not intended to diagnose, treat, cure, or prevent any disease. The Quick Screen helps ensure comfort and safety for anyone who might be sensitive to these energies.</p>
 
@@ -442,7 +438,6 @@
                     pacemaker_or_implant: checked('pacemaker'),
                     pregnant: checked('pregnant'),
                     ok_barefoot: checked('barefoot'),
-                    notes: v('notes'),
                     goals: goals.join('; '),
                     signature_image: canvas.toDataURL('image/png'),
                     waiver_date: dateEl.value,
