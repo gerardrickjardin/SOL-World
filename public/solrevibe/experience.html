@@ -210,11 +210,6 @@
                     <label class="opt"><input type="radio" name="pregnant" value="Yes"> Yes</label>
                     <label class="opt"><input type="radio" name="pregnant" value="No"> No</label>
                 </div>
-                <div class="q">
-                    <p class="q-text">Are you OK to be barefoot? <span class="req">* <em>required</em></span></p>
-                    <label class="opt"><input type="radio" name="barefoot" value="Yes"> Yes</label>
-                    <label class="opt"><input type="radio" name="barefoot" value="No"> No</label>
-                </div>
 
                 <p class="fine">The SOL REViBE Mind-Body Recharge Station uses PEMF (Pulsed Electromagnetic Field) and Terahertz energy. These devices are wellness devices and are not intended to diagnose, treat, cure, or prevent any disease. The Quick Screen helps ensure comfort and safety for anyone who might be sensitive to these energies.</p>
 
@@ -423,7 +418,7 @@
                     errorEl.textContent = 'Please choose a location from the list.'; return;
                 }
                 if (!/^\S+@\S+\.\S+$/.test(v('email'))) { errorEl.textContent = 'Please enter a valid email address.'; return; }
-                if (!checked('pacemaker') || !checked('pregnant') || !checked('barefoot')) { errorEl.textContent = 'Please answer all required safety screen questions.'; return; }
+                if (!checked('pacemaker') || !checked('pregnant')) { errorEl.textContent = 'Please answer all required safety screen questions.'; return; }
                 if (!signed) { errorEl.textContent = 'Please sign the form in the signature box.'; return; }
                 if (!dateEl.value) { errorEl.textContent = 'Please select today\'s date.'; return; }
 
@@ -437,7 +432,6 @@
                     email: v('email'), phone: v('phone'), phone_number: v('phone'), location: selected.label, location_business: selected.name, location_city: selected.city, location_state: selected.state,
                     pacemaker_or_implant: checked('pacemaker'),
                     pregnant: checked('pregnant'),
-                    ok_barefoot: checked('barefoot'),
                     goals: goals.join('; '),
                     signature_image: canvas.toDataURL('image/png'),
                     waiver_date: dateEl.value,
