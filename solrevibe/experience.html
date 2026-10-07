@@ -67,7 +67,8 @@
             -webkit-background-clip: text; background-clip: text;
             -webkit-text-fill-color: transparent; color: transparent;
         }
-        .hero p { max-width: 640px; margin: 0 auto; color: var(--light-gray); font-size: 1.05rem; }
+        .hero p { max-width: 900px; margin: 0 auto; color: var(--light-gray); font-size: 1.05rem; }
+        @media (min-width: 900px) { .hero p { white-space: nowrap; max-width: none; } }
 
         /* Form section */
         .form-section {
@@ -142,7 +143,7 @@
 
     <header class="hero">
         <h1>A Recovery Experience <span class="grad">You Can Feel</span> Immediately</h1>
-        <p>SOL REViBE all-in-one wellness devices combine PEMF and Terahertz technology in a way that's designed to help your body recharge, rebalance, and repair fast.</p>
+        <p>SOL REViBE all-in-one wellness devices combine PEMF and Terahertz technology<br>in a way that's designed to help your body recharge, rebalance, and repair fast.</p>
     </header>
 
     <main class="form-section">
