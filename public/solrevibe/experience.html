@@ -213,16 +213,6 @@
 
                 <p class="fine">The Olylife Tera-P90+ uses PEMF (Pulsed Electromagnetic Field) and Terahertz Energy. This device is a wellness device and is not intended to diagnose, treat, cure, or prevent any disease. The Quick Screen helps ensure comfort and safety for anyone who might be sensitive to these energies.</p>
 
-                <div class="q">
-                    <p class="q-text">What would you like to feel or achieve using the SOL REViBE Station?</p>
-                    <label class="opt"><input type="checkbox" name="goals" value="Improve circulation (promote cold hands or feet)"> Improve circulation (promote cold hands or feet)</label>
-                    <label class="opt"><input type="checkbox" name="goals" value="Ease body comfort and general aches or pains"> Ease body comfort and general aches or pains</label>
-                    <label class="opt"><input type="checkbox" name="goals" value="Alleviate inflammation"> Alleviate inflammation</label>
-                    <label class="opt"><input type="checkbox" name="goals" value="Help manage stress or calm the mind"> Help manage stress or calm the mind</label>
-                    <label class="opt"><input type="checkbox" name="goals" value="Enjoy better sleep or more vivid dreams"> Enjoy better sleep or more vivid dreams</label>
-                    <label class="opt"><input type="checkbox" name="goals" value="Refresh and recharge energy levels"> Refresh and recharge energy levels</label>
-                </div>
-
                 <p class="fine"><strong>Gentle Reminder:</strong> While using the SOL REViBE Station, relax with your feet on the footpad. Make sure your feet are clean and dry. Notice any sensations as you relax, and let us know if you feel any discomfort. Take the time to relax together with the session while using the Station.</p>
 
                 <p class="fine"><strong>Your Signature:</strong> By signing, I acknowledge that I am participating voluntarily and that SOL REViBE and the venue that provides this session are not liable for any effects or outcomes. I have disclosed any health conditions that apply to me and agree to stop using the Station if I feel unwell. I understand that this experience is for general wellness only, and I confirm that the information I have provided on this form is accurate to the best of my knowledge.</p>
@@ -425,14 +415,12 @@
                 btn.disabled = true; btn.textContent = 'Submitting...';
 
                 const nameParts = v('fullName').split(/\s+/);
-                const goals = Array.from(form.querySelectorAll('input[name="goals"]:checked')).map(c => c.value);
                 const payload = {
                     full_name: v('fullName'), name: v('fullName'),
                     first_name: nameParts[0], last_name: nameParts.slice(1).join(' '),
                     email: v('email'), phone: v('phone'), phone_number: v('phone'), location: selected.label, location_business: selected.name, location_city: selected.city, location_state: selected.state,
                     pacemaker_or_implant: checked('pacemaker'),
                     pregnant: checked('pregnant'),
-                    goals: goals.join('; '),
                     signature_image: canvas.toDataURL('image/png'),
                     waiver_date: dateEl.value,
                     source: 'Waiver & Wellness Intake',
