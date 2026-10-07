@@ -165,42 +165,6 @@
                     <label class="lbl" for="email">Email Address <span class="req">* <em>required</em></span></label>
                     <input type="email" id="email" name="email" placeholder="e.g. you@email.com" autocomplete="email" required>
                 </div>
-                <div class="field">
-                    <label class="lbl" for="street">Street Address</label>
-                    <input type="text" id="street" name="street" placeholder="Enter your full address" autocomplete="street-address">
-                </div>
-                <div class="row">
-                    <div class="field">
-                        <label class="lbl" for="city">City</label>
-                        <input type="text" id="city" name="city" placeholder="Enter your city" autocomplete="address-level2">
-                    </div>
-                    <div class="field">
-                        <label class="lbl" for="state">State</label>
-                        <input type="text" id="state" name="state" placeholder="Enter your state" autocomplete="address-level1">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="field">
-                        <label class="lbl" for="country">Country</label>
-                        <select id="country" name="country" autocomplete="country-name">
-                            <option value="">Enter your country</option>
-                            <option>United States</option>
-                            <option>Canada</option>
-                            <option>Mexico</option>
-                            <option>United Kingdom</option>
-                            <option>Australia</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label class="lbl" for="zip">Postal Code</label>
-                        <input type="text" id="zip" name="zip" placeholder="ZIP or postal code" autocomplete="postal-code">
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="lbl" for="referral">Who Referred You?</label>
-                    <input type="text" id="referral" name="referral" placeholder="Enter your text">
-                </div>
 
                 <h3 class="safety-title">Before You Begin&ndash;Quick Safety Screen</h3>
 
@@ -332,9 +296,6 @@
                     full_name: v('fullName'), name: v('fullName'),
                     first_name: nameParts[0], last_name: nameParts.slice(1).join(' '),
                     email: v('email'), phone: v('phone'), phone_number: v('phone'),
-                    street_address: v('street'), city: v('city'), state: v('state'),
-                    country: document.getElementById('country').value, postal_code: v('zip'),
-                    referred_by: v('referral'),
                     pacemaker_or_implant: checked('pacemaker'),
                     pregnant: checked('pregnant'),
                     ok_barefoot: checked('barefoot'),
