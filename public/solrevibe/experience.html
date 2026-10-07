@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Experience SOL REViBE | Waiver &amp; Wellness Intake Form</title>
+    <meta name="description" content="Complete the SOL REViBE waiver and wellness intake form to experience the mind-body recharge station and feel the difference immediately.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --sol-deep: #000814;
+            --deep-navy: #0E1320;
+            --sol-violet: #6C3AED;
+            --revibe-magenta: #FF2F90;
+            --soft-pink: #FF7AB8;
+            --energy-cyan: #00E5FF;
+            --light-gray: #E6E7EC;
+            --ink: #0F172A;
+            --muted: #64748B;
+            --border: #E2E8F0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--sol-deep);
+            color: #fff;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Nav */
+        .nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 28px; background: rgba(0, 8, 20, 0.88);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(108, 58, 237, 0.3);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .nav img { height: 64px; object-fit: contain; display: block; }
+        .nav a.back {
+            color: var(--light-gray); text-decoration: none; font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase; transition: color .2s;
+        }
+        .nav a.back:hover { color: var(--energy-cyan); }
+
+        /* Hero */
+        .hero {
+            text-align: center; padding: 72px 24px 64px;
+            background:
+                radial-gradient(circle at 20% 0%, rgba(108, 58, 237, 0.35) 0%, transparent 55%),
+                radial-gradient(circle at 85% 100%, rgba(255, 47, 144, 0.22) 0%, transparent 55%),
+                var(--sol-deep);
+            border-bottom: 1px solid rgba(108, 58, 237, 0.25);
+        }
+        .hero h1 {
+            font-family: 'Outfit', 'Inter', sans-serif; font-weight: 800;
+            font-size: clamp(2rem, 4.6vw, 3.4rem); line-height: 1.12;
+            letter-spacing: -0.02em; max-width: 760px; margin: 0 auto 18px;
+        }
+        .grad {
+            background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #00E5FF 100%);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; color: transparent;
+        }
+        .hero p { max-width: 640px; margin: 0 auto; color: var(--light-gray); font-size: 1.05rem; }
+
+        /* Form section */
+        .form-section {
+            padding: 56px 20px 90px;
+            background: linear-gradient(180deg, #0a1122 0%, #000814 100%);
+        }
+        .card {
+            max-width: 720px; margin: 0 auto; background: #fff; color: var(--ink);
+            border-radius: 20px; padding: 44px 40px 40px;
+            box-shadow: 0 30px 70px rgba(0, 4, 10, 0.7), 0 0 50px rgba(108, 58, 237, 0.25);
+            border: 1px solid rgba(108, 58, 237, 0.35);
+        }
+        .card-logo { display: block; height: 70px; margin: 0 auto 18px; object-fit: contain; background: #000814; border-radius: 14px; padding: 6px 18px; }
+        .card h2 { font-family: 'Outfit', sans-serif; font-size: 1.45rem; text-align: center; font-weight: 800; line-height: 1.25; }
+        .card .sub { text-align: center; font-weight: 700; margin-top: 6px; }
+        .card .devices { text-align: center; font-style: italic; font-weight: 700; font-size: 0.9rem; margin: 6px 0 30px; color: var(--sol-violet); }
+
+        .field { margin-bottom: 18px; }
+        label.lbl { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; }
+        .req { color: #DC2626; }
+        input[type=text], input[type=tel], input[type=email], input[type=date], select, textarea {
+            width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: 8px;
+            font: inherit; font-size: 0.9rem; color: var(--ink); background: #fff; transition: border-color .2s, box-shadow .2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none; border-color: var(--sol-violet); box-shadow: 0 0 0 3px rgba(108, 58, 237, 0.18);
+        }
+        ::placeholder { color: #A0AEC0; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .safety-title { font-family: 'Outfit', sans-serif; font-size: 1.55rem; font-weight: 800; margin: 30px 0 18px; }
+        .q { margin-bottom: 18px; }
+        .q-text { font-size: 0.84rem; font-weight: 600; margin-bottom: 8px; }
+        .opt { display: flex; align-items: flex-start; gap: 9px; font-size: 0.85rem; padding: 4px 0; cursor: pointer; }
+        .opt input { margin-top: 4px; accent-color: var(--sol-violet); width: 15px; height: 15px; flex-shrink: 0; }
+        .fine { font-size: 0.72rem; color: #475569; line-height: 1.55; margin: 20px 0; }
+        .fine strong { color: var(--ink); }
+
+        .sig-wrap { border: 1px solid var(--border); border-radius: 8px; background: #fff; position: relative; }
+        canvas#sig { width: 100%; height: 170px; display: block; touch-action: none; cursor: crosshair; border-radius: 8px; }
+        .sig-clear { display: block; margin: 6px 0 0 auto; background: none; border: none; font-size: 0.75rem; color: var(--muted); cursor: pointer; text-decoration: underline; }
+        .sig-clear:hover { color: var(--revibe-magenta); }
+
+        .submit {
+            width: 100%; margin-top: 22px; padding: 14px; border: none; border-radius: 10px; cursor: pointer;
+            font: inherit; font-weight: 700; font-size: 1rem; color: #fff; letter-spacing: 0.02em;
+            background: linear-gradient(135deg, var(--revibe-magenta), var(--sol-violet));
+            box-shadow: 0 10px 28px rgba(255, 47, 144, 0.35); transition: transform .2s, box-shadow .2s, opacity .2s;
+        }
+        .submit:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(255, 47, 144, 0.5); }
+        .submit:disabled { opacity: 0.7; cursor: wait; transform: none; }
+        .error { color: #DC2626; font-size: 0.82rem; margin-top: 12px; text-align: center; min-height: 1em; }
+
+        .success { display: none; text-align: center; padding: 40px 10px; }
+        .success .check { width: 68px; height: 68px; border-radius: 50%; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #fff; background: linear-gradient(135deg, var(--revibe-magenta), var(--sol-violet)); }
+        .success h3 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 8px; }
+        .success p { color: #475569; }
+
+        @media (max-width: 600px) {
+            .card { padding: 30px 20px; }
+            .row { grid-template-columns: 1fr; gap: 0; }
+            .nav img { height: 52px; }
+            .hero { padding: 52px 20px 48px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="index.html"><img src="assets/SOL_REViBE_Star_Logo.png?v=20260908b" alt="SOL REViBE Logo"></a>
+        <a class="back" href="index.html">&larr; Back to Home</a>
+    </nav>
+
+    <header class="hero">
+        <h1>A Recovery Experience <span class="grad">You Can Feel</span> Immediately</h1>
+        <p>SOL REViBE all-in-one wellness devices combine PEMF and Terahertz technology in a way that's designed to help your body recharge, rebalance, and repair fast.</p>
+    </header>
+
+    <main class="form-section">
+        <div class="card" id="waiverCard">
+            <form id="waiverForm" novalidate>
+                <img class="card-logo" src="assets/SOL_REViBE_Star_Logo.png?v=20260908b" alt="SOL REViBE">
+                <h2>Waiver &amp; Wellness Intake Form For Experiencing <span class="grad">SOL REViBE</span></h2>
+                <p class="sub">Frequency Wellness Devices</p>
+                <p class="devices">SOL REViBE Mind-Body Recharge Station</p>
+
+                <div class="field">
+                    <label class="lbl" for="fullName">Full Name <span class="req">*</span></label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" autocomplete="name" required>
+                </div>
+                <div class="field">
+                    <label class="lbl" for="phone">Contact Number <span class="req">*</span></label>
+                    <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" autocomplete="tel" required>
+                </div>
+                <div class="field">
+                    <label class="lbl" for="email">Email Address <span class="req">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="e.g. you@email.com" autocomplete="email" required>
+                </div>
+                <div class="field">
+                    <label class="lbl" for="street">Street Address</label>
+                    <input type="text" id="street" name="street" placeholder="Enter your full address" autocomplete="street-address">
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label class="lbl" for="city">City</label>
+                        <input type="text" id="city" name="city" placeholder="Enter your city" autocomplete="address-level2">
+                    </div>
+                    <div class="field">
+                        <label class="lbl" for="state">State</label>
+                        <input type="text" id="state" name="state" placeholder="Enter your state" autocomplete="address-level1">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label class="lbl" for="country">Country</label>
+                        <select id="country" name="country" autocomplete="country-name">
+                            <option value="">Enter your country</option>
+                            <option>United States</option>
+                            <option>Canada</option>
+                            <option>Mexico</option>
+                            <option>United Kingdom</option>
+                            <option>Australia</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label class="lbl" for="zip">Postal Code</label>
+                        <input type="text" id="zip" name="zip" placeholder="ZIP or postal code" autocomplete="postal-code">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="lbl" for="referral">Who Referred You?</label>
+                    <input type="text" id="referral" name="referral" placeholder="Enter your text">
+                </div>
+
+                <h3 class="safety-title">Before You Begin&ndash;Quick Safety Screen</h3>
+
+                <div class="q">
+                    <p class="q-text">Do you have a pacemaker or any other implanted medical devices? <span class="req">*</span></p>
+                    <label class="opt"><input type="radio" name="pacemaker" value="Yes - pacemaker or implanted device"> Yes, I have a pacemaker or implanted device</label>
+                    <label class="opt"><input type="radio" name="pacemaker" value="No implanted medical devices"> No, I do not have any implanted medical devices</label>
+                </div>
+                <div class="q">
+                    <p class="q-text">Are you currently pregnant (or think you might be)? <span class="req">*</span></p>
+                    <label class="opt"><input type="radio" name="pregnant" value="Yes"> Yes</label>
+                    <label class="opt"><input type="radio" name="pregnant" value="No"> No</label>
+                </div>
+                <div class="q">
+                    <p class="q-text">Are you OK to be barefoot? <span class="req">*</span></p>
+                    <label class="opt"><input type="radio" name="barefoot" value="Yes"> Yes</label>
+                    <label class="opt"><input type="radio" name="barefoot" value="No"> No</label>
+                </div>
+                <div class="field">
+                    <label class="lbl" for="notes">Notes (Optional)</label>
+                    <textarea id="notes" name="notes" rows="2"></textarea>
+                </div>
+
+                <p class="fine">The SOL REViBE Mind-Body Recharge Station uses PEMF (Pulsed Electromagnetic Field) and Terahertz energy. These devices are wellness devices and are not intended to diagnose, treat, cure, or prevent any disease. The Quick Screen helps ensure comfort and safety for anyone who might be sensitive to these energies.</p>
+
+                <div class="q">
+                    <p class="q-text">What would you like to feel or achieve using the SOL REViBE Station?</p>
+                    <label class="opt"><input type="checkbox" name="goals" value="Improve circulation (promote cold hands or feet)"> Improve circulation (promote cold hands or feet)</label>
+                    <label class="opt"><input type="checkbox" name="goals" value="Ease body comfort and general aches or pains"> Ease body comfort and general aches or pains</label>
+                    <label class="opt"><input type="checkbox" name="goals" value="Alleviate inflammation"> Alleviate inflammation</label>
+                    <label class="opt"><input type="checkbox" name="goals" value="Help manage stress or calm the mind"> Help manage stress or calm the mind</label>
+                    <label class="opt"><input type="checkbox" name="goals" value="Enjoy better sleep or more vivid dreams"> Enjoy better sleep or more vivid dreams</label>
+                    <label class="opt"><input type="checkbox" name="goals" value="Refresh and recharge energy levels"> Refresh and recharge energy levels</label>
+                </div>
+
+                <p class="fine"><strong>Gentle Reminder:</strong> While using the SOL REViBE Station, relax with your feet on the footpad. Make sure your feet are clean and dry. Notice any sensations as you relax, and let us know if you feel any discomfort. Take the time to relax together with the session while using the Station.</p>
+
+                <p class="fine"><strong>Your Signature:</strong> By signing, I acknowledge that I am participating voluntarily and that SOL REViBE and the venue that provides this session are not liable for any effects or outcomes. I have disclosed any health conditions that apply to me and agree to stop using the Station if I feel unwell. I understand that this experience is for general wellness only, and I confirm that the information I have provided on this form is accurate to the best of my knowledge.</p>
+
+                <div class="field">
+                    <label class="lbl">Signature <span class="req">*</span></label>
+                    <div class="sig-wrap"><canvas id="sig"></canvas></div>
+                    <button type="button" class="sig-clear" id="sigClear">Clear</button>
+                </div>
+                <div class="field">
+                    <label class="lbl" for="date">Date <span class="req">*</span></label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <button type="submit" class="submit" id="submitBtn">Submit</button>
+                <p class="error" id="formError" role="alert"></p>
+            </form>
+
+            <div class="success" id="successBox">
+                <div class="check">&#10003;</div>
+                <h3>Thank you!</h3>
+                <p>Your waiver and wellness intake form has been received. Enjoy your SOL REViBE experience.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function () {
+            const WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
+
+            const form = document.getElementById('waiverForm');
+            const errorEl = document.getElementById('formError');
+            const btn = document.getElementById('submitBtn');
+            const dateEl = document.getElementById('date');
+            const d = new Date();
+            dateEl.value = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+
+            // Signature pad
+            const canvas = document.getElementById('sig');
+            const ctx = canvas.getContext('2d');
+            let drawing = false, signed = false;
+
+            function sizeCanvas() {
+                const ratio = window.devicePixelRatio || 1;
+                const rect = canvas.getBoundingClientRect();
+                const prev = signed ? canvas.toDataURL() : null;
+                canvas.width = rect.width * ratio;
+                canvas.height = rect.height * ratio;
+                ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+                ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#0F172A';
+                if (prev) { const img = new Image(); img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height); img.src = prev; }
+            }
+            sizeCanvas();
+            window.addEventListener('resize', sizeCanvas);
+
+            function pos(e) {
+                const r = canvas.getBoundingClientRect();
+                return { x: e.clientX - r.left, y: e.clientY - r.top };
+            }
+            canvas.addEventListener('pointerdown', e => {
+                drawing = true; canvas.setPointerCapture(e.pointerId);
+                const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y);
+            });
+            canvas.addEventListener('pointermove', e => {
+                if (!drawing) return;
+                const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); signed = true;
+            });
+            ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => canvas.addEventListener(ev, () => { drawing = false; }));
+            document.getElementById('sigClear').addEventListener('click', () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height); signed = false;
+            });
+
+            function checked(name) {
+                const el = form.querySelector('input[name="' + name + '"]:checked');
+                return el ? el.value : '';
+            }
+
+            form.addEventListener('submit', async e => {
+                e.preventDefault();
+                errorEl.textContent = '';
+                const v = id => document.getElementById(id).value.trim();
+
+                if (!v('fullName') || !v('phone') || !v('email')) { errorEl.textContent = 'Please complete your name, contact number and email.'; return; }
+                if (!/^\S+@\S+\.\S+$/.test(v('email'))) { errorEl.textContent = 'Please enter a valid email address.'; return; }
+                if (!checked('pacemaker') || !checked('pregnant') || !checked('barefoot')) { errorEl.textContent = 'Please answer all required safety screen questions.'; return; }
+                if (!signed) { errorEl.textContent = 'Please sign the form in the signature box.'; return; }
+                if (!dateEl.value) { errorEl.textContent = 'Please select today\'s date.'; return; }
+
+                btn.disabled = true; btn.textContent = 'Submitting...';
+
+                const nameParts = v('fullName').split(/\s+/);
+                const goals = Array.from(form.querySelectorAll('input[name="goals"]:checked')).map(c => c.value);
+                const payload = {
+                    full_name: v('fullName'), name: v('fullName'),
+                    first_name: nameParts[0], last_name: nameParts.slice(1).join(' '),
+                    email: v('email'), phone: v('phone'), phone_number: v('phone'),
+                    street_address: v('street'), city: v('city'), state: v('state'),
+                    country: document.getElementById('country').value, postal_code: v('zip'),
+                    referred_by: v('referral'),
+                    pacemaker_or_implant: checked('pacemaker'),
+                    pregnant: checked('pregnant'),
+                    ok_barefoot: checked('barefoot'),
+                    notes: v('notes'),
+                    goals: goals.join('; '),
+                    signature_image: canvas.toDataURL('image/png'),
+                    waiver_date: dateEl.value,
+                    source: 'Waiver & Wellness Intake',
+                    tags: ['solrevibe-waiver', 'experience-form'],
+                    submittedAt: new Date().toISOString()
+                };
+
+                try {
+                    const res = await fetch(WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    form.style.display = 'none';
+                    document.getElementById('successBox').style.display = 'block';
+                    window.scrollTo({ top: document.getElementById('waiverCard').offsetTop - 80, behavior: 'smooth' });
+                } catch (err) {
+                    console.error('Waiver submission error:', err);
+                    errorEl.textContent = 'Sorry, something went wrong submitting your form. Please try again.';
+                    btn.disabled = false; btn.textContent = 'Submit';
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
