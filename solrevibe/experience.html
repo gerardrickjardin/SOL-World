@@ -128,6 +128,24 @@
         .success h3 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 8px; }
         .success p { color: #475569; }
 
+        /* Searchable location combobox */
+        .combo { position: relative; }
+        .combo-input { padding-right: 38px; }
+        .combo-caret { position: absolute; right: 14px; top: 50%; width: 8px; height: 8px; margin-top: -6px;
+            border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); pointer-events: none; }
+        .combo-list { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 30; max-height: 260px; overflow-y: auto;
+            list-style: none; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 6px;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18); }
+        .combo-list[hidden] { display: none; }
+        .combo-option { padding: 10px 12px; border-radius: 7px; font-size: 0.88rem; cursor: pointer; color: var(--ink); }
+        .combo-option[aria-selected="true"], .combo-option:hover { background: rgba(108, 58, 237, 0.1); }
+        .combo-option .sep { color: var(--muted); }
+        .combo-option mark { background: rgba(255, 47, 144, 0.18); color: inherit; border-radius: 3px; padding: 0 1px; }
+        .combo-empty { padding: 12px; font-size: 0.85rem; color: var(--muted); }
+        .combo-help { font-size: 0.74rem; color: var(--muted); margin-top: 6px; }
+        .combo-error { font-size: 0.78rem; color: #DC2626; margin-top: 6px; }
+        .combo-input.invalid { border-color: #DC2626; }
+
         @media (max-width: 600px) {
             .card { padding: 30px 20px; }
             .row { grid-template-columns: 1fr; gap: 0; }
@@ -167,7 +185,17 @@
                 </div>
                 <div class="field">
                     <label class="lbl" for="location">Location <span class="req">* <em>required</em></span></label>
-                    <input type="text" id="location" name="location" placeholder="Enter your text" required>
+                    <div class="combo" id="locationCombo">
+                        <input type="text" id="location" class="combo-input" role="combobox" aria-autocomplete="list"
+                            aria-expanded="false" aria-controls="locationList" aria-haspopup="listbox"
+                            aria-describedby="locationHelp" aria-required="true"
+                            placeholder="Search by business name or city" autocomplete="off" autocapitalize="off" spellcheck="false">
+                        <span class="combo-caret" aria-hidden="true"></span>
+                        <ul id="locationList" class="combo-list" role="listbox" aria-label="Locations" hidden></ul>
+                        <input type="hidden" id="locationValue" name="location">
+                    </div>
+                    <p class="combo-help" id="locationHelp">Start typing a business name or city, then choose from the list.</p>
+                    <p class="combo-error" id="locationError" role="alert" hidden>Please choose a location from the list.</p>
                 </div>
 
                 <h3 class="safety-title">Before You Begin&ndash;Quick Safety Screen</h3>
@@ -276,6 +304,113 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height); signed = false;
             });
 
+            // ---------------------------------------------------------------
+            // Searchable location combobox (restricted to the LOCATIONS list)
+            // ---------------------------------------------------------------
+            // SAMPLE DATA - replace with the real list of SOL REViBE partner locations.
+            // Each entry: { name: 'Business Name', city: 'City', state: 'ST' }
+            const LOCATIONS = [
+                { name: "Joe's Massage Parlor", city: 'Golden', state: 'CO' },
+                { name: 'Sample Wellness Studio', city: 'Denver', state: 'CO' },
+                { name: 'Sample Recovery Lounge', city: 'Boulder', state: 'CO' },
+                { name: 'Sample Day Spa', city: 'Phoenix', state: 'AZ' }
+            ].map(l => ({ ...l, label: l.name + ' \u2014 ' + l.city + ', ' + l.state }));
+
+            const norm = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+            const escapeHtml = t => t.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            LOCATIONS.forEach(l => { l.search = norm([l.name, l.city, l.state, l.city + ', ' + l.state, l.label].join(' | ')); });
+
+            const combo = document.getElementById('locationCombo');
+            const input = document.getElementById('location');
+            const list = document.getElementById('locationList');
+            const hidden = document.getElementById('locationValue');
+            const comboError = document.getElementById('locationError');
+            let results = [], active = -1, selected = null;
+
+            function highlight(label, query) {
+                const terms = norm(query).split(/\s+/).filter(Boolean);
+                let html = escapeHtml(label);
+                const folded = norm(label);
+                if (!terms.length || folded.length !== label.length) return html;
+                const ranges = [];
+                terms.forEach(t => { let i = folded.indexOf(t); while (i > -1) { ranges.push([i, i + t.length]); i = folded.indexOf(t, i + t.length); } });
+                ranges.sort((a, b) => a[0] - b[0]);
+                const merged = [];
+                ranges.forEach(r => { const last = merged[merged.length - 1]; if (last && r[0] <= last[1]) last[1] = Math.max(last[1], r[1]); else merged.push(r.slice()); });
+                let out = '', pos = 0;
+                merged.forEach(([a, b]) => { out += escapeHtml(label.slice(pos, a)) + '<mark>' + escapeHtml(label.slice(a, b)) + '</mark>'; pos = b; });
+                return out + escapeHtml(label.slice(pos));
+            }
+
+            function render() {
+                const q = input.value;
+                const terms = norm(q).split(/\s+/).filter(Boolean);
+                results = terms.length ? LOCATIONS.filter(l => terms.every(t => l.search.includes(t))) : LOCATIONS.slice();
+                if (terms.length) {
+                    // Rank matches that start a word (e.g. "den" -> Denver) above mid-word matches (Golden)
+                    const rank = l => terms.every(t => (' ' + l.search).includes(' ' + t) || (' ' + l.search).includes('| ' + t) || (' ' + l.search).includes(', ' + t)) ? 0 : 1;
+                    results = results.map((l, i) => ({ l, i, r: rank(l) })).sort((x, y) => x.r - y.r || x.i - y.i).map(x => x.l);
+                }
+                list.innerHTML = '';
+                if (!results.length) {
+                    const li = document.createElement('li');
+                    li.className = 'combo-empty'; li.setAttribute('role', 'presentation');
+                    li.textContent = 'No matching locations found.';
+                    list.appendChild(li);
+                }
+                results.forEach((l, i) => {
+                    const li = document.createElement('li');
+                    li.id = 'locationOpt' + i; li.className = 'combo-option'; li.setAttribute('role', 'option');
+                    li.setAttribute('aria-selected', 'false'); li.dataset.index = i;
+                    li.innerHTML = highlight(l.label, q).replace(' \u2014 ', ' <span class="sep">\u2014</span> ');
+                    list.appendChild(li);
+                });
+                active = -1;
+                input.removeAttribute('aria-activedescendant');
+            }
+            function open() { if (list.hidden) { render(); list.hidden = false; input.setAttribute('aria-expanded', 'true'); } }
+            function close() { list.hidden = true; input.setAttribute('aria-expanded', 'false'); active = -1; input.removeAttribute('aria-activedescendant'); }
+            function setActive(i) {
+                const opts = list.querySelectorAll('.combo-option');
+                if (!opts.length) return;
+                active = (i + opts.length) % opts.length;
+                opts.forEach((o, n) => o.setAttribute('aria-selected', n === active ? 'true' : 'false'));
+                input.setAttribute('aria-activedescendant', opts[active].id);
+                opts[active].scrollIntoView({ block: 'nearest' });
+            }
+            function choose(loc) {
+                selected = loc; input.value = loc.label; hidden.value = loc.label;
+                input.classList.remove('invalid'); comboError.hidden = true; close();
+            }
+            function clearSelection() { selected = null; hidden.value = ''; }
+
+            input.addEventListener('input', () => { clearSelection(); comboError.hidden = true; input.classList.remove('invalid'); list.hidden = true; open(); });
+            input.addEventListener('focus', open);
+            input.addEventListener('click', open);
+            input.addEventListener('keydown', e => {
+                if (e.key === 'ArrowDown') { e.preventDefault(); if (list.hidden) open(); setActive(active + 1); }
+                else if (e.key === 'ArrowUp') { e.preventDefault(); if (list.hidden) open(); setActive(active < 0 ? results.length - 1 : active - 1); }
+                else if (e.key === 'Home' && !list.hidden && active > -1) { e.preventDefault(); setActive(0); }
+                else if (e.key === 'End' && !list.hidden && active > -1) { e.preventDefault(); setActive(results.length - 1); }
+                else if (e.key === 'Enter') { if (!list.hidden) { e.preventDefault(); if (active > -1) choose(results[active]); else if (results.length === 1) choose(results[0]); } }
+                else if (e.key === 'Escape') { if (!list.hidden) { e.preventDefault(); close(); } }
+                else if (e.key === 'Tab') { if (!list.hidden && active > -1) choose(results[active]); }
+            });
+            list.addEventListener('mousedown', e => e.preventDefault()); // keep input focus
+            list.addEventListener('click', e => {
+                const li = e.target.closest('.combo-option');
+                if (li) choose(results[+li.dataset.index]);
+            });
+            document.addEventListener('click', e => { if (!combo.contains(e.target)) close(); });
+            input.addEventListener('blur', () => {
+                close();
+                if (!selected && input.value.trim()) {
+                    const exact = LOCATIONS.find(l => norm(l.label) === norm(input.value));
+                    if (exact) choose(exact);
+                    else { input.classList.add('invalid'); comboError.hidden = false; }
+                }
+            });
+
             function checked(name) {
                 const el = form.querySelector('input[name="' + name + '"]:checked');
                 return el ? el.value : '';
@@ -286,7 +421,11 @@
                 errorEl.textContent = '';
                 const v = id => document.getElementById(id).value.trim();
 
-                if (!v('fullName') || !v('phone') || !v('email') || !v('location')) { errorEl.textContent = 'Please complete your name, contact number, email and location.'; return; }
+                if (!v('fullName') || !v('phone') || !v('email')) { errorEl.textContent = 'Please complete your name, contact number and email.'; return; }
+                if (!selected || !LOCATIONS.some(l => l.label === hidden.value)) {
+                    input.classList.add('invalid'); comboError.hidden = false; input.focus();
+                    errorEl.textContent = 'Please choose a location from the list.'; return;
+                }
                 if (!/^\S+@\S+\.\S+$/.test(v('email'))) { errorEl.textContent = 'Please enter a valid email address.'; return; }
                 if (!checked('pacemaker') || !checked('pregnant') || !checked('barefoot')) { errorEl.textContent = 'Please answer all required safety screen questions.'; return; }
                 if (!signed) { errorEl.textContent = 'Please sign the form in the signature box.'; return; }
@@ -299,7 +438,7 @@
                 const payload = {
                     full_name: v('fullName'), name: v('fullName'),
                     first_name: nameParts[0], last_name: nameParts.slice(1).join(' '),
-                    email: v('email'), phone: v('phone'), phone_number: v('phone'), location: v('location'),
+                    email: v('email'), phone: v('phone'), phone_number: v('phone'), location: selected.label, location_business: selected.name, location_city: selected.city, location_state: selected.state,
                     pacemaker_or_implant: checked('pacemaker'),
                     pregnant: checked('pregnant'),
                     ok_barefoot: checked('barefoot'),
