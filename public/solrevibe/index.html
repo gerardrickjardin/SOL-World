@@ -2178,25 +2178,25 @@
         .aud-overlay[hidden] { display: none; }
         @keyframes audFade { from { opacity: 0; } to { opacity: 1; } }
         @keyframes audRise { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
-        .aud-modal { position: relative; width: 100%; max-width: 760px; padding: 44px 36px 34px; border-radius: 24px; text-align: center; color: #fff;
+        .aud-modal { position: relative; width: 100%; max-width: 1040px; padding: 60px 52px 46px; border-radius: 24px; text-align: center; color: #fff;
             background: linear-gradient(160deg, rgba(14, 19, 32, 0.96), rgba(0, 8, 20, 0.98));
             border: 1px solid rgba(108, 58, 237, 0.5); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(108, 58, 237, 0.25);
             animation: audRise .5s cubic-bezier(.16, 1, .3, 1); }
-        .aud-logo { height: 90px; margin: -10px auto 4px; display: block; background: #fff; border-radius: 16px; padding: 4px 22px; }
-        .aud-eyebrow { font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; color: #00E5FF; font-weight: 700; }
+        .aud-logo { height: 150px; width: auto; margin: -6px auto 10px; display: block; }
+        .aud-eyebrow { margin-bottom: 32px; font-size: 1.05rem; letter-spacing: .16em; text-transform: uppercase; color: #00E5FF; font-weight: 700; }
         .aud-title { font-family: 'Outfit', 'Inter', sans-serif; font-size: clamp(1.5rem, 3.6vw, 2.15rem); font-weight: 800; line-height: 1.2; margin: 8px 0 26px; }
-        .aud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .aud-card { display: flex; flex-direction: column; gap: 6px; align-items: center; justify-content: center; padding: 28px 18px; border-radius: 18px; text-decoration: none; color: #fff;
+        .aud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .aud-card { display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center; padding: 48px 32px; min-height: 240px; border-radius: 18px; text-decoration: none; color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.04); cursor: pointer; font: inherit;
             transition: transform .25s, border-color .25s, box-shadow .25s, background .25s; }
         .aud-card:hover, .aud-card:focus-visible { transform: translateY(-4px); outline: none; background: rgba(255, 255, 255, 0.08); }
         .aud-card.owner:hover, .aud-card.owner:focus-visible { border-color: #6C3AED; box-shadow: 0 14px 34px rgba(108, 58, 237, 0.4); }
         .aud-card.guest:hover, .aud-card.guest:focus-visible { border-color: #FF2F90; box-shadow: 0 14px 34px rgba(255, 47, 144, 0.4); }
-        .aud-icon { font-size: 1.9rem; line-height: 1; }
-        .aud-card strong { font-family: 'Outfit', 'Inter', sans-serif; font-size: 1.15rem; }
+        .aud-icon { font-size: 2.8rem; line-height: 1; }
+        .aud-card strong { font-family: 'Outfit', 'Inter', sans-serif; font-size: 1.6rem; line-height: 1.3; }
         .aud-card span { font-size: .85rem; color: #C9CEDB; }
         .aud-card.guest { background: linear-gradient(135deg, rgba(255, 47, 144, 0.18), rgba(108, 58, 237, 0.2)); }
-        .aud-skip { margin-top: 20px; background: none; border: none; color: #8B93A7; font: inherit; font-size: .82rem; cursor: pointer; text-decoration: underline; }
+        .aud-skip { margin-top: 30px; background: none; border: none; color: #8B93A7; font: inherit; font-size: 1.05rem; cursor: pointer; text-decoration: underline; }
         .aud-skip:hover { color: #fff; }
         body.aud-open { overflow: hidden; }
         @media (max-width: 600px) { .aud-grid { grid-template-columns: 1fr; } .aud-modal { padding: 34px 20px 26px; } }
@@ -2205,21 +2205,18 @@
 
 <body>
     <!-- Audience selector: splits visitors between space owners (B2B) and venue guests (B2C) -->
-    <div class="aud-overlay" id="audienceModal" role="dialog" aria-modal="true" aria-labelledby="audTitle" hidden>
+    <div class="aud-overlay" id="audienceModal" role="dialog" aria-modal="true" aria-label="Welcome to SOL REVIBE" hidden>
         <div class="aud-modal">
-            <img class="aud-logo" src="assets/Cosmic_SOL_REViBE_Logo.png" alt="SOL REViBE">
+            <img class="aud-logo" src="assets/SOL%20REViBE%20Logo.png" alt="SOL REViBE">
             <div class="aud-eyebrow">Welcome to SOL REViBE</div>
-            <h2 class="aud-title" id="audTitle">How would you like to get started?</h2>
             <div class="aud-grid">
                 <a class="aud-card owner" id="audOwner" href="landing/">
                     <span class="aud-icon" aria-hidden="true">&#127970;</span>
-                    <strong>Social Wellness Space Owner</strong>
-                    <span>Explore the business opportunity</span>
+                    <strong>I'm a social wellness space owner who would like to explore the business opportunity.</strong>
                 </a>
                 <a class="aud-card guest" id="audGuest" href="experience.html">
                     <span class="aud-icon" aria-hidden="true">&#10024;</span>
-                    <strong>Experience the Reset</strong>
-                    <span>Try the mind-body recharge station</span>
+                    <strong>I want to experience the mind body recharge station.</strong>
                 </a>
             </div>
             <button type="button" class="aud-skip" id="audSkip">Just browsing for now</button>
