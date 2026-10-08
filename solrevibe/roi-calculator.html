@@ -1412,7 +1412,14 @@
 
             // Read URL Parameters if arriving from Hero Preview
             const urlParams = new URLSearchParams(window.location.search);
-            const initialTraffic = urlParams.get('traffic');
+            let initialTraffic = urlParams.get('traffic');
+            try {
+                if (!initialTraffic) initialTraffic = sessionStorage.getItem('solRevibeTraffic');
+                sessionStorage.removeItem('solRevibeTraffic');
+            } catch (e) {}
+            if (urlParams.has('traffic') && window.history && history.replaceState) {
+                history.replaceState(null, '', window.location.pathname);
+            }
             if (initialTraffic && !isNaN(initialTraffic)) {
                 const parsedVal = Math.min(Math.max(parseInt(initialTraffic, 10), 10), 200);
                 trafficSlider.value = parsedVal;

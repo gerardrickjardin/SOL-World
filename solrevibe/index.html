@@ -2371,7 +2371,7 @@
                             </div>
                         </div>
 
-                        <a href="/roi-calculator?traffic=50" id="teaser-unlock-btn" class="teaser-unlock-cta">
+                        <a href="/roi-calculator" id="teaser-unlock-btn" class="teaser-unlock-cta">
                             <span>Unlock Full ROI Calculator &amp; Secure Your ZIP Code</span>
                             <i class="fa-solid fa-arrow-right"></i>
                         </a>
@@ -2903,7 +2903,8 @@
                 const monthly = traffic * CONVERSION_RATE * PRICE * DAYS;
                 revDisplay.textContent = fmt.format(Math.round(monthly));
 
-                unlockBtn.href = `/roi-calculator?traffic=${traffic}`;
+                unlockBtn.href = '/roi-calculator';
+                try { sessionStorage.setItem('solRevibeTraffic', traffic); } catch (e) {}
 
                 const min = parseFloat(slider.min) || 20;
                 const max = parseFloat(slider.max) || 200;
