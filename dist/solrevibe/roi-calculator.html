@@ -980,6 +980,90 @@
                 padding: 1.5rem;
             }
         }
+
+        /* ══ SOL REViBE Brand Theme (matches homepage: deep navy, magenta, violet, cyan) ══ */
+        :root {
+            --sol-deep: #000814; --deep-navy: #0E1320; --sol-violet: #6C3AED;
+            --revibe-magenta: #FF2F90; --soft-pink: #FF7AB8; --energy-cyan: #00E5FF;
+            --accent-green: #FF2F90; --accent-green-glow: rgba(255, 47, 144, 0.4);
+            --accent-green-dark: #6C3AED; --accent-cyan: #00E5FF; --accent-purple: #6C3AED;
+            --text-primary: #FFFFFF; --text-secondary: #C9CEDB; --text-muted: #8B93A7;
+            --border-glass: rgba(255, 255, 255, 0.1); --border-highlight: rgba(108, 58, 237, 0.4);
+            --brand-gradient: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #6C3AED 100%);
+            --font-display: 'Outfit', 'Inter', sans-serif; --font-body: 'Inter', sans-serif;
+        }
+        html, body {
+            background-color: #000814 !important;
+            background-image:
+                radial-gradient(circle at 50% -10%, rgba(108, 58, 237, 0.28) 0%, transparent 55%),
+                radial-gradient(circle at 100% 40%, rgba(255, 47, 144, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 0% 70%, rgba(0, 229, 255, 0.12) 0%, transparent 45%) !important;
+            background-attachment: fixed !important;
+            color: #FFFFFF !important;
+        }
+        .vibe-navbar {
+            background: rgba(0, 8, 20, 0.85) !important; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(108, 58, 237, 0.3) !important; box-shadow: none !important;
+        }
+        .vibe-navbar .nav-logo-img { filter: drop-shadow(0 0 10px rgba(108, 58, 237, 0.35)); transition: transform .3s ease, filter .3s ease; }
+        .vibe-navbar .nav-logo-img:hover { transform: scale(1.04); filter: drop-shadow(0 0 18px rgba(255, 47, 144, 0.65)); }
+        .vibe-nav-links a { color: #E6E7EC !important; }
+        .vibe-nav-links a:hover { color: #00E5FF !important; }
+        .vibe-nav-links a.active-page { color: #FF2F90 !important; border-bottom: 2px solid #FF2F90 !important; }
+        .vibe-reserve-btn { background: var(--brand-gradient) !important; animation: none !important; box-shadow: 0 4px 18px rgba(255, 47, 144, 0.45) !important; }
+        .hamburger-menu span { background-color: #fff !important; }
+        @media (max-width: 1024px) {
+            .vibe-nav-links { background: rgba(14, 19, 32, 0.98) !important; border-top: 1px solid rgba(108, 58, 237, 0.3) !important; }
+        }
+        .pill-badge { background: rgba(108, 58, 237, 0.15) !important; border: 1px solid rgba(108, 58, 237, 0.45) !important; color: #00E5FF !important; }
+        .pill-badge .dot { background: #FF2F90 !important; box-shadow: 0 0 8px #FF2F90 !important; }
+        .calc-title { color: #FFFFFF !important; }
+        .calc-title .green-text { background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #00E5FF 100%) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
+        .calc-subtitle { color: #C9CEDB !important; }
+        .dashboard-grid {
+            background: linear-gradient(145deg, #0E1320 0%, #080D18 100%) !important;
+            border: 1px solid rgba(108, 58, 237, 0.35) !important;
+            box-shadow: 0 25px 60px rgba(0, 4, 10, 0.8), 0 0 35px rgba(108, 58, 237, 0.18) !important;
+        }
+        .dashboard-grid::before { background: linear-gradient(90deg, transparent 5%, rgba(255, 47, 144, 0.6) 40%, rgba(108, 58, 237, 0.6) 70%, transparent 95%) !important; }
+        .panel-heading h2, .slider-title, .value-prop-header h3, .prop-card h4, .mini-stat-val { color: #FFFFFF !important; }
+        .panel-heading span, .slider-caption, .range-bounds, .mini-stat-title, .value-prop-header p { color: #8B93A7 !important; }
+        .slider-card { background: rgba(255, 255, 255, 0.04) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; }
+        .slider-card:hover { border-color: rgba(255, 47, 144, 0.5) !important; background: rgba(255, 255, 255, 0.07) !important; box-shadow: 0 4px 20px rgba(255, 47, 144, 0.12) !important; }
+        .slider-value-pill { color: #00E5FF !important; background: rgba(0, 229, 255, 0.1) !important; border: 1px solid rgba(0, 229, 255, 0.35) !important; box-shadow: 0 0 15px rgba(0, 229, 255, 0.15) !important; }
+        input[type="range"] { background: #1e293b; }
+        input[type="range"]::-webkit-slider-thumb { background: #00E5FF !important; border: 3px solid #fff !important; box-shadow: 0 0 16px rgba(0, 229, 255, 0.7), 0 2px 8px rgba(0,0,0,0.6) !important; }
+        input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 24px rgba(0, 229, 255, 0.95) !important; }
+        input[type="range"]::-moz-range-thumb { background: #00E5FF !important; border: 3px solid #fff !important; box-shadow: 0 0 16px rgba(0, 229, 255, 0.7) !important; }
+        .constant-note { background: rgba(108, 58, 237, 0.1) !important; border: 1px dashed rgba(108, 58, 237, 0.5) !important; color: #C9CEDB !important; }
+        .constant-note svg { stroke: #00E5FF !important; }
+        .results-panel { background: linear-gradient(160deg, rgba(108, 58, 237, 0.2), rgba(255, 47, 144, 0.1)) !important; border: 1px solid rgba(255, 47, 144, 0.35) !important; box-shadow: 0 4px 30px rgba(255, 47, 144, 0.12), inset 0 0 0 1px rgba(255,255,255,0.04) !important; }
+        .results-panel::before { background: linear-gradient(90deg, #FF2F90, #6C3AED, #00E5FF) !important; }
+        .results-tag, .massive-sublabel, .gauge-label { color: #C9CEDB !important; }
+        .massive-number { color: #FFFFFF !important; text-shadow: 0 0 30px rgba(108, 58, 237, 0.55) !important; }
+        .massive-number.highlight-glow { color: #FFFFFF !important; text-shadow: 0 0 40px rgba(255, 47, 144, 0.75) !important; }
+        .milestone-badge.surpassed { background: var(--brand-gradient) !important; border: 1px solid rgba(255, 122, 184, 0.6) !important; color: #fff !important; box-shadow: 0 0 20px rgba(255, 47, 144, 0.45) !important; }
+        .milestone-badge.under { background: rgba(0, 229, 255, 0.1) !important; border: 1px solid rgba(0, 229, 255, 0.35) !important; color: #00E5FF !important; }
+        .target-gauge-box, .mini-stat-card { background: rgba(0, 8, 20, 0.45) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; }
+        .gauge-status { color: #00E5FF !important; }
+        .gauge-track { background: rgba(255, 255, 255, 0.1) !important; }
+        .gauge-fill { background: linear-gradient(90deg, #FF2F90, #6C3AED, #00E5FF) !important; box-shadow: 0 0 12px rgba(255, 47, 144, 0.5) !important; }
+        .zip-lock-cta-section { border-top: 1px solid rgba(255, 255, 255, 0.12) !important; }
+        .zip-text-input { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(255, 255, 255, 0.18) !important; color: #fff !important; }
+        .zip-text-input::placeholder, .form-row input::placeholder { color: #8B93A7; }
+        .zip-text-input:focus, .form-row input:focus { border-color: #FF2F90 !important; box-shadow: 0 0 15px rgba(255, 47, 144, 0.3) !important; }
+        .zip-lock-submit-btn, .modal-submit-btn { background: var(--brand-gradient) !important; color: #fff !important; box-shadow: 0 8px 24px rgba(255, 47, 144, 0.4) !important; }
+        .zip-lock-submit-btn:hover, .modal-submit-btn:hover { background: var(--brand-gradient) !important; box-shadow: 0 12px 32px rgba(255, 47, 144, 0.6) !important; }
+        .zip-status-message { color: #00E5FF !important; }
+        .prop-card { background: linear-gradient(145deg, #0E1320 0%, #080D18 100%) !important; border: 1px solid rgba(108, 58, 237, 0.3) !important; box-shadow: 0 10px 30px rgba(0, 4, 10, 0.6) !important; }
+        .prop-card:hover { border-color: rgba(255, 47, 144, 0.55) !important; box-shadow: 0 16px 40px rgba(0, 4, 10, 0.7), 0 0 24px rgba(255, 47, 144, 0.2) !important; background: linear-gradient(145deg, #131a2c 0%, #0a1020 100%) !important; }
+        .prop-icon-badge { background: rgba(108, 58, 237, 0.18) !important; border: 1px solid rgba(108, 58, 237, 0.45) !important; }
+        .prop-card .prop-subtitle { color: #FF7AB8 !important; }
+        .prop-card p { color: #C9CEDB !important; }
+        .calc-footer { border-top: 1px solid rgba(108, 58, 237, 0.3) !important; color: #8B93A7 !important; }
+        .modal-card { background: linear-gradient(145deg, #0E1320 0%, #080D18 100%) !important; border: 1px solid rgba(108, 58, 237, 0.45) !important; box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 40px rgba(108, 58, 237, 0.3) !important; }
+        .modal-summary-pill { background: rgba(255, 47, 144, 0.1) !important; border: 1px solid rgba(255, 47, 144, 0.35) !important; }
+        .modal-summary-pill strong { color: #FF7AB8 !important; }
     </style>
 </head>
 <body>
@@ -1339,7 +1423,7 @@
                 const max = parseFloat(slider.max) || 100;
                 const val = parseFloat(slider.value);
                 const percentage = ((val - min) / (max - min)) * 100;
-                slider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${percentage}%, #1e293b ${percentage}%, #1e293b 100%)`;
+                slider.style.background = `linear-gradient(to right, #FF2F90 0%, #6C3AED ${percentage}%, #1e293b ${percentage}%, #1e293b 100%)`;
             }
 
             function updateCalculator() {
@@ -1378,13 +1462,13 @@
                     milestoneBadge.innerHTML = '🔥 $10,000+ Goal Achieved';
                     gaugePercentLabel.textContent = `${percentOfGoal}% of Goal (Target Surpassed)`;
                     revenueDisplay.classList.add('highlight-glow');
-                    gaugeFillBar.style.background = 'linear-gradient(90deg, #00e599, #10b981)';
+                    gaugeFillBar.style.background = 'linear-gradient(90deg, #FF2F90, #6C3AED, #00E5FF)';
                 } else {
                     milestoneBadge.className = 'milestone-badge under';
                     milestoneBadge.innerHTML = `$${(BENCHMARK_GOAL - monthlyGross).toLocaleString()} to $10k Mark`;
                     gaugePercentLabel.textContent = `${percentOfGoal}% of $10k Benchmark`;
                     revenueDisplay.classList.remove('highlight-glow');
-                    gaugeFillBar.style.background = 'linear-gradient(90deg, #06b6d4, #00e599)';
+                    gaugeFillBar.style.background = 'linear-gradient(90deg, #FF2F90, #6C3AED)';
                 }
 
                 // Update Slider Background track fills
