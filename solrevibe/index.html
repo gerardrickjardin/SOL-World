@@ -2387,17 +2387,6 @@
             </div>
         </section>
 
-        <!-- Steak Video Section -->
-        <section class="steak-video-section" style="max-width: 1200px; margin: 6rem auto; padding: 0 2rem; text-align: center; position: relative; z-index: 20;">
-            <div class="section-header" style="margin-bottom: 3rem; max-width: none;">
-                <h2 style="color: #FFFFFF;">Experience the <span style="background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #00E5FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">SOL REViBE</span> Recharging Station</h2>
-            </div>
-            
-            <div class="video-card-container" id="videoContainer" style="position: relative; border-radius: 24px; overflow: hidden; background: linear-gradient(145deg, #0E1320 0%, #080D18 100%); border: 1px solid rgba(108, 58, 237, 0.35); box-shadow: 0 25px 60px rgba(0, 4, 10, 0.8), 0 0 35px rgba(108, 58, 237, 0.18); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-width: 960px; margin: 0 auto; aspect-ratio: 16 / 9;">
-                <iframe id="steakVideo" src="https://www.youtube.com/embed/RYwGnhl-lpU?start=16&rel=0&modestbranding=1&playsinline=1" title="SOL REViBE Recharging Station" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; border-radius: 24px;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-            </div>
-        </section>
-
         <!-- Map Title Section -->
         <div class="section-header" style="margin-top: 6rem; margin-bottom: 2.5rem; max-width: none;">
             <h2>Claim Your <span style="background: linear-gradient(90deg, #5ec9a6, #6388ff, #b05cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">SOL REViBE</span> Territory <span style="background: linear-gradient(90deg, #5ec9a6, #6388ff, #b05cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">Now</span></h2>
@@ -2851,29 +2840,9 @@
             }
 
             if (audioControl) {
-                let isPlaying = false;
-                let audio = new Audio('assets/Audio%20for%20Joy.MP3');
-                const audioBtnText = audioControl.querySelector('.audio-btn-inner');
-
-                audio.onended = () => {
-                    isPlaying = false;
-                    audioControl.classList.remove('playing');
-                    if (audioBtnText) audioBtnText.innerText = 'START HERE';
-                };
-
+                audioControl.style.cursor = 'pointer';
                 audioControl.addEventListener('click', () => {
-                    if (isPlaying) {
-                        audio.pause();
-                        audio.currentTime = 0;
-                        isPlaying = false;
-                        audioControl.classList.remove('playing');
-                        if (audioBtnText) audioBtnText.innerText = 'START HERE';
-                    } else {
-                        audio.play().catch(e => console.error("Audio play failed:", e));
-                        isPlaying = true;
-                        audioControl.classList.add('playing');
-                        if (audioBtnText) audioBtnText.innerText = 'PAUSE';
-                    }
+                    window.location.href = 'start.html';
                 });
             }
 
