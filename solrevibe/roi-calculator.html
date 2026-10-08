@@ -1136,69 +1136,41 @@
                             type="range" 
                             id="slider-traffic" 
                             min="20" 
-                            max="200" 
+                            max="100" 
                             step="5" 
                             value="50"
                             aria-label="Daily Client Foot Traffic"
                         >
                         <div class="range-bounds">
                             <span>20 visitors</span>
+                            <span>60 visitors</span>
                             <span>100 visitors</span>
-                            <span>200 visitors</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Slider 2: Conversion Rate -->
+                <!-- Slider 2: Days Open Per Week -->
                 <div class="slider-card">
                     <div class="slider-top-row">
                         <div class="slider-title-wrap">
-                            <span class="slider-title">Session Conversion Rate</span>
-                            <span class="slider-caption">Percentage of visitors booking a 20-min session</span>
+                            <span class="slider-title">Days Open Per Week</span>
+                            <span class="slider-caption">Days your location is open to clients each week</span>
                         </div>
-                        <div class="slider-value-pill" id="conversion-pill">15%</div>
+                        <div class="slider-value-pill" id="days-pill">5</div>
                     </div>
                     <div class="range-wrapper">
                         <input 
                             type="range" 
-                            id="slider-conversion" 
-                            min="5" 
-                            max="50" 
+                            id="slider-days" 
+                            min="1" 
+                            max="7" 
                             step="1" 
-                            value="15"
-                            aria-label="Session Conversion Rate Percentage"
+                            value="5"
+                            aria-label="Days Open Per Week"
                         >
                         <div class="range-bounds">
-                            <span>5% (Conservative)</span>
-                            <span>25% (Average)</span>
-                            <span>50% (Optimized)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slider 3: Price Per Session -->
-                <div class="slider-card">
-                    <div class="slider-top-row">
-                        <div class="slider-title-wrap">
-                            <span class="slider-title">Price Per 20-Min Session</span>
-                            <span class="slider-caption">Standard market rate per automated recharge</span>
-                        </div>
-                        <div class="slider-value-pill" id="price-pill">$45</div>
-                    </div>
-                    <div class="range-wrapper">
-                        <input 
-                            type="range" 
-                            id="slider-price" 
-                            min="25" 
-                            max="100" 
-                            step="5" 
-                            value="45"
-                            aria-label="Price Per 20-Minute Session"
-                        >
-                        <div class="range-bounds">
-                            <span>$25/session</span>
-                            <span>$60/session</span>
-                            <span>$100/session</span>
+                            <span>1 day</span>
+                            <span>7 days</span>
                         </div>
                     </div>
                 </div>
@@ -1206,7 +1178,7 @@
                 <!-- Constant Operational Days Note -->
                 <div class="constant-note">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    <span><strong>Assumed Constant:</strong> 24 active operational days per month (6 days/week).</span>
+                    <span><strong>Assumed Constants:</strong> 15% session conversion at $45 per 20-min session, 4 weeks per month.</span>
                 </div>
 
             </div>
@@ -1369,7 +1341,7 @@
 
     <!-- Site Footer -->
     <footer class="calc-footer">
-        &copy; 2026 SOL REViBE. All rights reserved. Calculations are commercial estimates based on 24 operational days per month.
+        &copy; 2026 SOL REViBE. All rights reserved. Calculations are commercial estimates based on a 15% conversion rate, $45 per session, and 4 weeks per month.
     </footer>
 
     <!-- Vanilla JavaScript for Real-Time Responsive Dynamic Updates -->
@@ -1377,13 +1349,11 @@
         (function() {
             // Slider Elements
             const trafficSlider = document.getElementById('slider-traffic');
-            const conversionSlider = document.getElementById('slider-conversion');
-            const priceSlider = document.getElementById('slider-price');
+            const daysSlider = document.getElementById('slider-days');
 
             // Value Display Pills
             const trafficPill = document.getElementById('traffic-pill');
-            const conversionPill = document.getElementById('conversion-pill');
-            const pricePill = document.getElementById('price-pill');
+            const daysPill = document.getElementById('days-pill');
 
             // Output Display Elements
             const revenueDisplay = document.getElementById('monthly-revenue-display');
@@ -1401,7 +1371,9 @@
             const modalProjectedVal = document.getElementById('modal-projected-val');
             const leadZip = document.getElementById('lead-zip');
 
-            const OPERATIONAL_DAYS = 24;
+            const PER_SESSION_RATE = 45;   // constant per-session price
+            const CONVERSION_RATE = 0.15;  // constant 15% conversion
+            const WEEKS_PER_MONTH = 4;
             const BENCHMARK_GOAL = 10000;
 
             const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -1421,7 +1393,7 @@
                 history.replaceState(null, '', window.location.pathname);
             }
             if (initialTraffic && !isNaN(initialTraffic)) {
-                const parsedVal = Math.min(Math.max(parseInt(initialTraffic, 10), 10), 200);
+                const parsedVal = Math.min(Math.max(parseInt(initialTraffic, 10), 20), 100);
                 trafficSlider.value = parsedVal;
             }
 
@@ -1435,18 +1407,15 @@
 
             function updateCalculator() {
                 const traffic = parseInt(trafficSlider.value, 10);
-                const conversionPercent = parseInt(conversionSlider.value, 10);
-                const price = parseInt(priceSlider.value, 10);
+                const daysPerWeek = parseInt(daysSlider.value, 10);
 
                 // Update input pill tags
                 trafficPill.textContent = traffic;
-                conversionPill.textContent = `${conversionPercent}%`;
-                pricePill.textContent = `$${price}`;
+                daysPill.textContent = daysPerWeek;
 
-                // Math: Traffic * Conversion Rate * Price * 24 Days
-                const conversionRate = conversionPercent / 100;
-                const monthlyGross = traffic * conversionRate * price * OPERATIONAL_DAYS;
-                const dailyGross = monthlyGross / OPERATIONAL_DAYS;
+                // Math: Traffic * 15% Conversion * $45 * (Days Per Week * 4 Weeks)
+                const dailyGross = traffic * CONVERSION_RATE * PER_SESSION_RATE;
+                const monthlyGross = dailyGross * daysPerWeek * WEEKS_PER_MONTH;
                 const annualGross = monthlyGross * 12;
 
                 const formattedMonthly = currencyFormatter.format(Math.round(monthlyGross));
@@ -1480,12 +1449,11 @@
 
                 // Update Slider Background track fills
                 updateSliderFill(trafficSlider);
-                updateSliderFill(conversionSlider);
-                updateSliderFill(priceSlider);
+                updateSliderFill(daysSlider);
             }
 
             // Realtime Slider Listeners
-            [trafficSlider, conversionSlider, priceSlider].forEach(slider => {
+            [trafficSlider, daysSlider].forEach(slider => {
                 slider.addEventListener('input', updateCalculator);
             });
 
