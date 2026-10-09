@@ -1065,6 +1065,28 @@
         .modal-summary-pill { background: rgba(255, 47, 144, 0.1) !important; border: 1px solid rgba(255, 47, 144, 0.35) !important; }
         .modal-summary-pill strong { color: #FF7AB8 !important; }
     </style>
+<style id="mobile-safety">
+/* Mobile safety net (phones only) - additive, desktop unaffected */
+@media (max-width: 600px) {
+  html, body { max-width: 100%; overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+  img:not(.leaflet-tile):not(.leaflet-marker-icon), video, iframe { max-width: 100%; }
+  img { height: auto; }
+  /* 16px stops iOS Safari zooming the page when a field is focused */
+  input:not([type=checkbox]):not([type=radio]):not([type=range]), select, textarea { font-size: 16px !important; min-height: 44px; }
+  button, .btn, [role=button], input[type=submit] { min-height: 44px; }
+  h1, h2, h3, .section-header h2, .vibe-content-section h3 { white-space: normal !important; overflow-wrap: break-word; }
+  .container, .card, main { max-width: 100%; }
+  table { max-width: 100%; }
+  pre, code { white-space: pre-wrap; word-break: break-word; }
+}
+@media (max-width: 480px) {
+  .container { padding: 1.5rem !important; }
+  .card { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .topbar { padding: 10px 16px !important; }
+  .topbar img { height: 44px !important; }
+  main { padding-left: 1rem !important; padding-right: 1rem !important; }
+}
+</style>
 </head>
 <body>
 

@@ -188,7 +188,32 @@
             .card { padding: 30px 20px; }
             .row { grid-template-columns: 1fr; gap: 0; }
             .nav img { height: 52px; }
-            .hero { padding: 52px 20px 48px; }
+            .nav { padding: 8px 16px; }
+            .nav a.back { padding: 12px 0 12px 8px; }
+            .hero { padding: 40px 20px 36px; }
+            .hero h1 { white-space: normal; font-size: clamp(1.6rem, 7.5vw, 2.2rem); overflow-wrap: break-word; }
+            .hero p { font-size: 0.95rem; }
+            .hero p br { display: none; }
+            .form-section { padding: 28px 12px 56px; }
+            .card-logo { height: 110px; margin-top: -10px; }
+            .card h2 { font-size: 1.2rem; }
+            .step-title { font-size: 1.35rem; }
+            .safety-title { font-size: 1.3rem; }
+            /* 16px inputs stop iOS Safari zooming the page on focus */
+            input[type=text], input[type=tel], input[type=email], input[type=date], select, textarea { font-size: 16px; min-height: 48px; }
+            .submit { min-height: 52px; font-size: 1.05rem; }
+            .opt { padding: 10px 0; font-size: 0.92rem; }
+            .opt input { width: 20px; height: 20px; }
+            .sig-clear, .back-link { min-height: 44px; padding: 10px 12px; font-size: 0.9rem; }
+            canvas#sig { height: 200px; }
+            .combo-option { padding: 14px 12px; }
+            .nearby-btn, .station-item { min-height: 48px; }
+        }
+        @media (max-width: 360px) {
+            .form-section { padding: 20px 8px 48px; }
+            .card { padding: 24px 14px; }
+            .nav img { height: 44px; }
+            .nav a.back { font-size: 0.7rem; letter-spacing: 0.04em; }
         }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
