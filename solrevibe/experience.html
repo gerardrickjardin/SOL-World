@@ -206,12 +206,11 @@
 
     <main class="form-section">
 
-        <!-- STEP 1: Kim's intro video + basic info -->
+        <!-- STEP 1: Contact details -->
         <section class="step" id="step-intro">
             <div class="card">
-                <h2 class="step-title" tabindex="-1">Welcome to the <span class="grad">REViBE</span></h2>
-                <p class="step-sub">Watch Kim's quick intro, then tell us a little about you.</p>
-                <div class="video-frame" id="introVideo"></div>
+                <h2 class="step-title" tabindex="-1">Let's get you <span class="grad">started</span></h2>
+                <p class="step-sub">Tell us a little about you to begin your SOL REViBE experience.</p>
                 <form id="introForm" novalidate>
                     <div class="field">
                         <label class="lbl" for="gName">Full Name <span class="req">* <em>required</em></span></label>
@@ -225,22 +224,25 @@
                         <label class="lbl" for="gEmail">Email Address <span class="req">* <em>required</em></span></label>
                         <input type="email" id="gEmail" placeholder="e.g. you@email.com" autocomplete="email">
                     </div>
-                    <button type="submit" class="submit">Continue</button>
+                    <button type="submit" class="submit" id="introBtn">Continue</button>
                     <p class="error" id="introError" role="alert"></p>
                 </form>
             </div>
         </section>
 
-        <!-- STEP 2: At a station right now? -->
-        <section class="step" id="step-station" hidden>
+        <!-- STEP 2: Welcome message + short introductory video -->
+        <section class="step" id="step-welcome" hidden>
             <div class="card">
-                <h2 class="step-title" tabindex="-1">Are you at a SOL REViBE station right now?</h2>
-                <p class="step-sub">If you are, we'll get you set up for your session. If not, we'll help you find one.</p>
-                <div class="choice-row">
-                    <button type="button" class="choice" id="atStationYes">Yes, I'm at a station<small>Continue to the waiver</small></button>
-                    <button type="button" class="choice" id="atStationNo">No, not yet<small>Find a station and get a free trial pass</small></button>
+                <h2 class="step-title" tabindex="-1">Welcome to <span class="grad">SOL REViBE!</span></h2>
+                <p class="step-sub" style="color:var(--ink)">You&rsquo;re about to discover a simple, relaxing wellness experience designed to help you <strong>recharge, reset, and revitalize.</strong></p>
+                <p class="step-sub">Take a moment to watch this short introductory video to learn what the <strong>SOL REViBE Station</strong> is, how it works, and what you can expect from your 20-minute experience.</p>
+                <p class="step-sub" style="color:var(--ink)"><strong>Ready to discover more? Tap below to watch the video.</strong></p>
+                <button type="button" class="submit" id="watchIntroBtn" style="margin-top:0">&#9654; Watch the Video</button>
+                <div id="introVideoWrap" hidden>
+                    <div class="video-frame" id="introVideo"></div>
+                    <button type="button" class="submit" id="toWaiverBtn">Continue to the Waiver</button>
+                    <p class="step-sub" style="margin:12px 0 0;font-size:.82rem">Next: a quick waiver &amp; safety screen, then your how-to video.</p>
                 </div>
-                <button type="button" class="back-link" data-go="step-intro">&larr; Back</button>
             </div>
         </section>
 
@@ -311,14 +313,15 @@
                 <button type="submit" class="submit" id="submitBtn">Submit</button>
                 <p class="error" id="formError" role="alert"></p>
             </form>
+            <button type="button" class="back-link" id="notAtStation">Not at a station right now? Find one &amp; get a free trial pass</button>
         </div>
         </section>
 
-        <!-- STEP 4: Kim's 60-second orientation -->
+        <!-- STEP 4: How-to video (after waiver) -->
         <section class="step" id="step-orientation" hidden>
             <div class="card">
-                <h2 class="step-title" tabindex="-1">You're all set. Quick orientation</h2>
-                <p class="step-sub">Watch Kim's 60-second orientation, then start your session.</p>
+                <h2 class="step-title" tabindex="-1">Waiver complete &mdash; here's how it works</h2>
+                <p class="step-sub">Watch the how-to video, then start your session.</p>
                 <div class="video-frame" id="orientationVideo"></div>
                 <button type="button" class="submit" id="startSessionBtn">Start My 20-Minute Session</button>
                 <p class="error" id="sessionError" role="alert"></p>
@@ -383,7 +386,7 @@
                         <div class="t-note" id="voucherNote"></div>
                     </div>
                 </div>
-                <button type="button" class="back-link" data-go="step-station">&larr; Back</button>
+                <button type="button" class="back-link" data-go="step-waiver">&larr; Back to waiver</button>
             </div>
         </section>
     </main>
@@ -393,14 +396,14 @@
     <script>
         /* =====================================================================
            SOL REViBE guest flow:
-           intro video + details -> at a station? -> waiver -> orientation ->
+           contact details -> welcome + intro video -> waiver -> how-to video ->
            session launch   |   not at a station -> station map + free trial pass
            ===================================================================== */
         (function () {
             // ---- CONFIG: paste the video links here (YouTube or Vimeo watch/share links) ----
             const VIDEOS = {
-                intro:       { url: '', title: "Kim's 2-minute intro" },
-                orientation: { url: '', title: "Kim's 60-second orientation" }
+                intro:       { url: '', title: 'Welcome to SOL REViBE' },
+                orientation: { url: '', title: 'SOL REViBE How-To Video' }
             };
             const SESSION_MINUTES = 20;
             const WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
@@ -463,7 +466,6 @@
             document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
 
             // ---- step 1: intro ----
-            mountVideo($('introVideo'), VIDEOS.intro);
             $('introForm').addEventListener('submit', e => {
                 e.preventDefault();
                 const name = $('gName').value.trim(), phone = $('gPhone').value.trim(), email = $('gEmail').value.trim();
@@ -471,13 +473,26 @@
                 if (!/^\S+@\S+\.\S+$/.test(email)) { $('introError').textContent = 'Please enter a valid email address.'; return; }
                 $('introError').textContent = '';
                 Object.assign(guest, { name, phone, email });
-                post({ source: 'Experience Intro', tags: ['solrevibe-guest', 'experience-intro'] }).catch(err => console.error('Guest lead error:', err));
-                go('step-station');
+                // Waiver not yet signed: CRM puts this contact in the incomplete-waiver nurture workflow.
+                post({
+                    event: 'contact_captured', source: 'Experience Contact Form',
+                    waiver_status: 'incomplete',
+                    tags: ['solrevibe-guest', 'experience-lead', 'waiver-incomplete']
+                }).catch(err => console.error('Guest lead error:', err));
+                go('step-welcome');
             });
 
-            // ---- step 2: at a station? ----
-            $('atStationYes').addEventListener('click', () => go('step-waiver'));
-            $('atStationNo').addEventListener('click', () => go('step-map'));
+            // ---- step 2: welcome + intro video (video loads only after the visitor taps) ----
+            $('watchIntroBtn').addEventListener('click', () => {
+                $('watchIntroBtn').hidden = true;
+                $('introVideoWrap').hidden = false;
+                mountVideo($('introVideo'), VIDEOS.intro);
+                post({ event: 'intro_video_started', source: 'Experience Intro Video', tags: ['solrevibe-intro-video-started'] })
+                    .catch(err => console.error('Intro video event error:', err));
+                $('introVideoWrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+            $('toWaiverBtn').addEventListener('click', () => go('step-waiver'));
+            $('notAtStation').addEventListener('click', () => go('step-map'));
 
             // ---- step 4/5: session launch ----
             $('startSessionBtn').addEventListener('click', async () => {
@@ -784,7 +799,11 @@
                     signature_image: canvas.toDataURL('image/png'),
                     waiver_date: dateEl.value,
                     source: 'Waiver & Wellness Intake',
-                    tags: ['solrevibe-waiver', 'experience-form', 'at-station'],
+                    event: 'waiver_completed',
+                    waiver_status: 'complete',
+                    // CRM: add these tags (enters experience follow-up campaign) and remove the ones below
+                    tags: ['solrevibe-waiver', 'experience-form', 'waiver-complete'],
+                    remove_tags: ['waiver-incomplete'],
                     submittedAt: new Date().toISOString()
                 };
 
