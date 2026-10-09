@@ -2161,6 +2161,35 @@
             }
         }
 
+        /* ---------- Phone refinements (<=768px only) ---------- */
+        @media (max-width: 768px) {
+            /* Smaller logo + compact single-row navbar */
+            .vibe-navbar { flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; padding: max(0.5rem, env(safe-area-inset-top)) 1rem 0.5rem 1rem !important; }
+            .vibe-navbar .nav-logo-img { height: 46px !important; }
+            .vibe-navbar .logo a { gap: 0.5rem !important; }
+            .hamburger-menu { transform: none !important; padding: 10px; }
+
+            /* Banner strip tighter */
+            .banner-container { padding: 10px 0.75rem !important; }
+
+            /* Hero photo: full width, edge to edge, bigger */
+            .hero-container-wrapper { width: 100% !important; max-width: none !important; margin: 0 !important; border-radius: 0 !important; }
+            .hero-background-video { object-position: center !important; }
+
+            /* Section boxes: smaller padding/margins, closer to the screen edges */
+            .roi-overview-section { margin: 1.25rem 0.6rem !important; padding: 1.5rem 1rem !important; border-radius: 20px !important; }
+            .roi-overview-container { gap: 1.5rem !important; }
+            .roi-overview-copy { gap: 1rem !important; }
+            .roi-overview-headline { font-size: clamp(1.6rem, 7vw, 2rem) !important; }
+            .roi-overview-sub { font-size: 0.95rem !important; }
+            .roi-tag-badge { font-size: 0.7rem; padding: 5px 10px; }
+            .roi-prop-card, .roi-teaser-card { padding: 1.25rem 1rem !important; border-radius: 18px !important; }
+            .vibe-content-section { padding: 2.5rem 1rem !important; }
+            .vibe-content-section h3 { margin-bottom: 1.25rem !important; }
+            .vibe-content-section p { font-size: 1.05rem !important; line-height: 1.6 !important; margin-bottom: 1.5rem !important; }
+            .vibe-content-section .btn-outline { font-size: 1rem !important; padding: 0.85rem 1.5rem !important; }
+        }
+
 
     </style>
 
