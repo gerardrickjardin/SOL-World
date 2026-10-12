@@ -192,6 +192,7 @@
         .timer { color: #fff; text-shadow: 0 0 24px rgba(0, 229, 255, .5); }
         .check { background: rgba(0, 229, 255, .12); border-color: var(--cyan); color: var(--cyan); }
         .waiver-wrap iframe { background: #fff; }
+        .restart-btn { margin-top: 12px; padding: 13px 14px; font-size: .85rem; }
         input:focus-visible, button:focus-visible, a:focus-visible { outline-color: var(--cyan); }
     </style>
 </head>
@@ -210,6 +211,8 @@
                 <div class="tag-row"><span class="tag">&#127916; Welcome from Kim</span><span class="tag dark">Intro Video</span></div>
                 <h2 class="ct">Meet Kim &amp; See How It Works</h2>
                 <div class="video-frame" id="introVideo"></div>
+                <button type="button" class="btn restart-btn" id="restartUnmuteBtn" aria-label="Restart video and unmute"><span>&#8635; Click to restart and unmute</span></button>
+                <p class="fine center" style="margin-top:8px">Playing muted &mdash; tap the button for sound.</p>
             </div>
 
             <div class="card">
@@ -311,7 +314,7 @@
     (function () {
         // ---- CONFIG (same values/integration as experience.html) ----
         var VIDEOS = {
-            intro:       { url: 'https://youtu.be/Xa--k2W6QYQ', title: 'Welcome to SOL REViBE with Kim' },
+            intro:       { url: 'https://youtu.be/Xa--k2W6QYQ', title: 'Welcome to SOL REViBE with Kim', autoplay: true },
             orientation: { url: '', title: 'SOL REViBE How-To Video' }   // paste the instructional video link here
         };
         var WAIVER_FORM_ID = 'VueCQzezxvPknbJ4GG5k';
@@ -333,22 +336,23 @@
                 }, payload))
             }).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r; });
         }
-        function embedUrl(u) {
+        function embedUrl(u, autoplay) {
             if (!u) return '';
             var m = u.match(/(?:youtube\.com\/watch\?(?:[^#]*&)?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([\w-]{11})/);
             if (m) {
                 var t = (u.match(/[?&](?:t|start)=(\d+)/) || [])[1];
-                return 'https://www.youtube.com/embed/' + m[1] + '?rel=0&modestbranding=1&playsinline=1' + (t ? '&start=' + t : '');
+                return 'https://www.youtube.com/embed/' + m[1] + '?rel=0&modestbranding=1&playsinline=1' + (t ? '&start=' + t : '') +
+                    (autoplay ? '&autoplay=1&mute=1&loop=1&playlist=' + m[1] + '&enablejsapi=1' : '');
             }
             m = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
             return m ? 'https://player.vimeo.com/video/' + m[1] : u;
         }
         function mountVideo(el, cfg) {
             el.innerHTML = '';
-            var src = embedUrl(cfg.url);
+            var src = embedUrl(cfg.url, cfg.autoplay);
             if (src) {
                 var f = document.createElement('iframe');
-                f.src = src; f.title = cfg.title; f.loading = 'lazy'; f.allowFullscreen = true;
+                f.src = src; f.title = cfg.title; f.loading = cfg.autoplay ? 'eager' : 'lazy'; f.allowFullscreen = true;
                 f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
                 el.appendChild(f);
             } else {
@@ -365,6 +369,19 @@
         }
 
         mountVideo($('introVideo'), VIDEOS.intro);
+
+        // Restart the intro video from the beginning with sound on (YouTube iframe command API)
+        function ytCmd(func, args) {
+            var f = $('introVideo').querySelector('iframe');
+            if (f && f.contentWindow) f.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: args || [] }), '*');
+        }
+        $('restartUnmuteBtn').addEventListener('click', function () {
+            ytCmd('seekTo', [0, true]);
+            ytCmd('unMute');
+            ytCmd('setVolume', [100]);
+            ytCmd('playVideo');
+            $('restartUnmuteBtn').querySelector('span').textContent = 'Restart from the beginning';
+        });
 
         // ---- contact form ----
         function validate() {
