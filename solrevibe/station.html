@@ -239,6 +239,12 @@
         @media (max-width: 860px) {
             .shell { width: calc(100% - 20px); grid-template-columns: 1fr; }
         }
+        /* Desktop: static page, no scrollbar - content is scaled to fit the viewport (see fitToViewport) */
+        @media (min-width: 861px) {
+            html, body { height: 100%; overflow: hidden; }
+            body { min-height: 0; padding-bottom: 0; }
+            #fit { width: 100%; }
+        }
         @media (max-width: 560px) {
             .points { grid-template-columns: 1fr; }
             .point { flex-direction: row; gap: 10px; }
@@ -247,6 +253,7 @@
     </style>
 </head>
 <body>
+    <div id="fit">
     <nav class="topbar" aria-label="Primary">
         <a href="index.html" aria-label="SOL REViBE home"><img src="assets/SOL%20REViBE%20Logo.png" alt="SOL REViBE"></a>
         <a class="pill-link" href="index.html">Explore Full Site &rarr;</a>
@@ -366,6 +373,7 @@
             </div>
         </section>
     </main>
+    </div>
 
     <script>
     (function () {
@@ -612,6 +620,33 @@
             }
             tick(); timerId = setInterval(tick, 1000);
         }
+    })();
+    </script>
+    <script>
+    // Desktop: keep the page static (no scrollbar) by scaling content to fit the viewport.
+    (function () {
+        var fit = document.getElementById('fit'), mq = window.matchMedia('(min-width: 861px)'), busy = false;
+        function fitToViewport() {
+            if (busy) return; busy = true;
+            fit.style.zoom = ''; document.documentElement.style.overflowY = '';
+            if (mq.matches) {
+                var z = 1;
+                for (var i = 0; i < 4; i++) {
+                    fit.style.zoom = z;
+                    var h = fit.getBoundingClientRect().height;
+                    var nz = Math.max(0.55, Math.min(1, z * (window.innerHeight / h)));
+                    if (Math.abs(nz - z) < 0.005) break;
+                    z = nz;
+                }
+                fit.style.zoom = z;
+                if (fit.getBoundingClientRect().height > window.innerHeight + 2) document.documentElement.style.overflowY = 'auto';
+            }
+            busy = false;
+        }
+        window.addEventListener('resize', fitToViewport);
+        window.addEventListener('load', fitToViewport);
+        if (window.ResizeObserver) new ResizeObserver(function () { if (!busy) fitToViewport(); }).observe(document.getElementById('shell'));
+        fitToViewport();
     })();
     </script>
 </body>
