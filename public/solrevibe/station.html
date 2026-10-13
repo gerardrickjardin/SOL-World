@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Start Your SOL REViBE Mind Body Recharge | Free First Session</title>
+    <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="Watch Kim's welcome video, learn how the SOL REViBE Mind Body Recharge Station works, and complete your waiver to start your free first session.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -195,6 +196,27 @@
         .restart-btn { margin-top: 12px; padding: 13px 14px; font-size: .85rem; }
         input:focus-visible, button:focus-visible, a:focus-visible { outline-color: var(--cyan); }
 
+        /* ===== Benefit radios + personalization (mock-up) ===== */
+        fieldset.benefit-set { min-width: 0; }
+        .radio-opt { cursor: pointer; align-items: center; position: relative; }
+        .radio-opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+        .radio-opt .dot { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .45); display: block; position: relative; transition: border-color .2s, box-shadow .2s; }
+        .radio-opt .dot::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: linear-gradient(135deg, #FF2F90, #6C3AED); transform: scale(0); transition: transform .15s; }
+        .radio-opt:hover { border-color: var(--magenta); }
+        .radio-opt:has(input:checked) { border-color: var(--magenta); background: rgba(255, 47, 144, .1); box-shadow: 0 0 18px rgba(255, 47, 144, .25); }
+        .radio-opt input:checked + .dot { border-color: var(--magenta); }
+        .radio-opt input:checked + .dot::after { transform: scale(1); }
+        .radio-opt input:focus-visible + .dot { box-shadow: 0 0 0 3px rgba(0, 229, 255, .6); }
+        .radio-opt > div { min-width: 0; }
+        .radio-opt b, .radio-opt span:not(.dot) { display: block; }
+        .custom-card { border-color: rgba(255, 47, 144, .5); box-shadow: 0 0 24px rgba(255, 47, 144, .15); }
+        .custom-card .hl { color: var(--soft-pink); }
+        .custom-card .msg { font-size: .9rem; color: var(--text); line-height: 1.5; margin-bottom: 12px; }
+        .reco { display: flex; flex-direction: column; gap: 3px; border: 1px dashed rgba(0, 229, 255, .6); background: rgba(0, 229, 255, .07); border-radius: 12px; padding: 10px 12px; }
+        .reco-label { font-size: .66rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--cyan); }
+        .reco-name { font-family: 'Outfit', sans-serif; font-size: 1.05rem; color: #fff; }
+        .reco-desc { font-size: .8rem; color: var(--soft); }
+
         /* ===== Wide, compact layout (expands sideways, not tall) ===== */
         .topbar, h1.headline { max-width: 1320px; }
         h1.headline { margin: 0 auto; padding-bottom: 14px; font-size: clamp(1.2rem, 2.6vw, 1.7rem); }
@@ -263,11 +285,16 @@
                     <p class="sub">The SOL REViBE Mind Body Recharge Station blends sound, light and frequency into one easy, relaxing session. Here&rsquo;s why guests love it:</p>
                 </div>
 
-                <div class="stack">
-                    <div class="benefit"><div class="num">1</div><div><b>Recharge Your Energy</b><span>Step away from stress and leave feeling lighter and more focused.</span></div></div>
-                    <div class="benefit"><div class="num">2</div><div><b>Calm Your Mind</b><span>Guided audio helps quiet mental noise and ease tension.</span></div></div>
-                    <div class="benefit"><div class="num">3</div><div><b>Support Your Body</b><span>Frequency-based relaxation to help you unwind and reset.</span></div></div>
-                </div>
+                <fieldset class="card benefit-set" id="benefitFieldset">
+                    <legend class="sr">Which of the following benefits is most important to you?</legend>
+                    <h2 class="ct" aria-hidden="true">Which of the following benefits is most important to you?</h2>
+                    <div class="stack">
+                        <label class="benefit radio-opt"><input type="radio" name="benefit" value="energy"><span class="dot" aria-hidden="true"></span><div><b>Recharge Your Energy</b><span>Step away from stress and leave feeling lighter and more focused.</span></div></label>
+                        <label class="benefit radio-opt"><input type="radio" name="benefit" value="calm"><span class="dot" aria-hidden="true"></span><div><b>Calm Your Mind</b><span>Guided audio helps quiet mental noise and ease tension.</span></div></label>
+                        <label class="benefit radio-opt"><input type="radio" name="benefit" value="body"><span class="dot" aria-hidden="true"></span><div><b>Support Your Body</b><span>Frequency-based relaxation to help you unwind and reset.</span></div></label>
+                    </div>
+                    <p class="error" id="benefitError" role="alert"></p>
+                </fieldset>
 
                 <div class="offer"><b>&#127873; Your first session is free.</b> Subject to the approved offer details at your participating location.</div>
 
@@ -302,6 +329,7 @@
 
             <!-- Panel: waiver -->
             <div class="panel" id="p-waiver" hidden>
+                <div id="custWaiver" style="margin-bottom:14px"></div>
                 <div class="card">
                     <div class="tag-row"><span class="tag gold">Step 2 &bull; Waiver</span></div>
                     <h2 class="ct">Complete Your Waiver</h2>
@@ -314,6 +342,7 @@
 
             <!-- Panel: how-to -->
             <div class="panel" id="p-howto" hidden>
+                <div id="custHowto"></div>
                 <div class="card">
                     <div class="tag-row"><span class="tag green">&#10003; Waiver Complete</span><span class="tag dark">How-To</span></div>
                     <h2 class="ct" id="howtoTitle" tabindex="-1">Here&rsquo;s How It Works</h2>
@@ -344,6 +373,27 @@
         var VIDEOS = {
             intro:       { url: 'https://youtu.be/Xa--k2W6QYQ', title: 'Welcome to SOL REViBE with Kim', autoplay: true },
             orientation: { url: '', title: 'SOL REViBE How-To Video' }   // paste the instructional video link here
+        };
+        // PLACEHOLDER personalization content - update when the final MVP options are confirmed.
+        var PERSONALIZATION = {
+            energy: {
+                label: 'Recharging your energy',
+                message: 'Great choice. Many guests come in drained and leave feeling lighter and more focused. Your session will lean into energizing sound and light so you can step back into your day with momentum.',
+                mvp: 'Placeholder MVP: Energy Boost Session',
+                mvpDesc: 'A 20-minute energizing session. Final MVP name and details coming soon.'
+            },
+            calm: {
+                label: 'Calming your mind',
+                message: 'Great choice. Guided audio helps quiet mental noise and ease tension. Your session will lean into slower, soothing sound so you can settle in, breathe, and let your mind unwind.',
+                mvp: 'Placeholder MVP: Mind Calm Session',
+                mvpDesc: 'A 20-minute calming session. Final MVP name and details coming soon.'
+            },
+            body: {
+                label: 'Supporting your body',
+                message: 'Great choice. Frequency-based relaxation can help you unwind and reset physically. Your session will focus on gentle, restorative frequencies so your body can ease into recovery mode.',
+                mvp: 'Placeholder MVP: Body Reset Session',
+                mvpDesc: 'A 20-minute restorative session. Final MVP name and details coming soon.'
+            }
         };
         var WAIVER_FORM_ID = 'VueCQzezxvPknbJ4GG5k';
         var SESSION_MINUTES = 20;
@@ -434,7 +484,9 @@
                 post({
                     event: 'contact_captured', source: 'Station QR Landing Page',
                     waiver_status: 'incomplete',
-                    tags: ['solrevibe-guest', 'experience-lead', 'waiver-incomplete']
+                    selected_benefit: selectedBenefit,
+                    recommended_mvp: (PERSONALIZATION[selectedBenefit] || {}).mvp || '',
+                    tags: ['solrevibe-guest', 'experience-lead', 'waiver-incomplete', 'benefit-' + selectedBenefit]
                 }).catch(function (e) { console.error('Guest lead error:', e); });
             }
             return true;
@@ -448,9 +500,44 @@
             $(i).addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); $('ctaBtn').click(); } });
         });
 
+        // ---- personalization: benefit radios -> "Let's Customize Your Experience" ----
+        var selectedBenefit = '';
+        try { selectedBenefit = sessionStorage.getItem('solrevibe_benefit') || ''; } catch (e) {}
+        Array.prototype.forEach.call(document.querySelectorAll('input[name="benefit"]'), function (r) {
+            if (r.value === selectedBenefit) r.checked = true;
+            r.addEventListener('change', function () {
+                selectedBenefit = r.value;
+                $('benefitError').textContent = '';
+                try { sessionStorage.setItem('solrevibe_benefit', selectedBenefit); } catch (e) {}
+            });
+        });
+        function renderCustomize() {
+            var p = PERSONALIZATION[selectedBenefit];
+            if (!p) return;
+            var html = '<div class="card custom-card">' +
+                '<div class="tag-row"><span class="tag gold">Personalized for you</span></div>' +
+                '<h2 class="ct">Let\u2019s Customize Your Experience</h2>' +
+                '<p class="sub" style="margin-bottom:10px">You said <strong class="hl"></strong> matters most to you.</p>' +
+                '<p class="msg"></p>' +
+                '<div class="reco"><span class="reco-label">Recommended for you</span><b class="reco-name"></b><span class="reco-desc"></span></div>' +
+                '</div>';
+            ['custWaiver', 'custHowto'].forEach(function (id) {
+                var el = $(id); el.innerHTML = html;
+                el.querySelector('.hl').textContent = p.label;
+                el.querySelector('.msg').textContent = p.message;
+                el.querySelector('.reco-name').textContent = p.mvp;
+                el.querySelector('.reco-desc').textContent = p.mvpDesc;
+            });
+        }
+
         // ---- CTA -> waiver ----
         $('ctaBtn').addEventListener('click', function () {
             $('ctaError').textContent = '';
+            if (!selectedBenefit) {
+                $('benefitError').textContent = 'Please choose the benefit that matters most to you.';
+                $('benefitFieldset').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
             if (!saveContact()) {
                 $('ctaError').textContent = 'Please complete your details above to continue.';
                 return;
@@ -477,7 +564,8 @@
                 s.src = 'https://link.visioncontrol.io/js/form_embed.js';
                 document.body.appendChild(s);
             }
-            post({ event: 'waiver_started', source: 'Station QR Landing Page', tags: ['solrevibe-waiver-started'] }).catch(function () {});
+            post({ event: 'waiver_started', source: 'Station QR Landing Page', selected_benefit: selectedBenefit, tags: ['solrevibe-waiver-started'] }).catch(function () {});
+            renderCustomize();
             show('p-waiver');
         });
         $('waiverBack').addEventListener('click', function () { show('p-start'); });
