@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video Library | SOL REViBE</title>
+<meta name="description" content="Explore the SOL REViBE on-demand video library: frequency, wellness and restoration experiences.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070914; --panel:rgba(14,17,36,.78); --line:rgba(140,120,255,.35); --line-soft:rgba(255,255,255,.08);
+  --text:#f2f3fb; --muted:#9ea4c4; --cyan:#35e0d0; --pink:#ff3fb4; --violet:#8a5cff; --blue:#4a7dff;
+  --grad:linear-gradient(90deg,var(--pink),var(--violet));
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Outfit,system-ui,sans-serif;color:var(--text);background:var(--bg);min-height:100vh;line-height:1.45;
+  background-image:radial-gradient(700px 600px at -5% 20%,rgba(53,224,208,.22),transparent 70%),
+    radial-gradient(800px 600px at 105% 30%,rgba(255,63,180,.2),transparent 70%),
+    radial-gradient(900px 500px at 50% -10%,rgba(138,92,255,.25),transparent 70%);
+  background-attachment:fixed}
+body.modal-open{overflow:hidden}
+button{font:inherit;color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cyan{color:var(--cyan)}
+
+/* Nav */
+nav.top{display:flex;align-items:center;gap:36px;padding:16px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.35rem;letter-spacing:.02em;text-decoration:none;color:var(--text)}
+.logo svg{width:34px;height:26px}
+.logo b{background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.links{display:flex;gap:30px}
+.links a{color:var(--text);text-decoration:none;font-size:.95rem;padding:6px 0;border-bottom:2px solid transparent;opacity:.8;transition:.2s}
+.links a:hover{opacity:1}
+.links a.active{border-color:var(--pink);opacity:1}
+.search{position:relative;margin-left:auto;width:min(430px,100%)}
+.search .ic{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--text);pointer-events:none}
+.search input{width:100%;padding:12px 44px;border-radius:999px;background:rgba(10,12,28,.85);border:1px solid var(--line);color:var(--text);font:inherit;font-size:.92rem;outline:none;transition:.2s}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(53,224,208,.15)}
+.search input::-webkit-search-cancel-button{display:none}
+.clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;border:0;background:rgba(255,255,255,.1);cursor:pointer;display:none;place-items:center}
+.clear.visible{display:grid}
+.clear svg{width:12px;height:12px}
+.avatar{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(10,12,28,.85);display:grid;place-items:center;cursor:pointer}
+.avatar svg{width:18px;height:18px}
+
+/* Hero */
+.hero{text-align:center;padding:26px 0 24px}
+.badge{display:inline-flex;align-items:center;gap:8px;font-size:.66rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(138,92,255,.12)}
+.badge i{width:6px;height:6px;border-radius:50%;background:var(--pink);box-shadow:0 0 8px var(--pink)}
+.hero h1{font-size:clamp(2rem,5vw,3.3rem);font-weight:800;letter-spacing:-.02em;margin:14px 0 6px;line-height:1.1}
+.hero h1 span{background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);font-size:1.05rem}
+.hero p em{color:var(--text);font-style:italic}
+
+/* Featured */
+.featured{display:grid;grid-template-columns:1.15fr 1fr;gap:32px;align-items:center;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden;
+  box-shadow:0 0 40px rgba(138,92,255,.2),inset 0 0 40px rgba(138,92,255,.06);min-height:250px}
+.f-art{position:relative;height:100%;min-height:250px;cursor:pointer;overflow:hidden;border:0;background:none;display:block;width:100%}
+.f-art .art{position:absolute;inset:0}
+.tag-feat{position:absolute;left:18px;bottom:18px;z-index:2;display:flex;align-items:center;gap:8px;font-size:.7rem;font-weight:700;letter-spacing:.08em;padding:8px 14px;border-radius:999px;border:1px solid var(--violet);background:rgba(25,18,60,.85)}
+.tag-feat svg{width:12px;height:12px;color:var(--pink)}
+.playbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:68px;border-radius:50%;background:rgba(30,35,70,.7);border:2px solid rgba(255,255,255,.6);display:grid;place-items:center;backdrop-filter:blur(4px);transition:.25s;z-index:2}
+.playbtn svg{width:26px;height:26px;margin-left:3px}
+.f-art:hover .playbtn,.card:hover .playbtn,.card:focus-visible .playbtn{transform:translate(-50%,-50%) scale(1.12);background:rgba(138,92,255,.7);box-shadow:0 0 28px rgba(138,92,255,.7)}
+.f-info{padding:28px 36px 28px 0}
+.f-info h2{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;margin-bottom:12px}
+.f-info h2 span{color:var(--cyan)}
+.f-info p{color:#c9cde6;font-size:1rem;margin-bottom:18px;max-width:480px}
+.f-meta{display:flex;align-items:center;gap:10px;margin-bottom:20px;font-size:.95rem}
+.f-meta svg{width:16px;height:16px}
+.btn-watch{display:inline-flex;align-items:center;gap:10px;padding:13px 30px;border-radius:12px;border:0;background:linear-gradient(90deg,#ff3fb4,#8a5cff);font-weight:600;font-size:1rem;cursor:pointer;transition:.25s;box-shadow:0 8px 24px rgba(255,63,180,.35)}
+.btn-watch:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,63,180,.5)}
+
+/* Toolbar */
+.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:24px 0 18px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;flex:1}
+.chip{padding:8px 20px;border-radius:999px;border:1px solid var(--line);background:rgba(12,14,34,.8);font-size:.88rem;cursor:pointer;transition:.2s}
+.chip:hover{border-color:var(--cyan)}
+.chip[aria-pressed="true"]{background:linear-gradient(90deg,#ff3fb4,#a14cff);border-color:transparent;box-shadow:0 0 18px rgba(255,63,180,.45);font-weight:600}
+.sort{padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:rgba(12,14,34,.9);color:var(--text);font:inherit;font-size:.85rem;cursor:pointer;outline:none}
+.sort:focus{border-color:var(--cyan)}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:start;padding-bottom:30px}
+.side{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:14px 10px;position:sticky;top:16px}
+.side button{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:6px;border-radius:8px;border:0;border-left:3px solid transparent;background:none;cursor:pointer;text-align:left;font-size:.92rem;opacity:.85;transition:.2s}
+.side button:last-child{margin-bottom:0}
+.side button svg{width:18px;height:18px;flex:none}
+.side button:hover{background:rgba(255,255,255,.05);opacity:1}
+.side button[aria-pressed="true"]{background:rgba(138,92,255,.18);border-left-color:var(--pink);opacity:1;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{position:relative;display:flex;flex-direction:column;text-align:left;border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden;cursor:pointer;transition:.25s;animation:rise .45s both;padding:0}
+.card:hover,.card:focus-visible{transform:translateY(-5px);border-color:var(--cyan);box-shadow:0 10px 30px rgba(53,224,208,.2),0 0 20px rgba(138,92,255,.25);outline:none}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:#10122a}
+.thumb .art,.f-art .art{width:100%;height:100%;display:block;transition:transform .5s}
+.card:hover .art{transform:scale(1.08)}
+.card .playbtn{width:40px;height:40px}
+.card .playbtn svg{width:16px;height:16px;margin-left:2px}
+.dur{position:absolute;right:8px;bottom:8px;z-index:2;background:rgba(0,0,0,.7);padding:1px 8px;border-radius:6px;font-size:.74rem;font-weight:600}
+.save{position:absolute;top:8px;right:8px;z-index:3;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.55);display:grid;place-items:center;cursor:pointer;opacity:0;transition:.2s}
+.card:hover .save,.save.on,.save:focus-visible{opacity:1}
+.save svg{width:14px;height:14px}
+.save.on{color:var(--pink)}
+.save.on svg{fill:currentColor}
+.c-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px}
+.cat{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan)}
+.cat[data-cat="Terahertz"]{color:#6aa0ff}
+.cat[data-cat="Restorative Sound"]{color:#c58bff}
+.cat[data-cat="Business & Setup"]{color:#ff8ad2}
+.cat[data-cat="Customer Stories"]{color:#ffc46b}
+.c-body h3{font-size:.98rem;font-weight:600;line-height:1.25}
+.c-meta{display:flex;gap:14px;font-size:.74rem;color:var(--muted);margin-top:2px}
+.c-meta span{display:inline-flex;align-items:center;gap:5px}
+.c-meta svg{width:12px;height:12px}
+.c-desc{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.78rem;color:var(--muted)}
+.empty{display:none;text-align:center;padding:60px 20px;border:1px dashed var(--line);border-radius:var(--r);background:var(--panel)}
+.empty.show{display:block}
+.empty h2{font-size:1.3rem;margin-bottom:6px}
+.empty p{color:var(--muted);margin-bottom:18px}
+.empty .btn-watch{padding:11px 26px}
+footer{text-align:center;color:var(--muted);font-size:.85rem;font-style:italic;padding:14px 0 36px}
+footer b{font-style:normal;color:var(--text)}
+
+/* Modal */
+.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(4,5,14,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);opacity:0;visibility:hidden;transition:.25s}
+.modal.open{opacity:1;visibility:visible}
+.m-box{position:relative;width:min(1000px,100%);border:1px solid var(--line);border-radius:var(--r);background:#0d1030;overflow:hidden;box-shadow:0 0 60px rgba(138,92,255,.35);transform:scale(.95);transition:.25s}
+.modal.open .m-box{transform:none}
+.player{position:relative;aspect-ratio:16/9;background:#000}
+.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.m-info{padding:16px 22px;display:flex;gap:16px;align-items:center;justify-content:space-between}
+.m-info h2{font-size:1.2rem}
+.m-info p{color:var(--muted);font-size:.9rem;margin-top:2px}
+.close{position:absolute;top:12px;right:12px;z-index:2;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(10,12,28,.8);cursor:pointer;display:grid;place-items:center;transition:.2s}
+.close:hover{background:var(--pink);transform:rotate(90deg)}
+.close svg{width:18px;height:18px}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+@media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){
+  .links{display:none}
+  .layout{grid-template-columns:1fr}
+  .side{position:static;display:flex;overflow-x:auto;padding:8px;gap:4px}
+  .side button{width:auto;white-space:nowrap;margin:0;border-left:0;border-bottom:3px solid transparent}
+  .side button[aria-pressed="true"]{border-bottom-color:var(--pink)}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .featured{grid-template-columns:1fr;gap:0}
+  .f-info{padding:22px}
+}
+@media(max-width:600px){
+  .wrap{padding:0 16px}
+  nav.top{gap:12px;flex-wrap:wrap}
+  .search{order:3;width:100%;margin-left:0}
+  .avatar{margin-left:auto}
+  .grid{grid-template-columns:1fr}
+  .sort{width:100%}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Main">
+    <a class="logo" href="#">
+      <svg viewBox="0 0 34 26" aria-hidden="true"><defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#35e0d0"/><stop offset="1" stop-color="#ff3fb4"/></linearGradient></defs>
+        <g stroke="url(#lg)" stroke-width="3" stroke-linecap="round"><path d="M3 10v6M8 5v16M13 8v10M18 2v22M23 7v12M28 10v6M32 12v2"/></g></svg>
+      SOL <b>REViBE</b>
+    </a>
+    <div class="links">
+      <a href="#" class="active" aria-current="page">Explore</a>
+      <a href="#">Collections</a>
+      <a href="#">About</a>
+    </div>
+    <div class="search" role="search">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <label for="search" class="sr-only">Search videos</label>
+      <input id="search" type="search" placeholder="Search videos, topics, or experiences…" autocomplete="off">
+      <button id="clear" class="clear" type="button" aria-label="Clear search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <button class="avatar" type="button" aria-label="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></button>
+  </nav>
+
+  <header class="hero">
+    <span class="badge"><i></i>On-Demand Video Library</span>
+    <h1>Explore the <span>SOL REViBE</span> Library</h1>
+    <p>Discover frequency, wellness, and <em>restoration experiences.</em></p>
+  </header>
+
+  <section class="featured" id="featured" aria-label="Featured video"></section>
+
+  <div class="toolbar">
+    <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+    <label class="sr-only" for="sort">Sort videos</label>
+    <select class="sort" id="sort">
+      <option value="recent">Sort: Recently Added</option>
+      <option value="views">Sort: Most Viewed</option>
+      <option value="title">Sort: Title A–Z</option>
+    </select>
+  </div>
+
+  <div class="layout">
+    <aside class="side" id="side" aria-label="Browse"></aside>
+    <main>
+      <section class="grid" id="grid" aria-label="Videos"></section>
+      <section class="empty" id="empty" aria-live="polite">
+        <h2>No videos found matching your query</h2>
+        <p>Try a different keyword, category or view.</p>
+        <button class="btn-watch" id="reset" type="button">Reset Filters</button>
+      </section>
+    </main>
+  </div>
+  <footer>A focused viewing experience. No ads. Just <b>SOL REViBE.</b></footer>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" aria-hidden="true">
+  <div class="m-box">
+    <button class="close" id="close" type="button" aria-label="Close video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="player"><iframe id="player" title="Vimeo video player" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+    <div class="m-info"><div><h2 id="m-title"></h2><p id="m-desc"></p></div></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const CATS = ["All","Frequency & PEMF","Terahertz","Restorative Sound","Business & Setup","Customer Stories"];
+  const VIEWS = [
+    {k:"all", label:"Browse All", ic:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'},
+    {k:"featured", label:"Featured", ic:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'},
+    {k:"recent", label:"Recently Added", ic:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'},
+    {k:"viewed", label:"Most Watched", ic:'<path d="M5 20V10M12 20V4M19 20v-7"/>'},
+    {k:"saved", label:"Saved Videos", ic:'<path d="M6 3h12v18l-6-4-6 4z"/>'}
+  ];
+  // days = days since published; views in raw number
+  const videos = [
+    {id:1, vimeoId:"76979871", title:"The SOL REViBE Experience", category:"Frequency & PEMF", duration:"12:40", days:5, views:31200, featured:true, hue:[280,180], tags:["experience","pemf","terahertz","relaxation"], description:"Immerse yourself in a synchronized experience of PEMF, terahertz, and restorative soundscapes designed to support relaxation, balance, and renewal."},
+    {id:2, vimeoId:"148751763", title:"Understanding Frequency Wellness", category:"Frequency & PEMF", duration:"08:24", days:14, views:12400, hue:[200,290], tags:["frequency","wellness","basics"], description:"A clear introduction to how frequency-based wellness works and what to expect from a session."},
+    {id:3, vimeoId:"1084537", title:"Inside a SOL REViBE Session", category:"Frequency & PEMF", duration:"12:40", days:15, views:18700, hue:[190,260], tags:["session","walkthrough","experience"], description:"Step inside a full session from arrival to restoration and see every stage of the experience."},
+    {id:4, vimeoId:"76979871", title:"PEMF & Terahertz Explained", category:"Terahertz", duration:"06:18", days:21, views:14100, hue:[240,200], tags:["pemf","terahertz","science"], description:"The science behind PEMF and terahertz technology explained simply, with real-world context."},
+    {id:5, vimeoId:"148751763", title:"Bring SOL REViBE to Your Business", category:"Business & Setup", duration:"09:52", days:23, views:16800, hue:[320,260], tags:["business","partner","studio"], description:"Everything you need to know about adding SOL REViBE stations to your wellness business."},
+    {id:6, vimeoId:"1084537", title:"A Restorative Sound Experience", category:"Restorative Sound", duration:"15:06", days:30, views:22100, hue:[270,320], tags:["sound","music","calm","headphones"], description:"Put on your headphones and sink into a layered soundscape created for deep rest and renewal."},
+    {id:7, vimeoId:"76979871", title:"Partner Success Stories", category:"Customer Stories", duration:"04:45", days:32, views:17900, hue:[30,300], tags:["partners","stories","testimonials"], description:"Hear from partners about how SOL REViBE has transformed their spaces and their clients' experience."},
+    {id:8, vimeoId:"148751763", title:"Station Setup & First Steps", category:"Business & Setup", duration:"07:32", days:34, views:15600, hue:[210,280], tags:["setup","station","guide"], description:"A practical guide to unboxing, placing, and powering up your first station."},
+    {id:9, vimeoId:"1084537", title:"The Science of Synchronized Sessions", category:"Terahertz", duration:"11:15", days:40, views:20300, hue:[300,190], tags:["science","synchronized","research"], description:"How synchronized frequencies work together, and what the research says about them."}
+  ];
+
+  const $ = id => document.getElementById(id);
+  const grid=$("grid"), empty=$("empty"), search=$("search"), clearBtn=$("clear"), chips=$("chips"),
+        side=$("side"), sortSel=$("sort"), modal=$("modal"), player=$("player"), featuredEl=$("featured");
+  const saved = new Set(JSON.parse(localStorage.getItem("sol-saved") || "[]"));
+  const state = {query:"", cat:"All", view:"all", sort:"recent"};
+  let lastFocus = null;
+
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const svg = (p, extra="") => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${p}</svg>`;
+  const ago = d => d < 14 ? `${d} days ago` : d < 30 ? `${Math.round(d/7)} weeks ago` : `${Math.round(d/30)} month${Math.round(d/30)>1?"s":""} ago`;
+  const fmtViews = n => n >= 1000 ? (n/1000).toFixed(1)+"K views" : n+" views";
+  const PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>';
+
+  // Procedural wave artwork (replaces thumbnails)
+  function art(v){
+    const [h1,h2] = v.hue, seed = v.id * 7.3;
+    let paths = "";
+    for(let i=0;i<7;i++){
+      const amp = 14 + ((seed*(i+2))%22), ph = (seed*(i+1))%40, y = 50 + (i-3)*4;
+      let d = `M0 ${y}`;
+      for(let x=0;x<=200;x+=10) d += ` L${x} ${(y + Math.sin((x+ph)/(18+i*3))*amp*(.5+i*.12)).toFixed(1)}`;
+      paths += `<path d="${d}" stroke="url(#g${v.id})" stroke-width="${(.5+i*.12).toFixed(2)}" fill="none" opacity="${(.35+i*.1).toFixed(2)}"/>`;
+    }
+    return `<svg class="art" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs><linearGradient id="g${v.id}" x1="0" x2="1"><stop offset="0" stop-color="hsl(${h1} 95% 65%)"/><stop offset="1" stop-color="hsl(${h2} 95% 65%)"/></linearGradient>
+      <radialGradient id="b${v.id}" cx=".3" cy=".4" r=".9"><stop offset="0" stop-color="hsl(${h1} 70% 28%)"/><stop offset="1" stop-color="#080a1c"/></radialGradient></defs>
+      <rect width="200" height="100" fill="url(#b${v.id})"/>
+      <circle cx="${40+(seed%120)}" cy="45" r="30" fill="hsl(${h2} 90% 55%)" opacity=".18"/>${paths}</svg>`;
+  }
+
+  function renderFeatured(){
+    const v = videos.find(x => x.featured);
+    featuredEl.innerHTML = `
+      <button class="f-art" type="button" data-id="${v.id}" aria-label="Play ${esc(v.title)}">
+        ${art(v)}
+        <span class="playbtn">${PLAY}</span>
+        <span class="tag-feat">${svg('<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>','fill="currentColor"')}FEATURED EXPERIENCE</span>
+      </button>
+      <div class="f-info">
+        <h2>The SOL <span>REViBE</span> Experience</h2>
+        <p>${esc(v.description)}</p>
+        <div class="f-meta">${svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')}<span>${v.duration}</span><span>·</span><strong class="cyan">Featured</strong></div>
+        <button class="btn-watch" type="button" data-id="${v.id}">Watch Experience ${svg('<path d="M5 12h14M13 6l6 6-6 6"/>','width="18" height="18"')}</button>
+      </div>`;
+  }
+
+  function renderNav(){
+    chips.innerHTML = CATS.map(c => `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${c===state.cat}">${c==="All"?"All Videos":esc(c)}</button>`).join("");
+    side.innerHTML = VIEWS.map(v => `<button type="button" data-view="${v.k}" aria-pressed="${v.k===state.view}">${svg(v.ic)}${v.label}</button>`).join("");
+  }
+
+  function list(){
+    const q = state.query.trim().toLowerCase();
+    let out = videos.filter(v =>
+      (state.cat==="All" || v.category===state.cat) &&
+      (state.view!=="featured" || v.featured) &&
+      (state.view!=="saved" || saved.has(v.id)) &&
+      (!q || [v.title, v.category, v.description, ...v.tags].join(" ").toLowerCase().includes(q)));
+    const s = state.view==="recent" ? "recent" : state.view==="viewed" ? "views" : state.sort;
+    out.sort((a,b) => s==="recent" ? a.days-b.days : s==="views" ? b.views-a.views : a.title.localeCompare(b.title));
+    return out;
+  }
+
+  function render(){
+    const items = list();
+    grid.innerHTML = items.map((v,i) => `
+      <article class="card" tabindex="0" role="button" data-id="${v.id}" style="animation-delay:${i*45}ms" aria-label="Play ${esc(v.title)}">
+        <div class="thumb">
+          ${art(v)}
+          <span class="playbtn">${PLAY}</span>
+          <span class="dur">${v.duration}</span>
+          <button type="button" class="save ${saved.has(v.id)?"on":""}" data-save="${v.id}" aria-label="${saved.has(v.id)?"Remove from":"Add to"} saved videos" aria-pressed="${saved.has(v.id)}">${svg('<path d="M6 3h12v18l-6-4-6 4z"/>')}</button>
+        </div>
+        <div class="c-body">
+          <span class="cat" data-cat="${esc(v.category)}">${esc(v.category)}</span>
+          <h3>${esc(v.title)}</h3>
+          <p class="c-desc">${esc(v.description)}</p>
+          <div class="c-meta"><span>${svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>')}${ago(v.days)}</span><span>${svg('<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>')}${fmtViews(v.views)}</span></div>
+        </div>
+      </article>`).join("");
+    empty.classList.toggle("show", items.length===0);
+    grid.hidden = items.length===0;
+    clearBtn.classList.toggle("visible", !!state.query);
+  }
+
+  const update = () => { renderNav(); render(); };
+
+  function openModal(v){
+    lastFocus = document.activeElement;
+    $("m-title").textContent = v.title;
+    $("m-desc").textContent = `${v.category} · ${v.duration}`;
+    player.src = `https://player.vimeo.com/video/${v.vimeoId}?autoplay=1`;
+    modal.classList.add("open"); modal.setAttribute("aria-hidden","false");
+    document.body.classList.add("modal-open");
+    $("close").focus();
+  }
+  function closeModal(){
+    if(!modal.classList.contains("open")) return;
+    modal.classList.remove("open"); modal.setAttribute("aria-hidden","true");
+    document.body.classList.remove("modal-open");
+    player.src = "about:blank"; player.removeAttribute("src"); // stop audio
+    if(lastFocus) lastFocus.focus();
+  }
+
+  search.addEventListener("input", () => { state.query = search.value; render(); });
+  clearBtn.addEventListener("click", () => { search.value=""; state.query=""; render(); search.focus(); });
+  chips.addEventListener("click", e => { const b=e.target.closest(".chip"); if(b){ state.cat=b.dataset.cat; update(); }});
+  side.addEventListener("click", e => { const b=e.target.closest("[data-view]"); if(b){ state.view=b.dataset.view; update(); }});
+  sortSel.addEventListener("change", () => { state.sort = sortSel.value; if(state.view==="recent"||state.view==="viewed") state.view="all"; update(); });
+  $("reset").addEventListener("click", () => { search.value=""; Object.assign(state,{query:"",cat:"All",view:"all",sort:"recent"}); sortSel.value="recent"; update(); });
+  featuredEl.addEventListener("click", e => { const b=e.target.closest("[data-id]"); if(b) openModal(videos.find(v=>v.id===+b.dataset.id)); });
+  grid.addEventListener("click", e => {
+    const sv = e.target.closest("[data-save]");
+    if(sv){ e.stopPropagation(); const id=+sv.dataset.save; saved.has(id)?saved.delete(id):saved.add(id);
+      localStorage.setItem("sol-saved", JSON.stringify([...saved])); render(); return; }
+    const c = e.target.closest(".card"); if(c) openModal(videos.find(v=>v.id===+c.dataset.id));
+  });
+  grid.addEventListener("keydown", e => {
+    if((e.key==="Enter"||e.key===" ") && e.target.classList.contains("card")){ e.preventDefault(); openModal(videos.find(v=>v.id===+e.target.dataset.id)); }
+  });
+  $("close").addEventListener("click", closeModal);
+  modal.addEventListener("click", e => { if(e.target===modal) closeModal(); });
+  document.addEventListener("keydown", e => {
+    if(e.key==="Escape") closeModal();
+    if(e.key==="Tab" && modal.classList.contains("open")){ e.preventDefault(); $("close").focus(); }
+  });
+
+  renderFeatured(); update();
+})();
+</script>
+</body>
+</html>
