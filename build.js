@@ -56,6 +56,12 @@ const path = require('path');
     copyRecursiveSync(solgamesDirSrc, solgamesDirDest);
   }
 
+  const videoLibDirSrc = path.join(__dirname, 'video-library');
+  const videoLibDirDest = path.join(outDir, 'video-library');
+  if (fs.existsSync(videoLibDirSrc)) {
+    copyRecursiveSync(videoLibDirSrc, videoLibDirDest);
+  }
+
   const key = process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY || "";
   const geminiKey = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "";
 
