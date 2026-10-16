@@ -10,7 +10,7 @@ let showcaseMarker = null;
 // Helper to determine zone color based on status
 function getZoneColor(zoneId) {
     const zoneInfo = zonesData[zoneId];
-    return (zoneInfo && zoneInfo.status === 'Taken') ? '#a855f7' : '#10b981';
+    return (zoneInfo && zoneInfo.status === 'Taken') ? '#6B7A82' : '#10b981';
 }
 
 // Load Data Indexes on Startup
@@ -403,7 +403,7 @@ function claimActiveZone() {
         card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
         card.style.transform = 'translateY(-4px)';
         if (zoneInfo.status === 'Taken') {
-            card.style.boxShadow = '0 12px 25px rgba(168, 85, 247, 0.15)';
+            card.style.boxShadow = '0 12px 25px rgba(107,122,130, 0.15)';
         } else {
             card.style.boxShadow = '0 12px 25px rgba(16, 185, 129, 0.15)';
         }
@@ -520,7 +520,7 @@ function initRoiCalculator() {
         const max = parseFloat(slider.max) || 100;
         const val = parseFloat(slider.value);
         const percent = ((val - min) / (max - min)) * 100;
-        slider.style.background = `linear-gradient(to right, #00e599 0%, #00e599 ${percent}%, #1e293b ${percent}%, #1e293b 100%)`;
+        slider.style.background = `linear-gradient(to right, #8E9B8A 0%, #8E9B8A ${percent}%, #3A3A3A ${percent}%, #3A3A3A 100%)`;
     }
 
     function calculate() {

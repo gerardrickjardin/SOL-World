@@ -147,7 +147,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="token-row">
                   <span>Official 1-Year Warranty:</span>
-                  <strong style={{ color: '#059669' }}>
+                  <strong style={{ color: '#7A8776' }}>
                     ACTIVE (Registered to ID: {formData.governmentId ? '••••' + formData.governmentId.slice(-4) : '••••8412'})
                   </strong>
                 </div>
@@ -172,7 +172,7 @@ export default function CheckoutPage() {
                   type="button"
                   className="reset-btn"
                   onClick={() => window.print()}
-                  style={{ backgroundColor: '#0F172A', color: '#fff', border: 'none' }}
+                  style={{ backgroundColor: '#2B2B2B', color: '#fff', border: 'none' }}
                 >
                   Print Order & Warranty Receipt
                 </button>
@@ -193,7 +193,7 @@ export default function CheckoutPage() {
               <section className="product-summary-pane">
                 <div className="product-tag">Mind-Body Wellness Station</div>
                 <h2 className="product-title">SOL REViBE Mind-Body Wellness Station</h2>
-                <p style={{ fontSize: '0.875rem', color: '#64748B', marginTop: '-0.5rem', marginBottom: '1rem', fontWeight: 500 }}>
+                <p style={{ fontSize: '0.875rem', color: '#8C8A85', marginTop: '-0.5rem', marginBottom: '1rem', fontWeight: 500 }}>
                   P90 Plus Complete Station Package
                 </p>
 
@@ -202,7 +202,7 @@ export default function CheckoutPage() {
                   <span className="price-amount">{currentPrice}</span>
                   <span className="price-unit">USD</span>
                   {pricingPlan === 'split' && (
-                    <span style={{ fontSize: '0.85rem', color: '#64748b', marginLeft: '6px' }}>/ month (2 payments)</span>
+                    <span style={{ fontSize: '0.85rem', color: '#8C8A85', marginLeft: '6px' }}>/ month (2 payments)</span>
                   )}
                 </div>
 
@@ -502,7 +502,7 @@ export default function CheckoutPage() {
                   <div className="form-section warranty-highlight-section">
                     <div className="warranty-title-bar">
                       <h3 className="form-section-title" style={{ color: '#065f46' }}>
-                        <span className="step-num" style={{ backgroundColor: '#059669' }}>
+                        <span className="step-num" style={{ backgroundColor: '#7A8776' }}>
                           3
                         </span>{' '}
                         Official Warranty Registration
@@ -523,7 +523,7 @@ export default function CheckoutPage() {
                         <svg
                           viewBox="0 0 24 24"
                           fill="none"
-                          stroke="#059669"
+                          stroke="#7A8776"
                           strokeWidth="2"
                           width="18"
                           height="18"

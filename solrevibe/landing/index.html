@@ -12,13 +12,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         :root {
-            --sol-deep: #000814;
-            --deep-navy: #0E1320;
-            --sol-violet: #6C3AED;
-            --revibe-magenta: #FF2F90;
-            --soft-pink: #FF7AB8;
-            --energy-cyan: #00E5FF;
-            --light-gray: #E6E7EC;
+            --sol-deep: #2B2B2B;
+            --deep-navy: #333333;
+            --sol-violet: #6B7A82;
+            --revibe-magenta: #C29B68;
+            --soft-pink: #D8B88C;
+            --energy-cyan: #8E9B8A;
+            --light-gray: #F7F5F1;
             --white: #FFFFFF;
         }
 
@@ -41,9 +41,9 @@
             font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--sol-deep);
             background-image: 
-                radial-gradient(circle at 50% -10%, rgba(108, 58, 237, 0.28) 0%, transparent 55%),
-                radial-gradient(circle at 100% 40%, rgba(255, 47, 144, 0.14) 0%, transparent 45%),
-                radial-gradient(circle at 0% 70%, rgba(0, 229, 255, 0.12) 0%, transparent 45%);
+                radial-gradient(circle at 50% -10%, rgba(107,122,130, 0.28) 0%, transparent 55%),
+                radial-gradient(circle at 100% 40%, rgba(194,155,104, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 0% 70%, rgba(142,155,138, 0.12) 0%, transparent 45%);
             background-attachment: fixed;
             color: var(--white);
             letter-spacing: 0.015em;
@@ -99,7 +99,7 @@
         }
 
         .highlight {
-            background: linear-gradient(135deg, #FF2F90 0%, #FF7AB8 45%, #00E5FF 100%);
+            background: linear-gradient(135deg, #C29B68 0%, #D8B88C 45%, #8E9B8A 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
@@ -123,8 +123,8 @@
             border-radius: 20px;
             overflow: hidden;
             padding: 0;
-            border: 1px solid rgba(108, 58, 237, 0.35);
-            box-shadow: 0 25px 60px rgba(0, 4, 10, 0.8), 0 0 35px rgba(108, 58, 237, 0.18);
+            border: 1px solid rgba(107,122,130, 0.35);
+            box-shadow: 0 25px 60px rgba(36,36,36, 0.8), 0 0 35px rgba(107,122,130, 0.18);
             box-sizing: border-box;
         }
 
@@ -132,7 +132,7 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            background: linear-gradient(145deg, #0E1320 0%, #080D18 100%);
+            background: linear-gradient(145deg, #333333 0%, #242424 100%);
             border-radius: 18px;
             display: flex;
             flex-direction: row;
@@ -157,7 +157,7 @@
 
         .left-panel {
             position: relative;
-            background-color: #000814;
+            background-color: #2B2B2B;
             width: 100%;
             aspect-ratio: 16 / 9;
             min-width: 0;
@@ -167,7 +167,7 @@
             justify-content: center;
             cursor: pointer;
             border-radius: 16px;
-            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 25px rgba(108, 58, 237, 0.15);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 25px rgba(107,122,130, 0.15);
         }
 
         .video-cta-wrapper {
@@ -182,7 +182,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            background: linear-gradient(135deg, #FF2F90 0%, #6C3AED 100%);
+            background: linear-gradient(135deg, #C29B68 0%, #6B7A82 100%);
             color: #FFFFFF;
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
@@ -193,14 +193,14 @@
             border-radius: 999px;
             border: 1px solid rgba(255, 255, 255, 0.25);
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(255, 47, 144, 0.4), 0 0 20px rgba(108, 58, 237, 0.25);
+            box-shadow: 0 6px 20px rgba(194,155,104, 0.4), 0 0 20px rgba(107,122,130, 0.25);
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .video-play-trigger-btn:hover {
             transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 10px 28px rgba(255, 47, 144, 0.55), 0 0 25px rgba(0, 229, 255, 0.4);
-            border-color: rgba(0, 229, 255, 0.5);
+            box-shadow: 0 10px 28px rgba(194,155,104, 0.55), 0 0 25px rgba(142,155,138, 0.4);
+            border-color: rgba(142,155,138, 0.5);
         }
 
         .video-play-trigger-btn:active {
@@ -297,7 +297,7 @@
             font-size: 0.95rem;
             line-height: 1.35;
             top: 0px;
-            text-shadow: 0 0 8px rgba(255, 47, 144, 0.7);
+            text-shadow: 0 0 8px rgba(194,155,104, 0.7);
         }
 
         .gate-form {
@@ -326,7 +326,7 @@
             left: 0.85rem;
             width: 16px;
             height: 16px;
-            color: #64748b;
+            color: #8C8A85;
             pointer-events: none;
             transition: color 0.2s ease;
             z-index: 2;
@@ -346,13 +346,13 @@
             font-weight: 500;
             box-sizing: border-box;
             background-color: rgba(255, 255, 255, 0.98);
-            color: #000814;
+            color: #2B2B2B;
             transition: all 0.2s ease;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
 
         .form-input::placeholder {
-            color: #64748b;
+            color: #8C8A85;
             font-weight: 400;
             font-size: 0.83rem;
             letter-spacing: 0.01em;
@@ -361,12 +361,12 @@
         .form-input:focus {
             outline: none;
             border-color: var(--revibe-magenta);
-            box-shadow: 0 0 14px rgba(255, 47, 144, 0.35);
+            box-shadow: 0 0 14px rgba(194,155,104, 0.35);
             background-color: #ffffff;
         }
 
         .submit-btn {
-            background: linear-gradient(135deg, #6C3AED 0%, #FF2F90 100%);
+            background: linear-gradient(135deg, #6B7A82 0%, #C29B68 100%);
             color: var(--white);
             border: none;
             border-radius: 999px;
@@ -381,12 +381,12 @@
             text-transform: uppercase;
             letter-spacing: 0.04em;
             word-spacing: 0.06em;
-            box-shadow: 0 6px 22px rgba(108, 58, 237, 0.45);
+            box-shadow: 0 6px 22px rgba(107,122,130, 0.45);
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 47, 144, 0.55);
+            box-shadow: 0 10px 30px rgba(194,155,104, 0.55);
             background: linear-gradient(135deg, #7c48f7 0%, #ff479e 100%);
         }
 
@@ -460,8 +460,8 @@
 
         /* ── Revenue Calculator ─────── */
         .teaser-card {
-            background: rgba(14, 19, 32, 0.85);
-            border: 1px solid rgba(108, 58, 237, 0.4);
+            background: rgba(51,51,51, 0.85);
+            border: 1px solid rgba(107,122,130, 0.4);
             border-radius: 14px;
             padding: 0.85rem 1.05rem 0.75rem;
             margin: 0.3rem 0 0.3rem;
@@ -470,7 +470,7 @@
             gap: 0.5rem;
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(108, 58, 237, 0.12);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(107,122,130, 0.12);
         }
         .teaser-header {
             display: flex;
@@ -514,11 +514,11 @@
             font-size: 0.98rem;
             font-weight: 900;
             color: var(--energy-cyan);
-            background: rgba(0, 229, 255, 0.1);
-            border: 1px solid rgba(0, 229, 255, 0.4);
+            background: rgba(142,155,138, 0.1);
+            border: 1px solid rgba(142,155,138, 0.4);
             padding: 2px 10px;
             border-radius: 6px;
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+            text-shadow: 0 0 8px rgba(142,155,138, 0.5);
         }
         .teaser-range {
             -webkit-appearance: none;
@@ -526,7 +526,7 @@
             width: 100%;
             height: 6px;
             border-radius: 999px;
-            background: #1a2234;
+            background: #333333;
             outline: none;
             cursor: pointer;
             margin: 6px 0;
@@ -550,19 +550,19 @@
             border-radius: 50%;
             background: #ffffff;
             border: 3px solid var(--energy-cyan);
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
+            box-shadow: 0 0 12px rgba(142,155,138, 0.7);
             cursor: grab;
             margin-top: -7px;
             transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
         .teaser-range::-webkit-slider-thumb:hover {
             transform: scale(1.15);
-            box-shadow: 0 0 16px rgba(0, 229, 255, 0.95);
+            box-shadow: 0 0 16px rgba(142,155,138, 0.95);
         }
         .teaser-range::-webkit-slider-thumb:active {
             cursor: grabbing;
             transform: scale(1.25);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 1);
+            box-shadow: 0 0 20px rgba(142,155,138, 1);
         }
         .teaser-range::-moz-range-thumb {
             appearance: none;
@@ -571,19 +571,19 @@
             border-radius: 50%;
             background: #ffffff;
             border: 3px solid var(--energy-cyan);
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
+            box-shadow: 0 0 12px rgba(142,155,138, 0.7);
             cursor: grab;
             border: none;
             transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
         .teaser-range::-moz-range-thumb:hover {
             transform: scale(1.15);
-            box-shadow: 0 0 16px rgba(0, 229, 255, 0.95);
+            box-shadow: 0 0 16px rgba(142,155,138, 0.95);
         }
         .teaser-range::-moz-range-thumb:active {
             cursor: grabbing;
             transform: scale(1.25);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 1);
+            box-shadow: 0 0 20px rgba(142,155,138, 1);
         }
         .teaser-tick-row {
             display: flex;
@@ -593,8 +593,8 @@
             margin-top: 2px;
         }
         .teaser-output {
-            background: rgba(0, 8, 20, 0.65);
-            border: 1px solid rgba(108, 58, 237, 0.28);
+            background: rgba(43,43,43, 0.65);
+            border: 1px solid rgba(107,122,130, 0.28);
             border-radius: 12px;
             padding: 1rem 1.15rem;
             display: flex;
@@ -624,11 +624,11 @@
             font-weight: 900;
             color: var(--white);
             letter-spacing: -0.03em;
-            text-shadow: 0 0 25px rgba(255, 47, 144, 0.45), 0 0 10px rgba(0, 229, 255, 0.25);
+            text-shadow: 0 0 25px rgba(194,155,104, 0.45), 0 0 10px rgba(142,155,138, 0.25);
         }
         .teaser-output-unit { font-size: 0.92rem; font-weight: 500; color: var(--light-gray); }
         .teaser-cta {
-            background: linear-gradient(135deg, #FF2F90 0%, #6C3AED 100%);
+            background: linear-gradient(135deg, #C29B68 0%, #6B7A82 100%);
             color: var(--white) !important;
             font-size: 0.88rem;
             font-weight: 800;
@@ -639,7 +639,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 6px 22px rgba(255, 47, 144, 0.4);
+            box-shadow: 0 6px 22px rgba(194,155,104, 0.4);
             transition: all 0.25s ease;
             text-align: center;
             letter-spacing: 0.03em;
@@ -651,7 +651,7 @@
         }
         .teaser-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 47, 144, 0.6);
+            box-shadow: 0 10px 30px rgba(194,155,104, 0.6);
             background: linear-gradient(135deg, #ff479e 0%, #7c48f7 100%);
         }
         .teaser-lock-note {
@@ -922,7 +922,7 @@
                                     <span class="teaser-title">Revenue Calculator</span>
                                 </div>
                                 <div class="teaser-subtitle">
-                                    <span style="font-size: 0.72rem; color: #FF7AB8; font-weight: 600; display: block; margin-bottom: 5px;">This projection does not include referral sale calculations</span>
+                                    <span style="font-size: 0.72rem; color: #D8B88C; font-weight: 600; display: block; margin-bottom: 5px;">This projection does not include referral sale calculations</span>
                                     Two numbers about your practice are enough to project a conservative monthly revenue picture from paid sessions and home-device sales.
                                 </div>
 
@@ -934,7 +934,7 @@
                                         </div>
                                         <input type="range" id="t-traffic-slider" class="teaser-range"
                                             min="20" max="100" step="1" value="20"
-                                            style="background: linear-gradient(to right, #6C3AED 0%, #FF2F90 calc(0% + 10px), #1a2234 calc(0% + 10px), #1a2234 100%);">
+                                            style="background: linear-gradient(to right, #6B7A82 0%, #C29B68 calc(0% + 10px), #333333 calc(0% + 10px), #333333 100%);">
                                         <div class="teaser-tick-row">
                                             <span>20 / day</span>
                                             <span>100 / day</span>
@@ -948,7 +948,7 @@
                                         </div>
                                         <input type="range" id="t-days-slider" class="teaser-range"
                                             min="1" max="7" step="1" value="5"
-                                            style="background: linear-gradient(to right, #6C3AED 0%, #00E5FF calc(66.67% - 3.33px), #1a2234 calc(66.67% - 3.33px), #1a2234 100%);">
+                                            style="background: linear-gradient(to right, #6B7A82 0%, #8E9B8A calc(66.67% - 3.33px), #333333 calc(66.67% - 3.33px), #333333 100%);">
                                         <div class="teaser-tick-row">
                                             <span>1 day</span>
                                             <span>7 days</span>
@@ -968,7 +968,7 @@
                                     Learn about the Science and Business Model &rarr;
                                 </button>
                                 <div class="teaser-lock-note">
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#8C8A85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                     ZIP code reservations are locked on a first-come basis
                                 </div>
                             </div>
@@ -1048,7 +1048,7 @@
                     const tPct = (tRatio * 100).toFixed(2);
                     const tOffset = ((0.5 - tRatio) * 20).toFixed(2);
                     const tFill = `calc(${tPct}% + ${tOffset}px)`;
-                    trafficSlider.style.background = `linear-gradient(to right, #6C3AED 0%, #FF2F90 ${tFill}, #1a2234 ${tFill}, #1a2234 100%)`;
+                    trafficSlider.style.background = `linear-gradient(to right, #6B7A82 0%, #C29B68 ${tFill}, #333333 ${tFill}, #333333 100%)`;
 
                     const dMin = parseFloat(daysSlider.min) || 1;
                     const dMax = parseFloat(daysSlider.max) || 7;
@@ -1056,7 +1056,7 @@
                     const dPct = (dRatio * 100).toFixed(2);
                     const dOffset = ((0.5 - dRatio) * 20).toFixed(2);
                     const dFill = `calc(${dPct}% + ${dOffset}px)`;
-                    daysSlider.style.background = `linear-gradient(to right, #6C3AED 0%, #00E5FF ${dFill}, #1a2234 ${dFill}, #1a2234 100%)`;
+                    daysSlider.style.background = `linear-gradient(to right, #6B7A82 0%, #8E9B8A ${dFill}, #333333 ${dFill}, #333333 100%)`;
                 };
 
                 ['input', 'change'].forEach(evt => {
@@ -1200,7 +1200,7 @@
 
                 // Show clear success confirmation
                 if (btn) {
-                    btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    btn.style.background = 'linear-gradient(135deg, #10b981 0%, #7A8776 100%)';
                     btn.style.boxShadow = '0 0 25px rgba(16, 185, 129, 0.5)';
                     btn.style.color = '#ffffff';
                     btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Success! Unlocking Science & Business Model...</span>';
