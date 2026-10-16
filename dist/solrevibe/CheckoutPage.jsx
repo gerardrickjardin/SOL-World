@@ -172,7 +172,7 @@ export default function CheckoutPage() {
                   type="button"
                   className="reset-btn"
                   onClick={() => window.print()}
-                  style={{ backgroundColor: '#2B2B2B', color: '#fff', border: 'none' }}
+                  style={{ backgroundColor: '#2B2B2B', color: '#2B2B2B', border: 'none' }}
                 >
                   Print Order & Warranty Receipt
                 </button>

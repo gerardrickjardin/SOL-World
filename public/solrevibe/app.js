@@ -85,7 +85,7 @@ function initMap() {
                 const fillColor = getZoneColor(zoneId);
                 // Style zoned territories in semi-transparent emerald green or purple with clean white borders
                 return {
-                    color: '#ffffff',
+                    color: '#2B2B2B',
                     weight: 1.25,
                     opacity: 0.9,
                     fillColor: fillColor,
@@ -243,7 +243,7 @@ function highlightZonePolygons(zoneId, searchedZip = null) {
                     const zip = feature.properties.ZIP;
                     const isSearched = (zip === searchedZip);
                     return {
-                        color: isSearched ? borderHighlightColor : '#ffffff', // Bolder border for the specific searched ZIP code
+                        color: isSearched ? borderHighlightColor: '#2B2B2B', // Bolder border for the specific searched ZIP code
                         weight: isSearched ? 3 : 1.25,
                         opacity: 1,
                         fillColor: baseColor,
@@ -262,7 +262,7 @@ function highlightZonePolygons(zoneId, searchedZip = null) {
             });
         })
         .catch(err => {
-            console.error("Failed to retrieve zone boundaries outline:", err);
+            console.error("Failed to retrieve zone boundaries outline: ", err);
             fallbackToZoneBounds(zoneId);
         });
 }

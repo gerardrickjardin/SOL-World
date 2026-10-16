@@ -1,21 +1,21 @@
 :root {
-    --bg-dark: #2B2B2B;
-    --bg-glass: rgba(255, 255, 255, 0.03);
+    --bg-dark: #EDE6DB;
+    --bg-glass: rgba(43,43,43,0.03);
     --border-glass: rgba(107,122,130, 0.3);
-    --text-main: #ffffff;
-    --text-muted: #F7F5F1;
+    --text-main: #2B2B2B;
+    --text-muted: #4A4A4A;
     --accent: #C29B68;
     --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
     /* SOL REViBE Brand Guidelines Colors */
-    --sol-deep: #2B2B2B;
-    --deep-navy: #333333;
+    --sol-deep: #EDE6DB;
+    --deep-navy: #F7F5F1;
     --sol-violet: #6B7A82;
     --revibe-magenta: #C29B68;
     --soft-pink: #D8B88C;
     --energy-cyan: #8E9B8A;
-    --light-gray: #F7F5F1;
-    --white: #FFFFFF;
+    --light-gray: #4A4A4A;
+    --white: #2B2B2B;
 
     /* Territory Availability Map Variables */
     --accent-emerald: #8E9B8A;
@@ -28,13 +28,13 @@
     --accent-purple-light: rgba(107,122,130, 0.1);
     --accent-purple-glow: rgba(107,122,130, 0.25);
     
-    --bg-page: #2B2B2B;
-    --bg-card: #333333;
-    --bg-header: rgba(43,43,43, 0.85);
+    --bg-page: #EDE6DB;
+    --bg-card: #F7F5F1;
+    --bg-header: rgba(237,230,219, 0.85);
     
-    --text-primary: #FFFFFF;
-    --text-secondary: #F7F5F1;
-    --text-muted-map: #B8B5AE;
+    --text-primary: #2B2B2B;
+    --text-secondary: #4A4A4A;
+    --text-muted-map: #6B6B6B;
     
     --border-light: rgba(107,122,130, 0.3);
     --border-focus: #8E9B8A;
@@ -43,7 +43,7 @@
     --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 10px 20px -8px rgba(0, 0, 0, 0.5);
     
-    --glass-bg: rgba(51,51,51, 0.85);
+    --glass-bg: rgba(237,230,219, 0.85);
     --glass-border: 1px solid rgba(107,122,130, 0.35);
     --glass-blur: blur(16px);
     
@@ -69,6 +69,7 @@ body {
 
 /* Starfield Canvas */
 #starfield {
+    display: none !important; /* light brand background: no night-sky canvas */
     position: fixed;
     top: 0;
     left: 0;
@@ -84,7 +85,7 @@ body {
     position: absolute;
     width: 800px;
     height: 800px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(43,43,43,0.04) 0%, transparent 60%);
     border-radius: 50%;
     top: -300px;
     left: -200px;
@@ -96,7 +97,7 @@ body {
     position: absolute;
     width: 1000px;
     height: 1000px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(43,43,43,0.03) 0%, transparent 60%);
     border-radius: 50%;
     bottom: -400px;
     right: -300px;
@@ -158,7 +159,7 @@ body {
 }
 
 .nav-links a.btn-pill:hover {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(43,43,43,0.075);
     transform: scale(1.03);
 }
 
@@ -306,13 +307,13 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
     .card:hover .card-front {
-        border-color: rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(43,43,43,0.15);
+        background: rgba(43,43,43,0.013);
     }
 }
 .card.is-flipped .card-front {
-    border-color: rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(43,43,43,0.15);
+    background: rgba(43,43,43,0.013);
 }
 
 .card-white .card-front {
@@ -441,7 +442,7 @@ body {
     font-weight: 600;
     letter-spacing: 0.1em;
     transition: var(--transition);
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(43,43,43,0.005);
 }
 
 .btn-outline:hover {
@@ -646,7 +647,7 @@ body {
 }
 
 .ring-cyan {
-  stroke: rgba(0, 238, 255, 0.95);
+  stroke: rgba(142,155,138, 0.95);
   stroke-width: 1.5px;
   filter: drop-shadow(0 0 4px #8E9B8A);
   animation: spinRing1 0.4s steps(6) infinite;
@@ -676,7 +677,7 @@ body {
 }
 
 .signal-1 {
-  stroke: rgba(0, 238, 255, 0.95);
+  stroke: rgba(142,155,138, 0.95);
   filter: drop-shadow(0 0 5px #8E9B8A);
   animation: pulseSignal1 0.35s steps(4) infinite;
 }
@@ -698,7 +699,7 @@ body {
 }
 
 .bolt-1, .bolt-3, .bolt-5, .bolt-7 {
-  stroke: rgba(0, 238, 255, 0.9);
+  stroke: rgba(142,155,138, 0.9);
   filter: drop-shadow(0 0 3px #8E9B8A);
 }
 
@@ -724,9 +725,9 @@ body {
   top: 50%;
   width: 26%;
   height: 26%;
-  background: radial-gradient(circle, #ffffff 0%, #f472b6 40%, #C29B68 75%, #a21caf 100%);
+  background: radial-gradient(circle, #ffffff 0%, #C29B68 40%, #C29B68 75%, #6B7A82 100%);
   border-radius: 50%;
-  box-shadow: 0 0 12px #C29B68, 0 0 24px #a21caf, 0 0 35px rgba(194,155,104, 0.5), inset 0 1px 2px rgba(255,255,255,0.9);
+  box-shadow: 0 0 12px #C29B68, 0 0 24px #6B7A82, 0 0 35px rgba(194,155,104, 0.5), inset 0 1px 2px rgba(255,255,255,0.9);
   animation: crackleCore 0.25s steps(4) infinite;
 }
 
@@ -909,7 +910,7 @@ body {
 
 #zip-search-btn {
     background-color: var(--accent-emerald);
-    color: #ffffff;
+    color: #2B2B2B;
     border: none;
     border-radius: 8px;
     width: 38px;
@@ -1064,7 +1065,7 @@ body {
     gap: 8px;
     width: 100%;
     background-color: var(--accent-emerald);
-    color: #ffffff;
+    color: #2B2B2B;
     border: none;
     border-radius: 10px;
     padding: 12px 20px;
@@ -1218,8 +1219,8 @@ body {
     font-family: var(--font-body);
     font-size: 0.95rem;
     padding: 10px 14px;
-    background-color: rgba(255, 255, 255, 0.06);
-    color: #FFFFFF;
+    background-color: rgba(43,43,43,0.015);
+    color: #2B2B2B;
     border: 1px solid var(--border-light);
     border-radius: 8px;
     outline: none;
@@ -1228,7 +1229,7 @@ body {
 
 .input-group input::placeholder,
 .input-group textarea::placeholder {
-    color: #B8B5AE;
+    color: #6B6B6B;
 }
 
 .input-group textarea {
@@ -1248,7 +1249,7 @@ body {
 }
 
 .readonly-input {
-    background-color: rgba(43,43,43, 0.6) !important;
+    background-color: rgba(237,230,219, 0.6) !important;
     color: var(--energy-cyan) !important;
     border-style: dashed !important;
     font-weight: 600;
@@ -1261,7 +1262,7 @@ body {
     align-items: center;
     gap: 10px;
     background: linear-gradient(135deg, #C29B68 0%, #D8B88C 45%, #6B7A82 100%);
-    color: #ffffff;
+    color: #2B2B2B;
     border: none;
     border-radius: 10px;
     padding: 14px 36px;
@@ -1427,7 +1428,7 @@ body {
 
 .flagship-pin i {
     transform: rotate(45deg);
-    color: #ffffff;
+    color: #2B2B2B;
     font-size: 0.85rem;
 }
 
@@ -1476,7 +1477,7 @@ body {
 .popup-tag {
     font-size: 0.65rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #2B2B2B;
     background-color: var(--accent-purple);
     padding: 2px 6px;
     border-radius: 4px;
