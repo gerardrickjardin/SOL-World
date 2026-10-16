@@ -103,7 +103,7 @@ export default function CheckoutPage() {
       <main className="checkout-main-container">
         <header className="brand-header">
           <img
-            src="assets/SOL REViBE Logo.png"
+            src="assets/SOL_REViBE_New_Logo.png?v=20261016"
             alt="SOL REViBE"
             className="brand-logo"
             onError={(e) => {
