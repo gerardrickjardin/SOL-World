@@ -2263,6 +2263,35 @@
             .aud-skip { margin-top: 18px; padding: 12px; }
         }
     </style>
+    <style id="aud-mockup">
+        /* Welcome popup - exact mockup styling (overrides the rules above) */
+        .aud-overlay { align-items: center; background: rgba(244,240,233,0.55); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); }
+        .aud-modal { max-width: 696px; padding: 28px 32px 36px; border-radius: 14px; background: #F5F2EC; border: none;
+            box-shadow: 0 10px 40px rgba(60,50,40,0.14), 0 1px 3px rgba(60,50,40,0.08); }
+        .aud-logo { height: 92px; margin: 0 auto 0; }
+        .aud-divider { width: 30px; height: 1px; background: #C29B68; margin: 14px auto 20px; }
+        .aud-eyebrow { margin-bottom: 26px; font-size: clamp(1.5rem, 3.6vw, 1.95rem); font-weight: 700; letter-spacing: 0; color: #2B2926; }
+        .aud-grid { gap: 16px; }
+        .aud-card { padding: 22px 26px; min-height: 162px; gap: 14px; border-radius: 12px; background: #F5F2EC; box-shadow: 0 2px 6px rgba(60,50,40,0.12); }
+        .aud-card.guest { background: #F5F2EC; }
+        .aud-card.owner { border: 1px solid #A5A59B; }
+        .aud-card.guest { border: 1px solid #C9A06C; }
+        .aud-card.owner:hover, .aud-card.owner:focus-visible { border-color: #7F8A7A; box-shadow: 0 10px 26px rgba(107,122,100,0.28); }
+        .aud-card.guest:hover, .aud-card.guest:focus-visible { border-color: #B8864A; box-shadow: 0 10px 26px rgba(194,155,104,0.35); }
+        .aud-icon { display: flex; align-items: center; justify-content: center; width: 58px; height: 58px; border-radius: 50%; }
+        .aud-icon svg { width: 34px; height: 34px; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+        .aud-card.owner .aud-icon { background: #DDE0D2; } .aud-card.owner svg { stroke: #7C8573; }
+        .aud-card.guest .aud-icon { background: #EEDFCB; } .aud-card.guest svg { stroke: #B88E5A; }
+        .aud-card strong { font-size: 1.02rem; font-weight: 600; line-height: 1.4; color: #3A3835; }
+        .aud-skip { margin-top: 30px; font-size: .82rem; color: #6A6A66; }
+        @media (max-width: 600px) {
+            .aud-modal { padding: 22px 16px 24px; }
+            .aud-grid { grid-template-columns: 1fr; gap: 12px; }
+            .aud-card { min-height: 0; padding: 18px 16px; }
+            .aud-logo { height: 76px; }
+            .aud-eyebrow { font-size: 1.5rem; margin-bottom: 18px; }
+        }
+    </style>
 <style id="mobile-safety">
 /* Mobile safety net (phones only) - additive, desktop unaffected */
 @media (max-width: 600px) {
@@ -2292,14 +2321,19 @@
     <div class="aud-overlay" id="audienceModal" role="dialog" aria-modal="true" aria-label="Welcome to SOL REVIBE" hidden>
         <div class="aud-modal">
             <img class="aud-logo" src="assets/SOL_REViBE_New_Logo.png?v=20261016" alt="SOL REViBE">
+            <div class="aud-divider" aria-hidden="true"></div>
             <div class="aud-eyebrow">Welcome to SOL REViBE</div>
             <div class="aud-grid">
                 <a class="aud-card owner" id="audOwner" href="landing/">
-                    <span class="aud-icon" aria-hidden="true">&#127970;</span>
+                    <span class="aud-icon" aria-hidden="true">
+                        <svg viewBox="0 0 32 32"><path d="M5 28V12l9-3v19M14 28V4l13 4v20M3 28h26"/><path d="M18 11h2M22 11h2M18 15h2M22 15h2M18 19h2M22 19h2M9 15h2M9 19h2M9 23h2"/></svg>
+                    </span>
                     <strong>I'm a social wellness space owner who would like to explore the business opportunity.</strong>
                 </a>
                 <a class="aud-card guest" id="audGuest" href="experience.html">
-                    <span class="aud-icon" aria-hidden="true">&#10024;</span>
+                    <span class="aud-icon" aria-hidden="true">
+                        <svg viewBox="0 0 32 32"><path d="M16 6c3 3 4.5 6 4.5 9S19 21 16 24c-3-3-4.500-6-4.500-9S13 9 16 6z"/><path d="M16 24c-1-5-5-8-11-8 0 5 4 8 11 8zM16 24c1-5 5-8 11-8 0 5-4 8-11 8z"/><path d="M10 26h12"/></svg>
+                    </span>
                     <strong>I want to experience the mind body recharge station.</strong>
                 </a>
             </div>
@@ -2318,7 +2352,7 @@
             document.getElementById('audGuest').addEventListener('click', function () { try { sessionStorage.setItem(KEY, 'guest'); } catch (e) {} });
             document.getElementById('audSkip').addEventListener('click', function () { done('browse'); });
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) done('browse'); });
-            document.getElementById('audOwner').focus();
+            var box = modal.querySelector('.aud-modal'); box.setAttribute('tabindex', '-1'); box.style.outline = 'none'; box.focus({ preventScroll: true });
         })();
     </script>
     <canvas id="starfield"></canvas>
