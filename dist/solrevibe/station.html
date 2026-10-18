@@ -250,8 +250,65 @@
             #introForm { grid-template-columns: 1fr; }
         }
     </style>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style id="station-redesign">
+/* ===== Station redesign: cream cards, soft shadows, gold/sage accents (matches other pages) ===== */
+html, body { background: #F3F0EA !important; background-image: none !important; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; color: #2B2926 !important; }
+.page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
+.topbar, h1.headline, .shell { position: relative; z-index: 1; }
+.pill-link { background: #F8F5EF !important; color: #3A3835 !important; border: 1px solid #E6E1D7 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; box-shadow: none !important; }
+.pill-link:hover { color: #B88E5A !important; border-color: #D9C7A6 !important; box-shadow: none !important; }
+h1.headline { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em; }
+h1.headline .a, h1.headline .b { background: none !important; -webkit-text-fill-color: #C29B68 !important; color: #C29B68 !important; font-weight: 800 !important; padding: 0 !important; }
+.shell { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; }
+.col + .col { background: #F3F0EA !important; border-left: 1px solid #E6E1D7 !important; }
+.card { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 16px !important; box-shadow: none !important; }
+h2.ct, .point b, .benefit b, .lbl, .reco-name, .timer { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #2B2926 !important; text-shadow: none !important; }
+h2.ct { font-weight: 600 !important; }
+.sub, .point span, .benefit span, .fine, .steps span, .reco-desc, .custom-card .msg { color: #55524D !important; }
+.tag { background: #F3EBDD !important; color: #B88E5A !important; border: 1px solid #E3D3B8 !important; }
+.tag.gold { background: #F3EBDD !important; color: #B88E5A !important; }
+.tag.green { background: #E8EDE6 !important; color: #6E8271 !important; border-color: #CBD6C8 !important; }
+.tag.dark { background: #EFEBE3 !important; color: #55524D !important; border-color: #E0DACE !important; }
+.video-frame { border: none !important; box-shadow: 0 6px 22px rgba(70,58,44,0.14) !important; border-radius: 14px !important; background: #E9E3D7 !important; }
+.video-ph { color: #55524D !important; }
+.video-ph .play { background: linear-gradient(135deg, #7F9283, #C29B68) !important; color: #fff !important; }
+.point, .benefit { background: #F8F5EF !important; border: 1px solid #E6E1D7 !important; border-radius: 12px !important; }
+.point:hover, .benefit:hover { border-color: #D9C7A6 !important; box-shadow: none !important; }
+.point .ic { background: #F3EBDD !important; border: 1px solid #E3D3B8 !important; }
+.benefit .num { background: linear-gradient(135deg, #7F9283, #C29B68) !important; color: #fff !important; }
+.radio-opt .dot { border-color: #C9C2B4 !important; }
+.radio-opt .dot::after { background: #C29B68 !important; }
+.radio-opt:hover { border-color: #D9C7A6 !important; }
+.radio-opt:has(input:checked) { border-color: #C29B68 !important; background: #FBF5EA !important; box-shadow: 0 0 0 1px #C29B68 !important; }
+.radio-opt input:checked + .dot { border-color: #C29B68 !important; }
+input[type=text], input[type=tel], input[type=email] { background: #FBF9F5 !important; border: 1px solid #D9D4CA !important; border-radius: 10px !important; color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+input::placeholder { color: #8C8A85 !important; }
+input[type=text]:focus, input[type=tel]:focus, input[type=email]:focus { border-color: #C29B68 !important; box-shadow: 0 0 0 3px rgba(194,155,104,0.18) !important; }
+input.invalid { border-color: #B5705F !important; background: #FBF1EE !important; }
+.error { color: #B5705F !important; }
+.btn { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; color: #fff !important; border: none !important; border-radius: 999px !important; box-shadow: 0 5px 16px rgba(150,130,100,0.28) !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; }
+.btn:hover { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; filter: brightness(1.06); transform: translateY(-1px); box-shadow: 0 8px 22px rgba(150,130,100,0.38) !important; }
+.btn.alt { background: #FBF9F5 !important; color: #3A3835 !important; border: 1px solid #D9D4CA !important; box-shadow: none !important; }
+.btn.alt:hover { border-color: #C29B68 !important; }
+.offer { background: #FBF5EA !important; border: 1px dashed #D9C7A6 !important; color: #2B2926 !important; }
+.offer b, .reco-label { color: #B88E5A !important; }
+.reco { background: #FBF9F5 !important; border: 1px dashed #CBD6C8 !important; }
+.custom-card { border-color: #E3D3B8 !important; box-shadow: none !important; }
+.custom-card .hl { color: #B88E5A !important; }
+.steps span { border-color: #E0DACE !important; }
+.steps span.on { background: linear-gradient(90deg, #7F9283, #C29B68) !important; color: #fff !important; border-color: transparent !important; }
+.steps span.done { background: #E8EDE6 !important; color: #6E8271 !important; border-color: #CBD6C8 !important; }
+.link-btn { color: #7F9283 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.check { background: #E8EDE6 !important; border-color: #7F9283 !important; color: #7F9283 !important; }
+input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29B68 !important; }
+@media (max-width: 860px) { .col + .col { border-top: 1px solid #E6E1D7 !important; border-left: 0 !important; } }
+@media (max-width: 900px) { .page-deco { display: none; } }
+</style>
 </head>
 <body>
+<svg class="page-deco" viewBox="0 0 220 150" fill="none" aria-hidden="true"><path d="M-10 70 C 60 80, 110 110, 150 165" stroke="#8E9B8A" stroke-width="1.2" opacity=".55"/><path d="M-10 92 C 50 100, 90 125, 125 165" stroke="#C29B68" stroke-width="1.2" opacity=".6"/><path d="M-10 112 C 35 118, 70 138, 95 165" stroke="#8E9B8A" stroke-width="1" opacity=".4"/></svg>
+
     <div id="fit">
     <nav class="topbar" aria-label="Primary">
         <a href="index.html" aria-label="SOL REViBE home"><img src="assets/SOL_REViBE_New_Logo.png?v=20261016" alt="SOL REViBE"></a>
