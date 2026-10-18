@@ -1087,8 +1087,74 @@
   main { padding-left: 1rem !important; padding-right: 1rem !important; }
 }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style id="roi-redesign">
+/* ===== ROI redesign: cream cards, soft shadows, gold/sage accents (matches other pages) ===== */
+html, body { background-color: #F3F0EA !important; background-image: none !important; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; color: #2B2926; }
+.page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
+.calculator-container { position: relative; z-index: 1; }
+.vibe-navbar { background: #F8F5EF !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border-bottom: 1px solid #E6E1D7 !important; box-shadow: 0 2px 14px rgba(70,58,44,0.05) !important; padding: .55rem 2.4rem !important; }
+.vibe-navbar .nav-logo-img { height: 58px !important; filter: none !important; }
+.vibe-nav-links { gap: 1.5rem !important; }
+.vibe-nav-links a { font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: .7rem !important; font-weight: 700 !important; letter-spacing: .09em !important; color: #3A3835 !important; white-space: nowrap; }
+.vibe-nav-links a:hover { color: #B88E5A !important; }
+.vibe-nav-links a.active-page { color: #C29B68 !important; border-bottom: 2px solid #C29B68 !important; }
+.vibe-reserve-btn { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; color: #fff !important; border: none !important; border-radius: 999px !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: .72rem !important; font-weight: 700 !important; letter-spacing: .1em !important; white-space: nowrap; padding: .75rem 1.5rem !important; box-shadow: 0 5px 16px rgba(150,130,100,0.28) !important; animation: none !important; }
+.vibe-reserve-btn:hover { filter: brightness(1.06); transform: translateY(-1px); box-shadow: 0 8px 22px rgba(150,130,100,0.38) !important; }
+
+.pill-badge { background: #F8F5EF !important; border: 1px solid #E6E1D7 !important; color: #7F9283 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.calc-title { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em !important; }
+.calc-title .green-text { background: none !important; -webkit-text-fill-color: #C29B68 !important; color: #C29B68 !important; font-weight: 800 !important; }
+.calc-subtitle { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #55524D !important; }
+.calc-disclaimer { color: #B88E5A !important; }
+
+.dashboard-grid { background: #F8F5EF !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; }
+.dashboard-grid::before { display: none !important; }
+.panel-heading h2, .value-prop-header h3, .prop-card h4, .modal-header h3 { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 600 !important; color: #2B2926 !important; }
+.panel-heading { border-bottom-color: #E6E1D7 !important; }
+.slider-card { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 16px !important; box-shadow: none !important; }
+.slider-title { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #2B2926 !important; }
+.slider-value-pill { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #B88E5A !important; background: #F3EBDD !important; border: 1px solid #E3D3B8 !important; box-shadow: none !important; }
+input[type="range"]::-webkit-slider-thumb { background: #C29B68 !important; border: 3px solid #fff !important; box-shadow: 0 2px 8px rgba(150,130,100,.45) !important; }
+input[type="range"]::-moz-range-thumb { background: #C29B68 !important; border: 3px solid #fff !important; box-shadow: 0 2px 8px rgba(150,130,100,.45) !important; }
+.constant-note { background: #FBF9F5 !important; border: 1px dashed #D9D4CA !important; color: #55524D !important; }
+
+.results-panel { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 18px !important; box-shadow: none !important; }
+.results-panel::before { background: linear-gradient(90deg, #7F9283, #C29B68) !important; }
+.results-tag { color: #55524D !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.milestone-badge { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.massive-number, .massive-number.highlight-glow { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #2B2926 !important; text-shadow: none !important; font-weight: 800 !important; }
+.massive-sublabel { color: #55524D !important; }
+.target-gauge-box, .mini-stat-card { background: #F8F5EF !important; border: 1px solid #E6E1D7 !important; box-shadow: none !important; }
+.gauge-track { background: #E6E1D7 !important; }
+.gauge-fill { background: linear-gradient(90deg, #7F9283, #C29B68) !important; box-shadow: none !important; }
+.mini-stat-val { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #2B2926 !important; }
+.zip-lock-cta-section { border-top: 1px solid #E6E1D7 !important; }
+.zip-text-input, .form-row input { background: #FBF9F5 !important; border: 1px solid #D9D4CA !important; color: #2B2926 !important; border-radius: 10px !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.zip-text-input:focus, .form-row input:focus { border-color: #C29B68 !important; box-shadow: 0 0 0 3px rgba(194,155,104,0.18) !important; }
+.zip-lock-submit-btn, .modal-submit-btn { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; color: #fff !important; border: none !important; border-radius: 999px !important; box-shadow: 0 5px 16px rgba(150,130,100,0.28) !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; }
+.zip-lock-submit-btn *, .modal-submit-btn * { color: #fff !important; }
+.zip-lock-submit-btn:hover, .modal-submit-btn:hover { filter: brightness(1.06); box-shadow: 0 8px 22px rgba(150,130,100,0.38) !important; transform: translateY(-1px); }
+.zip-status-message { color: #7F9283 !important; }
+
+.value-prop-header p { color: #55524D !important; }
+.prop-card { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; }
+.prop-card:hover { background: #F8F5EF !important; box-shadow: 0 12px 40px rgba(70,58,44,0.14), 0 1px 3px rgba(70,58,44,0.06) !important; transform: translateY(-2px); }
+.prop-icon-badge { background: #F3EBDD !important; border: 1px solid #E3D3B8 !important; box-shadow: none !important; }
+.prop-subtitle { color: #B88E5A !important; }
+.prop-card p { color: #55524D !important; }
+
+.modal-card { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 24px 70px rgba(70,58,44,0.28) !important; }
+.modal-summary-pill { background: #F3EBDD !important; border: 1px solid #E3D3B8 !important; color: #2B2926 !important; }
+.form-row label { color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.footer { border-color: #E6E1D7 !important; }
+@media (max-width: 1280px) { .vibe-nav-links { gap: 1rem !important; } .vibe-navbar { padding: .5rem 1.4rem !important; } }
+@media (max-width: 900px) { .page-deco { display: none; } }
+</style>
 </head>
 <body>
+<svg class="page-deco" viewBox="0 0 220 150" fill="none" aria-hidden="true"><path d="M-10 70 C 60 80, 110 110, 150 165" stroke="#8E9B8A" stroke-width="1.2" opacity=".55"/><path d="M-10 92 C 50 100, 90 125, 125 165" stroke="#C29B68" stroke-width="1.2" opacity=".6"/><path d="M-10 112 C 35 118, 70 138, 95 165" stroke="#8E9B8A" stroke-width="1" opacity=".4"/></svg>
+
 
     <!-- Navigation (matches home page vibe-navbar) -->
     <nav class="navbar vibe-navbar">
@@ -1424,7 +1490,7 @@
                 const max = parseFloat(slider.max) || 100;
                 const val = parseFloat(slider.value);
                 const percentage = ((val - min) / (max - min)) * 100;
-                slider.style.background = `linear-gradient(to right, #C29B68 0%, #6B7A82 ${percentage}%, #3A3A3A ${percentage}%, #3A3A3A 100%)`;
+                slider.style.background = `linear-gradient(to right, #7F9283 0%, #C29B68 ${percentage}%, #E0DACE ${percentage}%, #E0DACE 100%)`;
             }
 
             function updateCalculator() {
@@ -1460,13 +1526,13 @@
                     milestoneBadge.innerHTML = '🔥 $10,000+ Goal Achieved';
                     gaugePercentLabel.textContent = `${percentOfGoal}% of Goal (Target Surpassed)`;
                     revenueDisplay.classList.add('highlight-glow');
-                    gaugeFillBar.style.background = 'linear-gradient(90deg, #C29B68, #6B7A82, #8E9B8A)';
+                    gaugeFillBar.style.background = 'linear-gradient(90deg, #7F9283, #C29B68)';
                 } else {
                     milestoneBadge.className = 'milestone-badge under';
                     milestoneBadge.innerHTML = `$${(BENCHMARK_GOAL - monthlyGross).toLocaleString()} to $10k Mark`;
                     gaugePercentLabel.textContent = `${percentOfGoal}% of $10k Benchmark`;
                     revenueDisplay.classList.remove('highlight-glow');
-                    gaugeFillBar.style.background = 'linear-gradient(90deg, #C29B68, #6B7A82)';
+                    gaugeFillBar.style.background = 'linear-gradient(90deg, #7F9283, #C29B68)';
                 }
 
                 // Update Slider Background track fills
