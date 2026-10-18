@@ -1277,8 +1277,69 @@
   main { padding-left: 1rem !important; padding-right: 1rem !important; }
 }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style id="payment-redesign">
+/* ===== Payment/Order redesign: cream cards, soft shadows, gold/sage accents (matches other pages) ===== */
+html, body { background-color: #F3F0EA !important; background-image: none !important; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; color: #2B2926; }
+.page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
+.order-hero, .order-section { position: relative; z-index: 1; }
+.site-nav { background: #F8F5EF !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border-bottom: 1px solid #E6E1D7 !important; box-shadow: 0 2px 14px rgba(70,58,44,0.05) !important; }
+.nav-links a { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; color: #3A3835 !important; }
+.nav-links a:hover { color: #B88E5A !important; }
+.nav-links a.active { color: #C29B68 !important; }
+.nav-links a.active::after { background: #C29B68 !important; }
+.hero-auth-badge { background: #F8F5EF !important; border: 1px solid #E6E1D7 !important; color: #7F9283 !important; box-shadow: none !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.hero-auth-badge i { color: #C29B68 !important; }
+.hero-heading { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em !important; }
+.hero-heading .gradient-brand { background: none !important; -webkit-text-fill-color: #C29B68 !important; color: #C29B68 !important; font-weight: 800 !important; }
+.hero-subtext { color: #55524D !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.feature-card { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; backdrop-filter: none !important; }
+.feature-card:hover { box-shadow: 0 12px 40px rgba(70,58,44,0.14), 0 1px 3px rgba(70,58,44,0.06) !important; transform: translateY(-2px); }
+.feature-icon-box { background: #F3EBDD !important; border: 1px solid #E3D3B8 !important; color: #B88E5A !important; box-shadow: none !important; }
+.feature-icon-box i { color: #B88E5A !important; }
+.feature-title, .card-header-text h3, .summary-title, .plan-title, .deliverables-heading, .total-label { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #2B2926 !important; }
+.card-header-text h3, .summary-title { font-weight: 600 !important; }
+.feature-desc, .card-header-text p, .summary-subtitle, .plan-subtitle { color: #55524D !important; }
+
+.form-card, .order-summary-card { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.step-badge { background: linear-gradient(90deg, #7F9283, #C29B68) !important; color: #fff !important; box-shadow: none !important; }
+.form-label { color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.form-input, .form-select { background: #FBF9F5 !important; border: 1px solid #D9D4CA !important; border-radius: 10px !important; color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; box-shadow: none !important; }
+.form-input:focus, .form-select:focus, .form-input.warranty-field:focus { border-color: #C29B68 !important; box-shadow: 0 0 0 3px rgba(194,155,104,0.18) !important; }
+.form-input:focus + .field-icon, .input-icon-wrap:focus-within .field-icon { color: #C29B68 !important; }
+.form-input.warranty-field { border-color: #D9D4CA !important; }
+.warranty-pill-tag { background: #F3EBDD !important; color: #B88E5A !important; border: 1px solid #E3D3B8 !important; }
+.warranty-circle-icon, .payment-circle-icon { background: #F3EBDD !important; color: #B88E5A !important; border: 1px solid #E3D3B8 !important; box-shadow: none !important; }
+.warranty-circle-icon i, .payment-circle-icon i { color: #B88E5A !important; }
+.warranty-info-box { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; }
+.warranty-info-primary { color: #2B2926 !important; }
+.warranty-info-primary i, .warranty-info-sub i, .payment-security-footer i { color: #7F9283 !important; }
+.warranty-info-sub, .payment-security-footer { color: #55524D !important; }
+.accepted-cards-row { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; }
+
+.plan-option-card { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 16px !important; box-shadow: none !important; }
+.plan-option-card:hover { border-color: #D9C7A6 !important; }
+.plan-option-card.active { border-color: #C29B68 !important; background: #FBF5EA !important; box-shadow: 0 0 0 1px #C29B68 !important; }
+.plan-option-card.active .custom-radio { border-color: #C29B68 !important; }
+.plan-option-card.active .custom-radio::after { background: #C29B68 !important; }
+.plan-main-price { color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.deliverables-list li { color: #55524D !important; }
+.deliverables-list strong { color: #2B2926 !important; }
+.deliverables-list li i { color: #7F9283 !important; }
+.total-amount-display { background: none !important; -webkit-text-fill-color: #2B2926 !important; color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 800 !important; }
+.btn-authorize { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; color: #fff !important; border: none !important; border-radius: 999px !important; box-shadow: 0 5px 16px rgba(150,130,100,0.28) !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; }
+.btn-authorize *, .btn-authorize i { color: #fff !important; }
+.btn-authorize:hover:not(:disabled) { filter: brightness(1.06); box-shadow: 0 8px 22px rgba(150,130,100,0.38) !important; transform: translateY(-1px); }
+.summary-guarantees { color: #55524D !important; }
+.summary-guarantees i { color: #7F9283 !important; }
+.btn-conf-print, .btn-conf-return { border-radius: 999px !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.btn-conf-return { background: linear-gradient(90deg, #7F9283, #C29B68) !important; color: #fff !important; border: none !important; }
+@media (max-width: 900px) { .page-deco { display: none; } }
+</style>
 </head>
 <body>
+<svg class="page-deco" viewBox="0 0 220 150" fill="none" aria-hidden="true"><path d="M-10 70 C 60 80, 110 110, 150 165" stroke="#8E9B8A" stroke-width="1.2" opacity=".55"/><path d="M-10 92 C 50 100, 90 125, 125 165" stroke="#C29B68" stroke-width="1.2" opacity=".6"/><path d="M-10 112 C 35 118, 70 138, 95 165" stroke="#8E9B8A" stroke-width="1" opacity=".4"/></svg>
+
 
     <!-- TOP NAVIGATION & TRUST HEADER BAR -->
     <nav class="site-nav">
