@@ -498,6 +498,29 @@
             .page-deco { display: none; }
         }
     </style>
+    <style id="booking-one-screen">
+        /* Desktop: everything fits in the first screen, no page scroll */
+        @media (min-width: 901px) {
+            html, body { height: 100%; overflow: hidden; }
+            .booking-container { height: 100vh; height: 100dvh; padding: .7rem 1.5rem 1.1rem; display: flex; flex-direction: column; align-items: center; }
+            .top-accent-row { margin-bottom: 0; flex: 0 0 auto; }
+            .headline { flex: 0 0 auto; font-size: clamp(18px, 1.7vw, 30px); margin: .35rem auto .9rem; }
+            .split-box-wrapper { flex: 1 1 auto; min-height: 0; }
+            .split-box, .split-box-inner { min-height: 0; height: 100%; }
+            .left-booking-panel { padding: 1rem; }
+            .calendar-card { min-height: 0; height: 100%; }
+            .calendar-card iframe { min-height: 0; height: 100%; }
+            .right-video-panel { padding: 1rem 2rem; gap: 1rem; }
+            .video-wrapper-inner { gap: 14px; }
+            .video-placeholder-frame { width: min(100%, calc((100dvh - 300px) * 16 / 9)); }
+            .video-play-trigger-btn { padding: .85rem 2.8rem; }
+            .video-caption-text { margin: 0; font-size: .8rem; line-height: 1.45; }
+        }
+        @media (min-width: 901px) and (max-height: 700px) {
+            .video-caption-text { display: none; }
+            .video-placeholder-frame { width: min(100%, calc((100dvh - 250px) * 16 / 9)); }
+        }
+    </style>
 <style id="mobile-safety">
 /* Mobile safety net (phones only) - additive, desktop unaffected */
 @media (max-width: 600px) {
@@ -554,8 +577,8 @@
                             <iframe 
                                 id="visioncontrol-calendar-iframe"
                                 src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7" 
-                                style="width: 100%; height: 100%; border: none; overflow: hidden;" 
-                                scrolling="no"
+                                style="width: 100%; height: 100%; border: none;"
+                                scrolling="auto"
                                 title="Book Discovery Call with Doug Cundiff">
                             </iframe>
                         </div>
@@ -688,6 +711,26 @@
                     }
                 });
             }
+        })();
+    </script>
+    <!-- Desktop: scale the calendar embed so the whole widget fits the card (no inner scrolling) -->
+    <script>
+        (function() {
+            const iframe = document.getElementById('visioncontrol-calendar-iframe');
+            const card = iframe && iframe.parentElement;
+            if (!iframe || !card) return;
+            const BASE_HEIGHT = 900; // approximate natural height of the booking widget
+            function fit() {
+                if (window.innerWidth <= 900) {
+                    iframe.style.cssText = 'width: 100%; height: 100%; border: none;';
+                    return;
+                }
+                const s = Math.min(1, Math.max(0.55, card.clientHeight / BASE_HEIGHT));
+                iframe.style.cssText = 'border: none; position: absolute; top: 0; left: 0; transform-origin: top left; ' +
+                    'width: ' + (100 / s) + '%; height: ' + (100 / s) + '%; transform: scale(' + s + ');';
+            }
+            fit();
+            window.addEventListener('resize', fit);
         })();
     </script>
 </body>
