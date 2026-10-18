@@ -467,6 +467,37 @@
             }
         }
     </style>
+    <style id="booking-redesign">
+        /* ===== Book-call redesign (matches landing page) ===== */
+        html, body { background-color: #F3F0EA; background-image: none; }
+        .booking-container { position: relative; z-index: 1; }
+        .brand-logo-mini { font-weight: 800; letter-spacing: .14em; color: #2B2926; }
+        .brand-logo-mini .accent { background: none; -webkit-text-fill-color: #C29B68; color: #C29B68; }
+        .return-link { background: #F8F5EF; border: 1px solid #DDD7CC; color: #55524D; }
+        .return-link:hover { color: #8A6A3E; border-color: #C29B68; background: #FBF8F2; }
+        .headline { font-size: clamp(22px, 2vw, 34px); font-weight: 500; letter-spacing: 0; color: #2B2926; margin: .8rem auto 1.8rem; }
+        .headline .highlight { background: none; -webkit-text-fill-color: #C29B68; color: #C29B68; font-weight: 800; }
+
+        .split-box { border: none; border-radius: 22px; background: #F8F5EF; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06); }
+        .left-booking-panel { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; border-right: 1px solid #DDD7CC; padding: 1.4rem; }
+        .calendar-card { border-radius: 14px; border: 1px solid #E5E0D6; box-shadow: 0 4px 18px rgba(70,58,44,0.12); }
+        .right-video-panel { background: transparent; padding: 2rem 2.6rem; gap: 1.6rem; }
+        .video-placeholder-frame { border: none; border-radius: 14px; background: #1d1d1d; box-shadow: 0 10px 28px rgba(70,58,44,0.18); }
+        .video-placeholder-frame:hover { border: none; box-shadow: 0 14px 34px rgba(70,58,44,0.26); }
+        .video-play-trigger-btn { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%); color: #fff; font-size: .8rem; font-weight: 600; letter-spacing: .16em; padding: 1rem 3.2rem; border: none; box-shadow: 0 6px 18px rgba(150,130,100,0.28); }
+        .video-play-trigger-btn i { color: #fff; font-size: .8rem; }
+        .video-play-trigger-btn:hover { transform: translateY(-2px); filter: brightness(1.06); border: none; box-shadow: 0 10px 24px rgba(150,130,100,0.38); }
+        .video-caption-text { color: #55524D; font-size: .86rem; max-width: 520px; }
+
+        .page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
+        @media (max-width: 900px) {
+            .headline { font-size: clamp(20px, 5.4vw, 26px); }
+            .video-placeholder-frame { box-shadow: 0 8px 22px rgba(70,58,44,0.18); }
+            .calendar-card { box-shadow: 0 6px 20px rgba(70,58,44,0.14); }
+            .video-play-trigger-btn { padding: .85rem 1.5rem; letter-spacing: .1em; }
+            .page-deco { display: none; }
+        }
+    </style>
 <style id="mobile-safety">
 /* Mobile safety net (phones only) - additive, desktop unaffected */
 @media (max-width: 600px) {
@@ -492,6 +523,7 @@
 </head>
 
 <body>
+    <svg class="page-deco" viewBox="0 0 220 150" fill="none" aria-hidden="true"><path d="M-10 70 C 60 80, 110 110, 150 165" stroke="#8E9B8A" stroke-width="1.2" opacity=".55"/><path d="M-10 92 C 50 100, 90 125, 125 165" stroke="#C29B68" stroke-width="1.2" opacity=".6"/><path d="M-10 112 C 35 118, 70 138, 95 165" stroke="#8E9B8A" stroke-width="1" opacity=".4"/></svg>
 
     <div class="booking-container">
         
