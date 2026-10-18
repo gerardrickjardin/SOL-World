@@ -216,8 +216,57 @@
         }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style id="experience-redesign">
+        /* ===== Experience page redesign: cream cards, soft shadows, gold/sage accents ===== */
+        body { background: #F3F0EA; font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #2B2926; }
+        .page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
+        .hero, .form-section { position: relative; z-index: 1; }
+
+        .nav { background: #F8F5EF; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 1px solid #E6E1D7; box-shadow: 0 2px 14px rgba(70,58,44,0.05); padding: 8px 32px; }
+        .nav img { height: 58px; }
+        .nav a.back { color: #3A3835; font-weight: 700; letter-spacing: .09em; font-size: .72rem; }
+        .nav a.back:hover { color: #B88E5A; }
+
+        .hero { background: transparent; border-bottom: none; padding: 52px 24px 30px; }
+        .hero h1 { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; font-weight: 500; letter-spacing: -.01em; color: #2B2926; }
+        .grad { background: none; -webkit-text-fill-color: #C29B68; color: #C29B68; font-weight: 800; }
+        .hero p { color: #55524D; }
+
+        .form-section { background: transparent; padding: 28px 20px 90px; }
+        .card { background: #F8F5EF; border: none; border-radius: 22px; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06); }
+        .card h2, .step-title, .safety-title, .success h3, .video-ph strong, .timer { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+        .step-title, .card h2 { font-weight: 500; color: #2B2926; }
+        .step-sub, .success p, .timer-note, .fine { color: #55524D; }
+        .timer { color: #2B2926; font-weight: 700; }
+
+        input[type=text], input[type=tel], input[type=email], input[type=date], select, textarea { background: #FBF9F5; border: 1px solid #D9D4CA; border-radius: 8px; }
+        input:focus, select:focus, textarea:focus { border-color: #C29B68; box-shadow: 0 0 0 3px rgba(194,155,104,0.18); }
+        ::placeholder { color: #8C8A85; }
+        .opt input { accent-color: #7F9283; }
+        .sig-wrap { background: #FBF9F5; border-color: #D9D4CA; }
+
+        .submit { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%); color: #fff; border-radius: 999px; box-shadow: 0 5px 16px rgba(150,130,100,0.28); font-weight: 700; }
+        .submit:hover { filter: brightness(1.06); box-shadow: 0 8px 22px rgba(150,130,100,0.38); }
+        .success .check, .video-ph .play { background: linear-gradient(135deg, #7F9283, #C29B68); color: #fff; box-shadow: 0 6px 18px rgba(150,130,100,0.3); }
+
+        .video-frame { border: none; border-radius: 14px; box-shadow: 0 10px 28px rgba(70,58,44,0.16); background: #1d1d1d; }
+        .video-ph { background: #EFE9DD; color: #3A3835; }
+        .choice, .station-item, .nearby-btn { background: #FBF9F5; border: 1px solid #E1DCD2; border-radius: 14px; box-shadow: 0 2px 8px rgba(70,58,44,0.06); }
+        .nearby-btn { color: #5F6F63; border-color: #C9CDBC; border-radius: 999px; }
+        .choice:hover, .choice:focus-visible, .station-item:hover, .station-item:focus-visible { border-color: #C29B68; background: #FBF8F2; box-shadow: 0 8px 22px rgba(70,58,44,0.12); }
+        .nearby-btn:hover { background: #EEF0E6; }
+        #stationMap { border: 1px solid #E1DCD2; border-radius: 14px; }
+        .voucher-box { border-top-color: #DDD7CC; }
+        .ticket { background: linear-gradient(90deg, #7F9283, #C29B68); color: #fff; border: 2px dashed rgba(255,255,255,0.7); box-shadow: 0 10px 28px rgba(150,130,100,0.3); }
+        .combo-list { background: #FBF9F5; border-color: #E1DCD2; box-shadow: 0 14px 34px rgba(70,58,44,0.16); }
+        .combo-option[aria-selected="true"], .combo-option:hover { background: #F0EADF; }
+        .back-link:hover, .sig-clear:hover { color: #B88E5A; }
+        @media (max-width: 900px) { .page-deco { display: none; } }
+    </style>
 </head>
 <body>
+    <svg class="page-deco" viewBox="0 0 220 150" fill="none" aria-hidden="true"><path d="M-10 70 C 60 80, 110 110, 150 165" stroke="#8E9B8A" stroke-width="1.2" opacity=".55"/><path d="M-10 92 C 50 100, 90 125, 125 165" stroke="#C29B68" stroke-width="1.2" opacity=".6"/><path d="M-10 112 C 35 118, 70 138, 95 165" stroke="#8E9B8A" stroke-width="1" opacity=".4"/></svg>
     <nav class="nav">
         <a href="index.html"><img src="assets/SOL_REViBE_New_Logo.png?v=20261016" alt="SOL REViBE Logo"></a>
         <a class="back" href="index.html">&larr; Back to Home</a>
