@@ -951,6 +951,12 @@
         .booking-close { position: absolute; top: .6rem; right: .9rem; width: 38px; height: 38px; border: none; background: transparent; font-size: 2rem; line-height: 1; color: #55524D; cursor: pointer; border-radius: 50%; }
         .booking-close:hover { background: rgba(0,0,0,.06); }
         body.modal-open { overflow: hidden; }
+        .call-points { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .call-points li { display: flex; gap: .6rem; align-items: flex-start; }
+        .call-num { flex: 0 0 26px; width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #7F9283 0%, #C29B68 100%); color: #fff; font-size: .78rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+        .call-points h3 { margin: 0 0 .25rem; font-size: .8rem; font-weight: 700; color: #2B2926; line-height: 1.3; }
+        .call-points p { margin: 0; font-size: .7rem; line-height: 1.45; color: #55524D; }
+        @media (max-width: 768px) { .call-points { grid-template-columns: 1fr; gap: .8rem; } }
         @media (max-width: 768px) { .booking-modal .booking-calendar iframe { height: 600px; } .booking-modal { padding: .6rem; } .booking-modal .booking-section { padding: 2.4rem 1rem 1.2rem; } }
     </style>
 <style id="mobile-safety">
@@ -1083,6 +1089,11 @@
             <section class="booking-section" id="book-a-call">
                 <button type="button" class="booking-close" id="bookingCloseBtn" aria-label="Close">&times;</button>
                 <h2 class="booking-title" id="bookingModalTitle">Book Your Discovery Call</h2>
+                <ol class="call-points">
+                    <li><span class="call-num">1</span><div><h3>Explore Your Revenue Potential</h3><p>Discuss the opportunity based on your customer volume, business goals, and ROI assumptions.</p></div></li>
+                    <li><span class="call-num">2</span><div><h3>Understand How It Works</h3><p>Learn about the home-station sales process, customer follow-up, and additional revenue opportunities.</p></div></li>
+                    <li><span class="call-num">3</span><div><h3>Determine Your Business Fit</h3><p>Review the setup, investment, implementation, and next steps&mdash;including whether you may qualify for a money-back guarantee.</p></div></li>
+                </ol>
                 <div class="booking-calendar">
                     <iframe id="visioncontrol-calendar-iframe"
                         src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
