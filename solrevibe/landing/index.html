@@ -1330,12 +1330,30 @@
                     timeoutPromise
                 ]);
 
+                // Pre-fill the booking calendar's own details form so the visitor doesn't type twice
+                try {
+                    const cal = document.getElementById('visioncontrol-calendar-iframe');
+                    if (cal) {
+                        const calUrl = new URL(cal.getAttribute('src'), window.location.href);
+                        calUrl.searchParams.set('first_name', firstName);
+                        calUrl.searchParams.set('last_name', lastName);
+                        calUrl.searchParams.set('email', email);
+                        if (phone) calUrl.searchParams.set('phone', phone);
+                        if (company) calUrl.searchParams.set('company_name', company);
+                        cal.src = calUrl.toString();
+                        const calBox = cal.closest('.booking-calendar') || cal;
+                        calBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } catch (prefillErr) {
+                    console.error('Calendar prefill failed:', prefillErr);
+                }
+
                 // Show clear success confirmation (stay on page; no redirect)
                 if (btn) {
                     btn.disabled = true;
                     btn.style.opacity = '1';
                     btn.style.background = 'linear-gradient(135deg, #10b981 0%, #7A8776 100%)';
-                    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Thank you! We\'ll be in touch.</span>';
+                    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Thanks! Now pick a time on the calendar.</span>';
                 }
 
             } catch (error) {
