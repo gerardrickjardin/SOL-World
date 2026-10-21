@@ -1195,8 +1195,22 @@
                         bookingReveal.classList.add('open');
                         bookingReveal.removeAttribute('aria-hidden');
                     }
-                    // Let the expand animation start, then glide the section into view
-                    setTimeout(() => bookingReveal.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+                    // Glide down in step with the expand animation (target re-measured every frame)
+                    const startY = window.pageYOffset;
+                    const duration = 1000;
+                    const t0 = performance.now();
+                    const ease = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+                    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                        bookingReveal.scrollIntoView({ block: 'start' });
+                        return;
+                    }
+                    (function step(now) {
+                        const p = Math.min(1, (now - t0) / duration);
+                        const maxY = document.documentElement.scrollHeight - window.innerHeight;
+                        const targetY = Math.min(maxY, bookingReveal.getBoundingClientRect().top + window.pageYOffset - 16);
+                        window.scrollTo(0, startY + (targetY - startY) * ease(p));
+                        if (p < 1) requestAnimationFrame(step);
+                    })(t0);
                 });
             }
 
