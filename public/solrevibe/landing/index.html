@@ -928,14 +928,7 @@
     </style>
     <style id="booking-section-style">
         /* Desktop: video left (51%), calculator right. Booking section scrolls below. */
-        .info-section { padding: 2.2rem 2.8rem 0.5rem; border-top: 1px solid #DDD7CC; }
-        .info-inner { max-width: 1000px; margin: 0 auto; }
-        .info-inner .teaser-card { margin-bottom: 0; }
-        .right-panel { padding: 2.2rem 2.6rem 2.2rem 2.6rem; margin: 0; display: flex; }
-        .right-panel .booking-calendar { flex: 1; width: 100%; max-width: none; margin: 0; display: flex; }
-        .right-panel .booking-calendar iframe { flex: 1; height: auto; min-height: 640px; }
-        @media (max-width: 1280px) { .info-section { padding: 1.8rem 1.5rem 0.5rem; } .right-panel .booking-calendar iframe { min-height: 800px; } }
-        @media (max-width: 768px) { .info-section { padding: 1.4rem 1rem 0.5rem; } .right-panel { padding: 0 .5rem 1rem; } .right-panel .booking-calendar iframe { min-height: 900px; } }
+        .right-panel-content .teaser-card { margin-bottom: 0; }
         .booking-section { padding: 2.4rem 2.8rem 2.8rem; border-top: 1px solid #DDD7CC; display: flex; flex-direction: column; gap: 1.4rem; }
         .booking-title { margin: 0; font-size: .85rem; letter-spacing: .13em; font-weight: 800; color: #3A3835; text-transform: uppercase; text-align: center; }
         .booking-calendar { width: 100%; max-width: 1000px; margin: 0 auto; border: 1px solid #E5E0D6; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 4px 18px rgba(70,58,44,0.12); }
@@ -1007,19 +1000,7 @@
                     </div>
 
                     <div class="right-panel">
-                        <div class="booking-calendar">
-                            <iframe id="visioncontrol-calendar-iframe"
-                                src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
-                                scrolling="auto"
-                                title="Book Discovery Call with Doug Cundiff"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Info + ROI calculator -->
-            <section class="info-section">
-                <div class="info-inner">
+                        <div class="right-panel-content">
                             <h2 class="right-headline">BUILT BY CLINICIANS FOR SOCIAL WELLNESS SPACES</h2>
 
                             <ul class="bullet-list">
@@ -1027,6 +1008,7 @@
                                 <li>Minimal staff setup. Only one showcase station per territory.</li>
                                 <li>Proven to help with stress, recovery, focus and overall well-being.</li>
                             </ul>
+
 
                             <!-- ── Quick Revenue Teaser (Deliverable 1) ── -->
                             <div class="teaser-card">
@@ -1076,12 +1058,23 @@
                                 </div>
 
                             </div>
-                </div>
-            </section>
 
-            <!-- Booking form -->
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking section: calendar, then contact fields -->
             <section class="booking-section" id="book-a-call">
-                <h2 class="booking-title">Your Details</h2>
+                <h2 class="booking-title">Book Your Discovery Call</h2>
+                <div class="booking-calendar">
+                    <iframe id="visioncontrol-calendar-iframe"
+                        src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
+                        scrolling="auto" loading="lazy"
+                        title="Book Discovery Call with Doug Cundiff"></iframe>
+                </div>
                 <form class="gate-form booking-form" id="leadForm">
                     <div class="form-row">
                         <div class="input-wrap">
