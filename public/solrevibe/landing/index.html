@@ -945,11 +945,13 @@
     <style id="booking-modal-style">
         .booking-modal { position: fixed; inset: 0; z-index: 1000; background: rgba(36,30,24,.55); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 2rem 1rem; -webkit-overflow-scrolling: touch; }
         .booking-modal[hidden] { display: none; }
-        .booking-modal .booking-section { position: relative; width: 100%; max-width: 1000px; margin: auto; background: #F8F5EF; border: none; border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,.35); padding: 2.2rem 2rem 2rem; }
+        .booking-modal .booking-section { position: relative; width: 100%; max-width: 760px; margin: auto; background: #F8F5EF; border: none; border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,.35); padding: 1.6rem 1.5rem 1.5rem; gap: 1rem; }
+        .booking-modal .booking-calendar iframe { height: 560px; }
+        .booking-modal .booking-calendar, .booking-modal .booking-form { max-width: 100%; }
         .booking-close { position: absolute; top: .6rem; right: .9rem; width: 38px; height: 38px; border: none; background: transparent; font-size: 2rem; line-height: 1; color: #55524D; cursor: pointer; border-radius: 50%; }
         .booking-close:hover { background: rgba(0,0,0,.06); }
         body.modal-open { overflow: hidden; }
-        @media (max-width: 768px) { .booking-modal { padding: .6rem; } .booking-modal .booking-section { padding: 2.4rem 1rem 1.2rem; } }
+        @media (max-width: 768px) { .booking-modal .booking-calendar iframe { height: 600px; } .booking-modal { padding: .6rem; } .booking-modal .booking-section { padding: 2.4rem 1rem 1.2rem; } }
     </style>
 <style id="mobile-safety">
 /* Mobile safety net (phones only) - additive, desktop unaffected */
