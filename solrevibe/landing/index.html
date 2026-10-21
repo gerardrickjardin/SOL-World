@@ -942,6 +942,15 @@
             .booking-calendar iframe { height: 900px; }
         }
     </style>
+    <style id="booking-modal-style">
+        .booking-modal { position: fixed; inset: 0; z-index: 1000; background: rgba(36,30,24,.55); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 2rem 1rem; -webkit-overflow-scrolling: touch; }
+        .booking-modal[hidden] { display: none; }
+        .booking-modal .booking-section { position: relative; width: 100%; max-width: 1000px; margin: auto; background: #F8F5EF; border: none; border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,.35); padding: 2.2rem 2rem 2rem; }
+        .booking-close { position: absolute; top: .6rem; right: .9rem; width: 38px; height: 38px; border: none; background: transparent; font-size: 2rem; line-height: 1; color: #55524D; cursor: pointer; border-radius: 50%; }
+        .booking-close:hover { background: rgba(0,0,0,.06); }
+        body.modal-open { overflow: hidden; }
+        @media (max-width: 768px) { .booking-modal { padding: .6rem; } .booking-modal .booking-section { padding: 2.4rem 1rem 1.2rem; } }
+    </style>
 <style id="mobile-safety">
 /* Mobile safety net (phones only) - additive, desktop unaffected */
 @media (max-width: 600px) {
@@ -1068,8 +1077,10 @@
             </div>
 
             <!-- Booking section: calendar, then contact fields -->
+            <div class="booking-modal" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle" hidden>
             <section class="booking-section" id="book-a-call">
-                <h2 class="booking-title">Book Your Discovery Call</h2>
+                <button type="button" class="booking-close" id="bookingCloseBtn" aria-label="Close">&times;</button>
+                <h2 class="booking-title" id="bookingModalTitle">Book Your Discovery Call</h2>
                 <div class="booking-calendar">
                     <iframe id="visioncontrol-calendar-iframe"
                         src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
@@ -1080,20 +1091,25 @@
                     <div class="form-row">
                         <div class="input-wrap">
                             <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <input type="text" class="form-input" id="full-name" name="name" placeholder="Name" required>
+                            <input type="text" class="form-input" id="first-name" name="first_name" placeholder="First Name" required>
+                        </div>
+                        <div class="input-wrap">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <input type="text" class="form-input" id="last-name" name="last_name" placeholder="Last Name" required>
                         </div>
                         <div class="input-wrap">
                             <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <input type="text" class="form-input" id="company" name="company" placeholder="Organization" required>
+                            <input type="text" class="form-input" id="company" name="company" placeholder="Organization / Company" required>
                         </div>
                         <div class="input-wrap">
                             <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                            <input type="email" class="form-input" id="email" name="email" placeholder="Email" required>
+                            <input type="email" class="form-input" id="email" name="email" placeholder="Email Address" required>
                         </div>
                     </div>
                     <button type="submit" id="submitBtn" class="submit-btn">Submit</button>
                 </form>
             </section>
+        </div>
         </div>
     </div>
 
@@ -1153,6 +1169,29 @@
             }
 
 
+
+            // Book a Call button opens the calendar + details popup
+            const bookingModal = document.getElementById('bookingModal');
+            const claimBtn = document.getElementById('claimTerritoryBtn');
+            const closeBtn = document.getElementById('bookingCloseBtn');
+            function openBooking(e) {
+                if (e) e.preventDefault();
+                const cal = document.getElementById('visioncontrol-calendar-iframe');
+                if (cal) cal.removeAttribute('loading');
+                bookingModal.hidden = false;
+                document.body.classList.add('modal-open');
+            }
+            function closeBooking() {
+                bookingModal.hidden = true;
+                document.body.classList.remove('modal-open');
+            }
+            if (bookingModal && claimBtn) {
+                claimBtn.addEventListener('click', openBooking);
+                closeBtn.addEventListener('click', closeBooking);
+                bookingModal.addEventListener('click', e => { if (e.target === bookingModal) closeBooking(); });
+                document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBooking(); });
+            }
+
             // ── YouTube Video Player Control (Restart & Unmute / Mute Audio) ──────
             const videoPlayTriggerBtn = document.getElementById('videoPlayTriggerBtn');
             const ytIframe = document.getElementById('youtubePlayer');
@@ -1208,10 +1247,9 @@
             const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
             const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzh-Ev0POWeoD3mSoSIeqDzqt_dMjyxpuiiBIBZAXW1ZI7oBkjCqY4M-UwS8Cih6KlM/exec';
 
-            const fullName = (document.getElementById('full-name')?.value || '').trim();
-            const nameParts = fullName.split(/\s+/);
-            const firstName = nameParts.shift() || '';
-            const lastName = nameParts.join(' ');
+            const firstName = (document.getElementById('first-name')?.value || '').trim();
+            const lastName = (document.getElementById('last-name')?.value || '').trim();
+            const fullName = (firstName + ' ' + lastName).trim();
             const email = (document.getElementById('email')?.value || '').trim();
             const phone = '';
             const company = (document.getElementById('company')?.value || '').trim();
