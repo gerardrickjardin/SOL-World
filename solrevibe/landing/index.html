@@ -942,22 +942,27 @@
             .booking-calendar iframe { height: 900px; }
         }
     </style>
-    <style id="booking-modal-style">
-        .booking-modal { position: fixed; inset: 0; z-index: 1000; background: rgba(36,30,24,.55); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 2rem 1rem; -webkit-overflow-scrolling: touch; }
-        .booking-modal[hidden] { display: none; }
-        .booking-modal .booking-section { position: relative; width: 100%; max-width: 760px; margin: auto; background: #F8F5EF; border: none; border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,.35); padding: 1.6rem 1.5rem 1.5rem; gap: 1rem; }
-        .booking-modal .booking-calendar iframe { height: 560px; }
-        .booking-modal .booking-calendar, .booking-modal .booking-form { max-width: 100%; }
-        .booking-close { position: absolute; top: .6rem; right: .9rem; width: 38px; height: 38px; border: none; background: transparent; font-size: 2rem; line-height: 1; color: #55524D; cursor: pointer; border-radius: 50%; }
-        .booking-close:hover { background: rgba(0,0,0,.06); }
-        body.modal-open { overflow: hidden; }
-        .call-points { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-        .call-points li { display: flex; gap: .6rem; align-items: flex-start; }
-        .call-num { flex: 0 0 26px; width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #7F9283 0%, #C29B68 100%); color: #fff; font-size: .78rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
-        .call-points h3 { margin: 0 0 .25rem; font-size: .8rem; font-weight: 700; color: #2B2926; line-height: 1.3; }
-        .call-points p { margin: 0; font-size: .7rem; line-height: 1.45; color: #55524D; }
-        @media (max-width: 768px) { .call-points { grid-template-columns: 1fr; gap: .8rem; } }
-        @media (max-width: 768px) { .booking-modal .booking-calendar iframe { height: 600px; } .booking-modal { padding: .6rem; } .booking-modal .booking-section { padding: 2.4rem 1rem 1.2rem; } }
+    <style id="booking-reveal-style">
+        /* Seamless expand: animates from 0 to full height without a fixed pixel value */
+        .booking-reveal { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .7s cubic-bezier(.22,1,.36,1), opacity .6s ease .1s, margin-top .7s cubic-bezier(.22,1,.36,1); margin-top: 0; }
+        .booking-reveal.open { grid-template-rows: 1fr; opacity: 1; margin-top: 1.4rem; }
+        .booking-reveal-inner { overflow: hidden; min-height: 0; }
+        .booking-reveal .booking-section { max-width: 1500px; margin: 0 auto; border: none; border-radius: 22px; background: #F8F5EF; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06); padding: 2rem 2.2rem; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.2rem; align-items: center; transform: translateY(18px); transition: transform .7s cubic-bezier(.22,1,.36,1); }
+        .booking-reveal.open .booking-section { transform: none; }
+        .booking-reveal .booking-calendar { max-width: 100%; margin: 0; }
+        .booking-reveal .booking-calendar iframe { height: 600px; }
+        .booking-info-col { display: flex; flex-direction: column; gap: 1.1rem; min-width: 0; }
+        .booking-info-col .booking-title { text-align: left; }
+        .booking-reveal .booking-form { max-width: 100%; margin: 0; }
+        .booking-reveal .booking-form .input-wrap { flex: 1 1 0; }
+        .call-points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .9rem; }
+        .call-points li { display: flex; gap: .7rem; align-items: flex-start; }
+        .call-num { flex: 0 0 28px; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #7F9283 0%, #C29B68 100%); color: #fff; font-size: .8rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+        .call-points h3 { margin: 0 0 .2rem; font-size: .88rem; font-weight: 700; color: #2B2926; line-height: 1.3; }
+        .call-points p { margin: 0; font-size: .76rem; line-height: 1.5; color: #55524D; }
+        @media (max-width: 1280px) { .booking-reveal .booking-section { grid-template-columns: 1fr; padding: 1.6rem 1.4rem; } }
+        @media (max-width: 768px) { .booking-reveal .booking-section { padding: 1.2rem .9rem; border-radius: 16px; } .booking-reveal .booking-calendar iframe { height: 640px; } .booking-reveal .booking-form .form-row { flex-direction: column; } }
+        @media (prefers-reduced-motion: reduce) { .booking-reveal, .booking-reveal .booking-section { transition: none; } }
     </style>
 <style id="mobile-safety">
 /* Mobile safety net (phones only) - additive, desktop unaffected */
@@ -1084,45 +1089,42 @@
                 </div>
             </div>
 
-            <!-- Booking section: calendar, then contact fields -->
-            <div class="booking-modal" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle" hidden>
-            <section class="booking-section" id="book-a-call">
-                <button type="button" class="booking-close" id="bookingCloseBtn" aria-label="Close">&times;</button>
-                <h2 class="booking-title" id="bookingModalTitle">Book Your Discovery Call</h2>
-                <ol class="call-points">
-                    <li><span class="call-num">1</span><div><h3>Explore Your Revenue Potential</h3><p>Discuss the opportunity based on your customer volume, business goals, and ROI assumptions.</p></div></li>
-                    <li><span class="call-num">2</span><div><h3>Understand How It Works</h3><p>Learn about the home-station sales process, customer follow-up, and additional revenue opportunities.</p></div></li>
-                    <li><span class="call-num">3</span><div><h3>Determine Your Business Fit</h3><p>Review the setup, investment, implementation, and next steps&mdash;including whether you may qualify for a money-back guarantee.</p></div></li>
-                </ol>
-                <div class="booking-calendar">
-                    <iframe id="visioncontrol-calendar-iframe"
-                        src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
-                        scrolling="auto" loading="lazy"
-                        title="Book Discovery Call with Doug Cundiff"></iframe>
-                </div>
-                <form class="gate-form booking-form" id="leadForm">
-                    <div class="form-row">
-                        <div class="input-wrap">
-                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <input type="text" class="form-input" id="first-name" name="first_name" placeholder="First Name" required>
-                        </div>
-                        <div class="input-wrap">
-                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <input type="text" class="form-input" id="last-name" name="last_name" placeholder="Last Name" required>
-                        </div>
-                        <div class="input-wrap">
-                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <input type="text" class="form-input" id="company" name="company" placeholder="Organization / Company" required>
-                        </div>
-                        <div class="input-wrap">
-                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                            <input type="email" class="form-input" id="email" name="email" placeholder="Email Address" required>
+            <!-- Booking section: revealed below the main box when the CTA is clicked -->
+            <div class="booking-reveal" id="bookingReveal" aria-hidden="true">
+              <div class="booking-reveal-inner">
+                <section class="booking-section" id="book-a-call">
+                    <div class="booking-cal-col">
+                        <div class="booking-calendar">
+                            <iframe id="visioncontrol-calendar-iframe"
+                                src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
+                                scrolling="auto"
+                                title="Book Discovery Call with Doug Cundiff"></iframe>
                         </div>
                     </div>
-                    <button type="submit" id="submitBtn" class="submit-btn">Submit</button>
-                </form>
-            </section>
-        </div>
+                    <div class="booking-info-col">
+                        <h2 class="booking-title">Book Your Discovery Call</h2>
+                        <ol class="call-points">
+                            <li><span class="call-num">1</span><div><h3>Explore Your Revenue Potential</h3><p>Discuss the opportunity based on your customer volume, business goals, and ROI assumptions.</p></div></li>
+                            <li><span class="call-num">2</span><div><h3>Understand How It Works</h3><p>Learn about the home-station sales process, customer follow-up, and additional revenue opportunities.</p></div></li>
+                            <li><span class="call-num">3</span><div><h3>Determine Your Business Fit</h3><p>Review the setup, investment, implementation, and next steps&mdash;including whether you may qualify for a money-back guarantee.</p></div></li>
+                        </ol>
+                        <form class="gate-form booking-form" id="leadForm">
+                            <div class="form-row">
+                                <div class="input-wrap"><svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input type="text" class="form-input" id="first-name" name="first_name" placeholder="First Name" required></div>
+                                <div class="input-wrap"><svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input type="text" class="form-input" id="last-name" name="last_name" placeholder="Last Name" required></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-wrap"><svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><input type="text" class="form-input" id="company" name="company" placeholder="Organization / Company" required></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-wrap"><svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><input type="email" class="form-input" id="email" name="email" placeholder="Email Address" required></div>
+                            </div>
+                            <button type="submit" id="submitBtn" class="submit-btn">Submit</button>
+                        </form>
+                    </div>
+                </section>
+              </div>
+            </div>
         </div>
     </div>
 
@@ -1183,26 +1185,19 @@
 
 
 
-            // Book a Call button opens the calendar + details popup
-            const bookingModal = document.getElementById('bookingModal');
+            // Book a Call button reveals the calendar + details below the main box
+            const bookingReveal = document.getElementById('bookingReveal');
             const claimBtn = document.getElementById('claimTerritoryBtn');
-            const closeBtn = document.getElementById('bookingCloseBtn');
-            function openBooking(e) {
-                if (e) e.preventDefault();
-                const cal = document.getElementById('visioncontrol-calendar-iframe');
-                if (cal) cal.removeAttribute('loading');
-                bookingModal.hidden = false;
-                document.body.classList.add('modal-open');
-            }
-            function closeBooking() {
-                bookingModal.hidden = true;
-                document.body.classList.remove('modal-open');
-            }
-            if (bookingModal && claimBtn) {
-                claimBtn.addEventListener('click', openBooking);
-                closeBtn.addEventListener('click', closeBooking);
-                bookingModal.addEventListener('click', e => { if (e.target === bookingModal) closeBooking(); });
-                document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBooking(); });
+            if (bookingReveal && claimBtn) {
+                claimBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (!bookingReveal.classList.contains('open')) {
+                        bookingReveal.classList.add('open');
+                        bookingReveal.removeAttribute('aria-hidden');
+                    }
+                    // Let the expand animation start, then glide the section into view
+                    setTimeout(() => bookingReveal.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+                });
             }
 
             // ── YouTube Video Player Control (Restart & Unmute / Mute Audio) ──────
