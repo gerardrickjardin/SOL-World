@@ -849,104 +849,92 @@
 
     </style>
     <style id="landing-redesign">
-        /* ===== Landing page redesign (matches mockup) ===== */
-        body { background-color: #F3F0EA; background-image: none; }
-        .gate-container { padding: 1.5rem 1.5rem 2.5rem; justify-content: center; }
-        .split-box-wrapper { max-width: 1500px; }
-        .split-box { max-width: 1500px; border: none; border-radius: 22px; background: #F8F5EF; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06); }
-        .split-box-inner { background: #F8F5EF; border-radius: 22px; align-items: stretch; }
+        /* ===== Landing page redesign v2 (single-column, matches mockup) ===== */
+        body { background-color: #F4F1EB; background-image: none; display: block; color: #2B2926; letter-spacing: 0; word-spacing: 0; }
+        .page-wrap { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 2.6rem 1.6rem 3rem; }
+        .page-wrap p.eyebrow { font-size: .66rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: #C29B68; margin: 0 0 .9rem; }
+        .page-wrap p.eyebrow.center { text-align: center; }
 
-        /* Left column: headline, video, button */
-        .left-panel-wrapper { flex: 0 0 51%; margin: 0; padding: 2.2rem 2.4rem 2.4rem 2.8rem; align-self: stretch; align-items: stretch; justify-content: flex-start; gap: 26px; }
-        .headline { text-align: left; font-size: clamp(20px, 1.8vw, 32px); font-weight: 500; line-height: 1.32; letter-spacing: 0; word-spacing: 0; margin: 0; padding: 0; max-width: 100%; color: #2B2926; }
-        .headline .highlight { background: none; -webkit-text-fill-color: #C29B68; color: #C29B68; font-weight: 800; }
-        .left-panel { border-radius: 14px; box-shadow: 0 10px 28px rgba(70,58,44,0.18); background: #1d1d1d; }
-        .video-cta-wrapper { margin-top: 6px; }
-        .video-play-trigger-btn { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: .8rem; font-weight: 600; letter-spacing: .16em; padding: 1rem 3.2rem; border: none; box-shadow: 0 6px 18px rgba(150,130,100,0.28); }
-        .video-play-trigger-btn i { color: #fff; font-size: .8rem; }
+        /* Hero */
+        .hero { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 3rem; align-items: center; padding-bottom: 2.4rem; }
+        .hero h1 { font-size: clamp(26px, 2.6vw, 34px); font-weight: 500; line-height: 1.22; margin: 0 0 1rem; color: #2B2926; letter-spacing: -.01em; }
+        .hero h1 .highlight { background: none; -webkit-text-fill-color: #C29B68; color: #C29B68; font-weight: 800; }
+        .hero p { font-size: .84rem; line-height: 1.6; color: #55524D; margin: 0 0 1.5rem; max-width: 420px; }
+        .video-play-trigger-btn { background: linear-gradient(90deg, #6F8286 0%, #C29B68 100%); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .16em; padding: .95rem 2.2rem; border: none; box-shadow: 0 6px 18px rgba(150,130,100,.28); }
+        .video-play-trigger-btn i { color: #fff; font-size: .75rem; }
+        .hero-video { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #1d1d1d; box-shadow: 0 14px 34px rgba(60,48,36,.28); }
+        .hero-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 
-        /* Right column */
-        .right-panel { flex: 1; align-items: stretch; justify-content: flex-start; margin: 2.2rem 0; padding: 0 2.6rem 0 2.6rem; border-left: 1px solid #DDD7CC; }
-        .right-panel-content { max-width: 100%; }
-        .right-headline { font-size: .8rem; letter-spacing: .13em; font-weight: 800; color: #3A3835; margin: 0 0 1.2rem; }
-        .bullet-list { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0 0 1.5rem; }
-        .bullet-list li { margin: 0; padding: 0 16px 0 34px; font-size: .74rem; line-height: 1.55; color: #4A4744; letter-spacing: 0; word-spacing: 0; }
-        .bullet-list li + li { border-left: 1px solid #DDD7CC; padding-left: 40px; }
-        .bullet-list li::before { color: #C29B68; text-shadow: none; font-size: 1.1rem; top: 2px; }
-        .bullet-list li + li::before { left: 14px; }
+        /* Divider + trust row */
+        .divider { border: none; border-top: 1px solid #E0DAD0; margin: 0; }
+        .trust { padding: 1.7rem 0 2rem; }
+        .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+        .trust-item { text-align: center; padding: 0 1.8rem; }
+        .trust-item + .trust-item { border-left: 1px solid #E0DAD0; }
+        .trust-icon { width: 46px; height: 46px; border-radius: 50%; background: #EFE6D8; color: #A9855A; display: inline-flex; align-items: center; justify-content: center; font-size: 1.05rem; margin-bottom: .8rem; }
+        .trust-item h3 { font-size: .86rem; font-weight: 700; margin: 0 0 .45rem; color: #2B2926; }
+        .trust-item p { font-size: .74rem; line-height: 1.55; color: #55524D; margin: 0; }
 
-        .teaser-card { background: #F8F5EF; border: 1px solid #E1DCD2; border-radius: 12px; padding: 1.3rem 1.5rem 1.1rem; margin: 0 0 1.1rem; gap: .95rem; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; }
-        .teaser-title { font-size: 1.05rem; font-weight: 700; color: #2B2926; }
-        .teaser-subtitle { font-size: .72rem; line-height: 1.5; color: #55524D; margin: -.45rem 0 .2rem; }
-        .teaser-sliders-row { gap: 2rem; }
-        .teaser-slider-label { font-size: .82rem; font-weight: 700; color: #2B2926; margin-bottom: 8px; }
+        /* Cards */
+        .card-box { background: #F9F7F2; border: 1px solid #E6E1D7; border-radius: 14px; box-shadow: 0 2px 10px rgba(70,58,44,.05); padding: 1.5rem 1.7rem; margin-top: 1.4rem; }
+        .teaser-card { background: transparent; border: none; box-shadow: none; padding: 0; margin: 0; backdrop-filter: none; -webkit-backdrop-filter: none; gap: 1rem; }
+        .teaser-title { font-size: 1.12rem; font-weight: 700; color: #2B2926; }
+        .teaser-subtitle { font-size: .74rem; line-height: 1.5; color: #55524D; margin: -.5rem 0 .2rem; max-width: 560px; }
+        .teaser-sliders-row { gap: 2.4rem; }
+        .teaser-slider-label { font-size: .8rem; font-weight: 600; color: #2B2926; margin-bottom: 8px; }
         .teaser-val-badge { font-size: .88rem; font-weight: 600; color: #2B2926; background: #fff; border: 1px solid #D8D3C9; border-radius: 6px; padding: 3px 12px; min-width: 54px; text-align: right; text-shadow: none; box-sizing: border-box; }
         .teaser-tick-row { font-size: .68rem; color: #6D6A64; }
-        .teaser-output { background: transparent; border: none; border-radius: 0; padding: .2rem 0; }
-        .teaser-output-label { font-size: .78rem; font-weight: 800; letter-spacing: .06em; color: #2B2926; }
-        .teaser-output-num { font-size: 2.1rem; font-weight: 800; color: #2B2926; text-shadow: none; letter-spacing: -.02em; }
-        .teaser-output-unit { font-size: .9rem; color: #55524D; }
-        .teaser-cta { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%); color: #fff !important; font-size: .9rem; font-weight: 700; padding: .95rem 1.2rem; box-shadow: 0 5px 16px rgba(150,130,100,0.28); letter-spacing: .02em; word-spacing: 0; }
-        .teaser-cta:hover { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%); filter: brightness(1.06); box-shadow: 0 8px 22px rgba(150,130,100,0.38); }
-        .teaser-lock-note { font-size: .66rem; color: #7A7770; }
+        .teaser-output { background: transparent; border: none; border-top: 1px solid #E0DAD0; border-radius: 0; padding: 1rem 0 0; margin-top: .3rem; }
+        .teaser-output-label { font-size: .72rem; font-weight: 800; letter-spacing: .1em; color: #2B2926; }
+        .teaser-output-num { font-size: 2.3rem; font-weight: 800; color: #1F1D1A; text-shadow: none; letter-spacing: -.02em; }
+        .teaser-output-unit { font-size: .92rem; color: #55524D; }
+        .teaser-range { height: 4px; background: #DAD5CC; margin: 8px 0; }
+        .teaser-range::-webkit-slider-runnable-track { height: 4px; }
+        .teaser-range::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -8px; background: #fff; border: 2px solid #8E9B8A; box-shadow: 0 1px 4px rgba(60,50,40,.25); }
+        .teaser-range::-moz-range-thumb { width: 20px; height: 20px; background: #fff; border: 2px solid #8E9B8A; box-shadow: 0 1px 4px rgba(60,50,40,.25); }
 
-        .gate-form { gap: .7rem; margin-top: 0; }
-        .form-row { gap: .8rem; }
-        .form-input { padding: .85rem .95rem .85rem 2.6rem; background-color: #FBF9F5; border: 1px solid #D9D4CA; border-radius: 8px; font-size: .84rem; box-shadow: none; }
-        .form-input::placeholder { color: #8C8A85; font-size: .82rem; }
-        .form-input:focus { background-color: #fff; border-color: #C29B68; box-shadow: 0 0 0 3px rgba(194,155,104,0.18); }
+        /* Schedule */
+        .schedule { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 2.4rem; align-items: start; }
+        .schedule h2 { font-size: 1.5rem; font-weight: 600; line-height: 1.22; margin: 0 0 .8rem; color: #2B2926; letter-spacing: -.01em; }
+        .schedule > div > p { font-size: .8rem; line-height: 1.6; color: #55524D; margin: 0 0 1.4rem; }
+        .benefit { display: flex; gap: .9rem; align-items: flex-start; margin-bottom: 1.1rem; }
+        .benefit .trust-icon { width: 38px; height: 38px; font-size: .9rem; margin: 0; flex: 0 0 38px; }
+        .benefit h3 { font-size: .82rem; font-weight: 700; margin: 0 0 .2rem; color: #2B2926; }
+        .benefit p { font-size: .72rem; line-height: 1.5; color: #55524D; margin: 0; }
+        .booking-calendar { width: 100%; border: 1px solid #E5E0D6; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 4px 18px rgba(70,58,44,.10); }
+        .booking-calendar iframe { width: 100%; height: 640px; border: none; display: block; }
+
+        /* Details form */
+        .page-wrap .details p.eyebrow { margin-bottom: .3rem; }
+        .details > p { font-size: .76rem; color: #55524D; margin: 0 0 1rem; }
+        .booking-form { max-width: 100%; margin: 0; }
+        .booking-form .form-row { flex-wrap: wrap; gap: .8rem; }
+        .booking-form .input-wrap { flex: 1 1 180px; }
+        .form-input { padding: .8rem .95rem .8rem 2.6rem; background-color: #fff; border: 1px solid #D9D4CA; border-radius: 8px; font-size: .82rem; box-shadow: none; }
+        .form-input::placeholder { color: #8C8A85; font-size: .8rem; }
+        .form-input:focus { border-color: #C29B68; box-shadow: 0 0 0 3px rgba(194,155,104,.18); }
         .input-icon { left: .95rem; color: #8C8A85; }
-
-        @media (min-width: 769px) {
-            .teaser-range { height: 4px; background: #DAD5CC; margin: 8px 0; }
-            .teaser-range::-webkit-slider-runnable-track { height: 4px; }
-            .teaser-range::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -8px; background: #fff; border: 2px solid #8E9B8A; box-shadow: 0 1px 4px rgba(60,50,40,0.25); }
-            .teaser-range::-moz-range-thumb { width: 20px; height: 20px; background: #fff; border: 2px solid #8E9B8A; box-shadow: 0 1px 4px rgba(60,50,40,0.25); }
-        }
+        .submit-btn { background: linear-gradient(90deg, #6F8286 0%, #C29B68 100%); color: #fff; font-size: .72rem; font-weight: 700; letter-spacing: .16em; padding: 1rem 1.4rem; margin-top: .2rem; box-shadow: 0 5px 16px rgba(150,130,100,.28); }
+        .submit-btn:hover { background: linear-gradient(90deg, #6F8286 0%, #C29B68 100%); filter: brightness(1.06); box-shadow: 0 8px 22px rgba(150,130,100,.38); }
 
         .page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
-        .gate-container { position: relative; z-index: 1; }
+        .page-deco-tr { position: fixed; right: 0; top: 0; width: 180px; height: 130px; pointer-events: none; z-index: 0; }
 
-        @media (max-width: 1280px) {
-            .left-panel-wrapper { padding: 1.6rem 1.5rem 1rem; }
-            .right-panel { margin: 0; padding: 1.5rem 1.5rem 2rem; border-left: none; border-top: 1px solid #DDD7CC; }
+        @media (max-width: 900px) {
+            .hero, .schedule { grid-template-columns: 1fr; gap: 1.6rem; }
+            .hero-video { order: 2; }
+            .trust-grid { grid-template-columns: 1fr; gap: 1.4rem; }
+            .trust-item + .trust-item { border-left: none; border-top: 1px solid #E0DAD0; padding-top: 1.4rem; }
         }
         @media (max-width: 768px) {
-            .gate-container { padding: .7rem .5rem 3rem; }
-            .split-box, .split-box-inner { border-radius: 16px; }
-            .left-panel-wrapper { padding: 1.1rem 1rem .8rem; gap: 18px; }
-            .headline { font-size: clamp(20px, 5.6vw, 26px) !important; }
-            .video-play-trigger-btn { padding: .85rem 1.5rem; letter-spacing: .1em; }
-            .right-panel { padding: 1.2rem 1rem 1.6rem; }
-            .bullet-list { grid-template-columns: 1fr; gap: .8rem; }
-            .bullet-list li, .bullet-list li + li { border-left: none; padding: 0 0 0 26px; font-size: .82rem; }
-            .bullet-list li + li::before { left: 0; }
-            .teaser-card { padding: 1rem; }
-            .teaser-sliders-row { gap: 1rem; }
-            .page-deco { display: none; }
-        }
-    </style>
-    <style id="booking-section-style">
-        /* Desktop: video left (51%), calculator right. Booking section scrolls below. */
-        .info-section { padding: 2.2rem 2.8rem 0.5rem; border-top: 1px solid #DDD7CC; }
-        .info-inner { max-width: 1000px; margin: 0 auto; }
-        .info-inner .teaser-card { margin-bottom: 0; }
-        .right-panel { padding: 2.2rem 2.6rem 2.2rem 2.6rem; margin: 0; display: flex; }
-        .right-panel .booking-calendar { flex: 1; width: 100%; max-width: none; margin: 0; display: flex; }
-        .right-panel .booking-calendar iframe { flex: 1; height: auto; min-height: 640px; }
-        @media (max-width: 1280px) { .info-section { padding: 1.8rem 1.5rem 0.5rem; } .right-panel .booking-calendar iframe { min-height: 800px; } }
-        @media (max-width: 768px) { .info-section { padding: 1.4rem 1rem 0.5rem; } .right-panel { padding: 0 .5rem 1rem; } .right-panel .booking-calendar iframe { min-height: 900px; } }
-        .booking-section { padding: 2.4rem 2.8rem 2.8rem; border-top: 1px solid #DDD7CC; display: flex; flex-direction: column; gap: 1.4rem; }
-        .booking-title { margin: 0; font-size: .85rem; letter-spacing: .13em; font-weight: 800; color: #3A3835; text-transform: uppercase; text-align: center; }
-        .booking-calendar { width: 100%; max-width: 1000px; margin: 0 auto; border: 1px solid #E5E0D6; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 4px 18px rgba(70,58,44,0.12); }
-        .booking-calendar iframe { width: 100%; height: 780px; border: none; display: block; }
-        .booking-form { width: 100%; max-width: 1000px; margin: 0 auto; }
-        .booking-form .form-row { flex-wrap: wrap; }
-        .booking-form .input-wrap { flex: 1 1 220px; }
-        @media (max-width: 1280px) { .booking-section { padding: 1.8rem 1.5rem 2rem; } }
-        @media (max-width: 768px) {
-            .booking-section { padding: 1.4rem 1rem 1.6rem; }
-            .booking-calendar iframe { height: 900px; }
+            .page-wrap { padding: 1.4rem 1rem 2.4rem; }
+            .teaser-sliders-row { grid-template-columns: 1fr; gap: 1rem; }
+            .teaser-range { height: 6px; }
+            .teaser-range::-webkit-slider-thumb { width: 26px; height: 26px; margin-top: -10px; }
+            .card-box { padding: 1.2rem 1rem; }
+            .booking-calendar iframe { height: 760px; }
+            .video-play-trigger-btn { width: 100%; justify-content: center; }
+            .page-deco, .page-deco-tr { display: none; }
         }
     </style>
 <style id="mobile-safety">
@@ -975,133 +963,144 @@
 
 <body>
     <svg class="page-deco" viewBox="0 0 220 150" fill="none" aria-hidden="true"><path d="M-10 70 C 60 80, 110 110, 150 165" stroke="#8E9B8A" stroke-width="1.2" opacity=".55"/><path d="M-10 92 C 50 100, 90 125, 125 165" stroke="#C29B68" stroke-width="1.2" opacity=".6"/><path d="M-10 112 C 35 118, 70 138, 95 165" stroke="#8E9B8A" stroke-width="1" opacity=".4"/></svg>
+    <svg class="page-deco-tr" viewBox="0 0 180 130" fill="none" aria-hidden="true"><circle cx="190" cy="-10" r="70" stroke="#C29B68" stroke-width="1" opacity=".45"/><circle cx="190" cy="-10" r="95" stroke="#8E9B8A" stroke-width="1" opacity=".35"/><circle cx="190" cy="-10" r="120" stroke="#C29B68" stroke-width="1" opacity=".25"/></svg>
 
-    <div class="gate-container">
-        <div class="split-box-wrapper">
-            <div class="split-box">
-                <div class="split-box-inner">
-                    <div class="left-panel-wrapper">
-                        <div class="headline">
-                            <span class="desktop-text">Make <span class="highlight">$10,000+ Monthly</span> by Placing a<br>Mind-Body SOL REViBE Wellness Station<br>in your Business</span>
-                            <span class="mobile-text">
-                                <span>Make <span class="highlight">$10,000+ Monthly</span> by</span><br>
-                                <span>Placing a Mind-Body SOL REViBE</span><br>
-                                <span>Wellness Station in your Business</span>
-                            </span>
+    <main class="page-wrap">
+        <section class="hero">
+            <div>
+                <p class="eyebrow">A New Revenue Opportunity</p>
+                <h1>Make <span class="highlight">$10,000+ Monthly</span><br>by Placing a Mind-Body<br>SOL REViBE Wellness Station<br>in your Business</h1>
+                <p>A compact, plug-and-play wellness experience that attracts new clients, increases retention, and creates ongoing revenue opportunities.</p>
+                <button type="button" class="video-play-trigger-btn" id="videoPlayTriggerBtn" aria-label="Watch the opportunity video">
+                    <i class="fa-solid fa-play"></i>
+                    <span>Watch the Opportunity Video</span>
+                </button>
+            </div>
+            <div class="hero-video">
+                <iframe
+                    id="youtubePlayer"
+                    src="https://www.youtube.com/embed/hIs9X-F3lbw?autoplay=1&mute=1&loop=1&playlist=hIs9X-F3lbw&playsinline=1&rel=0&modestbranding=1&enablejsapi=1"
+                    title="SOL REViBE Video Presentation"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <section class="trust">
+            <p class="eyebrow center">Built by Clinicians for Social Wellness Spaces</p>
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <span class="trust-icon"><i class="fa-solid fa-heart-pulse"></i></span>
+                    <h3>Clinically Backed Technology</h3>
+                    <p>Integrates Pulsed Electromagnetic Field Therapy (PEMF), targeted frequencies, visual interactive programs and light therapy.</p>
+                </div>
+                <div class="trust-item">
+                    <span class="trust-icon"><i class="fa-solid fa-cube"></i></span>
+                    <h3>Simple and Compact</h3>
+                    <p>Minimal staff setup.<br>Only one showcase station per territory.</p>
+                </div>
+                <div class="trust-item">
+                    <span class="trust-icon"><i class="fa-solid fa-leaf"></i></span>
+                    <h3>Real Results for Your Clients</h3>
+                    <p>Proven to help with stress, recovery, focus and overall well-being.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card-box">
+            <div class="teaser-card">
+                <div class="teaser-header">
+                    <span class="teaser-title">Revenue Calculator</span>
+                </div>
+                <div class="teaser-subtitle">
+                    This projection shows potential monthly revenue based on average client usage and operating days. Actual results may vary by location, industry and foot traffic.
+                </div>
+
+                <div class="teaser-sliders-row">
+                    <div class="teaser-slider-group">
+                        <div class="teaser-slider-label">
+                            <span>Daily Client Foot Traffic</span>
+                            <span class="teaser-val-badge" id="t-traffic-val">20</span>
                         </div>
-                        <div class="left-panel">
-                            <iframe 
-                                id="youtubePlayer"
-                                src="https://www.youtube.com/embed/hIs9X-F3lbw?autoplay=1&mute=1&loop=1&playlist=hIs9X-F3lbw&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" 
-                                title="SOL REViBE Video Presentation" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="video-cta-wrapper">
-                            <button type="button" class="video-play-trigger-btn" id="videoPlayTriggerBtn" aria-label="Click to restart and unmute">
-                                <i class="fa-solid fa-arrow-rotate-left"></i>
-                                <span>Click to restart and unmute</span>
-                            </button>
-                        </div>
+                        <input type="range" id="t-traffic-slider" class="teaser-range" min="20" max="100" step="1" value="20">
+                        <div class="teaser-tick-row"><span>20 / day</span><span>100 / day</span></div>
                     </div>
 
-                    <div class="right-panel">
-                        <div class="booking-calendar">
-                            <iframe id="visioncontrol-calendar-iframe"
-                                src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
-                                scrolling="auto"
-                                title="Book Discovery Call with Doug Cundiff"></iframe>
+                    <div class="teaser-slider-group">
+                        <div class="teaser-slider-label">
+                            <span>Days open per week</span>
+                            <span class="teaser-val-badge" id="t-days-val">5</span>
                         </div>
+                        <input type="range" id="t-days-slider" class="teaser-range" min="1" max="7" step="1" value="5">
+                        <div class="teaser-tick-row"><span>1 day</span><span>7 days</span></div>
+                    </div>
+                </div>
+
+                <div class="teaser-output">
+                    <div class="teaser-output-label">Potential Monthly Revenue</div>
+                    <div class="teaser-output-amount">
+                        <span class="teaser-output-num" id="t-revenue-val">$2,700</span>
+                        <span class="teaser-output-unit">/mo</span>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Info + ROI calculator -->
-            <section class="info-section">
-                <div class="info-inner">
-                            <h2 class="right-headline">BUILT BY CLINICIANS FOR SOCIAL WELLNESS SPACES</h2>
-
-                            <ul class="bullet-list">
-                                <li>Integrates Pulsed Electromagnetic Field Therapy (PEMF), targeted frequency, visual interactive programs and light therapy.</li>
-                                <li>Minimal staff setup. Only one showcase station per territory.</li>
-                                <li>Proven to help with stress, recovery, focus and overall well-being.</li>
-                            </ul>
-
-                            <!-- ── Quick Revenue Teaser (Deliverable 1) ── -->
-                            <div class="teaser-card">
-                                <div class="teaser-header">
-                                    <span class="teaser-title">Revenue Calculator</span>
-                                </div>
-                                <div class="teaser-subtitle">
-                                    This projection shows potential monthly revenue based on average client usage and operating days. Actual results may vary by location, industry and foot traffic.
-                                </div>
-
-                                <div class="teaser-sliders-row">
-                                    <div class="teaser-slider-group">
-                                        <div class="teaser-slider-label">
-                                            <span>Daily Client Foot Traffic</span>
-                                            <span class="teaser-val-badge" id="t-traffic-val">20</span>
-                                        </div>
-                                        <input type="range" id="t-traffic-slider" class="teaser-range"
-                                            min="20" max="100" step="1" value="20"
-                                            style="background: linear-gradient(to right, #6B7A82 0%, #C29B68 calc(0% + 10px), #F7F5F1 calc(0% + 10px), #F7F5F1 100%);">
-                                        <div class="teaser-tick-row">
-                                            <span>20 / day</span>
-                                            <span>100 / day</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="teaser-slider-group">
-                                        <div class="teaser-slider-label">
-                                            <span>Days open per week</span>
-                                            <span class="teaser-val-badge" id="t-days-val">5</span>
-                                        </div>
-                                        <input type="range" id="t-days-slider" class="teaser-range"
-                                            min="1" max="7" step="1" value="5"
-                                            style="background: linear-gradient(to right, #6B7A82 0%, #8E9B8A calc(66.67% - 3.33px), #F7F5F1 calc(66.67% - 3.33px), #F7F5F1 100%);">
-                                        <div class="teaser-tick-row">
-                                            <span>1 day</span>
-                                            <span>7 days</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="teaser-output">
-                                    <div class="teaser-output-label">Potential Monthly Revenue</div>
-                                    <div class="teaser-output-amount">
-                                        <span class="teaser-output-num" id="t-revenue-val">$2,700</span>
-                                        <span class="teaser-output-unit">/mo</span>
-                                    </div>
-                                </div>
-
-                            </div>
+        <section class="card-box schedule">
+            <div>
+                <p class="eyebrow">Schedule a Discovery Call</p>
+                <h2>Explore Whether SOL REViBE<br>Is Right for Your Business</h2>
+                <p>Book a free, no-obligation call with our team to learn how SOL REViBE can fit into your practice, studio, or wellness space.</p>
+                <div class="benefit">
+                    <span class="trust-icon"><i class="fa-solid fa-chart-line"></i></span>
+                    <div><h3>See the Business Opportunity</h3><p>Learn how the model works and the potential revenue for your location.</p></div>
                 </div>
-            </section>
+                <div class="benefit">
+                    <span class="trust-icon"><i class="fa-solid fa-gear"></i></span>
+                    <div><h3>Discuss Your Space and Fit</h3><p>Explore station placement, requirements and the best setup for your business.</p></div>
+                </div>
+                <div class="benefit">
+                    <span class="trust-icon"><i class="fa-solid fa-users"></i></span>
+                    <div><h3>Get Your Questions Answered</h3><p>Talk through next steps and whether it's the right opportunity for you.</p></div>
+                </div>
+            </div>
+            <div class="booking-calendar">
+                <iframe id="visioncontrol-calendar-iframe"
+                    src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
+                    scrolling="auto"
+                    title="Book Discovery Call with Doug Cundiff"></iframe>
+            </div>
+        </section>
 
-            <!-- Booking form -->
-            <section class="booking-section" id="book-a-call">
-                <h2 class="booking-title">Your Details</h2>
-                <form class="gate-form booking-form" id="leadForm">
-                    <div class="form-row">
-                        <div class="input-wrap">
-                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <input type="text" class="form-input" id="full-name" name="name" placeholder="Name" required>
-                        </div>
-                        <div class="input-wrap">
-                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <input type="text" class="form-input" id="company" name="company" placeholder="Organization" required>
-                        </div>
-                        <div class="input-wrap">
-                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                            <input type="email" class="form-input" id="email" name="email" placeholder="Email" required>
-                        </div>
+        <section class="card-box details" id="book-a-call">
+            <p class="eyebrow">Your Details</p>
+            <p>Please provide your information to confirm your selected date and time.</p>
+            <form class="gate-form booking-form" id="leadForm">
+                <div class="form-row">
+                    <div class="input-wrap">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <input type="text" class="form-input" id="first-name" name="first_name" placeholder="First Name" required>
                     </div>
-                    <button type="submit" id="submitBtn" class="submit-btn">Submit</button>
-                </form>
-            </section>
-        </div>
-    </div>
+                    <div class="input-wrap">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <input type="text" class="form-input" id="last-name" name="last_name" placeholder="Last Name" required>
+                    </div>
+                    <div class="input-wrap">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        <input type="text" class="form-input" id="company" name="company" placeholder="Organization / Company" required>
+                    </div>
+                    <div class="input-wrap">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        <input type="email" class="form-input" id="email" name="email" placeholder="Email Address" required>
+                    </div>
+                </div>
+                <button type="submit" id="submitBtn" class="submit-btn">Confirm Booking &rarr;</button>
+            </form>
+        </section>
+    </main>
 
     <script>
         function initLandingPage() {
@@ -1186,7 +1185,7 @@
                     } else {
                         sendYouTubeCommand('mute');
                         isAudioMuted = true;
-                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-arrow-rotate-left"></i><span>Click to restart and unmute</span>';
+                        videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-play"></i><span>Watch the Opportunity Video</span>';
                     }
                 });
             }
@@ -1214,10 +1213,9 @@
             const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
             const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzh-Ev0POWeoD3mSoSIeqDzqt_dMjyxpuiiBIBZAXW1ZI7oBkjCqY4M-UwS8Cih6KlM/exec';
 
-            const fullName = (document.getElementById('full-name')?.value || '').trim();
-            const nameParts = fullName.split(/\s+/);
-            const firstName = nameParts.shift() || '';
-            const lastName = nameParts.join(' ');
+            const firstName = (document.getElementById('first-name')?.value || '').trim();
+            const lastName = (document.getElementById('last-name')?.value || '').trim();
+            const fullName = (firstName + ' ' + lastName).trim();
             const email = (document.getElementById('email')?.value || '').trim();
             const phone = '';
             const company = (document.getElementById('company')?.value || '').trim();
