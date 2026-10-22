@@ -1368,6 +1368,86 @@
                 alert("There was an issue submitting. Please try again.");
             }
         });
+
+        // ---- Two-way details sync between the lead form and the Vision Control calendar ----
+        (function syncCalendarDetails() {
+            const cal = document.getElementById('visioncontrol-calendar-iframe');
+            const fields = {
+                first_name: document.getElementById('first-name'),
+                last_name: document.getElementById('last-name'),
+                company: document.getElementById('company'),
+                email: document.getElementById('email'),
+                phone: document.getElementById('phone')
+            };
+            if (!cal || !fields.first_name) return;
+            const STORE_KEY = 'solrevibe_lead_details';
+            const baseSrc = cal.getAttribute('src');
+
+            const toE164 = (p) => {
+                const d = (p || '').replace(/[^\d+]/g, '');
+                if (!d) return '';
+                if (d.startsWith('+')) return d;
+                if (d.length === 10) return '+1' + d;
+                if (d.length === 11 && d.startsWith('1')) return '+' + d;
+                return d;
+            };
+            const read = () => {
+                const v = {};
+                Object.keys(fields).forEach(k => { v[k] = (fields[k].value || '').trim(); });
+                return v;
+            };
+            const save = (v) => { try { localStorage.setItem(STORE_KEY, JSON.stringify(v)); } catch (e) {} };
+            const fill = (v) => {
+                Object.keys(fields).forEach(k => {
+                    if (v[k] && !fields[k].value) fields[k].value = v[k];
+                });
+            };
+
+            let lastSrc = null;
+            const pushToCalendar = () => {
+                const v = read();
+                save(v);
+                if (!v.first_name && !v.last_name && !v.email && !v.phone) return;
+                const u = new URL(baseSrc, window.location.href);
+                if (v.first_name) u.searchParams.set('first_name', v.first_name);
+                if (v.last_name) u.searchParams.set('last_name', v.last_name);
+                if (v.email) u.searchParams.set('email', v.email);
+                const ph = toE164(v.phone);
+                if (ph) u.searchParams.set('phone', ph);
+                if (v.company) u.searchParams.set('company_name', v.company);
+                const next = u.toString();
+                if (next === lastSrc) return;
+                lastSrc = next;
+                cal.src = next; // reloads the widget (resets any slot already picked)
+            };
+
+            // Restore previously saved details into the form, then the calendar
+            try { fill(JSON.parse(localStorage.getItem(STORE_KEY) || '{}')); } catch (e) {}
+            pushToCalendar();
+
+            // On change (blur), not every keystroke, so the calendar isn't reloaded while typing
+            Object.keys(fields).forEach(k => fields[k].addEventListener('change', pushToCalendar));
+
+            // Calendar -> form: fill the form from any contact details the widget posts back
+            window.addEventListener('message', (e) => {
+                if (!/visioncontrol\.io|leadconnectorhq\.com|msgsndr\.com/.test(e.origin)) return;
+                let data = e.data;
+                try { if (typeof data === 'string') data = JSON.parse(data); } catch (err) {}
+                const payload = Array.isArray(data) ? data[1] : data;
+                if (!payload || typeof payload !== 'object') return;
+                const c = payload.contact || payload;
+                const incoming = {
+                    first_name: c.first_name || c.firstName || '',
+                    last_name: c.last_name || c.lastName || '',
+                    email: c.email || '',
+                    phone: c.phone || '',
+                    company: c.company_name || c.companyName || ''
+                };
+                if (!Object.values(incoming).some(Boolean)) return;
+                fill(incoming);
+                save(read());
+            });
+        })();
     }
 
     if (document.readyState === 'loading') {
