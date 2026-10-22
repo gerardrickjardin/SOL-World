@@ -956,14 +956,23 @@
         .booking-reveal-inner { overflow: hidden; min-height: 0; }
         .booking-reveal .booking-section { max-width: 1500px; margin: 0 auto; border: none; border-radius: 22px; background: #F8F5EF; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06); padding: 2rem 2.2rem; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.2rem; align-items: center; transform: translateY(18px); transition: transform .7s cubic-bezier(.22,1,.36,1); }
         .booking-reveal.open .booking-section { transform: none; }
-        /* Step 1: details only, centered. Step 2 (after submit): calendar slides in beside it. */
+        /* Step 1: details only, centered. Step 2 (after submit): calendar opens full-screen. */
         .booking-reveal .booking-section { grid-template-columns: minmax(0, 620px); justify-content: center; transition: transform .7s cubic-bezier(.22,1,.36,1); }
-        .booking-reveal .booking-cal-col { display: none; order: 2; }
         .booking-reveal .booking-info-col { order: 1; }
-        .booking-reveal .booking-section.calendar-open { justify-content: stretch; }
-        .booking-reveal .booking-section.calendar-open .booking-cal-col { display: block; animation: calSlideIn .7s cubic-bezier(.22,1,.36,1) both; }
-        @keyframes calSlideIn { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
-        @media (min-width: 1281px) { .booking-reveal .booking-section.calendar-open { grid-template-columns: 0.9fr 1.1fr; } }
+        .booking-reveal .booking-cal-col { display: none; }
+        .booking-reveal .booking-section.calendar-open .booking-cal-col { display: flex; flex-direction: column; position: fixed; inset: 0; z-index: 10000; background: #F4F0E8; animation: calFullIn .45s cubic-bezier(.22,1,.36,1) both; }
+        @keyframes calFullIn { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
+        .cal-fs-header { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1.6rem; background: #F8F5EF; border-bottom: 1px solid #DDD7CC; }
+        .cal-fs-title { margin: 0; font-size: .85rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: #3A3835; }
+        .cal-fs-sub { display: block; margin-top: .15rem; font-size: .74rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: #6B675F; }
+        .cal-fs-close { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid #D8D1C3; background: #fff; color: #2B2926; font: inherit; font-size: .78rem; font-weight: 700; padding: .55rem 1rem; border-radius: 999px; cursor: pointer; transition: background .2s, transform .2s; }
+        .cal-fs-close:hover { background: #F0EBE0; transform: translateY(-1px); }
+        .booking-reveal .booking-section.calendar-open .booking-calendar { flex: 1 1 auto; max-width: 1100px; width: 100%; margin: 1.2rem auto; border-radius: 14px; min-height: 0; }
+        .booking-reveal .booking-section.calendar-open .booking-calendar iframe { height: 100%; }
+        @media (max-width: 768px) {
+            .cal-fs-header { padding: .7rem 1rem; }
+            .booking-reveal .booking-section.calendar-open .booking-calendar { margin: 0; border-radius: 0; border: none; max-width: none; }
+        }
         .booking-steps { display: flex; align-items: center; gap: .6rem; margin-bottom: .2rem; }
         .booking-steps .step { display: inline-flex; align-items: center; gap: .45rem; font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9A958B; transition: color .3s; }
         .booking-steps .step b { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #C9C2B4; display: inline-flex; align-items: center; justify-content: center; font-size: .66rem; transition: all .3s; }
@@ -1117,6 +1126,10 @@
               <div class="booking-reveal-inner">
                 <section class="booking-section" id="book-a-call">
                     <div class="booking-cal-col">
+                        <div class="cal-fs-header">
+                            <h2 class="cal-fs-title">Choose Your Discovery Call Time<span class="cal-fs-sub">Step 2 of 2 &mdash; your details are already filled in.</span></h2>
+                            <button type="button" class="cal-fs-close" id="calCloseBtn" aria-label="Close calendar">&larr; Back</button>
+                        </div>
                         <div class="booking-calendar">
                             <iframe id="visioncontrol-calendar-iframe"
                                 src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
@@ -1271,6 +1284,32 @@
                 });
             }
 
+        // Full-screen calendar overlay controls
+        const calSectionEl = document.getElementById('book-a-call');
+        window.__openCalendar = function () {
+            if (!calSectionEl) return;
+            calSectionEl.classList.add('calendar-open');
+            document.body.style.overflow = 'hidden';
+            const c = document.getElementById('calCloseBtn');
+            if (c) c.focus({ preventScroll: true });
+        };
+        window.__closeCalendar = function () {
+            if (!calSectionEl) return;
+            calSectionEl.classList.remove('calendar-open');
+            document.body.style.overflow = '';
+            const b = document.getElementById('submitBtn');
+            if (b && window.__leadSubmitted) {
+                b.disabled = false;
+                b.innerHTML = 'Reopen Calendar';
+            }
+        };
+        document.addEventListener('click', function (ev) {
+            if (ev.target.closest && ev.target.closest('#calCloseBtn')) window.__closeCalendar();
+        });
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape' && calSectionEl && calSectionEl.classList.contains('calendar-open')) window.__closeCalendar();
+        });
+
         document.getElementById('leadForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
@@ -1281,6 +1320,9 @@
             }
 
             const btn = document.getElementById('submitBtn');
+
+            // Details already submitted: just reopen the full-screen calendar
+            if (window.__leadSubmitted) { window.__openCalendar(); return; }
             const origContent = btn ? btn.innerHTML : '';
 
             // Show active loading state with spinner
@@ -1358,17 +1400,13 @@
                         if (phone) calUrl.searchParams.set('phone', phone);
                         if (company) calUrl.searchParams.set('company_name', company);
                         cal.src = calUrl.toString();
-                        // Reveal the calendar now that details are in (step 2)
-                        const section = document.getElementById('book-a-call');
-                        if (section) {
-                            section.classList.add('calendar-open');
-                            const s1 = document.querySelector('.booking-steps [data-step="1"]');
-                            const s2 = document.querySelector('.booking-steps [data-step="2"]');
-                            if (s1) { s1.classList.remove('active'); s1.classList.add('done'); }
-                            if (s2) s2.classList.add('active');
-                        }
-                        const calBox = cal.closest('.booking-calendar') || cal;
-                        setTimeout(() => calBox.scrollIntoView({ behavior: 'smooth', block: 'center' }), 250);
+                        // Open the calendar full-screen now that details are in (step 2)
+                        window.__leadSubmitted = true;
+                        const s1 = document.querySelector('.booking-steps [data-step="1"]');
+                        const s2 = document.querySelector('.booking-steps [data-step="2"]');
+                        if (s1) { s1.classList.remove('active'); s1.classList.add('done'); }
+                        if (s2) s2.classList.add('active');
+                        window.__openCalendar();
                     }
                 } catch (prefillErr) {
                     console.error('Calendar prefill failed:', prefillErr);
