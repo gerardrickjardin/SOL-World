@@ -956,11 +956,22 @@
         .booking-reveal-inner { overflow: hidden; min-height: 0; }
         .booking-reveal .booking-section { max-width: 1500px; margin: 0 auto; border: none; border-radius: 22px; background: #F8F5EF; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06); padding: 2rem 2.2rem; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.2rem; align-items: center; transform: translateY(18px); transition: transform .7s cubic-bezier(.22,1,.36,1); }
         .booking-reveal.open .booking-section { transform: none; }
-        @media (min-width: 1281px) {
-            .booking-reveal .booking-section { grid-template-columns: 0.9fr 1.1fr; }
-            .booking-reveal .booking-info-col { order: 1; }
-            .booking-reveal .booking-cal-col { order: 2; }
-        }
+        /* Step 1: details only, centered. Step 2 (after submit): calendar slides in beside it. */
+        .booking-reveal .booking-section { grid-template-columns: minmax(0, 620px); justify-content: center; transition: transform .7s cubic-bezier(.22,1,.36,1); }
+        .booking-reveal .booking-cal-col { display: none; order: 2; }
+        .booking-reveal .booking-info-col { order: 1; }
+        .booking-reveal .booking-section.calendar-open { justify-content: stretch; }
+        .booking-reveal .booking-section.calendar-open .booking-cal-col { display: block; animation: calSlideIn .7s cubic-bezier(.22,1,.36,1) both; }
+        @keyframes calSlideIn { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+        @media (min-width: 1281px) { .booking-reveal .booking-section.calendar-open { grid-template-columns: 0.9fr 1.1fr; } }
+        .booking-steps { display: flex; align-items: center; gap: .6rem; margin-bottom: .2rem; }
+        .booking-steps .step { display: inline-flex; align-items: center; gap: .45rem; font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9A958B; transition: color .3s; }
+        .booking-steps .step b { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #C9C2B4; display: inline-flex; align-items: center; justify-content: center; font-size: .66rem; transition: all .3s; }
+        .booking-steps .step.active { color: #2B2926; }
+        .booking-steps .step.active b { background: linear-gradient(135deg, #7F9283 0%, #C29B68 100%); border-color: transparent; color: #fff; }
+        .booking-steps .step.done { color: #5E7A63; }
+        .booking-steps .step.done b { background: #5E7A63; border-color: transparent; color: #fff; }
+        .booking-steps .sep { flex: 0 0 28px; height: 1.5px; background: #D8D1C3; }
         .booking-reveal .booking-calendar { max-width: 100%; margin: 0; }
         .booking-reveal .booking-calendar iframe { height: 600px; }
         .booking-info-col { display: flex; flex-direction: column; gap: 1.1rem; min-width: 0; }
@@ -972,7 +983,7 @@
         .call-num { flex: 0 0 28px; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #7F9283 0%, #C29B68 100%); color: #fff; font-size: .8rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
         .call-points h3 { margin: 0 0 .2rem; font-size: .88rem; font-weight: 700; color: #2B2926; line-height: 1.3; }
         .call-points p { margin: 0; font-size: .76rem; line-height: 1.5; color: #55524D; }
-        @media (max-width: 1280px) { .booking-reveal .booking-section { grid-template-columns: 1fr; padding: 1.6rem 1.4rem; } }
+        @media (max-width: 1280px) { .booking-reveal .booking-section { padding: 1.6rem 1.4rem; } .booking-reveal .booking-section.calendar-open { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { .booking-reveal .booking-section { padding: 1.2rem .9rem; border-radius: 16px; } .booking-reveal .booking-calendar iframe { height: 640px; } .booking-reveal .booking-form .form-row { flex-direction: column; } }
         @media (prefers-reduced-motion: reduce) { .booking-reveal, .booking-reveal .booking-section { transition: none; } }
     </style>
@@ -1114,6 +1125,7 @@
                         </div>
                     </div>
                     <div class="booking-info-col">
+                        <div class="booking-steps" aria-label="Booking progress"><span class="step active" data-step="1"><b>1</b>Your details</span><span class="sep"></span><span class="step" data-step="2"><b>2</b>Pick a time</span></div>
                         <h2 class="booking-title">Book Your Discovery Call</h2>
                         <ol class="call-points">
                             <li><span class="call-num">1</span><div><h3>Explore Your Revenue Potential</h3><p>Discuss the opportunity based on your customer volume, business goals, and ROI assumptions.</p></div></li>
@@ -1346,8 +1358,17 @@
                         if (phone) calUrl.searchParams.set('phone', phone);
                         if (company) calUrl.searchParams.set('company_name', company);
                         cal.src = calUrl.toString();
+                        // Reveal the calendar now that details are in (step 2)
+                        const section = document.getElementById('book-a-call');
+                        if (section) {
+                            section.classList.add('calendar-open');
+                            const s1 = document.querySelector('.booking-steps [data-step="1"]');
+                            const s2 = document.querySelector('.booking-steps [data-step="2"]');
+                            if (s1) { s1.classList.remove('active'); s1.classList.add('done'); }
+                            if (s2) s2.classList.add('active');
+                        }
                         const calBox = cal.closest('.booking-calendar') || cal;
-                        calBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        setTimeout(() => calBox.scrollIntoView({ behavior: 'smooth', block: 'center' }), 250);
                     }
                 } catch (prefillErr) {
                     console.error('Calendar prefill failed:', prefillErr);
@@ -1358,7 +1379,7 @@
                     btn.disabled = true;
                     btn.style.opacity = '1';
                     btn.style.background = 'linear-gradient(135deg, #10b981 0%, #7A8776 100%)';
-                    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Thanks! Now pick a time on the calendar.</span>';
+                    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Details received &mdash; choose your time</span>';
                 }
 
             } catch (error) {
