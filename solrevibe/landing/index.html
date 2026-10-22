@@ -960,18 +960,21 @@
         .booking-reveal .booking-section { grid-template-columns: minmax(0, 620px); justify-content: center; transition: transform .7s cubic-bezier(.22,1,.36,1); }
         .booking-reveal .booking-info-col { order: 1; }
         .booking-reveal .booking-cal-col { display: none; }
-        .booking-reveal .booking-section.calendar-open .booking-cal-col { display: flex; flex-direction: column; position: fixed; inset: 0; z-index: 10000; background: #F4F0E8; animation: calFullIn .45s cubic-bezier(.22,1,.36,1) both; }
+        .booking-cal-col.cal-fullscreen { display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100vh; height: 100dvh; z-index: 2147483000; background: #F4F0E8; animation: calFullIn .45s cubic-bezier(.22,1,.36,1) both; }
         @keyframes calFullIn { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
         .cal-fs-header { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1.6rem; background: #F8F5EF; border-bottom: 1px solid #DDD7CC; }
         .cal-fs-title { margin: 0; font-size: .85rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: #3A3835; }
         .cal-fs-sub { display: block; margin-top: .15rem; font-size: .74rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: #6B675F; }
         .cal-fs-close { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid #D8D1C3; background: #fff; color: #2B2926; font: inherit; font-size: .78rem; font-weight: 700; padding: .55rem 1rem; border-radius: 999px; cursor: pointer; transition: background .2s, transform .2s; }
         .cal-fs-close:hover { background: #F0EBE0; transform: translateY(-1px); }
-        .booking-reveal .booking-section.calendar-open .booking-calendar { flex: 1 1 auto; max-width: 1100px; width: 100%; margin: 1.2rem auto; border-radius: 14px; min-height: 0; }
-        .booking-reveal .booking-section.calendar-open .booking-calendar iframe { height: 100%; }
+        .booking-cal-col.cal-fullscreen .booking-calendar { flex: 1 1 auto; display: flex; flex-direction: column; max-width: 1100px; width: 100%; margin: 1.2rem auto; border-radius: 14px; min-height: 0; background: #fff; }
+        .booking-cal-col.cal-fullscreen .booking-calendar iframe { flex: 1 1 auto; width: 100%; height: 100%; min-height: 0; border: 0; }
         @media (max-width: 768px) {
-            .cal-fs-header { padding: .7rem 1rem; }
-            .booking-reveal .booking-section.calendar-open .booking-calendar { margin: 0; border-radius: 0; border: none; max-width: none; }
+            .cal-fs-header { padding: calc(.7rem + env(safe-area-inset-top, 0px)) 1rem .7rem; }
+            .cal-fs-title { font-size: .74rem; letter-spacing: .1em; }
+            .cal-fs-sub { font-size: .68rem; }
+            .cal-fs-close { padding: .5rem .85rem; white-space: nowrap; }
+            .booking-cal-col.cal-fullscreen .booking-calendar { margin: 0; border-radius: 0; border: none; max-width: none; padding-bottom: env(safe-area-inset-bottom, 0px); }
         }
         .booking-steps { display: flex; align-items: center; gap: .6rem; margin-bottom: .2rem; }
         .booking-steps .step { display: inline-flex; align-items: center; gap: .45rem; font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9A958B; transition: color .3s; }
@@ -1286,17 +1289,24 @@
 
         // Full-screen calendar overlay controls
         const calSectionEl = document.getElementById('book-a-call');
+        const calColEl = calSectionEl ? calSectionEl.querySelector('.booking-cal-col') : null;
         window.__openCalendar = function () {
-            if (!calSectionEl) return;
+            if (!calSectionEl || !calColEl) return;
             calSectionEl.classList.add('calendar-open');
+            document.body.appendChild(calColEl);
+            calColEl.classList.add('cal-fullscreen');
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
             const c = document.getElementById('calCloseBtn');
             if (c) c.focus({ preventScroll: true });
         };
         window.__closeCalendar = function () {
-            if (!calSectionEl) return;
+            if (!calSectionEl || !calColEl) return;
+            calColEl.classList.remove('cal-fullscreen');
+            calSectionEl.insertBefore(calColEl, calSectionEl.firstChild);
             calSectionEl.classList.remove('calendar-open');
             document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
             const b = document.getElementById('submitBtn');
             if (b && window.__leadSubmitted) {
                 b.disabled = false;
