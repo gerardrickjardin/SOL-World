@@ -1430,8 +1430,15 @@
             try { fill(JSON.parse(localStorage.getItem(STORE_KEY) || '{}')); } catch (e) {}
             pushToCalendar();
 
-            // On change (blur), not every keystroke, so the calendar isn't reloaded while typing
-            Object.keys(fields).forEach(k => fields[k].addEventListener('change', pushToCalendar));
+            // Live sync: push to the calendar ~0.9s after the visitor stops typing (and on blur)
+            let typingTimer = null;
+            Object.keys(fields).forEach(k => {
+                fields[k].addEventListener('input', () => {
+                    clearTimeout(typingTimer);
+                    typingTimer = setTimeout(pushToCalendar, 900);
+                });
+                fields[k].addEventListener('change', () => { clearTimeout(typingTimer); pushToCalendar(); });
+            });
 
             // Calendar -> form: fill the form from any contact details the widget posts back
             window.addEventListener('message', (e) => {
