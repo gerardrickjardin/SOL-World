@@ -66,7 +66,7 @@
         h2.ct { font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
         .sub { font-size: .86rem; color: var(--muted); line-height: 1.45; }
 
-        .video-frame { position: relative; aspect-ratio: 16 / 9; max-height: min(340px, 38vh); width: min(100%, calc(min(340px, 38vh) * 16 / 9)); margin: 0 auto; border-radius: 10px; overflow: hidden; background: #EDE6DB; border: 2px solid var(--navy); }
+        .video-frame { position: relative; aspect-ratio: 16 / 9; max-height: 365px; width: 100%; margin: 0 auto; border-radius: 10px; overflow: hidden; background: #EDE6DB; border: 2px solid var(--navy); }
         .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
         .video-ph { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #4A4A4A; text-align: center; padding: 16px; }
         .video-ph .play { width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #2B2B2B; background: linear-gradient(135deg, var(--magenta), var(--violet)); }
@@ -218,24 +218,27 @@
 
         /* ===== Wide, compact layout (expands sideways, not tall) ===== */
         .topbar, h1.headline { max-width: 1420px; width: min(88vw, 1420px); margin: 0 auto; }
-        .topbar { padding: 12px 16px 6px; }
-        h1.headline { margin: 0 auto; padding-top: 8px; padding-bottom: 26px; font-size: clamp(1.15rem, 1.8vw, 1.55rem); }
+        .topbar { padding: 10px 16px 4px; }
+        h1.headline { margin: 0 auto; padding-top: 6px; padding-bottom: 20px; font-size: clamp(1.15rem, 1.8vw, 1.55rem); }
         .shell { max-width: 1420px; width: min(88vw, 1420px); margin: 0 auto; grid-template-columns: 1.05fr 1fr; }
-        .col { padding: 12px; gap: 10px; }
-        .card { padding: 10px 14px; }
-        .tag-row { margin-bottom: 6px; }
-        h2.ct { font-size: 1.02rem; margin-bottom: 5px; }
+        .col { padding: 12px; gap: 8px; }
+        .col:first-of-type { justify-content: space-between; }
+        .card { padding: 9px 13px; }
+        .tag-row { margin-bottom: 4px; }
+        h2.ct { font-size: 1rem; margin-bottom: 4px; }
         .points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .point { flex-direction: column; gap: 4px; padding: 8px 10px; }
         .stack { gap: 6px; }
-        .benefit { padding: 7px 11px; }
-        .offer { padding: 8px 11px; font-size: .8rem; }
+        .benefit { padding: 6px 10px; }
+        .offer { padding: 6px 10px; font-size: .78rem; }
         #introForm { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10px; }
-        #introForm .field { margin-bottom: 6px; }
+        #introForm .field { margin-bottom: 4px; }
         #introForm .field:nth-of-type(3), #introForm .error, #introForm .fine { grid-column: 1 / -1; }
         #introForm .error { margin-top: 0; min-height: 0; }
-        .btn.cta { padding: 13px 14px; }
-        .link-btn { padding: 3px; min-height: 32px; }
+        .error:empty { display: none !important; margin: 0 !important; min-height: 0 !important; }
+        .btn.cta { padding: 12px 14px; }
+        .link-btn { padding: 2px 6px; min-height: 0; font-size: .8rem; }
+        input[type=text], input[type=tel], input[type=email] { min-height: 40px; padding: 8px 11px; }
         @media (max-width: 860px) {
             .shell { width: calc(100% - 20px); grid-template-columns: 1fr; }
         }
@@ -255,9 +258,10 @@ html, body { background: #F3F0EA !important; background-image: none !important; 
 .shell { grid-template-columns: 1.05fr 1fr !important; }
 .pill-link { background: #F8F5EF !important; color: #3A3835 !important; border: 1px solid #E6E1D7 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; box-shadow: none !important; }
 .pill-link:hover { color: #B88E5A !important; border-color: #D9C7A6 !important; box-shadow: none !important; }
-h1.headline { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em; padding-top: 8px !important; padding-bottom: 26px !important; }
+h1.headline { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em; padding-top: 6px !important; padding-bottom: 20px !important; }
 h1.headline .a, h1.headline .b { background: none !important; -webkit-text-fill-color: #C29B68 !important; color: #C29B68 !important; font-weight: 800 !important; padding: 0 !important; }
 .shell { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; }
+.col:first-of-type { justify-content: space-between !important; }
 .col + .col { background: #F3F0EA !important; border-left: 1px solid #E6E1D7 !important; }
 .card { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 16px !important; box-shadow: none !important; }
 h2.ct, .point b, .benefit b, .lbl, .reco-name, .timer { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #2B2926 !important; text-shadow: none !important; }
@@ -284,6 +288,7 @@ input::placeholder { color: #8C8A85 !important; }
 input[type=text]:focus, input[type=tel]:focus, input[type=email]:focus { border-color: #C29B68 !important; box-shadow: 0 0 0 3px rgba(194,155,104,0.18) !important; }
 input.invalid { border-color: #B5705F !important; background: #FBF1EE !important; }
 .error { color: #B5705F !important; }
+.error:empty { display: none !important; margin: 0 !important; min-height: 0 !important; }
 .btn { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; color: #fff !important; border: none !important; border-radius: 999px !important; box-shadow: 0 5px 16px rgba(150,130,100,0.28) !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; }
 .btn:hover { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; filter: brightness(1.06); transform: translateY(-1px); box-shadow: 0 8px 22px rgba(150,130,100,0.38) !important; }
 .btn.alt { background: #FBF9F5 !important; color: #3A3835 !important; border: 1px solid #D9D4CA !important; box-shadow: none !important; }
@@ -296,7 +301,7 @@ input.invalid { border-color: #B5705F !important; background: #FBF1EE !important
 .steps span { border-color: #E0DACE !important; }
 .steps span.on { background: linear-gradient(90deg, #7F9283, #C29B68) !important; color: #fff !important; border-color: transparent !important; }
 .steps span.done { background: #E8EDE6 !important; color: #6E8271 !important; border-color: #CBD6C8 !important; }
-.link-btn { color: #7F9283 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.link-btn { color: #7F9283 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; padding: 3px 6px !important; min-height: 0 !important; }
 .check { background: #E8EDE6 !important; border-color: #7F9283 !important; color: #7F9283 !important; }
 input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29B68 !important; }
 @media (max-width: 860px) { .col + .col { border-top: 1px solid #E6E1D7 !important; border-left: 0 !important; } }
@@ -338,7 +343,7 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
         <!-- RIGHT COLUMN -->
         <section class="col" aria-label="Get started">
             <!-- Panel: start -->
-            <div class="panel stack" id="p-start" style="gap:16px">
+            <div class="panel stack" id="p-start">
                 <div class="card">
                     <div class="tag-row"><span class="tag">&#127775; The Experience</span><span class="tag dark">20 min</span></div>
                     <h2 class="ct">Feel the Difference &mdash; Right Now</h2>
