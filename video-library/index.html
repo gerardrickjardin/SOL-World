@@ -226,23 +226,25 @@ nav.top { background: #F8F5EF; border-bottom: 1px solid #E6E1D7; margin: 0 -28px
 .side button { color: #3A3835; font-family: 'Plus Jakarta Sans', sans-serif; }
 .side button:hover { background: #F3EBDD !important; }
 .side button[aria-pressed="true"] { background: #F3EBDD !important; border-left-color: #C29B68 !important; color: #2B2926; }
-.grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(330px, 400px)) !important; gap: 20px !important; }
-.card { background: #F8F5EF !important; border: none !important; border-radius: 16px !important; box-shadow: 0 6px 24px rgba(70,58,44,0.09), 0 1px 3px rgba(70,58,44,0.06) !important; max-width: 400px; }
+.grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px, 290px)) !important; gap: 18px !important; }
+.card { background: #F8F5EF !important; border: none !important; border-radius: 16px !important; box-shadow: 0 6px 24px rgba(70,58,44,0.09), 0 1px 3px rgba(70,58,44,0.06) !important; max-width: 290px !important; }
 .card:hover, .card:focus-visible { border-color: transparent !important; box-shadow: 0 12px 34px rgba(70,58,44,0.16), 0 1px 3px rgba(70,58,44,0.06) !important; }
 .thumb { background: #EFEBE3 !important; }
 .dur { background: rgba(43,41,38,.72) !important; color: #fff; }
 .save { background: rgba(43,41,38,.55) !important; color: #fff; }
 .cat, .cat[data-cat="Terahertz"], .cat[data-cat="Restorative Sound"], .cat[data-cat="Business & Setup"], .cat[data-cat="Customer Stories"] { color: #B88E5A !important; }
+.c-body { padding: 10px 12px 12px !important; }
 .c-body h3 {
   font-family: 'Plus Jakarta Sans', sans-serif;
   color: #2B2926;
-  font-size: 1.02rem !important;
+  font-size: .88rem !important;
   font-weight: 600;
   white-space: nowrap !important;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.c-meta, .c-desc, footer, .empty p { color: #55524D !important; }
+.c-desc { font-size: .75rem !important; line-height: 1.4 !important; color: #55524D !important; }
+.c-meta, footer, .empty p { color: #55524D !important; }
 .empty { background: #F8F5EF !important; border: 1px dashed #D9D4CA !important; }
 footer b { color: #2B2926 !important; }
 .modal { background: rgba(243,240,234,.82) !important; }
@@ -258,8 +260,8 @@ footer b { color: #2B2926 !important; }
   .f-art { min-height: 240px !important; }
   .f-info { padding: 24px 22px 28px !important; }
   .f-info h2 { white-space: normal !important; font-size: 1.55rem !important; }
-  .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important; }
-  .card { max-width: none; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(260px, 320px)) !important; }
+  .card { max-width: 320px !important; }
 }
 @media (max-width: 600px) {
   nav.top { margin: 0 -16px; padding: 8px 16px; }
