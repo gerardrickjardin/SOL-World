@@ -1042,7 +1042,7 @@
                         <div class="left-panel">
                             <iframe 
                                 id="youtubePlayer"
-                                src="https://www.youtube.com/embed/Rnmyd0s26Lw?autoplay=1&mute=1&loop=1&playlist=Rnmyd0s26Lw&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" 
+                                src="https://www.youtube.com/embed/Rnmyd0s26Lw?autoplay=1&mute=1&loop=1&playlist=Rnmyd0s26Lw&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&vq=hd1080&hd=1" 
                                 title="SOL REViBE Video Presentation" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                                 allowfullscreen>
@@ -1255,7 +1255,7 @@
                 });
             }
 
-            // ── YouTube Video Player Control (Restart & Unmute / Mute Audio) ──────
+            // ── YouTube Video Player Control (Restart & Unmute / Mute Audio / HD) ──────
             const videoPlayTriggerBtn = document.getElementById('videoPlayTriggerBtn');
             const ytIframe = document.getElementById('youtubePlayer');
             let isAudioMuted = true;
@@ -1270,12 +1270,26 @@
                 }
             }
 
+            function setHDQuality() {
+                sendYouTubeCommand('setPlaybackQuality', ['hd1080']);
+                sendYouTubeCommand('setPlaybackQualityRange', ['hd1080', 'highres']);
+            }
+
+            if (ytIframe) {
+                ytIframe.addEventListener('load', () => {
+                    setTimeout(setHDQuality, 500);
+                    setTimeout(setHDQuality, 1500);
+                    setTimeout(setHDQuality, 3000);
+                });
+            }
+
             if (videoPlayTriggerBtn) {
                 videoPlayTriggerBtn.addEventListener('click', () => {
                     if (isAudioMuted) {
                         sendYouTubeCommand('seekTo', [0, true]);
                         sendYouTubeCommand('unMute');
                         sendYouTubeCommand('setVolume', [100]);
+                        setHDQuality();
                         sendYouTubeCommand('playVideo');
                         isAudioMuted = false;
                         videoPlayTriggerBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i><span>Mute Audio</span>';
