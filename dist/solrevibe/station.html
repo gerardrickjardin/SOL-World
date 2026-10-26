@@ -66,7 +66,7 @@
         h2.ct { font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
         .sub { font-size: .86rem; color: var(--muted); line-height: 1.45; }
 
-        .video-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #EDE6DB; border: 2px solid var(--navy); }
+        .video-frame { position: relative; aspect-ratio: 16 / 9; max-height: min(410px, 46vh); width: min(100%, calc(min(410px, 46vh) * 16 / 9)); margin: 0 auto; border-radius: 10px; overflow: hidden; background: #EDE6DB; border: 2px solid var(--navy); }
         .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
         .video-ph { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #4A4A4A; text-align: center; padding: 16px; }
         .video-ph .play { width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #2B2B2B; background: linear-gradient(135deg, var(--magenta), var(--violet)); }
@@ -74,7 +74,7 @@
 
         .points { list-style: none; display: flex; flex-direction: column; gap: 9px; }
         .point { display: flex; gap: 10px; align-items: flex-start; border: 2px solid var(--navy); border-radius: 12px; padding: 10px 12px; background: #fff; }
-        .point .ic { flex: 0 0 34px; height: 34px; border-radius: 9px; background: #FFF1CC; border: 2px solid var(--navy); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; }
+        .point .ic { flex: 0 0 34px; height: 34px; border-radius: 999px; background: #FFF1CC; border: 2px solid var(--navy); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; }
         .point b { display: block; font-family: 'Outfit', sans-serif; font-size: .98rem; color: var(--navy); }
         .point span { font-size: .8rem; color: var(--muted); line-height: 1.35; display: block; }
 
@@ -192,7 +192,7 @@
         .timer { color: #2B2B2B; text-shadow: 0 0 24px rgba(142,155,138, .5); }
         .check { background: rgba(142,155,138, .12); border-color: var(--cyan); color: var(--cyan); }
         .waiver-wrap iframe { background: #fff; }
-        .restart-btn { margin-top: 12px; padding: 13px 14px; font-size: .85rem; }
+        .restart-btn { margin-top: 10px; padding: 11px 14px; font-size: .85rem; }
         input:focus-visible, button:focus-visible, a:focus-visible { outline-color: var(--cyan); }
 
         /* ===== Benefit radios + personalization (mock-up) ===== */
@@ -217,33 +217,29 @@
         .reco-desc { font-size: .8rem; color: var(--soft); }
 
         /* ===== Wide, compact layout (expands sideways, not tall) ===== */
-        .topbar, h1.headline { max-width: 1320px; }
-        h1.headline { margin: 0 auto; padding-bottom: 14px; font-size: clamp(1.2rem, 2.6vw, 1.7rem); }
-        .shell { max-width: 1320px; width: calc(100% - 48px); grid-template-columns: 1.25fr 1fr; }
-        .col { padding: 14px; gap: 12px; }
-        .card { padding: 12px 14px; }
-        .tag-row { margin-bottom: 8px; }
-        h2.ct { font-size: 1.05rem; margin-bottom: 6px; }
-        .points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .point { flex-direction: column; gap: 6px; padding: 10px; }
-        .stack { gap: 8px; }
-        .benefit { padding: 8px 12px; }
-        .offer { padding: 9px 12px; font-size: .82rem; }
-        #introForm { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12px; }
-        #introForm .field { margin-bottom: 8px; }
+        .topbar, h1.headline { max-width: 1760px; width: calc(100% - 48px); margin: 0 auto; }
+        .topbar { padding: 8px 16px; }
+        h1.headline { margin: 0 auto; padding-bottom: 8px; font-size: clamp(1.2rem, 2vw, 1.65rem); }
+        .shell { max-width: 1760px; width: calc(100% - 48px); margin: 0 auto; grid-template-columns: 1.05fr 1fr; }
+        .col { padding: 12px; gap: 10px; }
+        .card { padding: 10px 14px; }
+        .tag-row { margin-bottom: 6px; }
+        h2.ct { font-size: 1.02rem; margin-bottom: 5px; }
+        .points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .point { flex-direction: column; gap: 4px; padding: 8px 10px; }
+        .stack { gap: 6px; }
+        .benefit { padding: 7px 11px; }
+        .offer { padding: 8px 11px; font-size: .8rem; }
+        #introForm { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10px; }
+        #introForm .field { margin-bottom: 6px; }
         #introForm .field:nth-of-type(3), #introForm .error, #introForm .fine { grid-column: 1 / -1; }
         #introForm .error { margin-top: 0; min-height: 0; }
-        .btn.cta { padding: 15px 14px; }
-        .link-btn { padding: 4px; min-height: 36px; }
+        .btn.cta { padding: 13px 14px; }
+        .link-btn { padding: 3px; min-height: 32px; }
         @media (max-width: 860px) {
             .shell { width: calc(100% - 20px); grid-template-columns: 1fr; }
         }
-        /* Desktop: static page, no scrollbar - content is scaled to fit the viewport (see fitToViewport) */
-        @media (min-width: 861px) {
-            html, body { height: 100%; overflow: hidden; }
-            body { min-height: 0; padding-bottom: 0; }
-            #fit { width: 100%; }
-        }
+
         @media (max-width: 560px) {
             .points { grid-template-columns: 1fr; }
             .point { flex-direction: row; gap: 10px; }
@@ -255,7 +251,8 @@
 /* ===== Station redesign: cream cards, soft shadows, gold/sage accents (matches other pages) ===== */
 html, body { background: #F3F0EA !important; background-image: none !important; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; color: #2B2926 !important; }
 .page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
-.topbar, h1.headline, .shell { position: relative; z-index: 1; }
+.topbar, h1.headline, .shell { position: relative; z-index: 1; max-width: 1760px !important; width: calc(100% - 48px) !important; margin-left: auto !important; margin-right: auto !important; }
+.shell { grid-template-columns: 1.05fr 1fr !important; }
 .pill-link { background: #F8F5EF !important; color: #3A3835 !important; border: 1px solid #E6E1D7 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; box-shadow: none !important; }
 .pill-link:hover { color: #B88E5A !important; border-color: #D9C7A6 !important; box-shadow: none !important; }
 h1.headline { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em; }
@@ -425,7 +422,7 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                     <div class="timer" id="sessionTimer">20:00</div>
                     <p class="sub center" id="sessionNote">Time remaining</p>
                 </div>
-                <a class="btn" href="video-library/index.html" style="margin-top:16px">Explore the Video Library</a>
+                <a class="btn" href="video-library/index.html" style="margin-top:16px">Explore the Therapeutic Audio Guides (TAGs)</a>
                 <a class="btn alt" href="experience.html" style="margin-top:16px">Find a Station &amp; Free Trial Pass</a>
             </div>
         </section>
@@ -679,32 +676,6 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
         }
     })();
     </script>
-    <script>
-    // Desktop: keep the page static (no scrollbar) by scaling content to fit the viewport.
-    (function () {
-        var fit = document.getElementById('fit'), mq = window.matchMedia('(min-width: 861px)'), busy = false;
-        function fitToViewport() {
-            if (busy) return; busy = true;
-            fit.style.zoom = ''; document.documentElement.style.overflowY = '';
-            if (mq.matches) {
-                var z = 1;
-                for (var i = 0; i < 4; i++) {
-                    fit.style.zoom = z;
-                    var h = fit.getBoundingClientRect().height;
-                    var nz = Math.max(0.55, Math.min(1, z * (window.innerHeight / h)));
-                    if (Math.abs(nz - z) < 0.005) break;
-                    z = nz;
-                }
-                fit.style.zoom = z;
-                if (fit.getBoundingClientRect().height > window.innerHeight + 2) document.documentElement.style.overflowY = 'auto';
-            }
-            busy = false;
-        }
-        window.addEventListener('resize', fitToViewport);
-        window.addEventListener('load', fitToViewport);
-        if (window.ResizeObserver) new ResizeObserver(function () { if (!busy) fitToViewport(); }).observe(document.getElementById('shell'));
-        fitToViewport();
-    })();
-    </script>
+
 </body>
 </html>

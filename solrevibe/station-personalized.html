@@ -66,7 +66,7 @@
         h2.ct { font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
         .sub { font-size: .86rem; color: var(--muted); line-height: 1.45; }
 
-        .video-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #EDE6DB; border: 2px solid var(--navy); }
+        .video-frame { position: relative; aspect-ratio: 16 / 9; max-height: min(410px, 46vh); width: min(100%, calc(min(410px, 46vh) * 16 / 9)); margin: 0 auto; border-radius: 10px; overflow: hidden; background: #EDE6DB; border: 2px solid var(--navy); }
         .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
         .video-ph { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #4A4A4A; text-align: center; padding: 16px; }
         .video-ph .play { width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #2B2B2B; background: linear-gradient(135deg, var(--magenta), var(--violet)); }
@@ -217,9 +217,10 @@
         .reco-desc { font-size: .8rem; color: var(--soft); }
 
         /* ===== Wide, compact layout (expands sideways, not tall) ===== */
-        .topbar, h1.headline { max-width: 1320px; }
-        h1.headline { margin: 0 auto; padding-bottom: 14px; font-size: clamp(1.2rem, 2.6vw, 1.7rem); }
-        .shell { max-width: 1320px; width: calc(100% - 48px); grid-template-columns: 1.25fr 1fr; }
+        .topbar, h1.headline { max-width: 1760px; width: calc(100% - 48px); margin: 0 auto; }
+        .topbar { padding: 8px 16px; }
+        h1.headline { margin: 0 auto; padding-bottom: 8px; font-size: clamp(1.2rem, 2vw, 1.65rem); }
+        .shell { max-width: 1760px; width: calc(100% - 48px); margin: 0 auto; grid-template-columns: 1.05fr 1fr; }
         .col { padding: 14px; gap: 12px; }
         .card { padding: 12px 14px; }
         .tag-row { margin-bottom: 8px; }
@@ -249,7 +250,8 @@
 /* ===== Station redesign: cream cards, soft shadows, gold/sage accents (matches other pages) ===== */
 html, body { background: #F3F0EA !important; background-image: none !important; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; color: #2B2926 !important; }
 .page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
-.topbar, h1.headline, .shell { position: relative; z-index: 1; }
+.topbar, h1.headline, .shell { position: relative; z-index: 1; max-width: 1760px !important; width: calc(100% - 48px) !important; margin-left: auto !important; margin-right: auto !important; }
+.shell { grid-template-columns: 1.05fr 1fr !important; }
 .pill-link { background: #F8F5EF !important; color: #3A3835 !important; border: 1px solid #E6E1D7 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; box-shadow: none !important; }
 .pill-link:hover { color: #B88E5A !important; border-color: #D9C7A6 !important; box-shadow: none !important; }
 h1.headline { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em; }
