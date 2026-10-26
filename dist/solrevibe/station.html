@@ -243,6 +243,52 @@
             .shell { width: calc(100% - 20px); grid-template-columns: 1fr; }
         }
 
+        /* Desktop: static page, no scrollbar - centered in the middle of the screen */
+        @media (min-width: 861px) {
+            html, body {
+                height: 100% !important;
+                overflow: hidden !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            #fit {
+                height: 100vh !important;
+                height: 100dvh !important;
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+            }
+            .topbar {
+                flex: 0 0 auto !important;
+                width: 100% !important;
+                max-width: 1420px !important;
+                margin: 0 auto !important;
+                padding: clamp(8px, 1.4vh, 14px) 20px clamp(4px, 0.8vh, 8px) !important;
+                box-sizing: border-box !important;
+            }
+            .station-stage {
+                flex: 1 1 auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                width: 100% !important;
+                min-height: 0 !important;
+                padding: 0 16px clamp(6px, 1.2vh, 16px) !important;
+                box-sizing: border-box !important;
+            }
+            h1.headline {
+                padding-top: 0 !important;
+                padding-bottom: clamp(10px, 1.8vh, 20px) !important;
+                margin: 0 auto !important;
+            }
+            .shell {
+                margin: 0 auto !important;
+            }
+        }
+
         @media (max-width: 560px) {
             .points { grid-template-columns: 1fr; }
             .point { flex-direction: row; gap: 10px; }
@@ -254,11 +300,12 @@
 /* ===== Station redesign: cream cards, soft shadows, gold/sage accents (matches other pages) ===== */
 html, body { background: #F3F0EA !important; background-image: none !important; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; color: #2B2926 !important; }
 .page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
-.topbar, h1.headline, .shell { position: relative; z-index: 1; max-width: 1420px !important; width: min(88vw, 1420px) !important; margin-left: auto !important; margin-right: auto !important; }
+.topbar, .station-stage, h1.headline, .shell { position: relative; z-index: 1; }
+h1.headline, .shell { max-width: 1420px !important; width: min(88vw, 1420px) !important; margin-left: auto !important; margin-right: auto !important; }
 .shell { grid-template-columns: 1.05fr 1fr !important; }
 .pill-link { background: #F8F5EF !important; color: #3A3835 !important; border: 1px solid #E6E1D7 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; box-shadow: none !important; }
 .pill-link:hover { color: #B88E5A !important; border-color: #D9C7A6 !important; box-shadow: none !important; }
-h1.headline { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em; padding-top: 6px !important; padding-bottom: 20px !important; }
+h1.headline { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em; padding-top: 0 !important; padding-bottom: clamp(10px, 1.8vh, 20px) !important; }
 h1.headline .a, h1.headline .b { background: none !important; -webkit-text-fill-color: #C29B68 !important; color: #C29B68 !important; font-weight: 800 !important; padding: 0 !important; }
 .shell { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; }
 .col:first-of-type { justify-content: space-between !important; }
@@ -317,6 +364,7 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
         <a class="pill-link" href="index.html">Explore Full Site &rarr;</a>
     </nav>
 
+    <div class="station-stage">
     <h1 class="headline">Welcome to the <span class="a">Mind-Body</span> <span class="b">Recharge Station</span></h1>
 
     <main class="shell" id="shell">
@@ -433,12 +481,13 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
         </section>
     </main>
     </div>
+    </div>
 
     <script>
     (function () {
         // ---- CONFIG (same values/integration as experience.html) ----
         var VIDEOS = {
-            intro:       { url: 'https://youtu.be/Xa--k2W6QYQ', title: 'Welcome to SOL REViBE with Kim', autoplay: true },
+            intro:       { url: 'https://youtu.be/-332L7wq0jQ', title: 'Welcome to SOL REViBE with Kim', autoplay: true },
             orientation: { url: '', title: 'SOL REViBE How-To Video' }   // paste the instructional video link here
         };
         // PLACEHOLDER personalization content - update when the final MVP options are confirmed.
@@ -679,6 +728,42 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
             }
             tick(); timerId = setInterval(tick, 1000);
         }
+    })();
+    </script>
+    <script>
+    // Desktop: keep the page static (no scrollbar) and perfectly centered in the middle of the screen.
+    (function () {
+        var stage = document.querySelector('.station-stage');
+        var mq = window.matchMedia('(min-width: 861px)');
+        var busy = false;
+        function fitViewport() {
+            if (busy) return;
+            busy = true;
+            if (!mq.matches || !stage) {
+                if (stage) stage.style.transform = '';
+                busy = false;
+                return;
+            }
+            stage.style.transform = '';
+            var topbar = document.querySelector('.topbar');
+            var topbarH = topbar ? topbar.getBoundingClientRect().height : 50;
+            var availH = window.innerHeight - topbarH - 12;
+            var stageH = stage.scrollHeight;
+            if (stageH > availH && availH > 200) {
+                var s = Math.max(0.60, Math.min(1, availH / stageH));
+                stage.style.transform = 'scale(' + s.toFixed(3) + ')';
+                stage.style.transformOrigin = 'center center';
+            } else {
+                stage.style.transform = '';
+            }
+            busy = false;
+        }
+        window.addEventListener('resize', fitViewport);
+        window.addEventListener('load', fitViewport);
+        if (window.ResizeObserver && document.getElementById('shell')) {
+            new ResizeObserver(function () { if (!busy) fitViewport(); }).observe(document.getElementById('shell'));
+        }
+        fitViewport();
     })();
     </script>
 
