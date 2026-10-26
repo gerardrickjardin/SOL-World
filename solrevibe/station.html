@@ -522,6 +522,7 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
             return fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                keepalive: true,
                 body: JSON.stringify(Object.assign({
                     full_name: guest.name, name: guest.name, email: guest.email,
                     phone: guest.phone, phone_number: guest.phone,
@@ -645,7 +646,22 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
             });
         }
 
-        // ---- CTA -> waiver ----
+        function getWaiverUrl() {
+            var nameParts = (guest.name || '').trim().split(/\s+/);
+            var firstName = nameParts[0] || '';
+            var lastName = nameParts.slice(1).join(' ') || '';
+            var p = new URLSearchParams();
+            p.set('full_name', guest.name || '');
+            p.set('name', guest.name || '');
+            if (firstName) { p.set('first_name', firstName); p.set('firstName', firstName); }
+            if (lastName) { p.set('last_name', lastName); p.set('lastName', lastName); }
+            p.set('phone', guest.phone || '');
+            p.set('email', guest.email || '');
+            if (selectedBenefit) p.set('benefit', selectedBenefit);
+            return 'https://link.visioncontrol.io/widget/form/' + WAIVER_FORM_ID + '?' + p.toString();
+        }
+
+        // ---- CTA -> waiver redirect ----
         $('ctaBtn').addEventListener('click', function () {
             $('ctaError').textContent = '';
             if (!selectedBenefit) {
@@ -653,35 +669,42 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                 $('benefitFieldset').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
-            if (!saveContact()) {
+            var v = validate();
+            if (!v) {
                 $('ctaError').textContent = 'Please complete your details above to continue.';
                 return;
             }
-            if (!waiverMounted) {
-                waiverMounted = true;
-                var f = document.createElement('iframe');
-                f.src = 'https://link.visioncontrol.io/widget/form/' + WAIVER_FORM_ID +
-                        '?full_name=' + encodeURIComponent(guest.name) + '&phone=' + encodeURIComponent(guest.phone) + '&email=' + encodeURIComponent(guest.email);
-                f.id = 'inline-' + WAIVER_FORM_ID;
-                f.title = 'Tera-P90+ Session Waiver';
-                f.setAttribute('data-layout', "{'id':'INLINE'}");
-                f.setAttribute('data-trigger-type', 'alwaysShow');
-                f.setAttribute('data-activation-type', 'alwaysActivated');
-                f.setAttribute('data-deactivation-type', 'neverDeactivate');
-                f.setAttribute('data-form-name', 'Tera-P90+ Session Waiver');
-                f.setAttribute('data-height', '1875');
-                f.setAttribute('data-layout-iframe-id', f.id);
-                f.setAttribute('data-form-id', WAIVER_FORM_ID);
-                f.setAttribute('data-cookie-consent', 'true');
-                f.setAttribute('data-cookie-consent-provider', 'auto');
-                $('waiverMount').appendChild(f);
-                var s = document.createElement('script');
-                s.src = 'https://link.visioncontrol.io/js/form_embed.js';
-                document.body.appendChild(s);
+            Object.assign(guest, v);
+
+            var cta = $('ctaBtn');
+            cta.disabled = true;
+            cta.textContent = 'Redirecting to Waiver\u2026';
+
+            var waiverUrl = getWaiverUrl();
+
+            var p1 = post({
+                event: 'contact_captured', source: 'Station QR Landing Page',
+                waiver_status: 'incomplete',
+                selected_benefit: selectedBenefit,
+                recommended_mvp: (PERSONALIZATION[selectedBenefit] || {}).mvp || '',
+                tags: ['solrevibe-guest', 'experience-lead', 'waiver-incomplete', 'benefit-' + selectedBenefit]
+            }).catch(function (e) { console.error('Guest lead error:', e); });
+
+            var p2 = post({
+                event: 'waiver_started', source: 'Station QR Landing Page',
+                selected_benefit: selectedBenefit,
+                tags: ['solrevibe-waiver-started']
+            }).catch(function (e) { console.error('Waiver start error:', e); });
+
+            var redirected = false;
+            function goWaiver() {
+                if (redirected) return;
+                redirected = true;
+                window.location.href = waiverUrl;
             }
-            post({ event: 'waiver_started', source: 'Station QR Landing Page', selected_benefit: selectedBenefit, tags: ['solrevibe-waiver-started'] }).catch(function () {});
-            renderCustomize();
-            show('p-waiver');
+
+            Promise.all([p1, p2]).then(goWaiver).catch(goWaiver);
+            setTimeout(goWaiver, 400);
         });
         $('waiverBack').addEventListener('click', function () { show('p-start'); });
         $('notAtStation').addEventListener('click', function () { window.location.href = 'experience.html'; });
