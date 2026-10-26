@@ -128,7 +128,7 @@ async function testFormToken() {
       },
       transactionRequest: {
         transactionType: 'authCaptureTransaction',
-        amount: '3000.00',
+        amount: '3995.00',
       },
       hostedPaymentSettings: {
         setting: [
@@ -156,7 +156,7 @@ async function testFormToken() {
           },
           {
             settingName:  'hostedPaymentButtonOptions',
-            settingValue: JSON.stringify({ text: 'Complete Payment — $3,000' }),
+            settingValue: JSON.stringify({ text: 'Complete Payment — $3,995' }),
           },
           {
             settingName:  'hostedPaymentCustomerOptions',

@@ -64,7 +64,7 @@ export default async function handler(req) {
         refId: 'ORDER-' + Date.now(),
         transactionRequest: {
           transactionType: 'authCaptureTransaction',
-          amount: amount || '3000.00',
+          amount: amount || '3995.00',
           payment: {
             opaqueData: {
               dataDescriptor: opaqueDataDescriptor,
@@ -143,7 +143,7 @@ export default async function handler(req) {
         authCode: txResult.authCode,
         accountType: txResult.accountType || 'Card',
         last4: txResult.accountNumber ? txResult.accountNumber.replace(/X/g, '') : '',
-        amount: amount || '3000.00',
+        amount: amount || '3995.00',
         message: (txResult.messages && txResult.messages.message && txResult.messages.message[0] && txResult.messages.message[0].description) || 'Transaction approved',
       }), {
         status: 200,

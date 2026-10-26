@@ -117,7 +117,7 @@ module.exports = async function handler(req, res) {
       },
       transactionRequest: {
         transactionType: 'authCaptureTransaction',
-        amount: '3000.00',
+        amount: '3995.00',
         currencyCode: 'USD',
         billTo: {
           firstName:   contactName.split(' ')[0] || contactName,
@@ -145,7 +145,7 @@ module.exports = async function handler(req, res) {
             name:        'SOL REViBE Business-in-a-Box Station',
             description: 'Direct B2B purchase — showcase position',
             quantity:    '1',
-            unitPrice:   '3000.00',
+            unitPrice:   '3995.00',
           }
         },
       },
@@ -170,7 +170,7 @@ module.exports = async function handler(req, res) {
           {
             settingName:  'hostedPaymentButtonOptions',
             settingValue: JSON.stringify({
-              text: 'Pay $3,000.00 — Secure My Position',
+              text: 'Pay $3,995.00 — Secure My Position',
             }),
           },
           // ── Visual branding ───────────────────────────────────────
@@ -209,7 +209,7 @@ module.exports = async function handler(req, res) {
           {
             settingName:  'hostedPaymentButtonOptions',
             settingValue: JSON.stringify({
-              text: 'Complete Payment — $3,000',
+              text: 'Complete Payment — $3,995',
             }),
           },
           // ── Security ──────────────────────────────────────────────

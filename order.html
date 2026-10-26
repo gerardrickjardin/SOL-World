@@ -1010,7 +1010,7 @@
                 </div>
 
                 <!-- ========================================================
-                     PRODUCT SELECTION & BUNDLE PRICING ($2,495 / $2,500)
+                     PRODUCT SELECTION & BUNDLE PRICING ($3,995 / $4,000)
                      ======================================================== -->
                 <div class="section-separator-title">
                     <i class="fa-solid fa-box-open"></i>
@@ -1018,28 +1018,28 @@
                 </div>
 
                 <div class="bundle-selection-card">
-                    <!-- Option 1: Pay in Full ($2,495) - Preselected -->
+                    <!-- Option 1: Pay in Full ($3,995) - Preselected -->
                     <div class="pricing-radio-option" id="plan-full-card" onclick="selectPlan('full')">
                         <div class="radio-left-wrap">
                             <div class="radio-custom-circle" id="radio-full"></div>
                             <div>
                                 <div class="plan-title-bold">Complete Station Package — Pay in Full</div>
-                                <div class="plan-subtitle-tag">Pre-selected Special Offer (Save $1,355 vs MSRP)</div>
+                                <div class="plan-subtitle-tag">Pre-selected Special Offer (Save $1,000 vs MSRP)</div>
                             </div>
                         </div>
-                        <div class="plan-amount-display">$2,495</div>
+                        <div class="plan-amount-display">$3,995</div>
                     </div>
 
-                    <!-- Option 2: 2-Payment Split ($1,250 x 2 = $2,500) -->
+                    <!-- Option 2: 2-Payment Split ($2,000 x 2 = $4,000) -->
                     <div class="pricing-radio-option inactive" id="plan-split-card" onclick="selectPlan('split')">
                         <div class="radio-left-wrap">
                             <div class="radio-custom-circle" id="radio-split"></div>
                             <div>
-                                <div class="plan-title-bold">2-Payment Split Option ($2,500 Total)</div>
-                                <div style="font-size: 11.5px; color: #64748B;">2 monthly payments of $1,250.00</div>
+                                <div class="plan-title-bold">2-Payment Split Option ($4,000 Total)</div>
+                                <div style="font-size: 11.5px; color: #64748B;">2 monthly payments of $2,000.00</div>
                             </div>
                         </div>
-                        <div class="plan-amount-display" style="font-size: 18px;">$1,250<span style="font-size: 12px; font-weight: 500; color: #64748B;">/mo</span></div>
+                        <div class="plan-amount-display" style="font-size: 18px;">$2,000<span style="font-size: 12px; font-weight: 500; color: #64748B;">/mo</span></div>
                     </div>
 
                     <!-- Bundled Deliverables Checklist -->
@@ -1081,11 +1081,11 @@
                     <div style="margin-top: 14px; border-top: 1px solid #E2E8F0; padding-top: 10px;">
                         <div class="order-summary-row">
                             <span>Package Regular Price:</span>
-                            <span style="text-decoration: line-through;">$3,850.00</span>
+                            <span style="text-decoration: line-through;">$4,995.00</span>
                         </div>
                         <div class="order-summary-row">
                             <span>Station Package Discount:</span>
-                            <span style="color: #E11D48; font-weight: 600;">-$1,355.00</span>
+                            <span style="color: #E11D48; font-weight: 600;">-$1,000.00</span>
                         </div>
                         <div class="order-summary-row">
                             <span>Insured Freight Delivery:</span>
@@ -1093,7 +1093,7 @@
                         </div>
                         <div class="order-total-row">
                             <span>Total Due Today:</span>
-                            <span class="order-total-amount" id="total-amount-label">$2,495.00</span>
+                            <span class="order-total-amount" id="total-amount-label">$3,995.00</span>
                         </div>
                     </div>
                 </div>
@@ -1178,7 +1178,7 @@
                 <!-- Submit Button -->
                 <button type="submit" class="submit-order-button" id="submit-btn">
                     <i class="fa-solid fa-lock"></i>
-                    <span id="submit-btn-text">Authorize & Complete Order - $2,495.00</span>
+                    <span id="submit-btn-text">Authorize & Complete Order - $3,995.00</span>
                 </button>
 
                 <div class="submit-trust-subtext">
@@ -1215,7 +1215,7 @@
                 </div>
                 <div class="conf-row">
                     <span>Total Amount Charged:</span>
-                    <strong id="conf-amount-display" style="color: #0F172A; font-size: 15px;">$2,495.00 USD</strong>
+                    <strong id="conf-amount-display" style="color: #0F172A; font-size: 15px;">$3,995.00 USD</strong>
                 </div>
                 <div class="conf-row">
                     <span>Delivery Address:</span>
@@ -1251,17 +1251,17 @@
             const btnText = document.getElementById('submit-btn-text');
 
             if (plan === 'full') {
-                currentPrice = 2495.00;
+                currentPrice = 3995.00;
                 cardFull.classList.remove('inactive');
                 cardSplit.classList.add('inactive');
-                totalLabel.textContent = '$2,495.00';
-                btnText.textContent = 'Authorize & Complete Order - $2,495.00';
+                totalLabel.textContent = '$3,995.00';
+                btnText.textContent = 'Authorize & Complete Order - $3,995.00';
             } else {
-                currentPrice = 1250.00;
+                currentPrice = 2000.00;
                 cardSplit.classList.remove('inactive');
                 cardFull.classList.add('inactive');
-                totalLabel.textContent = '$1,250.00';
-                btnText.textContent = 'Authorize 1st Payment - $1,250.00 (Total $2,500)';
+                totalLabel.textContent = '$2,000.00';
+                btnText.textContent = 'Authorize 1st Payment - $2,000.00 (Total $4,000)';
             }
         }
 
@@ -1354,7 +1354,7 @@
                     document.getElementById('conf-name-display').textContent = fullName;
                     document.getElementById('conf-order-num').textContent = 'SR-' + Math.floor(100000 + Math.random() * 900000);
                     document.getElementById('conf-warranty-status').textContent = 'ACTIVE (Registered to ID: ••••' + govId.slice(-4) + ')';
-                    document.getElementById('conf-amount-display').textContent = currentPlan === 'full' ? '$2,495.00 USD' : '$1,250.00 USD (Installment 1 of 2 • $2,500 Total)';
+                    document.getElementById('conf-amount-display').textContent = currentPlan === 'full' ? '$3,995.00 USD' : '$2,000.00 USD (Installment 1 of 2 • $4,000 Total)';
                     document.getElementById('conf-address-display').textContent = `${street}, ${city}, ${state} ${zip}`;
                     document.getElementById('conf-email-display').textContent = email;
 

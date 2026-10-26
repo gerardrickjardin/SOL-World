@@ -1562,8 +1562,8 @@
 
         .payment-grid {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 48px;
+            grid-template-columns: 1.38fr 0.62fr;
+            gap: 36px;
             align-items: center;
         }
 
@@ -1581,12 +1581,13 @@
         }
 
         .payment-details-col h3 {
-            font-size: clamp(26px, 3vw, 38px);
+            font-size: clamp(20px, 2.05vw, 29px);
             font-weight: 800;
             color: #2B2B2B;
-            line-height: 1.2;
+            line-height: 1.25;
             margin-bottom: 16px;
             letter-spacing: -0.02em;
+            white-space: nowrap;
         }
 
         .payment-price-box {
@@ -1755,6 +1756,10 @@
             }
             .payment-card-wrapper {
                 padding: 30px 20px;
+            }
+            .payment-details-col h3 {
+                white-space: normal;
+                font-size: clamp(22px, 4.5vw, 28px);
             }
         }
             to   { opacity: 1; transform: translateY(0); }

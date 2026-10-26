@@ -26,7 +26,7 @@ export default function CheckoutPage() {
     cardCvc: '',
   });
 
-  const [pricingPlan, setPricingPlan] = useState('full'); // 'full' ($2,495) | 'split' ($2,500 total, $1,250 now)
+  const [pricingPlan, setPricingPlan] = useState('full'); // 'full' ($3,995) | 'split' ($4,000 total, $2,000 now)
   const [cardType, setCardType] = useState('visa');
   const [paymentState, setPaymentState] = useState({
     isProcessing: false,
@@ -92,8 +92,8 @@ export default function CheckoutPage() {
     }, 1600);
   };
 
-  const currentPrice = pricingPlan === 'full' ? '2,495' : '1,250';
-  const totalDisplay = pricingPlan === 'full' ? '$2,495.00 USD' : '$1,250.00 USD (Installment 1 of 2 • $2,500 Total)';
+  const currentPrice = pricingPlan === 'full' ? '3,995' : '2,000';
+  const totalDisplay = pricingPlan === 'full' ? '$3,995.00 USD' : '$2,000.00 USD (Installment 1 of 2 • $4,000 Total)';
 
   return (
     <div className="checkout-page-root">
@@ -213,8 +213,8 @@ export default function CheckoutPage() {
                   >
                     <div className="toggle-radio"></div>
                     <div className="toggle-text">
-                      <strong>Pay in Full: $2,495</strong>
-                      <small>Save $1,355 vs regular MSRP</small>
+                      <strong>Pay in Full: $3,995</strong>
+                      <small>Save $1,000 vs regular MSRP</small>
                     </div>
                   </div>
                   <div
@@ -223,8 +223,8 @@ export default function CheckoutPage() {
                   >
                     <div className="toggle-radio"></div>
                     <div className="toggle-text">
-                      <strong>2 Monthly Payments of $1,250</strong>
-                      <small>$2,500 total package price</small>
+                      <strong>2 Monthly Payments of $2,000</strong>
+                      <small>$4,000 total package price</small>
                     </div>
                   </div>
                 </div>
