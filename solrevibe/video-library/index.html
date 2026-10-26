@@ -296,15 +296,20 @@ footer b { color: #2B2926 !important; }
   ];
   // days = days since published; views in raw number
   const videos = [
-    {id:1, vimeoId:"76979871", title:"The SOL REViBE Experience", category:"TAGs", duration:"12:40", days:5, views:31200, featured:true, hue:[280,180], tags:["experience","pemf","terahertz","relaxation","tag","tags"], description:"Immerse yourself in a synchronized experience of PEMF, terahertz, and restorative soundscapes designed to support relaxation, balance, and renewal."},
-    {id:2, vimeoId:"148751763", title:"Understanding Frequency Wellness", category:"Video", duration:"08:24", days:14, views:12400, hue:[200,290], tags:["frequency","wellness","basics","video"], description:"A clear introduction to how frequency-based wellness works and what to expect from a session."},
-    {id:3, vimeoId:"1084537", title:"Inside a SOL REViBE Session", category:"TAGs", duration:"12:40", days:15, views:18700, hue:[190,260], tags:["session","walkthrough","experience","tag","tags"], description:"Step inside a full session from arrival to restoration and see every stage of the experience."},
-    {id:4, vimeoId:"76979871", title:"PEMF & Terahertz Explained", category:"Video", duration:"06:18", days:21, views:14100, hue:[240,200], tags:["pemf","terahertz","science","video"], description:"The science behind PEMF and terahertz technology explained simply, with real-world context."},
-    {id:5, vimeoId:"148751763", title:"Bring SOL REViBE to Your Business", category:"Video", duration:"09:52", days:23, views:16800, hue:[320,260], tags:["business","partner","studio","video"], description:"Everything you need to know about adding SOL REViBE stations to your wellness business."},
-    {id:6, vimeoId:"1084537", title:"A Restorative Sound Experience", category:"TAGs", duration:"15:06", days:30, views:22100, hue:[270,320], tags:["sound","music","calm","headphones","tag","tags"], description:"Put on your headphones and sink into a layered soundscape created for deep rest and renewal."},
-    {id:7, vimeoId:"76979871", title:"Partner Success Stories", category:"Video", duration:"04:45", days:32, views:17900, hue:[30,300], tags:["partners","stories","testimonials","video"], description:"Hear from partners about how SOL REViBE has transformed their spaces and their clients' experience."},
-    {id:8, vimeoId:"148751763", title:"Station Setup & First Steps", category:"Video", duration:"07:32", days:34, views:15600, hue:[210,280], tags:["setup","station","guide","video"], description:"A practical guide to unboxing, placing, and powering up your first station."},
-    {id:9, vimeoId:"1084537", title:"The Science of Synchronized Sessions", category:"TAGs", duration:"11:15", days:40, views:20300, hue:[300,190], tags:["science","synchronized","research","tag","tags"], description:"How synchronized frequencies work together, and what the research says about them."}
+    {
+      id: 1,
+      vimeoId: "1236316338",
+      title: "TAG 1 - Thought Loop Clearing",
+      category: "TAGs",
+      duration: "18:00",
+      days: 1,
+      views: 1,
+      featured: true,
+      hue: [280, 180],
+      tags: ["tag", "tags", "thought loop", "clearing", "relaxation"],
+      thumb: "https://i.vimeocdn.com/video/2212782790-9341a403216fa8e33679fb56c54b78a705159a3b669f95f9f07a60b15569891e-d_640x360",
+      description: "A synchronized 18-minute therapeutic audio guide designed to clear thought loops, quiet mental noise, and restore mind-body balance."
+    }
   ];
 
   const $ = id => document.getElementById(id);
@@ -320,8 +325,11 @@ footer b { color: #2B2926 !important; }
   const fmtViews = n => n >= 1000 ? (n/1000).toFixed(1)+"K views" : n+" views";
   const PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>';
 
-  // Procedural wave artwork (replaces thumbnails)
+  // Procedural wave artwork or thumbnail
   function art(v){
+    if (v.thumb) {
+      return `<img class="art" src="${esc(v.thumb)}" alt="${esc(v.title)}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy">`;
+    }
     const [h1,h2] = v.hue, seed = v.id * 7.3;
     let paths = "";
     for(let i=0;i<7;i++){
@@ -338,7 +346,8 @@ footer b { color: #2B2926 !important; }
   }
 
   function renderFeatured(){
-    const v = videos.find(x => x.featured);
+    const v = videos.find(x => x.featured) || videos[0];
+    if (!v) { featuredEl.innerHTML = ""; return; }
     featuredEl.innerHTML = `
       <button class="f-art" type="button" data-id="${v.id}" aria-label="Play ${esc(v.title)}">
         ${art(v)}
@@ -346,7 +355,7 @@ footer b { color: #2B2926 !important; }
         <span class="tag-feat">${svg('<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>','fill="currentColor"')}FEATURED EXPERIENCE</span>
       </button>
       <div class="f-info">
-        <h2>The SOL <span>REViBE</span> Experience</h2>
+        <h2>${esc(v.title)}</h2>
         <p>${esc(v.description)}</p>
         <div class="f-meta">${svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')}<span>${v.duration}</span><span>·</span><strong class="cyan">Featured</strong></div>
         <button class="btn-watch" type="button" data-id="${v.id}">Watch Experience ${svg('<path d="M5 12h14M13 6l6 6-6 6"/>','width="18" height="18"')}</button>
