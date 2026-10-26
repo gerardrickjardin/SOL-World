@@ -295,6 +295,17 @@
             .point { flex-direction: row; gap: 10px; }
             #introForm { grid-template-columns: 1fr; }
         }
+
+        /* ===== Waiver section: appears BELOW the landing box after the CTA is clicked ===== */
+        html.waiver-open, html.waiver-open body { height: auto !important; overflow-x: hidden !important; overflow-y: auto !important; }
+        .waiver-below { position: relative; z-index: 1; max-width: 1420px; width: min(88vw, 1420px); margin: 0 auto clamp(28px, 5vh, 56px); scroll-margin-top: 16px; }
+        .waiver-below[hidden] { display: none !important; }
+        .waiver-below .waiver-card { max-width: 900px; margin: 0 auto; padding: clamp(16px, 2.4vw, 28px); }
+        .waiver-below .waiver-head { text-align: center; margin-bottom: 14px; }
+        .waiver-below .waiver-head .tag-row { justify-content: center; }
+        .waiver-below .waiver-wrap { border-radius: 12px; overflow: hidden; }
+        .waiver-below .waiver-actions { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 14px; }
+        @media (max-width: 860px) { .waiver-below { width: calc(100% - 20px); margin-top: 16px; } }
     </style>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style id="station-redesign">
@@ -439,19 +450,6 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                 <button type="button" class="link-btn" id="notAtStation">Not at a station right now? Find one &amp; get a free trial pass</button>
             </div>
 
-            <!-- Panel: waiver -->
-            <div class="panel" id="p-waiver" hidden>
-                <div id="custWaiver" style="margin-bottom:14px"></div>
-                <div class="card">
-                    <div class="tag-row"><span class="tag gold">Step 2 &bull; Waiver</span></div>
-                    <h2 class="ct">Complete Your Waiver</h2>
-                    <p class="sub" style="margin-bottom:10px">Fill out and submit the waiver below, then tap Continue.</p>
-                    <div class="waiver-wrap" id="waiverMount"></div>
-                    <button type="button" class="btn" id="waiverDoneBtn" style="margin-top:12px">I&rsquo;ve submitted my waiver &mdash; Continue</button>
-                    <button type="button" class="link-btn" id="waiverBack">&larr; Back</button>
-                </div>
-            </div>
-
             <!-- Panel: how-to -->
             <div class="panel" id="p-howto" hidden>
                 <div id="custHowto"></div>
@@ -481,6 +479,23 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
     </main>
     </div>
     </div>
+
+    <!-- WAIVER: appears below the landing box after the CTA is clicked -->
+    <section class="waiver-below" id="waiverSection" aria-label="Complete your waiver" hidden>
+        <div class="card waiver-card">
+            <div class="waiver-head">
+                <div class="tag-row"><span class="tag gold">Step 2 &bull; Waiver</span></div>
+                <h2 class="ct" id="waiverTitle" tabindex="-1">Complete Your Waiver</h2>
+                <p class="sub">Fill out and submit the waiver below, then tap Continue.</p>
+            </div>
+            <div id="custWaiver" style="margin-bottom:14px"></div>
+            <div class="waiver-wrap" id="waiverMount"></div>
+            <div class="waiver-actions">
+                <button type="button" class="btn" id="waiverDoneBtn">I&rsquo;ve submitted my waiver &mdash; Continue</button>
+                <button type="button" class="link-btn" id="waiverBack">&uarr; Back to top</button>
+            </div>
+        </div>
+    </section>
 
     <script>
     (function () {
@@ -554,7 +569,7 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                 el.querySelector('strong').textContent = cfg.title;
             }
         }
-        var panels = ['p-start', 'p-waiver', 'p-howto', 'p-session'];
+        var panels = ['p-start', 'p-howto', 'p-session'];
         function show(id) {
             panels.forEach(function (p) { $(p).hidden = p !== id; });
             if (window.matchMedia('(max-width: 860px)').matches) {
@@ -661,7 +676,7 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
             return 'https://link.visioncontrol.io/widget/form/' + WAIVER_FORM_ID + '?' + p.toString();
         }
 
-        // ---- CTA -> waiver redirect ----
+        // ---- CTA -> waiver (shown BELOW the landing box) ----
         $('ctaBtn').addEventListener('click', function () {
             $('ctaError').textContent = '';
             if (!selectedBenefit) {
@@ -669,48 +684,54 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                 $('benefitFieldset').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
-            var v = validate();
-            if (!v) {
+            if (!saveContact()) {
                 $('ctaError').textContent = 'Please complete your details above to continue.';
                 return;
             }
-            Object.assign(guest, v);
-
-            var cta = $('ctaBtn');
-            cta.disabled = true;
-            cta.textContent = 'Redirecting to Waiver\u2026';
-
-            var waiverUrl = getWaiverUrl();
-
-            var p1 = post({
-                event: 'contact_captured', source: 'Station QR Landing Page',
-                waiver_status: 'incomplete',
-                selected_benefit: selectedBenefit,
-                recommended_mvp: (PERSONALIZATION[selectedBenefit] || {}).mvp || '',
-                tags: ['solrevibe-guest', 'experience-lead', 'waiver-incomplete', 'benefit-' + selectedBenefit]
-            }).catch(function (e) { console.error('Guest lead error:', e); });
-
-            var p2 = post({
-                event: 'waiver_started', source: 'Station QR Landing Page',
-                selected_benefit: selectedBenefit,
-                tags: ['solrevibe-waiver-started']
-            }).catch(function (e) { console.error('Waiver start error:', e); });
-
-            var redirected = false;
-            function goWaiver() {
-                if (redirected) return;
-                redirected = true;
-                window.location.href = waiverUrl;
+            if (!waiverMounted) {
+                waiverMounted = true;
+                var f = document.createElement('iframe');
+                f.src = getWaiverUrl();
+                f.id = 'inline-' + WAIVER_FORM_ID;
+                f.title = 'Tera-P90+ Session Waiver';
+                f.setAttribute('data-layout', "{'id':'INLINE'}");
+                f.setAttribute('data-trigger-type', 'alwaysShow');
+                f.setAttribute('data-activation-type', 'alwaysActivated');
+                f.setAttribute('data-deactivation-type', 'neverDeactivate');
+                f.setAttribute('data-form-name', 'Tera-P90+ Session Waiver');
+                f.setAttribute('data-height', '1875');
+                f.setAttribute('data-layout-iframe-id', f.id);
+                f.setAttribute('data-form-id', WAIVER_FORM_ID);
+                f.setAttribute('data-cookie-consent', 'true');
+                f.setAttribute('data-cookie-consent-provider', 'auto');
+                $('waiverMount').appendChild(f);
+                var s = document.createElement('script');
+                s.src = 'https://link.visioncontrol.io/js/form_embed.js';
+                document.body.appendChild(s);
+                post({ event: 'waiver_started', source: 'Station QR Landing Page', selected_benefit: selectedBenefit, tags: ['solrevibe-waiver-started'] }).catch(function () {});
             }
-
-            Promise.all([p1, p2]).then(goWaiver).catch(goWaiver);
-            setTimeout(goWaiver, 400);
+            renderCustomize();
+            openWaiver();
         });
-        $('waiverBack').addEventListener('click', function () { show('p-start'); });
+        function openWaiver() {
+            document.documentElement.classList.add('waiver-open');
+            $('waiverSection').hidden = false;
+            requestAnimationFrame(function () {
+                $('waiverSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setTimeout(function () { $('waiverTitle').focus({ preventScroll: true }); }, 600);
+            });
+        }
+        function closeWaiver() {
+            window.scrollTo(0, 0);
+            $('waiverSection').hidden = true;
+            document.documentElement.classList.remove('waiver-open');
+        }
+        $('waiverBack').addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
         $('notAtStation').addEventListener('click', function () { window.location.href = 'experience.html'; });
 
         // ---- waiver done -> how-to video ----
         function waiverDone() {
+            closeWaiver();
             mountVideo($('orientationVideo'), VIDEOS.orientation);
             show('p-howto');
             setTimeout(function () { $('howtoTitle').focus({ preventScroll: true }); }, 100);
@@ -720,7 +741,7 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
         window.addEventListener('message', function (e) {
             if (!/visioncontrol\.io|leadconnectorhq\.com/.test(e.origin || '')) return;
             var d = e.data, txt = typeof d === 'string' ? d : JSON.stringify(d || '');
-            if (/form[_-]?submitted|submitted successfully|"formSubmit/i.test(txt) && !$('p-waiver').hidden) waiverDone();
+            if (/form[_-]?submitted|submitted successfully|"formSubmit/i.test(txt) && !$('waiverSection').hidden) waiverDone();
         });
 
         // ---- session ----
