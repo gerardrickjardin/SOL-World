@@ -1873,6 +1873,7 @@
             letter-spacing: -0.02em;
             color: #2B2B2B;
             margin: 0;
+            text-wrap: balance;
         }
 
         .roi-overview-headline .green-gradient {
@@ -2120,9 +2121,9 @@
             background: linear-gradient(135deg, #C29B68 0%, #D8B88C 45%, #6B7A82 100%);
             color: #2B2B2B !important;
             font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
+            font-size: clamp(0.78rem, 1.05vw, 0.88rem);
             font-weight: 800;
-            padding: 0.95rem 1.4rem;
+            padding: 0.85rem 1.15rem;
             border-radius: 12px;
             text-decoration: none;
             display: flex;
@@ -2132,6 +2133,11 @@
             box-shadow: 0 8px 24px rgba(194,155,104, 0.45);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
+            white-space: nowrap;
+        }
+
+        .teaser-unlock-cta span {
+            white-space: nowrap;
         }
 
         .teaser-unlock-cta:hover {
@@ -2372,7 +2378,7 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 
 /* ROI teaser card */
 .roi-teaser-card-wrapper::before { display: none !important; }
-.roi-teaser-card { background: #F8F5EF !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid #E1DCD2 !important; border-radius: 16px !important; box-shadow: 0 2px 10px rgba(70,58,44,0.06) !important; }
+.roi-teaser-card { background: #F8F5EF !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid #E1DCD2 !important; border-radius: 16px !important; box-shadow: 0 2px 10px rgba(70,58,44,0.06) !important; padding: 2rem 1.5rem !important; }
 .teaser-slider-val { background: #fff !important; border: 1px solid #D8D3C9 !important; color: #2B2926 !important; text-shadow: none !important; border-radius: 6px !important; }
 .teaser-slider-input { background-color: #DAD5CC !important; height: 5px !important; }
 .teaser-slider-input::-webkit-slider-runnable-track { height: 5px; }
@@ -2383,6 +2389,8 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 .teaser-unlock-cta, .payment-cta-button, .finder-form button, .callout-form button { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; color: #fff !important; border: none !important; border-radius: 999px !important; box-shadow: 0 5px 16px rgba(150,130,100,0.28) !important; }
 .teaser-unlock-cta:hover, .payment-cta-button:hover, .finder-form button:hover, .callout-form button:hover { filter: brightness(1.06); box-shadow: 0 8px 22px rgba(150,130,100,0.38) !important; transform: translateY(-1px); }
 .teaser-unlock-cta *, .payment-cta-button * { color: #fff !important; }
+.teaser-unlock-cta { font-size: clamp(0.76rem, 1.0vw, 0.88rem) !important; padding: 0.85rem 1.15rem !important; white-space: nowrap !important; }
+.teaser-unlock-cta span { white-space: nowrap !important; }
 
 /* Payment section */
 .payment-action-card { background: #FBF9F5 !important; border-radius: 16px !important; box-shadow: 0 0 0 1px #E1DCD2 !important; }
@@ -2396,7 +2404,7 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 .footer { border-color: #E1DCD2 !important; }
 
 /* ROI headline: keep highlight inline so wrapping matches the landing headline */
-.roi-overview-headline { font-size: clamp(2rem, 3.1vw, 3rem) !important; line-height: 1.15 !important; }
+.roi-overview-headline { font-size: clamp(2rem, 3.1vw, 3rem) !important; line-height: 1.15 !important; text-wrap: balance !important; }
 .roi-overview-headline .green-gradient { display: inline !important; }
 /* Application form */
 .form-title { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; }
@@ -2485,7 +2493,7 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
             <a href="#partnership">PARTNERSHIP</a>
             <a href="order.html">ORDER</a>
             <a href="station.html">STATION</a>
-            <a href="video-library/index.html">VIDEO LIBRARY</a>
+            <a href="video-library/index.html">THERAPEUTIC AUDIO GUIDES (TAGs)</a>
             <a href="landing" class="vibe-reserve-btn mobile-only-btn">JOIN THE WAITLIST &rarr;</a>
         </div>
         <div class="desktop-reserve-container">
@@ -2533,7 +2541,7 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                     </div>
 
                     <h2 class="roi-overview-headline">
-                        Make <span class="green-gradient">$10,000+ Monthly</span> by Placing a SOL REViBE Mind-Body Station in Your Business
+                        Make <span class="green-gradient">$10,000+ Monthly</span> by Placing a SOL REViBE Mind-Body Station <span style="white-space: nowrap;">in Your Business</span>
                     </h2>
 
                     <p class="roi-overview-sub">
@@ -2601,7 +2609,7 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                         </div>
 
                         <a href="/roi-calculator" id="teaser-unlock-btn" class="teaser-unlock-cta">
-                            <span>Unlock Full ROI Calculator &amp; Secure Your ZIP Code</span>
+                            <span style="white-space: nowrap;">Unlock Full ROI Calculator &amp; Secure Your ZIP Code</span>
                             <i class="fa-solid fa-arrow-right"></i>
                         </a>
 
