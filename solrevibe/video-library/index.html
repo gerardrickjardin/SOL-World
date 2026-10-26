@@ -286,7 +286,7 @@ footer b { color: #2B2926 !important; }
 
 <script>
 (() => {
-  const CATS = ["All","Frequency & PEMF","Terahertz","Restorative Sound","Business & Setup","Customer Stories"];
+  const CATS = ["All", "TAGs"];
   const VIEWS = [
     {k:"all", label:"Browse All", ic:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'},
     {k:"featured", label:"Featured", ic:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'},
@@ -296,15 +296,15 @@ footer b { color: #2B2926 !important; }
   ];
   // days = days since published; views in raw number
   const videos = [
-    {id:1, vimeoId:"76979871", title:"The SOL REViBE Experience", category:"Frequency & PEMF", duration:"12:40", days:5, views:31200, featured:true, hue:[280,180], tags:["experience","pemf","terahertz","relaxation"], description:"Immerse yourself in a synchronized experience of PEMF, terahertz, and restorative soundscapes designed to support relaxation, balance, and renewal."},
-    {id:2, vimeoId:"148751763", title:"Understanding Frequency Wellness", category:"Frequency & PEMF", duration:"08:24", days:14, views:12400, hue:[200,290], tags:["frequency","wellness","basics"], description:"A clear introduction to how frequency-based wellness works and what to expect from a session."},
-    {id:3, vimeoId:"1084537", title:"Inside a SOL REViBE Session", category:"Frequency & PEMF", duration:"12:40", days:15, views:18700, hue:[190,260], tags:["session","walkthrough","experience"], description:"Step inside a full session from arrival to restoration and see every stage of the experience."},
-    {id:4, vimeoId:"76979871", title:"PEMF & Terahertz Explained", category:"Terahertz", duration:"06:18", days:21, views:14100, hue:[240,200], tags:["pemf","terahertz","science"], description:"The science behind PEMF and terahertz technology explained simply, with real-world context."},
-    {id:5, vimeoId:"148751763", title:"Bring SOL REViBE to Your Business", category:"Business & Setup", duration:"09:52", days:23, views:16800, hue:[320,260], tags:["business","partner","studio"], description:"Everything you need to know about adding SOL REViBE stations to your wellness business."},
-    {id:6, vimeoId:"1084537", title:"A Restorative Sound Experience", category:"Restorative Sound", duration:"15:06", days:30, views:22100, hue:[270,320], tags:["sound","music","calm","headphones"], description:"Put on your headphones and sink into a layered soundscape created for deep rest and renewal."},
-    {id:7, vimeoId:"76979871", title:"Partner Success Stories", category:"Customer Stories", duration:"04:45", days:32, views:17900, hue:[30,300], tags:["partners","stories","testimonials"], description:"Hear from partners about how SOL REViBE has transformed their spaces and their clients' experience."},
-    {id:8, vimeoId:"148751763", title:"Station Setup & First Steps", category:"Business & Setup", duration:"07:32", days:34, views:15600, hue:[210,280], tags:["setup","station","guide"], description:"A practical guide to unboxing, placing, and powering up your first station."},
-    {id:9, vimeoId:"1084537", title:"The Science of Synchronized Sessions", category:"Terahertz", duration:"11:15", days:40, views:20300, hue:[300,190], tags:["science","synchronized","research"], description:"How synchronized frequencies work together, and what the research says about them."}
+    {id:1, vimeoId:"76979871", title:"The SOL REViBE Experience", category:"TAGs", duration:"12:40", days:5, views:31200, featured:true, hue:[280,180], tags:["experience","pemf","terahertz","relaxation","tag","tags"], description:"Immerse yourself in a synchronized experience of PEMF, terahertz, and restorative soundscapes designed to support relaxation, balance, and renewal."},
+    {id:2, vimeoId:"148751763", title:"Understanding Frequency Wellness", category:"Video", duration:"08:24", days:14, views:12400, hue:[200,290], tags:["frequency","wellness","basics","video"], description:"A clear introduction to how frequency-based wellness works and what to expect from a session."},
+    {id:3, vimeoId:"1084537", title:"Inside a SOL REViBE Session", category:"TAGs", duration:"12:40", days:15, views:18700, hue:[190,260], tags:["session","walkthrough","experience","tag","tags"], description:"Step inside a full session from arrival to restoration and see every stage of the experience."},
+    {id:4, vimeoId:"76979871", title:"PEMF & Terahertz Explained", category:"Video", duration:"06:18", days:21, views:14100, hue:[240,200], tags:["pemf","terahertz","science","video"], description:"The science behind PEMF and terahertz technology explained simply, with real-world context."},
+    {id:5, vimeoId:"148751763", title:"Bring SOL REViBE to Your Business", category:"Video", duration:"09:52", days:23, views:16800, hue:[320,260], tags:["business","partner","studio","video"], description:"Everything you need to know about adding SOL REViBE stations to your wellness business."},
+    {id:6, vimeoId:"1084537", title:"A Restorative Sound Experience", category:"TAGs", duration:"15:06", days:30, views:22100, hue:[270,320], tags:["sound","music","calm","headphones","tag","tags"], description:"Put on your headphones and sink into a layered soundscape created for deep rest and renewal."},
+    {id:7, vimeoId:"76979871", title:"Partner Success Stories", category:"Video", duration:"04:45", days:32, views:17900, hue:[30,300], tags:["partners","stories","testimonials","video"], description:"Hear from partners about how SOL REViBE has transformed their spaces and their clients' experience."},
+    {id:8, vimeoId:"148751763", title:"Station Setup & First Steps", category:"Video", duration:"07:32", days:34, views:15600, hue:[210,280], tags:["setup","station","guide","video"], description:"A practical guide to unboxing, placing, and powering up your first station."},
+    {id:9, vimeoId:"1084537", title:"The Science of Synchronized Sessions", category:"TAGs", duration:"11:15", days:40, views:20300, hue:[300,190], tags:["science","synchronized","research","tag","tags"], description:"How synchronized frequencies work together, and what the research says about them."}
   ];
 
   const $ = id => document.getElementById(id);
@@ -361,7 +361,7 @@ footer b { color: #2B2926 !important; }
   function list(){
     const q = state.query.trim().toLowerCase();
     let out = videos.filter(v =>
-      (state.cat==="All" || v.category===state.cat) &&
+      (state.cat==="All" || v.category===state.cat || (state.cat==="TAGs" && (/tag/i.test(v.category) || (v.tags && v.tags.some(t => /tag/i.test(t)))))) &&
       (state.view!=="featured" || v.featured) &&
       (state.view!=="saved" || saved.has(v.id)) &&
       (!q || [v.title, v.category, v.description, ...v.tags].join(" ").toLowerCase().includes(q)));
