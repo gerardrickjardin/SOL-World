@@ -254,6 +254,16 @@ footer b { color: #2B2926 !important; }
 .close { background: #F8F5EF !important; border-color: #E6E1D7 !important; color: #2B2926; }
 .close:hover { background: #C29B68 !important; color: #fff; }
 :focus-visible { outline-color: #C29B68 !important; }
+/* Auto-pause "Play Again" overlay (shown over the video at each step break) */
+.resume-overlay { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: rgba(30,26,22,.42); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s ease; }
+.resume-overlay.show { opacity: 1; visibility: visible; }
+.resume-btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 34px; border: 0; border-radius: 999px; background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: .02em; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,.35); transform: scale(.94); transition: transform .25s ease, filter .2s ease; }
+.resume-overlay.show .resume-btn { transform: none; animation: resumePulse 2.2s ease-in-out infinite; }
+.resume-btn:hover { filter: brightness(1.08); }
+.resume-btn svg { width: 20px; height: 20px; }
+.resume-note { color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+@keyframes resumePulse { 0%, 100% { box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 0 0 rgba(194,155,104,.6); } 50% { box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 0 14px rgba(194,155,104,0); } }
+@media (prefers-reduced-motion: reduce) { .resume-overlay.show .resume-btn { animation: none; } }
 @media (max-width: 900px) {
   .page-deco { display: none; }
   .featured { grid-template-columns: 1fr !important; min-height: auto !important; }
@@ -325,7 +335,12 @@ footer b { color: #2B2926 !important; }
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" aria-hidden="true">
   <div class="m-box">
     <button class="close" id="close" type="button" aria-label="Close video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    <div class="player"><iframe id="player" title="Vimeo video player" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+    <div class="player"><iframe id="player" title="Vimeo video player" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="resume-overlay" id="resumeOverlay" aria-hidden="true">
+        <button type="button" class="resume-btn" id="resumeBtn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>Play Again</button>
+        <span class="resume-note" id="resumeNote" aria-live="polite"></span>
+      </div>
+    </div>
     <div class="m-info"><div><h2 id="m-title"></h2><p id="m-desc"></p></div></div>
   </div>
 </div>
@@ -507,19 +522,32 @@ footer b { color: #2B2926 !important; }
 
   // ---- Auto-pause points (e.g. between instructional steps) via the Vimeo player postMessage API ----
   const VIMEO_ORIGIN = "https://player.vimeo.com";
-  const pauser = { points: [], fired: {}, last: 0 };
+  const pauser = { points: [], fired: {}, last: 0, holdAt: null };
+  const resumeOverlay = $("resumeOverlay"), resumeBtn = $("resumeBtn"), resumeNote = $("resumeNote");
   function vimeoCmd(method, value){
     if (!player.contentWindow) return;
     player.contentWindow.postMessage(JSON.stringify(value === undefined ? {method} : {method, value}), VIMEO_ORIGIN);
   }
+  function showResume(idx){
+    resumeNote.textContent = `Paused · Up next: Step ${idx + 2}`;
+    resumeOverlay.classList.add("show"); resumeOverlay.setAttribute("aria-hidden", "false");
+    resumeBtn.focus({ preventScroll: true });
+  }
+  function hideResume(){
+    pauser.holdAt = null;
+    if (!resumeOverlay.classList.contains("show")) return;
+    resumeOverlay.classList.remove("show"); resumeOverlay.setAttribute("aria-hidden", "true");
+  }
+  resumeBtn.addEventListener("click", () => { hideResume(); vimeoCmd("play"); $("close").focus({ preventScroll: true }); });
   function armPauses(v){
     pauser.points = (v && v.pausePoints) ? v.pausePoints.slice().sort((a,b) => a-b) : [];
     pauser.fired = {}; pauser.last = 0;
+    hideResume();
   }
   function listenVimeo(){
     if (!pauser.points.length) return;
     // Vimeo's postMessage API uses legacy names (playProgress/seek/finish); register both naming schemes
-    ["timeupdate", "playProgress", "seeked", "seek", "ended", "finish"].forEach(ev => vimeoCmd("addEventListener", ev));
+    ["timeupdate", "playProgress", "seeked", "seek", "ended", "finish", "play"].forEach(ev => vimeoCmd("addEventListener", ev));
   }
   player.addEventListener("load", listenVimeo);
   window.addEventListener("message", e => {
@@ -529,12 +557,16 @@ footer b { color: #2B2926 !important; }
     if (!d || !d.event) return;
     if (d.event === "ready") { listenVimeo(); return; }
     const ev = { playProgress: "timeupdate", seek: "seeked", finish: "ended" }[d.event] || d.event;
-    if (ev === "ended") { pauser.fired = {}; pauser.last = 0; return; }   // replay -> pauses work again
+    if (ev === "play") { hideResume(); return; }                           // resumed via the player's own controls
+    if (ev === "ended") { pauser.fired = {}; pauser.last = 0; hideResume(); return; }   // replay -> pauses work again
     const t = d.data && typeof d.data.seconds === "number" ? d.data.seconds : null;
     if (t === null) return;
     // Re-arm any pause point that is ahead of the playhead (restart or seek back)
     pauser.points.forEach(p => { if (t < p - 0.5) pauser.fired[p] = false; });
-    if (ev === "seeked") { pauser.last = t; return; }                       // manual seeks never trigger a pause
+    if (ev === "seeked") {                                                  // manual seeks never trigger a pause
+      if (pauser.holdAt === null || Math.abs(t - pauser.holdAt) > 0.5) hideResume();
+      pauser.last = t; return;
+    }
     if (ev !== "timeupdate") return;
     // Only pause when normal playback crosses the point (not when the user jumps past it)
     const hit = pauser.points.find(p => !pauser.fired[p] && pauser.last < p && t >= p && t - pauser.last < 3);
@@ -544,6 +576,8 @@ footer b { color: #2B2926 !important; }
       vimeoCmd("pause");
       vimeoCmd("setCurrentTime", hit);                                       // hold exactly on the mark; Play resumes from here
       pauser.last = hit;
+      pauser.holdAt = hit;
+      showResume(pauser.points.indexOf(hit));                                // "Play Again" button over the video
     }
   });
 
@@ -588,7 +622,9 @@ footer b { color: #2B2926 !important; }
   modal.addEventListener("click", e => { if(e.target===modal) closeModal(); });
   document.addEventListener("keydown", e => {
     if(e.key==="Escape") closeModal();
-    if(e.key==="Tab" && modal.classList.contains("open")){ e.preventDefault(); $("close").focus(); }
+    if(e.key==="Tab" && modal.classList.contains("open")){ e.preventDefault();
+      const r = resumeOverlay.classList.contains("show");
+      (r && document.activeElement === $("close") ? resumeBtn : $("close")).focus(); }
   });
 
   renderFeatured(); update();
