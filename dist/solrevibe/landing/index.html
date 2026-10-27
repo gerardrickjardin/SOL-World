@@ -956,6 +956,34 @@
         .booking-reveal-inner { overflow: hidden; min-height: 0; }
         .booking-reveal .booking-section { max-width: 1500px; margin: 0 auto; border: none; border-radius: 22px; background: #F8F5EF; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06); padding: 2rem 2.2rem; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.2rem; align-items: center; transform: translateY(18px); transition: transform .7s cubic-bezier(.22,1,.36,1); }
         .booking-reveal.open .booking-section { transform: none; }
+        /* Step 1: details only, centered. Step 2 (after submit): calendar opens full-screen. */
+        .booking-reveal .booking-section { grid-template-columns: minmax(0, 620px); justify-content: center; transition: transform .7s cubic-bezier(.22,1,.36,1); }
+        .booking-reveal .booking-info-col { order: 1; }
+        .booking-reveal .booking-cal-col { display: none; }
+        .booking-cal-col.cal-fullscreen { display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100vh; height: 100dvh; z-index: 2147483000; background: #F4F0E8; animation: calFullIn .45s cubic-bezier(.22,1,.36,1) both; }
+        @keyframes calFullIn { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
+        .cal-fs-header { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1.6rem; background: #F8F5EF; border-bottom: 1px solid #DDD7CC; }
+        .cal-fs-title { margin: 0; font-size: .85rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: #3A3835; }
+        .cal-fs-sub { display: block; margin-top: .15rem; font-size: .74rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: #6B675F; }
+        .cal-fs-close { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid #D8D1C3; background: #fff; color: #2B2926; font: inherit; font-size: .78rem; font-weight: 700; padding: .55rem 1rem; border-radius: 999px; cursor: pointer; transition: background .2s, transform .2s; }
+        .cal-fs-close:hover { background: #F0EBE0; transform: translateY(-1px); }
+        .booking-cal-col.cal-fullscreen .booking-calendar { flex: 1 1 auto; display: flex; flex-direction: column; max-width: 1100px; width: 100%; margin: 1.2rem auto; border-radius: 14px; min-height: 0; background: #fff; }
+        .booking-cal-col.cal-fullscreen .booking-calendar iframe { flex: 1 1 auto; width: 100%; height: 100%; min-height: 0; border: 0; }
+        @media (max-width: 768px) {
+            .cal-fs-header { padding: calc(.7rem + env(safe-area-inset-top, 0px)) 1rem .7rem; }
+            .cal-fs-title { font-size: .74rem; letter-spacing: .1em; }
+            .cal-fs-sub { font-size: .68rem; }
+            .cal-fs-close { padding: .5rem .85rem; white-space: nowrap; }
+            .booking-cal-col.cal-fullscreen .booking-calendar { margin: 0; border-radius: 0; border: none; max-width: none; padding-bottom: env(safe-area-inset-bottom, 0px); }
+        }
+        .booking-steps { display: flex; align-items: center; gap: .6rem; margin-bottom: .2rem; }
+        .booking-steps .step { display: inline-flex; align-items: center; gap: .45rem; font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9A958B; transition: color .3s; }
+        .booking-steps .step b { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #C9C2B4; display: inline-flex; align-items: center; justify-content: center; font-size: .66rem; transition: all .3s; }
+        .booking-steps .step.active { color: #2B2926; }
+        .booking-steps .step.active b { background: linear-gradient(135deg, #7F9283 0%, #C29B68 100%); border-color: transparent; color: #fff; }
+        .booking-steps .step.done { color: #5E7A63; }
+        .booking-steps .step.done b { background: #5E7A63; border-color: transparent; color: #fff; }
+        .booking-steps .sep { flex: 0 0 28px; height: 1.5px; background: #D8D1C3; }
         .booking-reveal .booking-calendar { max-width: 100%; margin: 0; }
         .booking-reveal .booking-calendar iframe { height: 600px; }
         .booking-info-col { display: flex; flex-direction: column; gap: 1.1rem; min-width: 0; }
@@ -967,7 +995,7 @@
         .call-num { flex: 0 0 28px; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #7F9283 0%, #C29B68 100%); color: #fff; font-size: .8rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
         .call-points h3 { margin: 0 0 .2rem; font-size: .88rem; font-weight: 700; color: #2B2926; line-height: 1.3; }
         .call-points p { margin: 0; font-size: .76rem; line-height: 1.5; color: #55524D; }
-        @media (max-width: 1280px) { .booking-reveal .booking-section { grid-template-columns: 1fr; padding: 1.6rem 1.4rem; } }
+        @media (max-width: 1280px) { .booking-reveal .booking-section { padding: 1.6rem 1.4rem; } .booking-reveal .booking-section.calendar-open { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { .booking-reveal .booking-section { padding: 1.2rem .9rem; border-radius: 16px; } .booking-reveal .booking-calendar iframe { height: 640px; } .booking-reveal .booking-form .form-row { flex-direction: column; } }
         @media (prefers-reduced-motion: reduce) { .booking-reveal, .booking-reveal .booking-section { transition: none; } }
     </style>
@@ -1035,7 +1063,7 @@
                             <ul class="bullet-list">
                                 <li><strong class="bullet-title">A Distinctive S.A.M. Experience</strong>Sound, Aroma, and Magnetic technology combine in a guided 20-minute mind-body wellness experience.</li>
                                 <li><strong class="bullet-title">Simple to Integrate</strong>Minimal staff involvement, a compact station, and an experience designed to complement your existing services.</li>
-                                <li><strong class="bullet-title">A New Wellness Opportunity</strong>Offer clients a dedicated 20-minute experience designed to help them reset the mind and recharge the body.</li>
+                                <li><strong class="bullet-title">A New Wellness Opportunity</strong>Offer clients a dedicated 20-minute experience designed to help them quiet the mind and recharge the body.</li>
                             </ul>
 
 
@@ -1101,6 +1129,10 @@
               <div class="booking-reveal-inner">
                 <section class="booking-section" id="book-a-call">
                     <div class="booking-cal-col">
+                        <div class="cal-fs-header">
+                            <h2 class="cal-fs-title">Choose Your Discovery Call Time<span class="cal-fs-sub">Step 2 of 2 &mdash; your details are already filled in.</span></h2>
+                            <button type="button" class="cal-fs-close" id="calCloseBtn" aria-label="Close calendar">&larr; Back</button>
+                        </div>
                         <div class="booking-calendar">
                             <iframe id="visioncontrol-calendar-iframe"
                                 src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
@@ -1109,6 +1141,7 @@
                         </div>
                     </div>
                     <div class="booking-info-col">
+                        <div class="booking-steps" aria-label="Booking progress"><span class="step active" data-step="1"><b>1</b>Your details</span><span class="sep"></span><span class="step" data-step="2"><b>2</b>Pick a time</span></div>
                         <h2 class="booking-title">Book Your Discovery Call</h2>
                         <ol class="call-points">
                             <li><span class="call-num">1</span><div><h3>Explore Your Revenue Potential</h3><p>Discuss the opportunity based on your customer volume, business goals, and ROI assumptions.</p></div></li>
@@ -1268,6 +1301,39 @@
                 });
             }
 
+        // Full-screen calendar overlay controls
+        const calSectionEl = document.getElementById('book-a-call');
+        const calColEl = calSectionEl ? calSectionEl.querySelector('.booking-cal-col') : null;
+        window.__openCalendar = function () {
+            if (!calSectionEl || !calColEl) return;
+            calSectionEl.classList.add('calendar-open');
+            document.body.appendChild(calColEl);
+            calColEl.classList.add('cal-fullscreen');
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+            const c = document.getElementById('calCloseBtn');
+            if (c) c.focus({ preventScroll: true });
+        };
+        window.__closeCalendar = function () {
+            if (!calSectionEl || !calColEl) return;
+            calColEl.classList.remove('cal-fullscreen');
+            calSectionEl.insertBefore(calColEl, calSectionEl.firstChild);
+            calSectionEl.classList.remove('calendar-open');
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+            const b = document.getElementById('submitBtn');
+            if (b && window.__leadSubmitted) {
+                b.disabled = false;
+                b.innerHTML = 'Reopen Calendar';
+            }
+        };
+        document.addEventListener('click', function (ev) {
+            if (ev.target.closest && ev.target.closest('#calCloseBtn')) window.__closeCalendar();
+        });
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape' && calSectionEl && calSectionEl.classList.contains('calendar-open')) window.__closeCalendar();
+        });
+
         document.getElementById('leadForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
@@ -1278,6 +1344,9 @@
             }
 
             const btn = document.getElementById('submitBtn');
+
+            // Details already submitted: just reopen the full-screen calendar
+            if (window.__leadSubmitted) { window.__openCalendar(); return; }
             const origContent = btn ? btn.innerHTML : '';
 
             // Show active loading state with spinner
@@ -1355,8 +1424,13 @@
                         if (phone) calUrl.searchParams.set('phone', phone);
                         if (company) calUrl.searchParams.set('company_name', company);
                         cal.src = calUrl.toString();
-                        const calBox = cal.closest('.booking-calendar') || cal;
-                        calBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Open the calendar full-screen now that details are in (step 2)
+                        window.__leadSubmitted = true;
+                        const s1 = document.querySelector('.booking-steps [data-step="1"]');
+                        const s2 = document.querySelector('.booking-steps [data-step="2"]');
+                        if (s1) { s1.classList.remove('active'); s1.classList.add('done'); }
+                        if (s2) s2.classList.add('active');
+                        window.__openCalendar();
                     }
                 } catch (prefillErr) {
                     console.error('Calendar prefill failed:', prefillErr);
@@ -1367,7 +1441,7 @@
                     btn.disabled = true;
                     btn.style.opacity = '1';
                     btn.style.background = 'linear-gradient(135deg, #10b981 0%, #7A8776 100%)';
-                    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Thanks! Now pick a time on the calendar.</span>';
+                    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Details received &mdash; choose your time</span>';
                 }
 
             } catch (error) {
@@ -1382,6 +1456,93 @@
                 alert("There was an issue submitting. Please try again.");
             }
         });
+
+        // ---- Two-way details sync between the lead form and the Vision Control calendar ----
+        (function syncCalendarDetails() {
+            const cal = document.getElementById('visioncontrol-calendar-iframe');
+            const fields = {
+                first_name: document.getElementById('first-name'),
+                last_name: document.getElementById('last-name'),
+                company: document.getElementById('company'),
+                email: document.getElementById('email'),
+                phone: document.getElementById('phone')
+            };
+            if (!cal || !fields.first_name) return;
+            const STORE_KEY = 'solrevibe_lead_details';
+            const baseSrc = cal.getAttribute('src');
+
+            const toE164 = (p) => {
+                const d = (p || '').replace(/[^\d+]/g, '');
+                if (!d) return '';
+                if (d.startsWith('+')) return d;
+                if (d.length === 10) return '+1' + d;
+                if (d.length === 11 && d.startsWith('1')) return '+' + d;
+                return d;
+            };
+            const read = () => {
+                const v = {};
+                Object.keys(fields).forEach(k => { v[k] = (fields[k].value || '').trim(); });
+                return v;
+            };
+            const save = (v) => { try { localStorage.setItem(STORE_KEY, JSON.stringify(v)); } catch (e) {} };
+            const fill = (v) => {
+                Object.keys(fields).forEach(k => {
+                    if (v[k] && !fields[k].value) fields[k].value = v[k];
+                });
+            };
+
+            let lastSrc = null;
+            const pushToCalendar = () => {
+                const v = read();
+                save(v);
+                if (!v.first_name && !v.last_name && !v.email && !v.phone) return;
+                const u = new URL(baseSrc, window.location.href);
+                if (v.first_name) u.searchParams.set('first_name', v.first_name);
+                if (v.last_name) u.searchParams.set('last_name', v.last_name);
+                if (v.email) u.searchParams.set('email', v.email);
+                const ph = toE164(v.phone);
+                if (ph) u.searchParams.set('phone', ph);
+                if (v.company) u.searchParams.set('company_name', v.company);
+                const next = u.toString();
+                if (next === lastSrc) return;
+                lastSrc = next;
+                cal.src = next; // reloads the widget (resets any slot already picked)
+            };
+
+            // Restore previously saved details into the form, then the calendar
+            try { fill(JSON.parse(localStorage.getItem(STORE_KEY) || '{}')); } catch (e) {}
+            pushToCalendar();
+
+            // Live sync: push to the calendar ~0.9s after the visitor stops typing (and on blur)
+            let typingTimer = null;
+            Object.keys(fields).forEach(k => {
+                fields[k].addEventListener('input', () => {
+                    clearTimeout(typingTimer);
+                    typingTimer = setTimeout(pushToCalendar, 900);
+                });
+                fields[k].addEventListener('change', () => { clearTimeout(typingTimer); pushToCalendar(); });
+            });
+
+            // Calendar -> form: fill the form from any contact details the widget posts back
+            window.addEventListener('message', (e) => {
+                if (!/visioncontrol\.io|leadconnectorhq\.com|msgsndr\.com/.test(e.origin)) return;
+                let data = e.data;
+                try { if (typeof data === 'string') data = JSON.parse(data); } catch (err) {}
+                const payload = Array.isArray(data) ? data[1] : data;
+                if (!payload || typeof payload !== 'object') return;
+                const c = payload.contact || payload;
+                const incoming = {
+                    first_name: c.first_name || c.firstName || '',
+                    last_name: c.last_name || c.lastName || '',
+                    email: c.email || '',
+                    phone: c.phone || '',
+                    company: c.company_name || c.companyName || ''
+                };
+                if (!Object.values(incoming).some(Boolean)) return;
+                fill(incoming);
+                save(read());
+            });
+        })();
     }
 
     if (document.readyState === 'loading') {
