@@ -264,6 +264,17 @@ footer b { color: #2B2926 !important; }
 .resume-note { color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
 @keyframes resumePulse { 0%, 100% { box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 0 0 rgba(194,155,104,.6); } 50% { box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 0 14px rgba(194,155,104,0); } }
 @media (prefers-reduced-motion: reduce) { .resume-overlay.show .resume-btn { animation: none; } }
+/* End-of-video exit callout pointing at the close (×) button */
+.exit-hint { position: absolute; top: 62px; right: 12px; z-index: 3; width: max-content; max-width: min(300px, calc(100% - 24px)); padding: 13px 16px; border-radius: 14px; background: #FBF9F5; color: #2B2926; border: 1px solid #E6E1D7; box-shadow: 0 12px 32px rgba(40,32,24,.28); font-family: 'Plus Jakarta Sans', sans-serif; font-size: .9rem; line-height: 1.45; pointer-events: none; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .3s ease, transform .3s ease, visibility .3s ease; }
+.exit-hint.show { opacity: 1; visibility: visible; transform: none; animation: hintNudge 1.8s ease-in-out .4s infinite; }
+.exit-hint::before { content: ""; position: absolute; top: -8px; right: 13px; width: 14px; height: 14px; background: #FBF9F5; border-left: 1px solid #E6E1D7; border-top: 1px solid #E6E1D7; transform: rotate(45deg); }
+.exit-hint strong { display: block; color: #B88E5A; font-weight: 700; margin-bottom: 2px; }
+.exit-hint .x-chip { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #F8F5EF; border: 1px solid #D9D4CA; font-size: .68rem; font-weight: 700; line-height: 1; vertical-align: -4px; margin: 0 1px; }
+@keyframes hintNudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.close.attn { animation: closePulse 1.6s ease-out infinite; }
+@keyframes closePulse { 0% { box-shadow: 0 0 0 0 rgba(194,155,104,.75); } 70% { box-shadow: 0 0 0 14px rgba(194,155,104,0); } 100% { box-shadow: 0 0 0 0 rgba(194,155,104,0); } }
+@media (prefers-reduced-motion: reduce) { .exit-hint.show, .close.attn { animation: none; } }
+@media (max-width: 600px) { .exit-hint { top: 58px; padding: 10px 13px; font-size: .8rem; max-width: min(260px, calc(100% - 24px)); } }
 @media (max-width: 900px) {
   .page-deco { display: none; }
   .featured { grid-template-columns: 1fr !important; min-height: auto !important; }
@@ -335,6 +346,7 @@ footer b { color: #2B2926 !important; }
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" aria-hidden="true">
   <div class="m-box">
     <button class="close" id="close" type="button" aria-label="Close video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="exit-hint" id="exitHint" role="status" aria-live="polite" aria-hidden="true"><strong>Finished watching?</strong>Click the &ldquo;<span class="x-chip" aria-hidden="true">&#10005;</span><span class="sr-only">X</span>&rdquo; button here to return to the main page and continue.</div>
     <div class="player"><iframe id="player" title="Vimeo video player" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
       <div class="resume-overlay" id="resumeOverlay" aria-hidden="true">
         <button type="button" class="resume-btn" id="resumeBtn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>Play Again</button>
@@ -368,6 +380,7 @@ footer b { color: #2B2926 !important; }
       featured: true,
       hideFromGrid: true,
       pausePoints: [81, 141], // auto-pause: 1:21 (Step 1 -> 2) and 2:21 (Step 2 -> 3)
+      exitHint: true,         // show "Finished watching? Click the X" callout near the end
       hue: [280, 180],
       tags: ["instructional", "walkthrough", "guide", "orientation", "how to"],
       thumb: "https://i.vimeocdn.com/video/2217065735-cda1ac1d773b62bab01586d778ed3ae55ab40207801aa545c7134b87d5c22b24-d_640x360",
@@ -539,28 +552,48 @@ footer b { color: #2B2926 !important; }
     resumeOverlay.classList.remove("show"); resumeOverlay.setAttribute("aria-hidden", "true");
   }
   resumeBtn.addEventListener("click", () => { hideResume(); vimeoCmd("play"); $("close").focus({ preventScroll: true }); });
+  // End-of-video exit callout (points at the × button)
+  const exitHint = $("exitHint"), EXIT_HINT_SECONDS = 5;
+  function showExitHint(){
+    if (!pauser.exitHint || exitHint.classList.contains("show")) return;
+    exitHint.classList.add("show"); exitHint.setAttribute("aria-hidden", "false");
+    $("close").classList.add("attn");
+  }
+  function hideExitHint(){
+    exitHint.classList.remove("show"); exitHint.setAttribute("aria-hidden", "true");
+    $("close").classList.remove("attn");
+  }
   function armPauses(v){
     pauser.points = (v && v.pausePoints) ? v.pausePoints.slice().sort((a,b) => a-b) : [];
+    pauser.exitHint = !!(v && v.exitHint);
     pauser.fired = {}; pauser.last = 0;
-    hideResume();
+    hideResume(); hideExitHint();
   }
+  const tracking = () => pauser.points.length > 0 || pauser.exitHint;
   function listenVimeo(){
-    if (!pauser.points.length) return;
+    if (!tracking()) return;
     // Vimeo's postMessage API uses legacy names (playProgress/seek/finish); register both naming schemes
     ["timeupdate", "playProgress", "seeked", "seek", "ended", "finish", "play"].forEach(ev => vimeoCmd("addEventListener", ev));
   }
   player.addEventListener("load", listenVimeo);
   window.addEventListener("message", e => {
-    if (e.origin !== VIMEO_ORIGIN || e.source !== player.contentWindow || !pauser.points.length) return;
+    if (e.origin !== VIMEO_ORIGIN || e.source !== player.contentWindow || !tracking()) return;
     let d = e.data;
     if (typeof d === "string") { try { d = JSON.parse(d); } catch(_) { return; } }
     if (!d || !d.event) return;
     if (d.event === "ready") { listenVimeo(); return; }
     const ev = { playProgress: "timeupdate", seek: "seeked", finish: "ended" }[d.event] || d.event;
     if (ev === "play") { hideResume(); return; }                           // resumed via the player's own controls
-    if (ev === "ended") { pauser.fired = {}; pauser.last = 0; hideResume(); return; }   // replay -> pauses work again
+    if (ev === "ended") { pauser.fired = {}; pauser.last = 0; hideResume(); showExitHint(); return; }   // replay -> pauses work again
     const t = d.data && typeof d.data.seconds === "number" ? d.data.seconds : null;
     if (t === null) return;
+    // Exit callout: show in the final seconds, hide again if the viewer rewinds
+    const dur = d.data && typeof d.data.duration === "number" ? d.data.duration : 0;
+    if (dur > 0) {
+      const left = dur - t;
+      if (left <= EXIT_HINT_SECONDS && t > 0) showExitHint();
+      else if (left > EXIT_HINT_SECONDS + 2) hideExitHint();
+    }
     // Re-arm any pause point that is ahead of the playhead (restart or seek back)
     pauser.points.forEach(p => { if (t < p - 0.5) pauser.fired[p] = false; });
     if (ev === "seeked") {                                                  // manual seeks never trigger a pause
@@ -595,11 +628,13 @@ footer b { color: #2B2926 !important; }
   }
   function closeModal(){
     if(!modal.classList.contains("open")) return;
+    const backToTags = pauser.exitHint;                                      // instructional video -> land back on the main TAGs page
     modal.classList.remove("open"); modal.setAttribute("aria-hidden","true");
     document.body.classList.remove("modal-open");
     armPauses(null);
     player.src = "about:blank"; player.removeAttribute("src"); // stop audio
-    if(lastFocus) lastFocus.focus();
+    if(lastFocus) lastFocus.focus({ preventScroll: backToTags });
+    if (backToTags) window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   search.addEventListener("input", () => { state.query = search.value; render(); });
