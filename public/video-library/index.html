@@ -518,7 +518,8 @@ footer b { color: #2B2926 !important; }
   }
   function listenVimeo(){
     if (!pauser.points.length) return;
-    ["timeupdate", "seeked", "ended"].forEach(ev => vimeoCmd("addEventListener", ev));
+    // Vimeo's postMessage API uses legacy names (playProgress/seek/finish); register both naming schemes
+    ["timeupdate", "playProgress", "seeked", "seek", "ended", "finish"].forEach(ev => vimeoCmd("addEventListener", ev));
   }
   player.addEventListener("load", listenVimeo);
   window.addEventListener("message", e => {
@@ -527,13 +528,14 @@ footer b { color: #2B2926 !important; }
     if (typeof d === "string") { try { d = JSON.parse(d); } catch(_) { return; } }
     if (!d || !d.event) return;
     if (d.event === "ready") { listenVimeo(); return; }
-    if (d.event === "ended") { pauser.fired = {}; pauser.last = 0; return; }   // replay -> pauses work again
+    const ev = { playProgress: "timeupdate", seek: "seeked", finish: "ended" }[d.event] || d.event;
+    if (ev === "ended") { pauser.fired = {}; pauser.last = 0; return; }   // replay -> pauses work again
     const t = d.data && typeof d.data.seconds === "number" ? d.data.seconds : null;
     if (t === null) return;
     // Re-arm any pause point that is ahead of the playhead (restart or seek back)
     pauser.points.forEach(p => { if (t < p - 0.5) pauser.fired[p] = false; });
-    if (d.event === "seeked") { pauser.last = t; return; }                 // manual seeks never trigger a pause
-    if (d.event !== "timeupdate") return;
+    if (ev === "seeked") { pauser.last = t; return; }                       // manual seeks never trigger a pause
+    if (ev !== "timeupdate") return;
     // Only pause when normal playback crosses the point (not when the user jumps past it)
     const hit = pauser.points.find(p => !pauser.fired[p] && pauser.last < p && t >= p && t - pauser.last < 3);
     pauser.last = t;
