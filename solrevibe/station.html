@@ -486,12 +486,11 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
             <div class="waiver-head">
                 <div class="tag-row"><span class="tag gold">Step 2 &bull; Waiver</span></div>
                 <h2 class="ct" id="waiverTitle" tabindex="-1">Complete Your Waiver</h2>
-                <p class="sub">Fill out and submit the waiver below, then tap Continue.</p>
+                <p class="sub">Fill out and submit the waiver below. Once it&rsquo;s submitted, you&rsquo;ll be taken to the Therapeutic Audio Guides (TAGs).</p>
             </div>
             <div id="custWaiver" style="margin-bottom:14px"></div>
             <div class="waiver-wrap" id="waiverMount"></div>
             <div class="waiver-actions">
-                <button type="button" class="btn" id="waiverDoneBtn">I&rsquo;ve submitted my waiver &mdash; Continue</button>
                 <button type="button" class="link-btn" id="waiverBack">&uarr; Back to top</button>
             </div>
         </div>
@@ -729,19 +728,19 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
         $('waiverBack').addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
         $('notAtStation').addEventListener('click', function () { window.location.href = 'experience.html'; });
 
-        // ---- waiver done -> how-to video ----
+        // ---- waiver submitted -> Therapeutic Audio Guides (TAGs) page ----
+        var TAGS_URL = 'video-library/index.html';
+        var redirecting = false;
         function waiverDone() {
-            closeWaiver();
-            mountVideo($('orientationVideo'), VIDEOS.orientation);
-            show('p-howto');
-            setTimeout(function () { $('howtoTitle').focus({ preventScroll: true }); }, 100);
+            if (redirecting) return;
+            redirecting = true;
+            window.location.href = TAGS_URL;
         }
-        $('waiverDoneBtn').addEventListener('click', waiverDone);
-        // Auto-advance if the form provider reports a submission
+        // Redirect as soon as the form provider reports a submission
         window.addEventListener('message', function (e) {
-            if (!/visioncontrol\.io|leadconnectorhq\.com/.test(e.origin || '')) return;
+            if (!/visioncontrol\.io|leadconnectorhq\.com|msgsndr\.com/.test(e.origin || '')) return;
             var d = e.data, txt = typeof d === 'string' ? d : JSON.stringify(d || '');
-            if (/form[_-]?submitted|submitted successfully|"formSubmit/i.test(txt) && !$('waiverSection').hidden) waiverDone();
+            if (/form[_-]?submitted|submitted successfully|"formSubmit|set-sticky-contacts/i.test(txt) && !$('waiverSection').hidden) waiverDone();
         });
 
         // ---- session ----
