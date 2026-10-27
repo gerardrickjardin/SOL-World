@@ -352,6 +352,7 @@ footer b { color: #2B2926 !important; }
       views: 24,
       featured: true,
       hideFromGrid: true,
+      pausePoints: [81, 141], // auto-pause: 1:21 (Step 1 -> 2) and 2:21 (Step 2 -> 3)
       hue: [280, 180],
       tags: ["instructional", "walkthrough", "guide", "orientation", "how to"],
       thumb: "https://i.vimeocdn.com/video/2217065735-cda1ac1d773b62bab01586d778ed3ae55ab40207801aa545c7134b87d5c22b24-d_640x360",
@@ -504,12 +505,53 @@ footer b { color: #2B2926 !important; }
 
   const update = () => { renderNav(); render(); };
 
+  // ---- Auto-pause points (e.g. between instructional steps) via the Vimeo player postMessage API ----
+  const VIMEO_ORIGIN = "https://player.vimeo.com";
+  const pauser = { points: [], fired: {}, last: 0 };
+  function vimeoCmd(method, value){
+    if (!player.contentWindow) return;
+    player.contentWindow.postMessage(JSON.stringify(value === undefined ? {method} : {method, value}), VIMEO_ORIGIN);
+  }
+  function armPauses(v){
+    pauser.points = (v && v.pausePoints) ? v.pausePoints.slice().sort((a,b) => a-b) : [];
+    pauser.fired = {}; pauser.last = 0;
+  }
+  function listenVimeo(){
+    if (!pauser.points.length) return;
+    ["timeupdate", "seeked", "ended"].forEach(ev => vimeoCmd("addEventListener", ev));
+  }
+  player.addEventListener("load", listenVimeo);
+  window.addEventListener("message", e => {
+    if (e.origin !== VIMEO_ORIGIN || e.source !== player.contentWindow || !pauser.points.length) return;
+    let d = e.data;
+    if (typeof d === "string") { try { d = JSON.parse(d); } catch(_) { return; } }
+    if (!d || !d.event) return;
+    if (d.event === "ready") { listenVimeo(); return; }
+    if (d.event === "ended") { pauser.fired = {}; pauser.last = 0; return; }   // replay -> pauses work again
+    const t = d.data && typeof d.data.seconds === "number" ? d.data.seconds : null;
+    if (t === null) return;
+    // Re-arm any pause point that is ahead of the playhead (restart or seek back)
+    pauser.points.forEach(p => { if (t < p - 0.5) pauser.fired[p] = false; });
+    if (d.event === "seeked") { pauser.last = t; return; }                 // manual seeks never trigger a pause
+    if (d.event !== "timeupdate") return;
+    // Only pause when normal playback crosses the point (not when the user jumps past it)
+    const hit = pauser.points.find(p => !pauser.fired[p] && pauser.last < p && t >= p && t - pauser.last < 3);
+    pauser.last = t;
+    if (hit !== undefined) {
+      pauser.fired[hit] = true;                                              // once per playback cycle
+      vimeoCmd("pause");
+      vimeoCmd("setCurrentTime", hit);                                       // hold exactly on the mark; Play resumes from here
+      pauser.last = hit;
+    }
+  });
+
   function openModal(v){
     if(!v) return;
     countView(v);
     lastFocus = document.activeElement;
     $("m-title").textContent = v.title;
     $("m-desc").textContent = `${v.category} · ${v.duration} · ${fmtViews(v.views)}`;
+    armPauses(v);
     player.src = `https://player.vimeo.com/video/${v.vimeoId}?autoplay=1`;
     modal.classList.add("open"); modal.setAttribute("aria-hidden","false");
     document.body.classList.add("modal-open");
@@ -519,6 +561,7 @@ footer b { color: #2B2926 !important; }
     if(!modal.classList.contains("open")) return;
     modal.classList.remove("open"); modal.setAttribute("aria-hidden","true");
     document.body.classList.remove("modal-open");
+    armPauses(null);
     player.src = "about:blank"; player.removeAttribute("src"); // stop audio
     if(lastFocus) lastFocus.focus();
   }
