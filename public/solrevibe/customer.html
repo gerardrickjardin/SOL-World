@@ -101,13 +101,21 @@
         .site-container {
             position: relative;
             z-index: 1;
-            max-width: 1440px;
+            max-width: 1560px;
+            width: 95%;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1.5rem;
+        }
+
+        @media (min-width: 1720px) {
+            .site-container {
+                max-width: 1680px;
+            }
         }
 
         @media (max-width: 768px) {
             .site-container {
+                width: 100%;
                 padding: 0 1.25rem;
             }
         }
@@ -302,20 +310,20 @@
 
         /* ================= HERO SECTION (TOP FOLD) ================= */
         .customer-hero {
-            padding: 2.75rem 0 2rem;
+            padding: 2.25rem 0 2rem;
             position: relative;
         }
 
         .hero-top-grid {
             display: grid;
-            grid-template-columns: 275px minmax(360px, 1fr) 530px;
-            gap: 2rem;
-            align-items: start;
+            grid-template-columns: 310px minmax(420px, 1.25fr) minmax(500px, 1.2fr);
+            gap: 1.85rem;
+            align-items: stretch;
         }
 
-        @media (max-width: 1320px) {
+        @media (max-width: 1380px) {
             .hero-top-grid {
-                grid-template-columns: 240px 1fr 490px;
+                grid-template-columns: 280px minmax(360px, 1.15fr) minmax(470px, 1.15fr);
                 gap: 1.5rem;
             }
         }
@@ -324,21 +332,30 @@
             .hero-top-grid {
                 grid-template-columns: 1fr;
                 gap: 2.5rem;
+                align-items: start;
             }
         }
 
-        /* Left Hero Column: Headline & Feature Badges */
+        /* Left Hero Column: Headline, Feature Cards & Reassurance */
         .hero-left-col {
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
+            justify-content: space-between;
+            height: 100%;
+            gap: 1.35rem;
             padding-top: 0.25rem;
+        }
+
+        .hero-left-top {
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
         }
 
         .hero-main-title {
             font-family: 'Playfair Display', Georgia, serif;
-            font-size: 3rem;
-            line-height: 1.1;
+            font-size: 2.9rem;
+            line-height: 1.08;
             font-weight: 600;
             color: var(--text-dark);
             letter-spacing: -0.02em;
@@ -350,7 +367,7 @@
         }
 
         .hero-subheadline {
-            font-size: 0.94rem;
+            font-size: 0.92rem;
             line-height: 1.55;
             color: var(--text-muted);
             font-weight: 400;
@@ -359,8 +376,8 @@
         .benefit-pills-list {
             display: flex;
             flex-direction: column;
-            gap: 0.65rem;
-            margin-top: 0.35rem;
+            gap: 0.6rem;
+            margin-top: 0.15rem;
         }
 
         @media (max-width: 1100px) {
@@ -371,28 +388,57 @@
         }
 
         .benefit-pill {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 0.75rem;
-            background: rgba(255, 255, 255, 0.85);
+            gap: 0.85rem;
+            background: rgba(255, 255, 255, 0.92);
             border: 1px solid var(--border-medium);
-            border-radius: var(--radius-pill);
-            padding: 0.52rem 1.15rem;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.74rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            color: var(--text-dark);
-            text-transform: uppercase;
+            border-radius: var(--radius-sm);
+            padding: 0.55rem 0.9rem;
             backdrop-filter: blur(10px);
             transition: var(--transition);
             box-shadow: 0 2px 8px rgba(30, 26, 22, 0.03);
-            width: fit-content;
+            width: 100%;
         }
 
-        .benefit-pill i {
-            font-size: 0.88rem;
+        .benefit-pill-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(194, 155, 104, 0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--brand-gold-dark);
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .benefit-pill:hover .benefit-pill-icon {
+            background: var(--brand-gold);
+            color: #FFFFFF;
+        }
+
+        .benefit-pill-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+        }
+
+        .benefit-pill-text strong {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: var(--text-dark);
+            text-transform: uppercase;
+        }
+
+        .benefit-pill-text span {
+            font-size: 0.71rem;
+            color: var(--text-light);
+            font-weight: 500;
         }
 
         .benefit-pill:hover {
@@ -402,66 +448,188 @@
             box-shadow: 0 4px 14px rgba(194, 155, 104, 0.16);
         }
 
-        /* Center Hero Column: Station Photo */
+        /* Hero Left Reassurance & Trust Card (Eliminates bottom void) */
+        .hero-left-reassurance {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 245, 240, 0.94) 100%);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.15rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            position: relative;
+        }
+
+        .reassurance-stars {
+            display: flex;
+            align-items: center;
+            gap: 0.22rem;
+            color: var(--brand-gold);
+            font-size: 0.72rem;
+        }
+
+        .reassurance-stars span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-left: 0.35rem;
+        }
+
+        .reassurance-quote {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: var(--text-dark);
+            line-height: 1.42;
+        }
+
+        .reassurance-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-light);
+            padding-top: 0.5rem;
+            font-size: 0.69rem;
+            color: var(--text-light);
+        }
+
+        .reassurance-footer strong {
+            color: var(--brand-forest);
+            font-weight: 700;
+        }
+
+        .reassurance-guarantee {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--brand-sage-dark);
+            font-weight: 700;
+        }
+
+        /* Center Hero Column: Station Photo (Full Height, No Void) */
         .hero-center-col {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            height: 100%;
             position: relative;
         }
 
         .hero-photo-frame {
             position: relative;
             width: 100%;
+            height: 100%;
+            min-height: 540px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: var(--shadow-card);
-            border: 1px solid rgba(220, 213, 201, 0.8);
-            background: #FFFFFF;
+            box-shadow: 0 16px 36px rgba(34, 55, 43, 0.12);
+            border: 1px solid rgba(220, 213, 201, 0.85);
+            background: #EAE6DF;
         }
 
         .hero-main-photo {
             width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 10;
+            height: 100%;
+            flex: 1;
+            min-height: 540px;
             object-fit: cover;
+            object-position: center 32%;
             display: block;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .hero-photo-frame:hover .hero-main-photo {
-            transform: scale(1.02);
+            transform: scale(1.025);
+        }
+
+        .hero-photo-frame::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 110px;
+            background: linear-gradient(to top, rgba(16, 28, 21, 0.62) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .photo-floating-pill-top {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: var(--brand-forest);
+            padding: 0.38rem 0.85rem;
+            border-radius: var(--radius-pill);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.66rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.7);
+            z-index: 2;
+        }
+
+        .photo-floating-pill-top i {
+            color: var(--brand-terracotta);
+            font-size: 0.72rem;
         }
 
         .photo-floating-badge {
             position: absolute;
             bottom: 14px;
             left: 14px;
+            right: 14px;
             background: rgba(20, 36, 27, 0.88);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             color: #FFFFFF;
-            padding: 0.45rem 1rem;
+            padding: 0.5rem 1rem;
             border-radius: var(--radius-pill);
             font-family: 'Outfit', sans-serif;
             font-size: 0.72rem;
             font-weight: 700;
-            letter-spacing: 0.07em;
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.18);
+            z-index: 2;
+        }
+
+        .photo-floating-badge-left {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.22);
-            border: 1px solid rgba(255,255,255,0.12);
         }
 
         .photo-floating-badge span.dot {
-            width: 7px;
-            height: 7px;
+            width: 8px;
+            height: 8px;
             background: #50E3C2;
             border-radius: 50%;
             box-shadow: 0 0 10px #50E3C2;
             animation: pulseDot 2s infinite;
+        }
+
+        .photo-floating-badge-tag {
+            font-size: 0.64rem;
+            color: var(--brand-gold-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 800;
         }
 
         @keyframes pulseDot {
@@ -702,27 +870,52 @@
         /* $29.95 Take-Home Audio Library Membership Callout */
         .audio-sub-callout {
             background: #FFFFFF;
-            border: 1px dashed var(--brand-gold);
+            border: 1.5px dashed var(--brand-gold);
             border-radius: var(--radius-sm);
-            padding: 0.8rem 1.15rem;
+            padding: 0.85rem 1.15rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-            margin-top: 0.85rem;
+            margin-top: 0.75rem;
             box-shadow: var(--shadow-subtle);
+            transition: var(--transition);
+        }
+
+        .audio-sub-callout:hover {
+            border-color: var(--brand-terracotta);
+            background: #FAF8F4;
+        }
+
+        .audio-sub-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .audio-sub-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(185, 111, 75, 0.12);
+            color: var(--brand-terracotta);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
         }
 
         .audio-sub-text {
-            font-size: 0.77rem;
+            font-size: 0.76rem;
             color: var(--text-dark);
-            line-height: 1.4;
+            line-height: 1.38;
         }
 
         .audio-sub-text strong {
             color: var(--brand-terracotta);
             font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
         }
 
         .audio-sub-badge {
@@ -731,18 +924,19 @@
             font-family: 'Outfit', sans-serif;
             font-size: 0.65rem;
             font-weight: 800;
-            padding: 0.25rem 0.75rem;
+            padding: 0.3rem 0.8rem;
             border-radius: var(--radius-pill);
             white-space: nowrap;
             letter-spacing: 0.08em;
             text-transform: uppercase;
+            border: 1px solid rgba(194, 155, 104, 0.35);
         }
 
         /* ================= THE S.A.M. PROTOCOL AT HOME ================= */
         .sam-section {
-            padding: 3.25rem 0 2rem;
+            padding: 2.75rem 0 2rem;
             border-top: 1px solid var(--border-medium);
-            margin-top: 1.5rem;
+            margin-top: 1.75rem;
         }
 
         .section-header-center {
@@ -1972,44 +2166,89 @@
             <div class="site-container">
                 <div class="hero-top-grid">
                     
-                    <!-- Left Column: Headline & Benefit Badges -->
+                    <!-- Left Column: Headline, Benefit Cards & Reassurance (Full Height) -->
                     <div class="hero-left-col">
-                        <h1 class="hero-main-title">
-                            Take the<br>Experience<br>Home.
-                        </h1>
-                        <p class="hero-subheadline">
-                            The same calming, restorative experience you enjoyed — now in your own space.
-                        </p>
+                        <div class="hero-left-top">
+                            <h1 class="hero-main-title">
+                                Take the<br>Experience<br>Home.
+                            </h1>
+                            <p class="hero-subheadline">
+                                The same calming, restorative experience you enjoyed — now in your own space.
+                            </p>
 
-                        <div class="benefit-pills-list">
-                            <div class="benefit-pill">
-                                <i class="fa-solid fa-spa"></i>
-                                <span>A Calmer Mind</span>
+                            <div class="benefit-pills-list">
+                                <div class="benefit-pill">
+                                    <div class="benefit-pill-icon"><i class="fa-solid fa-spa"></i></div>
+                                    <div class="benefit-pill-text">
+                                        <strong>A Calmer Mind</strong>
+                                        <span>Quiet overthinking &amp; mental loops</span>
+                                    </div>
+                                </div>
+                                <div class="benefit-pill">
+                                    <div class="benefit-pill-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                                    <div class="benefit-pill-text">
+                                        <strong>Balanced Mood</strong>
+                                        <span>Regulate nervous system tone</span>
+                                    </div>
+                                </div>
+                                <div class="benefit-pill">
+                                    <div class="benefit-pill-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                                    <div class="benefit-pill-text">
+                                        <strong>Renewed Energy</strong>
+                                        <span>Cellular vitality &amp; microcirculation</span>
+                                    </div>
+                                </div>
+                                <div class="benefit-pill">
+                                    <div class="benefit-pill-icon"><i class="fa-solid fa-moon"></i></div>
+                                    <div class="benefit-pill-text">
+                                        <strong>Better Rest</strong>
+                                        <span>Effortless transition into deep sleep</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="benefit-pill">
-                                <i class="fa-solid fa-scale-balanced"></i>
-                                <span>A More Balanced Mood</span>
+                        </div>
+
+                        <!-- Customer Reassurance & Guarantee Card (Eliminates bottom void) -->
+                        <div class="hero-left-reassurance">
+                            <div class="reassurance-stars">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <span>Daily Sanctuary</span>
                             </div>
-                            <div class="benefit-pill">
-                                <i class="fa-solid fa-bolt-lightning"></i>
-                                <span>Renewed Energy</span>
-                            </div>
-                            <div class="benefit-pill">
-                                <i class="fa-solid fa-moon"></i>
-                                <span>Better Rest</span>
+                            <p class="reassurance-quote">
+                                &ldquo;The exact same restorative stillness I felt in the wellness space, now welcoming me every single morning.&rdquo;
+                            </p>
+                            <div class="reassurance-footer">
+                                <div class="reassurance-author">
+                                    <strong>Sarah M.</strong> &bull; Verified Owner
+                                </div>
+                                <div class="reassurance-guarantee">
+                                    <i class="fa-solid fa-shield-heart"></i>
+                                    <span>1-Yr Warranty</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Center Column: Main Photo of Home Experience -->
+                    <!-- Center Column: Main Photo of Home Experience (Full Height, Matching Cards) -->
                     <div class="hero-center-col">
                         <div class="hero-photo-frame">
+                            <div class="photo-floating-pill-top">
+                                <i class="fa-solid fa-sparkles"></i>
+                                <span>Terahertz &bull; PEMF &bull; Audio Sync</span>
+                            </div>
                             <img src="assets/Serene Sol Revive Wellness Session.png" 
                                  alt="Customer enjoying SOL REViBE Mind-Body Reset Station at home" 
                                  class="hero-main-photo">
                             <div class="photo-floating-badge">
-                                <span class="dot"></span>
-                                <span>20-Minute Daily Reset Ritual</span>
+                                <div class="photo-floating-badge-left">
+                                    <span class="dot"></span>
+                                    <span>20-Minute Daily Reset Ritual</span>
+                                </div>
+                                <span class="photo-floating-badge-tag">Home Edition</span>
                             </div>
                         </div>
                     </div>
@@ -2093,10 +2332,16 @@
 
                         <!-- Take-Home Audio Option Callout ($29.95) -->
                         <div class="audio-sub-callout">
-                            <div class="audio-sub-text">
-                                <strong>$29.95/mo Take-Home Audio Library:</strong> Unlimited on-demand access to newly released Therapeutic Audio Guides (TAGs) and specialized frequencies.
+                            <div class="audio-sub-content">
+                                <div class="audio-sub-icon">
+                                    <i class="fa-solid fa-headphones-simple"></i>
+                                </div>
+                                <div class="audio-sub-text">
+                                    <strong>$29.95/mo Take-Home Audio Library:</strong>
+                                    <span>Unlimited on-demand access to newly released Therapeutic Audio Guides (TAGs) &amp; specialized frequencies.</span>
+                                </div>
                             </div>
-                            <span class="audio-sub-badge">Add-On</span>
+                            <span class="audio-sub-badge">+ Add-On</span>
                         </div>
 
                     </div>
