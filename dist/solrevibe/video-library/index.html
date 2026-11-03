@@ -422,8 +422,7 @@ footer b { color: #2B2926 !important; }
 
   const $ = id => document.getElementById(id);
   const grid=$("grid"), empty=$("empty"), search=$("search"), clearBtn=$("clear"), chips=$("chips"),
-        side=$("side"), sortSel=$("sort"), modal=$("modal"), player=$("player"), featuredEl=$("featured"),
-        playerNotice=$("playerNotice");
+        side=$("side"), sortSel=$("sort"), modal=$("modal"), player=$("player"), featuredEl=$("featured");
   const saved = new Set(JSON.parse(localStorage.getItem("sol-saved") || "[]"));
   const viewCounts = JSON.parse(localStorage.getItem("sol-views") || "{}");
   videos.forEach(v => {
