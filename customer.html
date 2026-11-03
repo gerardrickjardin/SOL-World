@@ -1,0 +1,2759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SOL REViBE | Take The Experience Home</title>
+    <meta name="description" content="Bring the power of Sound, Aroma, and Magnetic technology into your daily life with the SOL REViBE Home Experience.">
+    
+    <!-- Open Graph & Link Previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SOL REViBE">
+    <meta property="og:url" content="https://www.solrevibe.com/customer">
+    <meta property="og:title" content="SOL REViBE | Take The Experience Home">
+    <meta property="og:description" content="The same calming, restorative mind-body reset experience you enjoyed — now in your own space.">
+    <meta property="og:image" content="https://www.solrevibe.com/assets/share/solrevibe-reset-station.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SOL REViBE | Take The Experience Home">
+    <meta name="twitter:description" content="The same calming, restorative mind-body reset experience you enjoyed — now in your own space.">
+    <meta name="twitter:image" content="https://www.solrevibe.com/assets/share/solrevibe-reset-station.jpg">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --bg-page: #FBF9F5;
+            --bg-page-alt: #F4EFE6;
+            --bg-card: #FFFFFF;
+            --text-dark: #1E1A16;
+            --text-muted: #5E5A53;
+            --text-light: #8E8A83;
+            --brand-gold: #C29B68;
+            --brand-gold-dark: #A9814F;
+            --brand-gold-light: #F4E8D6;
+            --brand-terracotta: #B96F4B;
+            --brand-sage: #7F9283;
+            --brand-sage-light: #E7ECE8;
+            --brand-forest: #22372B;
+            --brand-forest-dark: #15241C;
+            --brand-ocean: #4B6E7D;
+            --brand-ocean-light: #E3ECF0;
+            --border-light: #EBE5DB;
+            --border-medium: #DDD5C7;
+            --shadow-subtle: 0 4px 20px rgba(30, 26, 22, 0.05);
+            --shadow-card: 0 12px 36px rgba(30, 26, 22, 0.08);
+            --shadow-hover: 0 18px 46px rgba(30, 26, 22, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
+            --radius-pill: 9999px;
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background accents */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 10% 15%, rgba(194, 155, 104, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 25%, rgba(127, 146, 131, 0.09) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(194, 155, 104, 0.06) 0%, transparent 50%);
+        }
+
+        .site-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .site-container {
+                padding: 0 1.25rem;
+            }
+        }
+
+        /* ================= NAVIGATION ================= */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(251, 249, 245, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(220, 213, 201, 0.6);
+            transition: var(--transition);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 74px;
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-logo-img {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-divider {
+            width: 1px;
+            height: 28px;
+            background: var(--border-medium);
+        }
+
+        .brand-tagline {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.4rem 0;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--brand-forest);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--brand-gold);
+            transition: width 0.25s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--brand-terracotta);
+            color: #FFFFFF !important;
+            padding: 0.65rem 1.4rem;
+            border-radius: var(--radius-pill);
+            text-decoration: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 14px rgba(185, 111, 75, 0.3);
+            transition: var(--transition);
+        }
+
+        .nav-cta:hover {
+            background: #A35E3D;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(185, 111, 75, 0.4);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.35rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 1080px) {
+            .nav-links {
+                display: none;
+            }
+            .brand-divider, .brand-tagline {
+                display: none;
+            }
+            .mobile-toggle {
+                display: block;
+            }
+            .nav-cta {
+                display: none;
+            }
+        }
+
+        /* Mobile drawer */
+        .mobile-nav-drawer {
+            display: none;
+            position: fixed;
+            top: 74px;
+            left: 0;
+            right: 0;
+            background: var(--bg-page);
+            border-bottom: 1px solid var(--border-medium);
+            padding: 1.5rem 2rem;
+            z-index: 99;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .mobile-nav-drawer.open {
+            display: block;
+        }
+
+        .mobile-nav-drawer a {
+            display: block;
+            padding: 0.85rem 0;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .mobile-nav-drawer .drawer-cta {
+            display: inline-block;
+            margin-top: 1.25rem;
+            background: var(--brand-terracotta);
+            color: #fff;
+            padding: 0.8rem 1.8rem;
+            border-radius: var(--radius-pill);
+            text-align: center;
+            width: 100%;
+        }
+
+        /* ================= HERO SECTION ================= */
+        .customer-hero {
+            padding: 2.5rem 0 2rem;
+            position: relative;
+        }
+
+        .hero-top-grid {
+            display: grid;
+            grid-template-columns: 280px minmax(360px, 1fr) 520px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1280px) {
+            .hero-top-grid {
+                grid-template-columns: 240px 1fr 480px;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 1080px) {
+            .hero-top-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+        }
+
+        /* Left Hero Column: Headline & Benefit Pills */
+        .hero-left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            padding-top: 0.5rem;
+        }
+
+        .hero-main-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.85rem;
+            line-height: 1.12;
+            font-weight: 600;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .hero-main-title em {
+            font-style: italic;
+            color: var(--brand-gold-dark);
+        }
+
+        .hero-subheadline {
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .benefit-pills-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 1080px) {
+            .benefit-pills-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+        }
+
+        .benefit-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-pill);
+            padding: 0.5rem 1rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            backdrop-filter: blur(8px);
+            transition: var(--transition);
+        }
+
+        .benefit-pill i {
+            font-size: 0.85rem;
+            color: var(--brand-gold-dark);
+        }
+
+        .benefit-pill:hover {
+            background: #FFFFFF;
+            border-color: var(--brand-gold);
+            transform: translateX(3px);
+            box-shadow: 0 4px 12px rgba(194, 155, 104, 0.15);
+        }
+
+        /* Center Hero Column: Station Photo */
+        .hero-center-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-photo-frame {
+            position: relative;
+            width: 100%;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(220, 213, 201, 0.7);
+            background: #FFFFFF;
+        }
+
+        .hero-main-photo {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 10;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-photo-frame:hover .hero-main-photo {
+            transform: scale(1.02);
+        }
+
+        .photo-floating-badge {
+            position: absolute;
+            bottom: 14px;
+            left: 14px;
+            background: rgba(21, 36, 28, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #FFFFFF;
+            padding: 0.45rem 0.95rem;
+            border-radius: var(--radius-pill);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+        }
+
+        .photo-floating-badge span.dot {
+            width: 7px;
+            height: 7px;
+            background: #50E3C2;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #50E3C2;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* Right Hero Column: Eyebrow, Title & Pricing Cards */
+        .hero-right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .hero-right-header {
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            color: var(--brand-forest);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .hero-package-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.75rem;
+            line-height: 1.05;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .hero-package-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* Two Pricing Cards Grid */
+        .purchase-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .purchase-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .purchase-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            padding: 1.35rem 1.15rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            box-shadow: var(--shadow-subtle);
+            transition: var(--transition);
+        }
+
+        .purchase-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--brand-gold);
+        }
+
+        .purchase-card.featured {
+            border: 2px solid var(--brand-sage);
+            background: linear-gradient(180deg, #FFFFFF 0%, #FAFAF8 100%);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--brand-sage);
+            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.8rem;
+            border-radius: var(--radius-pill);
+            box-shadow: 0 3px 10px rgba(127, 146, 131, 0.35);
+            white-space: nowrap;
+        }
+
+        .card-brand-sub {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.15rem;
+        }
+
+        .card-plan-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.18rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .card-plan-desc {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+            min-height: 32px;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Product visual inside card */
+        .card-product-visual {
+            background: #F7F5F0;
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.85rem;
+            min-height: 80px;
+            border: 1px solid var(--border-light);
+        }
+
+        .card-product-visual img {
+            max-height: 65px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
+        }
+
+        .card-product-visual.icon-grid-visual {
+            display: flex;
+            gap: 0.65rem;
+            justify-content: center;
+            color: var(--brand-forest);
+            font-size: 1.4rem;
+        }
+
+        .card-price-block {
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .card-price-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.95rem;
+            font-weight: 800;
+            color: var(--brand-terracotta);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .card-price-shipping {
+            font-size: 0.68rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .card-features-list {
+            list-style: none;
+            margin: 0.85rem 0 1.15rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .card-features-list li {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.45rem;
+            line-height: 1.35;
+        }
+
+        .card-features-list li i {
+            color: var(--brand-sage);
+            font-size: 0.75rem;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .card-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            padding: 0.75rem 0.85rem;
+            border-radius: var(--radius-pill);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .card-btn.btn-gold {
+            background: var(--brand-terracotta);
+            color: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(185, 111, 75, 0.28);
+        }
+
+        .card-btn.btn-gold:hover {
+            background: #A35E3D;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(185, 111, 75, 0.38);
+        }
+
+        .card-btn.btn-dark {
+            background: var(--brand-forest);
+            color: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(34, 55, 43, 0.25);
+        }
+
+        .card-btn.btn-dark:hover {
+            background: var(--brand-forest-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(34, 55, 43, 0.35);
+        }
+
+        /* Dedicated $29.95 Guided Audio Membership Callout */
+        .audio-sub-callout {
+            background: #FFFFFF;
+            border: 1px dashed var(--brand-gold);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 0.75rem;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .audio-sub-text {
+            font-size: 0.76rem;
+            color: var(--text-dark);
+            line-height: 1.35;
+        }
+
+        .audio-sub-text strong {
+            color: var(--brand-terracotta);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+        }
+
+        .audio-sub-badge {
+            background: var(--brand-gold-light);
+            color: var(--brand-gold-dark);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-pill);
+            white-space: nowrap;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        /* ================= THE S.A.M. PROTOCOL AT HOME ================= */
+        .sam-section {
+            padding: 2.5rem 0 2rem;
+            border-top: 1px solid var(--border-medium);
+            margin-top: 1.5rem;
+        }
+
+        .section-header-center {
+            text-align: center;
+            max-width: 820px;
+            margin: 0 auto 1.75rem;
+        }
+
+        .section-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .section-subtext {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .sam-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 860px) {
+            .sam-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sam-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            padding: 1.4rem 1.35rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-subtle);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sam-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .sam-card.card-sound {
+            border-top: 4px solid var(--brand-sage);
+        }
+
+        .sam-card.card-aroma {
+            border-top: 4px solid var(--brand-gold);
+        }
+
+        .sam-card.card-magnetic {
+            border-top: 4px solid var(--brand-ocean);
+        }
+
+        .sam-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .sam-icon-bubble {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .card-sound .sam-icon-bubble {
+            background: var(--brand-sage-light);
+            color: var(--brand-forest);
+        }
+
+        .card-aroma .sam-icon-bubble {
+            background: var(--brand-gold-light);
+            color: var(--brand-gold-dark);
+        }
+
+        .card-magnetic .sam-icon-bubble {
+            background: var(--brand-ocean-light);
+            color: var(--brand-ocean);
+        }
+
+        .sam-titles h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+
+        .sam-titles span {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .sam-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ================= GUIDED AUDIO EXPERIENCE (FOREST CONTAINER) ================= */
+        .audio-experience-section {
+            padding: 1.5rem 0 2rem;
+        }
+
+        .audio-forest-box {
+            background: linear-gradient(135deg, var(--brand-forest) 0%, var(--brand-forest-dark) 100%);
+            border-radius: var(--radius-lg);
+            padding: 2.25rem 2rem;
+            color: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 40px rgba(21, 36, 28, 0.28);
+        }
+
+        /* Subtle sound wave overlay in background */
+        .audio-forest-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(194, 155, 104, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .audio-inner-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 280px 1fr 220px;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (max-width: 1200px) {
+            .audio-inner-grid {
+                grid-template-columns: 1fr;
+                gap: 1.75rem;
+            }
+        }
+
+        /* Left intro */
+        .audio-intro {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .audio-intro h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.1rem;
+            line-height: 1.15;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+
+        .audio-intro p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.82);
+            line-height: 1.55;
+        }
+
+        .btn-audio-explore {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #FDFBF7;
+            color: var(--brand-forest-dark);
+            padding: 0.65rem 1.35rem;
+            border-radius: var(--radius-pill);
+            text-decoration: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            width: fit-content;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        }
+
+        .btn-audio-explore:hover {
+            background: var(--brand-gold-light);
+            color: var(--brand-gold-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+        }
+
+        /* Center: 4 Audio Trailer Cards */
+        .audio-trailers-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.85rem;
+        }
+
+        @media (max-width: 900px) {
+            .audio-trailers-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .audio-trailers-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .trailer-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .trailer-card:hover,
+        .trailer-card.is-playing {
+            background: rgba(255, 255, 255, 0.16);
+            border-color: var(--brand-gold);
+            transform: translateY(-3px);
+        }
+
+        .trailer-thumb {
+            position: relative;
+            width: 100%;
+            height: 95px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .trailer-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+            transition: transform 0.4s ease;
+        }
+
+        .trailer-card:hover .trailer-thumb img {
+            transform: scale(1.08);
+            opacity: 0.95;
+        }
+
+        .trailer-play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .trailer-card:hover .trailer-play-overlay,
+        .trailer-card.is-playing .trailer-play-overlay {
+            background: var(--brand-gold);
+            color: #FFFFFF;
+            transform: translate(-50%, -50%) scale(1.15);
+        }
+
+        .trailer-duration {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 600;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .trailer-body {
+            padding: 0.75rem 0.65rem 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .trailer-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            line-height: 1.25;
+        }
+
+        .trailer-desc {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.35;
+        }
+
+        /* Right Checklist */
+        .audio-checklist-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            padding-left: 1.5rem;
+        }
+
+        @media (max-width: 1200px) {
+            .audio-checklist-col {
+                border-left: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.15);
+                padding-left: 0;
+                padding-top: 1.25rem;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+        }
+
+        .audio-checklist-heading {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--brand-gold-light);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .audio-checklist-heading:hover {
+            color: #FFFFFF;
+        }
+
+        .audio-checks-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+        }
+
+        .audio-checks-list li {
+            font-size: 0.74rem;
+            color: rgba(255, 255, 255, 0.85);
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            line-height: 1.3;
+        }
+
+        .audio-checks-list li i {
+            color: var(--brand-gold);
+            font-size: 0.75rem;
+        }
+
+        /* Floating Audio Player Widget (Activates on Play click) */
+        .audio-player-banner {
+            display: none;
+            margin-top: 1.25rem;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1.25rem;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .audio-player-banner.active {
+            display: flex;
+        }
+
+        .player-track-info {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .player-wave-anim {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 16px;
+        }
+
+        .player-wave-anim span {
+            width: 3px;
+            background: var(--brand-gold);
+            border-radius: 2px;
+            animation: waveBounce 1.2s infinite ease-in-out;
+        }
+
+        .player-wave-anim span:nth-child(1) { height: 6px; animation-delay: 0.1s; }
+        .player-wave-anim span:nth-child(2) { height: 16px; animation-delay: 0.3s; }
+        .player-wave-anim span:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+        .player-wave-anim span:nth-child(4) { height: 14px; animation-delay: 0.4s; }
+
+        @keyframes waveBounce {
+            0%, 100% { transform: scaleY(0.4); }
+            50% { transform: scaleY(1); }
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .player-btn {
+            background: var(--brand-gold);
+            border: none;
+            color: #FFFFFF;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        /* ================= VIDEOS & TESTIMONIALS SECTION ================= */
+        .videos-section {
+            padding: 2.5rem 0 3.5rem;
+        }
+
+        .videos-row-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .videos-row-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .video-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-subtle);
+            transition: var(--transition);
+        }
+
+        .video-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--brand-gold);
+        }
+
+        .video-thumb-box {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background: #1A1A1A;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .video-thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .video-card:hover .video-thumb-box img {
+            transform: scale(1.05);
+        }
+
+        .video-play-btn-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-forest);
+            font-size: 1.1rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transition: var(--transition);
+        }
+
+        .video-thumb-box:hover .video-play-btn-circle {
+            background: var(--brand-terracotta);
+            color: #FFFFFF;
+            transform: translate(-50%, -50%) scale(1.12);
+        }
+
+        .video-card-body {
+            padding: 1.35rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+            gap: 0.85rem;
+        }
+
+        .video-card-body h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.25;
+        }
+
+        .video-card-body p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .video-action-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: var(--brand-terracotta);
+            text-decoration: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: var(--transition);
+            cursor: pointer;
+            width: fit-content;
+        }
+
+        .video-action-link:hover {
+            color: #A35E3D;
+            transform: translateX(3px);
+        }
+
+        /* ================= SOUL ZONE AT HOME SHOWCASE ================= */
+        .soul-zone-section {
+            background: var(--bg-page-alt);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2.5rem;
+            margin-bottom: 3.5rem;
+            border: 1px solid var(--border-medium);
+        }
+
+        .soul-zone-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .soul-zone-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .soul-zone-text h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.35rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .soul-zone-text p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .soul-steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .soul-step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .step-num-circle {
+            width: 32px;
+            height: 32px;
+            background: var(--brand-forest);
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-text strong {
+            display: block;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .step-text span {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .soul-zone-image {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .soul-zone-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* ================= FAQ SECTION ================= */
+        .faq-section {
+            padding: 1rem 0 3.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-top: 2rem;
+        }
+
+        .faq-item {
+            background: #FFFFFF;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-subtle);
+            transition: var(--transition);
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 1.25rem 1.35rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .faq-question i {
+            color: var(--brand-gold-dark);
+            transition: transform 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 1.35rem 1.25rem;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            border-top: 1px solid var(--border-light);
+            padding-top: 1rem;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        /* ================= FINAL CTA STRIP ================= */
+        .bottom-cta-banner {
+            background: linear-gradient(135deg, #FAF7F2 0%, #EDE6DB 100%);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .bottom-cta-banner h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.45rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .bottom-cta-banner p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 1.75rem;
+            line-height: 1.55;
+        }
+
+        .bottom-cta-btns {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* ================= FOOTER ================= */
+        .site-footer {
+            background: #181512;
+            color: #E6E1D7;
+            padding: 4rem 0 2.5rem;
+            border-top: 1px solid #2C2823;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .footer-brand p {
+            font-size: 0.85rem;
+            color: #A9A49B;
+            line-height: 1.6;
+            margin-top: 1rem;
+            max-width: 360px;
+        }
+
+        .footer-col h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #FFFFFF;
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .footer-col a {
+            text-decoration: none;
+            color: #A9A49B;
+            font-size: 0.84rem;
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--brand-gold-light);
+        }
+
+        .footer-disclaimer {
+            border-top: 1px solid #2C2823;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            font-size: 0.74rem;
+            color: #7D786F;
+            line-height: 1.6;
+        }
+
+        .footer-bottom-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1.5rem;
+            font-size: 0.74rem;
+            color: #7D786F;
+        }
+
+        /* ================= MODALS ================= */
+        /* Video Modal */
+        .video-modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 15, 12, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .video-modal-backdrop.open {
+            display: flex;
+        }
+
+        .video-modal-box {
+            background: #FFFFFF;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            width: 100%;
+            max-width: 860px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            position: relative;
+            animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            color: #FFFFFF;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close-btn:hover {
+            background: #000000;
+            transform: scale(1.1);
+        }
+
+        .modal-video-viewport {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000000;
+        }
+
+        .modal-video-viewport iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .modal-info-bar {
+            padding: 1.25rem 1.5rem;
+            background: #FAF7F2;
+        }
+
+        .modal-info-bar h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .modal-info-bar p {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+        }
+
+        /* Order / Inquiry Modal */
+        .order-modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 15, 12, 0.85);
+            backdrop-filter: blur(14px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .order-modal-backdrop.open {
+            display: flex;
+        }
+
+        .order-modal-box {
+            background: #FFFFFF;
+            border-radius: var(--radius-md);
+            max-width: 620px;
+            width: 100%;
+            padding: 2.25rem;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .order-modal-box h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.85rem;
+            color: var(--text-dark);
+            margin-bottom: 0.35rem;
+        }
+
+        .order-modal-box p.order-sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .order-selection-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-tab {
+            padding: 0.85rem;
+            border: 2px solid var(--border-medium);
+            border-radius: var(--radius-sm);
+            background: #FAF7F2;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .order-tab.active {
+            border-color: var(--brand-terracotta);
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(185, 111, 75, 0.15);
+        }
+
+        .order-tab strong {
+            display: block;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+        }
+
+        .order-tab span {
+            font-size: 0.82rem;
+            color: var(--brand-terracotta);
+            font-weight: 700;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 550px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.75rem 0.95rem;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.88rem;
+            outline: none;
+            transition: var(--transition);
+            background: #FAF7F2;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--brand-gold-dark);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(194, 155, 104, 0.2);
+        }
+
+        .form-submit-btn {
+            width: 100%;
+            background: var(--brand-terracotta);
+            color: #FFFFFF;
+            padding: 0.9rem;
+            border: none;
+            border-radius: var(--radius-pill);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 14px rgba(185, 111, 75, 0.3);
+        }
+
+        .form-submit-btn:hover {
+            background: #A35E3D;
+            transform: translateY(-1px);
+        }
+
+        .order-security-notes {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.72rem;
+            color: var(--text-light);
+        }
+
+        .order-security-notes span {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ambient-glow"></div>
+
+    <!-- SITE HEADER / NAVIGATION -->
+    <header class="site-header">
+        <div class="site-container">
+            <div class="nav-inner">
+                <a href="index.html" class="brand-link" aria-label="SOL REViBE Homepage">
+                    <img src="assets/SOL_REViBE_New_Logo.png" alt="SOL REViBE" class="brand-logo-img">
+                    <div class="brand-divider"></div>
+                    <div class="brand-tagline">
+                        THE 20-MINUTE<br>MIND-BODY STATION
+                    </div>
+                </a>
+
+                <nav aria-label="Primary Navigation">
+                    <ul class="nav-links">
+                        <li><a href="#experience">The Experience</a></li>
+                        <li><a href="#technology">The Technology</a></li>
+                        <li><a href="#audio-guides">Audio Guides</a></li>
+                        <li><a href="#stories">Real Stories</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </nav>
+
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <a href="#purchase-options" class="nav-cta" onclick="openOrderModal('complete')">Order Now &rarr;</a>
+                    <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Open Navigation Menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-nav-drawer" id="mobileDrawer">
+        <a href="#experience" onclick="closeDrawer()">The Experience</a>
+        <a href="#technology" onclick="closeDrawer()">The Technology</a>
+        <a href="#audio-guides" onclick="closeDrawer()">Audio Guides</a>
+        <a href="#stories" onclick="closeDrawer()">Real Stories</a>
+        <a href="#faq" onclick="closeDrawer()">FAQ</a>
+        <a href="#purchase-options" class="drawer-cta" onclick="closeDrawer(); openOrderModal('complete');">Order Now &rarr;</a>
+    </div>
+
+    <!-- ================= MAIN HERO SECTION ================= -->
+    <main>
+        <section class="customer-hero" id="experience">
+            <div class="site-container">
+                <div class="hero-top-grid">
+                    
+                    <!-- Left Column: Headline & Benefit Pills -->
+                    <div class="hero-left-col">
+                        <h1 class="hero-main-title">
+                            Take the<br>Experience<br>Home.
+                        </h1>
+                        <p class="hero-subheadline">
+                            The same calming, restorative experience you enjoyed — now in your own space.
+                        </p>
+
+                        <div class="benefit-pills-list">
+                            <div class="benefit-pill">
+                                <i class="fa-solid fa-spa"></i>
+                                <span>A Calmer Mind</span>
+                            </div>
+                            <div class="benefit-pill">
+                                <i class="fa-solid fa-scale-balanced"></i>
+                                <span>A More Balanced Mood</span>
+                            </div>
+                            <div class="benefit-pill">
+                                <i class="fa-solid fa-bolt-lightning"></i>
+                                <span>Renewed Energy</span>
+                            </div>
+                            <div class="benefit-pill">
+                                <i class="fa-solid fa-moon"></i>
+                                <span>Better Rest</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Center Column: Main Photo of Home Experience -->
+                    <div class="hero-center-col">
+                        <div class="hero-photo-frame">
+                            <img src="assets/Serene Sol Revive Wellness Session.png" 
+                                 alt="Customer enjoying SOL REViBE Mind-Body Reset Station at home" 
+                                 class="hero-main-photo">
+                            <div class="photo-floating-badge">
+                                <span class="dot"></span>
+                                <span>20-Minute Daily Reset Ritual</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Eyebrow, Title & Pricing Cards -->
+                    <div class="hero-right-col" id="purchase-options">
+                        <div class="hero-right-header">
+                            <span class="hero-eyebrow">The SOL REViBE</span>
+                            <h2 class="hero-package-title">Home Experience</h2>
+                            <p class="hero-package-subtitle">
+                                Bring the power of Sound, Aroma, and Magnetic technology into your daily life.
+                            </p>
+                        </div>
+
+                        <!-- Two Purchase Cards -->
+                        <div class="purchase-cards-grid">
+                            
+                            <!-- Card 1: Home Experience (Core P90+ Package) -->
+                            <div class="purchase-card featured">
+                                <div class="card-badge">Most Popular</div>
+                                <div>
+                                    <div class="card-brand-sub">SOL REViBE</div>
+                                    <h3 class="card-plan-title">Home Experience</h3>
+                                    <p class="card-plan-desc">P90 Plus + Guided Audio</p>
+
+                                    <!-- Product Visual -->
+                                    <div class="card-product-visual" style="padding: 0; overflow: hidden; border-radius: 8px; border: 1px solid var(--border-light);">
+                                        <img src="assets/p90-unit-crop.jpg" alt="OlyLife P90+ Unit" style="width: 100%; height: 90px; object-fit: cover; display: block;">
+                                    </div>
+
+                                    <div class="card-price-block">
+                                        <span class="card-price-value">$1,650</span>
+                                        <span class="card-price-shipping">Includes shipping</span>
+                                    </div>
+
+                                    <ul class="card-features-list">
+                                        <li><i class="fa-solid fa-circle-check"></i><span>OlyLife P90+ device</span></li>
+                                        <li><i class="fa-solid fa-circle-check"></i><span>Guided audio library (initial access)</span></li>
+                                        <li><i class="fa-solid fa-circle-check"></i><span>Step-by-step instructions (P90+ only)</span></li>
+                                        <li><i class="fa-solid fa-circle-check"></i><span>Ongoing customer support</span></li>
+                                    </ul>
+                                </div>
+
+                                <button type="button" class="card-btn btn-gold" onclick="openOrderModal('experience')">
+                                    Order Home Experience &rarr;
+                                </button>
+                            </div>
+
+                            <!-- Card 2: Complete Home Setup (Turnkey Package) -->
+                            <div class="purchase-card">
+                                <div>
+                                    <div class="card-brand-sub">SOL REViBE</div>
+                                    <h3 class="card-plan-title">Complete Home Setup</h3>
+                                    <p class="card-plan-desc">Everything You Need for a Turnkey Experience</p>
+
+                                    <!-- Product Visual -->
+                                    <div class="card-product-visual" style="padding: 0; overflow: hidden; border-radius: 8px; border: 1px solid var(--border-light);">
+                                        <img src="assets/complete-chair-setup-crop.jpg" alt="SOL REViBE Complete Turnkey Setup" style="width: 100%; height: 90px; object-fit: cover; display: block;">
+                                    </div>
+
+                                    <div class="card-price-block">
+                                        <span class="card-price-value">$2,995</span>
+                                        <span class="card-price-shipping">Includes shipping</span>
+                                    </div>
+
+                                    <ul class="card-features-list">
+                                        <li><i class="fa-solid fa-circle-check"></i><span>Everything in the Home Experience</span></li>
+                                        <li><i class="fa-solid fa-circle-check"></i><span>Comfortable lounge chair</span></li>
+                                        <li><i class="fa-solid fa-circle-check"></i><span>Premium noise-canceling headphones</span></li>
+                                        <li><i class="fa-solid fa-circle-check"></i><span>Aromatherapy diffuser &amp; essential oils</span></li>
+                                        <li><i class="fa-solid fa-circle-check"></i><span>Complete accessory set for a ready-to-use station</span></li>
+                                    </ul>
+                                </div>
+
+                                <button type="button" class="card-btn btn-dark" onclick="openOrderModal('complete')">
+                                    Order Complete Setup &rarr;
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <!-- Take-Home Audio Option Callout ($29.95) -->
+                        <div class="audio-sub-callout">
+                            <div class="audio-sub-text">
+                                <strong>$29.95/mo Take-Home Audio:</strong> Continued access to newly released guided audio, frequencies, and specialized TAGs journeys.
+                            </div>
+                            <span class="audio-sub-badge">Add-On</span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= THE S.A.M. PROTOCOL AT HOME ================= -->
+        <section class="sam-section" id="technology">
+            <div class="site-container">
+                <div class="section-header-center">
+                    <span class="section-eyebrow">The S.A.M. Protocol At Home</span>
+                    <p class="section-subtext">
+                        A guided 20-minute experience combining Sound, Aroma, and Magnetic technologies to help you relax, reset, and feel more balanced.
+                    </p>
+                </div>
+
+                <div class="sam-cards-grid">
+                    
+                    <!-- Sound Card -->
+                    <div class="sam-card card-sound">
+                        <div class="sam-card-header">
+                            <div class="sam-icon-bubble">
+                                <i class="fa-solid fa-headphones-simple"></i>
+                            </div>
+                            <div class="sam-titles">
+                                <h3>Sound</h3>
+                                <span>Guided Audio</span>
+                            </div>
+                        </div>
+                        <p class="sam-desc">
+                            Immerse yourself in professionally created audio guides designed to help you relax, re-center, and feel your best.
+                        </p>
+                    </div>
+
+                    <!-- Aroma Card -->
+                    <div class="sam-card card-aroma">
+                        <div class="sam-card-header">
+                            <div class="sam-icon-bubble">
+                                <i class="fa-solid fa-seedling"></i>
+                            </div>
+                            <div class="sam-titles">
+                                <h3>Aroma</h3>
+                                <span>Essential Oils</span>
+                            </div>
+                        </div>
+                        <p class="sam-desc">
+                            Use your favorite essential oils to create a calming environment and enhance the sensory experience.
+                        </p>
+                    </div>
+
+                    <!-- Magnetic Card -->
+                    <div class="sam-card card-magnetic">
+                        <div class="sam-card-header">
+                            <div class="sam-icon-bubble">
+                                <i class="fa-solid fa-water"></i>
+                            </div>
+                            <div class="sam-titles">
+                                <h3>Magnetic</h3>
+                                <span>PEMF Technology</span>
+                            </div>
+                        </div>
+                        <p class="sam-desc">
+                            Experience the OlyLife P90+ with advanced PEMF and terahertz technology, designed to support relaxation and general wellness.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= YOUR GUIDED AUDIO EXPERIENCE (FOREST GREEN) ================= -->
+        <section class="audio-experience-section" id="audio-guides">
+            <div class="site-container">
+                <div class="audio-forest-box">
+                    <div class="audio-inner-grid">
+                        
+                        <!-- Left Intro -->
+                        <div class="audio-intro">
+                            <h2>Your Guided Audio Experience</h2>
+                            <p>
+                                Get instant access to a curated library of SOL REViBE audio guides. Each experience combines soothing soundscapes, supportive guidance, and immersive frequencies to help you relax, reset, and feel more balanced.
+                            </p>
+                            <a href="video-library/index.html" class="btn-audio-explore">
+                                Explore The Audio Library &rarr;
+                            </a>
+                        </div>
+
+                        <!-- Center: 4 Audio Trailer Cards with interactive samples -->
+                        <div>
+                            <div class="audio-trailers-row">
+                                
+                                <!-- Track 1 -->
+                                <div class="trailer-card" onclick="toggleAudioPreview('The SOL REViBE Experience', 'assets/Audio for Joy.MP3', this)">
+                                    <div class="trailer-thumb">
+                                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500&auto=format&fit=crop&q=80" alt="Mountain lake reflection">
+                                        <div class="trailer-play-overlay">
+                                            <i class="fa-solid fa-play"></i>
+                                        </div>
+                                        <span class="trailer-duration">12:40</span>
+                                    </div>
+                                    <div class="trailer-body">
+                                        <div class="trailer-title">The SOL REViBE Experience</div>
+                                        <div class="trailer-desc">A complete 20-minute guided journey</div>
+                                    </div>
+                                </div>
+
+                                <!-- Track 2 -->
+                                <div class="trailer-card" onclick="toggleAudioPreview('Calm & Centered', 'assets/Audio for Joy.MP3', this)">
+                                    <div class="trailer-thumb">
+                                        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=500&auto=format&fit=crop&q=80" alt="Forest sunbeams">
+                                        <div class="trailer-play-overlay">
+                                            <i class="fa-solid fa-play"></i>
+                                        </div>
+                                        <span class="trailer-duration">08:24</span>
+                                    </div>
+                                    <div class="trailer-body">
+                                        <div class="trailer-title">Calm &amp; Centered</div>
+                                        <div class="trailer-desc">Guided audio to help you relax and shift your focus</div>
+                                    </div>
+                                </div>
+
+                                <!-- Track 3 -->
+                                <div class="trailer-card" onclick="toggleAudioPreview('Restorative Sleep', 'assets/Audio for Joy.MP3', this)">
+                                    <div class="trailer-thumb">
+                                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=80" alt="Serene ocean sunset">
+                                        <div class="trailer-play-overlay">
+                                            <i class="fa-solid fa-play"></i>
+                                        </div>
+                                        <span class="trailer-duration">12:40</span>
+                                    </div>
+                                    <div class="trailer-body">
+                                        <div class="trailer-title">Restorative Sleep</div>
+                                        <div class="trailer-desc">A soothing experience to prepare your mind and body for rest</div>
+                                    </div>
+                                </div>
+
+                                <!-- Track 4 -->
+                                <div class="trailer-card" onclick="toggleAudioPreview('Renewed Energy', 'assets/Audio for Joy.MP3', this)">
+                                    <div class="trailer-thumb">
+                                        <img src="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=500&auto=format&fit=crop&q=80" alt="Balanced zen stones">
+                                        <div class="trailer-play-overlay">
+                                            <i class="fa-solid fa-play"></i>
+                                        </div>
+                                        <span class="trailer-duration">10:15</span>
+                                    </div>
+                                    <div class="trailer-body">
+                                        <div class="trailer-title">Renewed Energy</div>
+                                        <div class="trailer-desc">A guided audio journey to help you feel refreshed and restored</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Live Audio Player Bar (Plays real audio sample) -->
+                            <div class="audio-player-banner" id="audioPlayerBanner">
+                                <div class="player-track-info">
+                                    <button class="player-btn" id="playerToggleBtn" onclick="togglePlayback()">
+                                        <i class="fa-solid fa-pause"></i>
+                                    </button>
+                                    <div class="player-wave-anim">
+                                        <span></span><span></span><span></span><span></span>
+                                    </div>
+                                    <div>
+                                        <div style="font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 700; color: #FFFFFF;" id="activeTrackTitle">Playing Audio Sample</div>
+                                        <div style="font-size: 0.72rem; color: rgba(255,255,255,0.7);" id="playerTime">Previewing sample track...</div>
+                                    </div>
+                                </div>
+                                <button onclick="stopAudioPreview()" style="background:none; border:none; color:rgba(255,255,255,0.6); cursor:pointer; font-size: 0.85rem;" title="Close preview">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <audio id="globalAudioPlayer" preload="none"></audio>
+                        </div>
+
+                        <!-- Right: Library Features -->
+                        <div class="audio-checklist-col">
+                            <a href="video-library/index.html" class="audio-checklist-heading">
+                                <span>View Full Audio Library</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                            <ul class="audio-checks-list">
+                                <li><i class="fa-solid fa-check"></i><span>Dozens of guided experiences</span></li>
+                                <li><i class="fa-solid fa-check"></i><span>Created for relaxation and renewal</span></li>
+                                <li><i class="fa-solid fa-check"></i><span>Access on phone, tablet, or computer</span></li>
+                                <li><i class="fa-solid fa-check"></i><span>New experiences added over time</span></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIDEOS & TESTIMONIALS SECTION ================= -->
+        <section class="videos-section" id="stories">
+            <div class="site-container">
+                <div class="videos-row-grid">
+                    
+                    <!-- Video 1: Learn About The Technology -->
+                    <div class="video-card">
+                        <div class="video-thumb-box" onclick="openVideoModal('1239524014', 'Learn About the Technology', 'Discover how PEMF and terahertz frequency technology work together in the OlyLife P90+ and how it powers the SOL REViBE experience.')">
+                            <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=600&auto=format&fit=crop&q=80" alt="Cellular frequency and technology">
+                            <div class="video-play-btn-circle">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-card-body">
+                            <div>
+                                <h3>Learn About the Technology</h3>
+                                <p>Discover how PEMF and terahertz technology work together in the OlyLife P90+ and how it fits into the SOL REViBE experience.</p>
+                            </div>
+                            <a class="video-action-link" onclick="openVideoModal('1239524014', 'Learn About the Technology', 'Discover how PEMF and terahertz frequency technology work together in the OlyLife P90+.')">
+                                <span>Watch Video</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Video 2: How to Use the P90+ at Home (The Soul Zone) -->
+                    <div class="video-card">
+                        <div class="video-thumb-box" onclick="openVideoModal('1240033068', 'How to Use the P90+ at Home', 'A short, step-by-step video to show you how to set up and use your system with confidence in your home Soul Zone.')">
+                            <img src="video-library/share-thumb.jpg" alt="Woman reclining in SOL REViBE station">
+                            <div class="video-play-btn-circle">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-card-body">
+                            <div>
+                                <h3>How to Use the P90+ at Home</h3>
+                                <p>A short, step-by-step video to show you how to set up and use your system with confidence in your personal sanctuary.</p>
+                            </div>
+                            <a class="video-action-link" onclick="openVideoModal('1240033068', 'How to Use the P90+ at Home', 'Step-by-step customer instructional walkthrough.')">
+                                <span>Watch Video</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Video 3: Real People. Real Experiences -->
+                    <div class="video-card">
+                        <div class="video-thumb-box" onclick="openVideoModal('1240033068', 'Real People. Real Experiences', 'Hear from customers who have brought the SOL REViBE experience into their homes and elevated their daily wellness.')">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&auto=format&fit=crop&q=80" alt="Smiling customer testimonial">
+                            <div class="video-play-btn-circle">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-card-body">
+                            <div>
+                                <h3>Real People. Real Experiences.</h3>
+                                <p>Hear from customers who have brought the SOL REViBE experience into their homes and transformed their daily wellness routines.</p>
+                            </div>
+                            <a class="video-action-link" onclick="openVideoModal('1240033068', 'Real People. Real Experiences', 'Customer stories and testimonials.')">
+                                <span>Watch Stories</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= THE "SOUL ZONE" HOME SHOWCASE ================= -->
+        <section class="site-container">
+            <div class="soul-zone-section">
+                <div class="soul-zone-grid">
+                    <div class="soul-zone-text">
+                        <span class="section-eyebrow" style="color: var(--brand-forest);">Creating Your Sanctuary</span>
+                        <h2>The "Soul Zone" in Your Home</h2>
+                        <p>
+                            Transform any quiet corner into your personal daily sanctuary. Designed for seamless 20-minute resets, the station requires minimal space while delivering deep restorative results.
+                        </p>
+
+                        <div class="soul-steps-list">
+                            <div class="soul-step-item">
+                                <div class="step-num-circle">1</div>
+                                <div class="step-text">
+                                    <strong>Position Your P90+ Platform</strong>
+                                    <span>Place the dual-frequency unit comfortably at your feet in front of your favorite lounge chair.</span>
+                                </div>
+                            </div>
+                            <div class="soul-step-item">
+                                <div class="step-num-circle">2</div>
+                                <div class="step-text">
+                                    <strong>Diffuse Calming Aromas</strong>
+                                    <span>Add a few drops of pure essential oils to activate your olfactory senses and signal relaxation.</span>
+                                </div>
+                            </div>
+                            <div class="soul-step-item">
+                                <div class="step-num-circle">3</div>
+                                <div class="step-text">
+                                    <strong>Slip On Your Headphones &amp; Reset</strong>
+                                    <span>Select a 20-minute Therapeutic Audio Guide from your library and let your mind and body synchronize.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="soul-zone-image">
+                        <img src="assets/Serene Sol Revive Wellness Session.png" alt="Relaxing in the Soul Zone at home">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= FREQUENTLY ASKED QUESTIONS ================= -->
+        <section class="faq-section" id="faq">
+            <div class="site-container">
+                <div class="section-header-center">
+                    <span class="section-eyebrow">Everything You Need To Know</span>
+                    <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: 2.2rem; margin-bottom: 0.5rem;">Frequently Asked Questions</h2>
+                    <p class="section-subtext">Clear answers regarding home installation, technology, and what is included in each package.</p>
+                </div>
+
+                <div class="faq-accordion">
+                    <div class="faq-item open">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>What is the difference between the Home Experience ($1,650) and Complete Setup ($2,995)?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            The <strong>Home Experience ($1,650)</strong> includes the core OlyLife P90+ dual-frequency device, guided audio library initial access, setup instructions, and ongoing support. The <strong>Complete Home Setup ($2,995)</strong> is turnkey: it includes everything in the Home Experience plus a premium zero-gravity lounge chair, high-end noise-canceling headphones, and an aromatherapy diffuser with essential oils for a complete ready-to-use station.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>How does the P90+ PEMF and Terahertz technology work?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            The OlyLife P90+ combines Pulsed Electromagnetic Field (PEMF) technology with terahertz wave frequencies. PEMF delivers gentle biological electromagnetic pulses that stimulate cellular vitality and improve microcirculation, while terahertz energy resonates at the same frequency as healthy human cells, gently warming and soothing tight tissues.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>How often should I use the station at home?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Most customers enjoy one 20-minute session daily. Whether in the morning to cultivate focused energy, or in the evening to release daily accumulated stress and prepare for deep restorative sleep, 20 minutes is the scientifically calibrated sweet spot.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>How do I access the Guided Audio Library?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            You receive instant on-demand access to the SOL REViBE Therapeutic Audio Guide (TAG) library on any smartphone, tablet, or computer. Continued access to all newly released audio guides and specialized soundscapes is available for just $29.95/month, which you can manage or cancel anytime.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>Are there any contraindications or health precautions?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            As with any bio-energetic or PEMF technology, do not use the active electromagnetic platform if you have an implanted electronic medical device (such as a pacemaker), or if you are currently pregnant. Joint replacements (hip or knee) are safely accommodated. Consult your physician if you have specific medical questions.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>What warranty and ongoing support is provided?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            Every P90+ device includes a full 1-year manufacturer warranty against defects, as well as dedicated concierge onboarding from our wellness support team to ensure you get the absolute best out of your daily reset routine.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= BOTTOM CONVERSION BANNER ================= -->
+        <section class="site-container">
+            <div class="bottom-cta-banner">
+                <h2>Ready to Bring the Reset Experience Home?</h2>
+                <p>
+                    Recreate the sanctuary you felt in our wellness space every single day. Orders include complimentary insured shipping and complete setup guidance.
+                </p>
+                <div class="bottom-cta-btns">
+                    <button type="button" class="card-btn btn-gold" style="width: auto; padding: 0.85rem 2rem;" onclick="openOrderModal('experience')">
+                        Order Home Experience ($1,650) &rarr;
+                    </button>
+                    <button type="button" class="card-btn btn-dark" style="width: auto; padding: 0.85rem 2rem;" onclick="openOrderModal('complete')">
+                        Order Complete Setup ($2,995) &rarr;
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================= SITE FOOTER ================= -->
+    <footer class="site-footer">
+        <div class="site-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="assets/SOL_REViBE_New_Logo.png" alt="SOL REViBE" style="height: 48px; filter: brightness(0) invert(1); opacity: 0.9;">
+                    <p>
+                        The 20-minute mind-body reset station combining Sound, Aroma, and Magnetic technology for social wellness spaces and private homes.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>The Experience</h4>
+                    <ul>
+                        <li><a href="#experience">Home Station</a></li>
+                        <li><a href="#technology">S.A.M. Protocol</a></li>
+                        <li><a href="video-library/index.html">Audio Library</a></li>
+                        <li><a href="experience.html">Studio Locations</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Purchase</h4>
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick="openOrderModal('experience')">P90+ Experience ($1,650)</a></li>
+                        <li><a href="javascript:void(0)" onclick="openOrderModal('complete')">Complete Setup ($2,995)</a></li>
+                        <li><a href="order.html">Commercial Systems</a></li>
+                        <li><a href="#faq">Warranty &amp; Shipping</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="tel:18005550199"><i class="fa-solid fa-phone" style="margin-right: 6px;"></i> Concierge Support</a></li>
+                        <li><a href="mailto:support@solrevibe.com"><i class="fa-solid fa-envelope" style="margin-right: 6px;"></i> support@solrevibe.com</a></li>
+                        <li><a href="https://solrevibe.com">solrevibe.com</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-disclaimer">
+                <strong>Wellness Disclaimer:</strong> The SOL REViBE station, OlyLife P90+, and Therapeutic Audio Guides are designed for relaxation, stress reduction, energetic balance, and general well-being. They are not intended to diagnose, treat, cure, or prevent any medical condition or disease. Always consult with a qualified healthcare professional regarding any personal medical conditions.
+            </div>
+
+            <div class="footer-bottom-bar">
+                <div>&copy; 2026 SOL REViBE. All rights reserved.</div>
+                <div style="display: flex; gap: 1.5rem;">
+                    <a href="index.html" style="color: inherit; text-decoration: none;">Home</a>
+                    <a href="video-library/index.html" style="color: inherit; text-decoration: none;">Video Library</a>
+                    <a href="order.html" style="color: inherit; text-decoration: none;">Direct Order</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= VIDEO MODAL ================= -->
+    <div class="video-modal-backdrop" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="video-modal-box">
+            <button class="modal-close-btn" onclick="closeVideoModal()" aria-label="Close Video">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-video-viewport">
+                <iframe id="modalVimeoIframe" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="modal-info-bar">
+                <h3 id="modalVideoTitle">SOL REViBE Instructional Video</h3>
+                <p id="modalVideoDesc">Learn how to get the most out of your 20-minute session.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ORDER / INQUIRY MODAL ================= -->
+    <div class="order-modal-backdrop" id="orderModal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="order-modal-box">
+            <button class="modal-close-btn" onclick="closeOrderModal()" aria-label="Close Order Form" style="color: #1E1A16; background: rgba(0,0,0,0.08);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h2>Bring SOL REViBE Home</h2>
+            <p class="order-sub">Select your preferred home package to proceed with order authorization and complimentary shipping.</p>
+
+            <div class="order-selection-tabs">
+                <div class="order-tab" id="tabExperience" onclick="selectOrderPlan('experience')">
+                    <strong>Home Experience</strong>
+                    <span>$1,650 (P90+ &amp; Audio)</span>
+                </div>
+                <div class="order-tab active" id="tabComplete" onclick="selectOrderPlan('complete')">
+                    <strong>Complete Home Setup</strong>
+                    <span>$2,995 (Turnkey)</span>
+                </div>
+            </div>
+
+            <form id="customerOrderForm" onsubmit="handleOrderSubmit(event)">
+                <input type="hidden" id="selectedPlanInput" name="plan" value="complete">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="custName">Full Name *</label>
+                        <input type="text" id="custName" name="name" required placeholder="Jane Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="custPhone">Phone Number *</label>
+                        <input type="tel" id="custPhone" name="phone" required placeholder="(555) 000-0000">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="custEmail">Email Address *</label>
+                    <input type="email" id="custEmail" name="email" required placeholder="jane@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="custAddress">Delivery Address (City, State, Zip) *</label>
+                    <input type="text" id="custAddress" name="address" required placeholder="123 Wellness Way, Los Angeles, CA 90210">
+                </div>
+
+                <div class="form-group">
+                    <label for="custNotes">Special Delivery Instructions (Optional)</label>
+                    <textarea id="custNotes" name="notes" rows="2" placeholder="Gate code, delivery preference, or questions..."></textarea>
+                </div>
+
+                <button type="submit" class="form-submit-btn" id="orderSubmitBtn">
+                    Proceed to Order Confirmation &rarr;
+                </button>
+
+                <div class="order-security-notes">
+                    <span><i class="fa-solid fa-lock"></i> 256-Bit SSL Encrypted</span>
+                    <span><i class="fa-solid fa-truck"></i> Free Insured Shipping</span>
+                    <span><i class="fa-solid fa-shield-halved"></i> 1-Year Warranty</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= SCRIPTS ================= -->
+    <script>
+        // Mobile Navigation Drawer Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileDrawer.classList.toggle('open');
+            const isOpen = mobileDrawer.classList.contains('open');
+            mobileMenuBtn.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+        });
+
+        function closeDrawer() {
+            mobileDrawer.classList.remove('open');
+            mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        }
+
+        // FAQ Accordion Toggle
+        function toggleFaq(btn) {
+            const item = btn.closest('.faq-item');
+            const wasOpen = item.classList.contains('open');
+            
+            // Close all
+            document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+            
+            // Toggle clicked
+            if (!wasOpen) {
+                item.classList.add('open');
+            }
+        }
+
+        // Video Modal Management (Using Vimeo Embeds)
+        const videoModal = document.getElementById('videoModal');
+        const modalVimeoIframe = document.getElementById('modalVimeoIframe');
+        const modalVideoTitle = document.getElementById('modalVideoTitle');
+        const modalVideoDesc = document.getElementById('modalVideoDesc');
+
+        function openVideoModal(vimeoId, title, desc) {
+            modalVideoTitle.textContent = title;
+            modalVideoDesc.textContent = desc;
+            modalVimeoIframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0`;
+            videoModal.classList.add('open');
+            videoModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideoModal() {
+            modalVimeoIframe.src = '';
+            videoModal.classList.remove('open');
+            videoModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) closeVideoModal();
+        });
+
+        // Audio Preview Manager
+        const globalAudioPlayer = document.getElementById('globalAudioPlayer');
+        const audioPlayerBanner = document.getElementById('audioPlayerBanner');
+        const activeTrackTitle = document.getElementById('activeTrackTitle');
+        const playerTime = document.getElementById('playerTime');
+        const playerToggleBtn = document.getElementById('playerToggleBtn');
+        let currentCard = null;
+
+        function toggleAudioPreview(title, audioSrc, cardEl) {
+            // If already playing this track, toggle play/pause
+            if (currentCard === cardEl && !globalAudioPlayer.paused) {
+                globalAudioPlayer.pause();
+                playerToggleBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                cardEl.classList.remove('is-playing');
+                cardEl.querySelector('.trailer-play-overlay').innerHTML = '<i class="fa-solid fa-play"></i>';
+                return;
+            }
+
+            // Remove state from old card
+            if (currentCard && currentCard !== cardEl) {
+                currentCard.classList.remove('is-playing');
+                currentCard.querySelector('.trailer-play-overlay').innerHTML = '<i class="fa-solid fa-play"></i>';
+            }
+
+            currentCard = cardEl;
+            currentCard.classList.add('is-playing');
+            currentCard.querySelector('.trailer-play-overlay').innerHTML = '<i class="fa-solid fa-pause"></i>';
+
+            activeTrackTitle.textContent = title;
+            audioPlayerBanner.classList.add('active');
+            playerToggleBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+
+            globalAudioPlayer.src = audioSrc;
+            globalAudioPlayer.play().catch(e => {
+                console.log("Audio autoplay prevented, user can click play", e);
+            });
+        }
+
+        function togglePlayback() {
+            if (globalAudioPlayer.paused) {
+                globalAudioPlayer.play();
+                playerToggleBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                if (currentCard) {
+                    currentCard.classList.add('is-playing');
+                    currentCard.querySelector('.trailer-play-overlay').innerHTML = '<i class="fa-solid fa-pause"></i>';
+                }
+            } else {
+                globalAudioPlayer.pause();
+                playerToggleBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                if (currentCard) {
+                    currentCard.classList.remove('is-playing');
+                    currentCard.querySelector('.trailer-play-overlay').innerHTML = '<i class="fa-solid fa-play"></i>';
+                }
+            }
+        }
+
+        globalAudioPlayer.addEventListener('timeupdate', () => {
+            const cur = Math.floor(globalAudioPlayer.currentTime);
+            const mins = Math.floor(cur / 60);
+            const secs = cur % 60;
+            playerTime.textContent = `Sample Preview: ${mins}:${secs < 10 ? '0' : ''}${secs} / 01:24`;
+        });
+
+        globalAudioPlayer.addEventListener('ended', () => {
+            stopAudioPreview();
+        });
+
+        function stopAudioPreview() {
+            globalAudioPlayer.pause();
+            globalAudioPlayer.src = '';
+            audioPlayerBanner.classList.remove('active');
+            if (currentCard) {
+                currentCard.classList.remove('is-playing');
+                currentCard.querySelector('.trailer-play-overlay').innerHTML = '<i class="fa-solid fa-play"></i>';
+                currentCard = null;
+            }
+        }
+
+        // Order Modal Management
+        const orderModal = document.getElementById('orderModal');
+        const tabExperience = document.getElementById('tabExperience');
+        const tabComplete = document.getElementById('tabComplete');
+        const selectedPlanInput = document.getElementById('selectedPlanInput');
+        const orderSubmitBtn = document.getElementById('orderSubmitBtn');
+
+        function openOrderModal(plan) {
+            selectOrderPlan(plan || 'complete');
+            orderModal.classList.add('open');
+            orderModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOrderModal() {
+            orderModal.classList.remove('open');
+            orderModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        orderModal.addEventListener('click', (e) => {
+            if (e.target === orderModal) closeOrderModal();
+        });
+
+        function selectOrderPlan(plan) {
+            selectedPlanInput.value = plan;
+            if (plan === 'experience') {
+                tabExperience.classList.add('active');
+                tabComplete.classList.remove('active');
+                orderSubmitBtn.innerHTML = 'Proceed with Home Experience ($1,650) &rarr;';
+            } else {
+                tabComplete.classList.add('active');
+                tabExperience.classList.remove('active');
+                orderSubmitBtn.innerHTML = 'Proceed with Complete Setup ($2,995) &rarr;';
+            }
+        }
+
+        function handleOrderSubmit(e) {
+            e.preventDefault();
+            const plan = selectedPlanInput.value;
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const email = document.getElementById('custEmail').value;
+            const address = document.getElementById('custAddress').value;
+            const notes = document.getElementById('custNotes').value;
+
+            // Forward to order/payment confirmation bridge
+            orderSubmitBtn.disabled = true;
+            orderSubmitBtn.textContent = 'Redirecting to Order Portal...';
+
+            try {
+                sessionStorage.setItem('customerOrder', JSON.stringify({
+                    plan, name, phone, email, address, notes, timestamp: new Date().toISOString()
+                }));
+            } catch(err) {}
+
+            setTimeout(() => {
+                window.location.href = `order.html?plan=${plan}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`;
+            }, 600);
+        }
+
+        // ESC key modal close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+                closeOrderModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

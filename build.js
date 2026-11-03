@@ -8,7 +8,7 @@ const path = require('path');
     fs.mkdirSync(outDir);
   }
 
-  const files = ['index.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'minds-eye-white-bg.mp4', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm'];
+  const files = ['index.html', 'customer.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html', 'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css', 'script.js', 'hope-survey.html', 'minds-eye-white-bg.mp4', 'minds-eye.png', 'minds-eye-animated.mp4', 'minds-eye-animated.webm'];
 
   files.forEach(file => {
     if (fs.existsSync(file)) {
@@ -60,6 +60,12 @@ const path = require('path');
   const videoLibDirDest = path.join(outDir, 'video-library');
   if (fs.existsSync(videoLibDirSrc)) {
     copyRecursiveSync(videoLibDirSrc, videoLibDirDest);
+  }
+
+  const customerDirSrc = path.join(__dirname, 'customer');
+  const customerDirDest = path.join(outDir, 'customer');
+  if (fs.existsSync(customerDirSrc)) {
+    copyRecursiveSync(customerDirSrc, customerDirDest);
   }
 
   const key = process.env.VITE_ELEVENLABS_API_KEY || process.env.ELEVENLABS_API_KEY || "";
