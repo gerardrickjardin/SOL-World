@@ -511,6 +511,14 @@ footer b { color: #2B2926 !important; }
   </div>
 </div>
 
+<script src="../assets/vimeo-player.min.js"></script>
+<script>
+  if (!window.Vimeo) {
+    const s = document.createElement("script");
+    s.src = "/assets/vimeo-player.min.js";
+    document.head.appendChild(s);
+  }
+</script>
 <script>
 (() => {
   const CATS = ["All", "TAGs"];
@@ -716,13 +724,37 @@ footer b { color: #2B2926 !important; }
 
   // ---- Vimeo Player & Auto-pause controller ----
   let currentVideo = null;
+  let vimeoSdkPlayer = null;
   const VIMEO_ORIGIN = "https://player.vimeo.com";
   const pauser = { points: [], fired: {}, last: 0, holdAt: null, exitHint: false };
   const resumeOverlay = $("resumeOverlay"), resumeBtn = $("resumeBtn"), resumeNote = $("resumeNote");
 
   function vimeoCmd(method, value){
     if (!player.contentWindow) return;
-    player.contentWindow.postMessage(JSON.stringify(value === undefined ? {method} : {method, value}), VIMEO_ORIGIN);
+    try {
+      player.contentWindow.postMessage(JSON.stringify(value === undefined ? {method} : {method, value}), VIMEO_ORIGIN);
+    } catch(_) {}
+  }
+
+  function pauseVideo(){
+    if (vimeoSdkPlayer) {
+      try { vimeoSdkPlayer.pause().catch(() => {}); } catch(_) {}
+    }
+    vimeoCmd("pause");
+  }
+
+  function seekVideo(seconds){
+    if (vimeoSdkPlayer) {
+      try { vimeoSdkPlayer.setCurrentTime(seconds).catch(() => {}); } catch(_) {}
+    }
+    vimeoCmd("setCurrentTime", seconds);
+  }
+
+  function playVideo(){
+    if (vimeoSdkPlayer) {
+      try { vimeoSdkPlayer.play().catch(() => {}); } catch(_) {}
+    }
+    vimeoCmd("play");
   }
 
   function showResume(idx){
@@ -739,7 +771,7 @@ footer b { color: #2B2926 !important; }
 
   resumeBtn.addEventListener("click", () => {
     hideResume();
-    vimeoCmd("play");
+    playVideo();
     $("close").focus({ preventScroll: true });
   });
 
@@ -765,46 +797,101 @@ footer b { color: #2B2926 !important; }
 
   const tracking = () => pauser.points.length > 0 || pauser.exitHint;
 
-  function listenVimeo(){
-    if (!tracking()) return;
-    ["timeupdate", "playProgress", "seeked", "seek", "ended", "finish", "play"].forEach(ev => vimeoCmd("addEventListener", ev));
-  }
-
-  player.addEventListener("load", listenVimeo);
-
-  window.addEventListener("message", e => {
-    if (!tracking()) return;
-    if (e.origin !== VIMEO_ORIGIN || e.source !== player.contentWindow) return;
-    let d = e.data;
-    if (typeof d === "string") { try { d = JSON.parse(d); } catch(_) { return; } }
-    if (!d || !d.event) return;
-    if (d.event === "ready") { listenVimeo(); return; }
-    const ev = { playProgress: "timeupdate", seek: "seeked", finish: "ended" }[d.event] || d.event;
-    if (ev === "play") { hideResume(); return; }
-    if (ev === "ended") { pauser.fired = {}; pauser.last = 0; hideResume(); showExitHint(); return; }
-    const t = d.data && typeof d.data.seconds === "number" ? d.data.seconds : null;
-    if (t === null) return;
-    const dur = d.data && typeof d.data.duration === "number" ? d.data.duration : 0;
+  function handleTimeUpdate(t, dur){
+    if (t === null || typeof t !== "number") return;
     if (dur > 0) {
       const left = dur - t;
       if (left <= EXIT_HINT_SECONDS && t > 0) showExitHint();
       else if (left > EXIT_HINT_SECONDS + 2) hideExitHint();
     }
     pauser.points.forEach(p => { if (t < p - 0.5) pauser.fired[p] = false; });
-    if (ev === "seeked") {
-      if (pauser.holdAt === null || Math.abs(t - pauser.holdAt) > 0.5) hideResume();
-      pauser.last = t; return;
-    }
-    if (ev !== "timeupdate") return;
     const hit = pauser.points.find(p => !pauser.fired[p] && pauser.last < p && t >= p && t - pauser.last < 3);
     pauser.last = t;
     if (hit !== undefined) {
       pauser.fired[hit] = true;
-      vimeoCmd("pause");
-      vimeoCmd("setCurrentTime", hit);
+      pauseVideo();
+      seekVideo(hit);
       pauser.last = hit;
       pauser.holdAt = hit;
       showResume(pauser.points.indexOf(hit));
+    }
+  }
+
+  function handleEnded(){
+    pauser.fired = {};
+    pauser.last = 0;
+    hideResume();
+    showExitHint();
+  }
+
+  function handleSeeked(t){
+    if (pauser.holdAt === null || (typeof t === "number" && Math.abs(t - pauser.holdAt) > 0.5)) {
+      hideResume();
+    }
+    if (typeof t === "number") pauser.last = t;
+  }
+
+  function listenVimeo(){
+    if (!tracking()) return;
+    ["timeupdate", "playProgress", "seeked", "seek", "ended", "finish", "play"].forEach(ev => vimeoCmd("addEventListener", ev));
+  }
+
+  function initVimeoSdk(){
+    if (!window.Vimeo || !window.Vimeo.Player || !tracking()) return;
+    try {
+      if (vimeoSdkPlayer) {
+        try { vimeoSdkPlayer.destroy(); } catch(_) {}
+      }
+      vimeoSdkPlayer = new Vimeo.Player(player);
+      vimeoSdkPlayer.on("timeupdate", function(data){
+        if (data) handleTimeUpdate(data.seconds, data.duration);
+      });
+      vimeoSdkPlayer.on("ended", function(){
+        handleEnded();
+      });
+      vimeoSdkPlayer.on("play", function(){
+        hideResume();
+      });
+      vimeoSdkPlayer.on("seeked", function(data){
+        handleSeeked(data ? data.seconds : null);
+      });
+    } catch(err) {
+      console.warn("Vimeo SDK attach note:", err);
+    }
+  }
+
+  player.addEventListener("load", () => {
+    listenVimeo();
+    initVimeoSdk();
+  });
+
+  window.addEventListener("message", e => {
+    if (!tracking()) return;
+    if (!e.origin || (!e.origin.includes("player.vimeo.com") && !e.origin.includes("vimeo.com"))) return;
+    let d = e.data;
+    if (typeof d === "string") { try { d = JSON.parse(d); } catch(_) { return; } }
+    if (!d) return;
+
+    if (d.event === "ready") {
+      listenVimeo();
+      initVimeoSdk();
+      return;
+    }
+
+    const ev = { playProgress: "timeupdate", seek: "seeked", finish: "ended" }[d.event] || d.event;
+    if (ev === "play") { hideResume(); return; }
+    if (ev === "ended") { handleEnded(); return; }
+
+    const t = d.data && typeof d.data.seconds === "number" ? d.data.seconds : (typeof d.seconds === "number" ? d.seconds : null);
+    const dur = d.data && typeof d.data.duration === "number" ? d.data.duration : (typeof d.duration === "number" ? d.duration : 0);
+
+    if (ev === "seeked") {
+      handleSeeked(t);
+      return;
+    }
+
+    if (ev === "timeupdate" && t !== null) {
+      handleTimeUpdate(t, dur);
     }
   });
 
@@ -876,7 +963,20 @@ footer b { color: #2B2926 !important; }
       return;
     }
     player.title = "Vimeo video player";
-    player.src = `https://player.vimeo.com/video/${currentVideo.vimeoId}?autoplay=1`;
+    player.src = `https://player.vimeo.com/video/${currentVideo.vimeoId}?autoplay=1&api=1&player_id=vimeo_player`;
+
+    setTimeout(() => {
+      listenVimeo();
+      initVimeoSdk();
+    }, 400);
+    setTimeout(() => {
+      listenVimeo();
+      initVimeoSdk();
+    }, 1200);
+    setTimeout(() => {
+      listenVimeo();
+      initVimeoSdk();
+    }, 2400);
   }
 
   function openModal(v){
@@ -904,6 +1004,10 @@ footer b { color: #2B2926 !important; }
     playerNotice.classList.remove("show"); playerNotice.setAttribute("aria-hidden", "true");
     playerNotice.innerHTML = "";
     armPauses(null);
+    if (vimeoSdkPlayer) {
+      try { vimeoSdkPlayer.destroy(); } catch(_) {}
+      vimeoSdkPlayer = null;
+    }
     player.src = "about:blank"; player.removeAttribute("src"); // stop audio
     currentVideo = null;
     if(lastFocus) lastFocus.focus({ preventScroll: backToTags });
