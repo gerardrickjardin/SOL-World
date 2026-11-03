@@ -146,7 +146,7 @@ export default function CheckoutPage() {
                   <code>{paymentState.orderId}</code>
                 </div>
                 <div className="token-row">
-                  <span>Official 1-Year Warranty:</span>
+                  <span>Official 2-Year Warranty:</span>
                   <strong style={{ color: '#7A8776' }}>
                     ACTIVE (Registered to ID: {formData.governmentId ? '••••' + formData.governmentId.slice(-4) : '••••8412'})
                   </strong>
@@ -303,7 +303,7 @@ export default function CheckoutPage() {
                         </svg>
                       </div>
                       <div>
-                        <strong>1-Year Manufacturer Warranty Registration</strong>
+                        <strong>2-Year Manufacturer Warranty Registration</strong>
                         <p>Official registration authenticated directly using your Government ID.</p>
                       </div>
                     </li>
@@ -329,7 +329,7 @@ export default function CheckoutPage() {
                   </svg>
                   <div>
                     <strong>Direct Single-Page Customer Order</strong>
-                    <p>Guaranteed genuine unit dispatch with 1-Year Manufacturer Warranty protection.</p>
+                    <p>Guaranteed genuine unit dispatch with 2-Year Manufacturer Warranty protection.</p>
                   </div>
                 </div>
               </section>
@@ -511,7 +511,7 @@ export default function CheckoutPage() {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13">
                           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                         </svg>
-                        1-Year Manufacturer Warranty
+                        2-Year Manufacturer Warranty
                       </span>
                     </div>
 
@@ -562,7 +562,7 @@ export default function CheckoutPage() {
                         <p>
                           <strong>
                             Your Driver's License or Government ID Number is required strictly to register your device for the
-                            one-year manufacturer warranty.
+                            two-year manufacturer warranty.
                           </strong>
                         </p>
                       </div>
@@ -688,7 +688,7 @@ export default function CheckoutPage() {
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                       </svg>
-                      Backed by 1-Year Manufacturer Warranty & 256-Bit SSL Encryption
+                      Backed by 2-Year Manufacturer Warranty & 256-Bit SSL Encryption
                     </p>
                   </div>
                 </form>
@@ -757,7 +757,7 @@ export default function CheckoutPage() {
             </button>
             <span className="link-divider">•</span>
             <button type="button" className="policy-link" onClick={() => setActiveModal('guarantee')}>
-              1-Year Warranty Terms
+              2-Year Warranty Terms
             </button>
           </div>
 
