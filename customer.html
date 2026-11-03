@@ -316,22 +316,22 @@
 
         .hero-top-grid {
             display: grid;
-            grid-template-columns: 310px minmax(420px, 1.25fr) minmax(500px, 1.2fr);
-            gap: 1.85rem;
+            grid-template-columns: 280px minmax(520px, 1.4fr) minmax(480px, 1.15fr);
+            gap: 1.75rem;
             align-items: stretch;
         }
 
-        @media (max-width: 1380px) {
+        @media (max-width: 1400px) {
             .hero-top-grid {
-                grid-template-columns: 280px minmax(360px, 1.15fr) minmax(470px, 1.15fr);
-                gap: 1.5rem;
+                grid-template-columns: 260px minmax(440px, 1.3fr) minmax(450px, 1.15fr);
+                gap: 1.35rem;
             }
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1120px) {
             .hero-top-grid {
                 grid-template-columns: 1fr;
-                gap: 2.5rem;
+                gap: 2.25rem;
                 align-items: start;
             }
         }
@@ -342,19 +342,19 @@
             flex-direction: column;
             justify-content: space-between;
             height: 100%;
-            gap: 1.35rem;
-            padding-top: 0.25rem;
+            gap: 0.95rem;
+            padding-top: 0.1rem;
         }
 
         .hero-left-top {
             display: flex;
             flex-direction: column;
-            gap: 1.1rem;
+            gap: 0.85rem;
         }
 
         .hero-main-title {
             font-family: 'Playfair Display', Georgia, serif;
-            font-size: 2.9rem;
+            font-size: 2.65rem;
             line-height: 1.08;
             font-weight: 600;
             color: var(--text-dark);
@@ -367,8 +367,8 @@
         }
 
         .hero-subheadline {
-            font-size: 0.92rem;
-            line-height: 1.55;
+            font-size: 0.88rem;
+            line-height: 1.48;
             color: var(--text-muted);
             font-weight: 400;
         }
@@ -376,11 +376,11 @@
         .benefit-pills-list {
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
-            margin-top: 0.15rem;
+            gap: 0.48rem;
+            margin-top: 0.1rem;
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1120px) {
             .benefit-pills-list {
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -390,11 +390,11 @@
         .benefit-pill {
             display: flex;
             align-items: center;
-            gap: 0.85rem;
+            gap: 0.75rem;
             background: rgba(255, 255, 255, 0.92);
             border: 1px solid var(--border-medium);
             border-radius: var(--radius-sm);
-            padding: 0.55rem 0.9rem;
+            padding: 0.48rem 0.8rem;
             backdrop-filter: blur(10px);
             transition: var(--transition);
             box-shadow: 0 2px 8px rgba(30, 26, 22, 0.03);
@@ -402,15 +402,15 @@
         }
 
         .benefit-pill-icon {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: rgba(194, 155, 104, 0.14);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--brand-gold-dark);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             flex-shrink: 0;
             transition: var(--transition);
         }
@@ -428,7 +428,7 @@
 
         .benefit-pill-text strong {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             font-weight: 800;
             letter-spacing: 0.08em;
             color: var(--text-dark);
@@ -436,7 +436,7 @@
         }
 
         .benefit-pill-text span {
-            font-size: 0.71rem;
+            font-size: 0.68rem;
             color: var(--text-light);
             font-weight: 500;
         }
@@ -453,11 +453,11 @@
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 245, 240, 0.94) 100%);
             border: 1px solid var(--border-medium);
             border-radius: var(--radius-md);
-            padding: 1rem 1.15rem;
+            padding: 0.85rem 1rem;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
             display: flex;
             flex-direction: column;
-            gap: 0.55rem;
+            gap: 0.45rem;
             position: relative;
         }
 
@@ -480,10 +480,10 @@
         }
 
         .reassurance-quote {
-            font-size: 0.8rem;
+            font-size: 0.79rem;
             font-style: italic;
             color: var(--text-dark);
-            line-height: 1.42;
+            line-height: 1.4;
         }
 
         .reassurance-footer {
@@ -491,8 +491,8 @@
             align-items: center;
             justify-content: space-between;
             border-top: 1px solid var(--border-light);
-            padding-top: 0.5rem;
-            font-size: 0.69rem;
+            padding-top: 0.45rem;
+            font-size: 0.68rem;
             color: var(--text-light);
         }
 
@@ -509,10 +509,11 @@
             font-weight: 700;
         }
 
-        /* Center Hero Column: Station Photo (Full Height, No Void) */
+        /* Center Hero Column: Station Photo (Shows Full Picture, Zero Cut-Through) */
         .hero-center-col {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             height: 100%;
             position: relative;
         }
@@ -520,11 +521,7 @@
         .hero-photo-frame {
             position: relative;
             width: 100%;
-            height: 100%;
-            min-height: 540px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+            aspect-ratio: 16 / 10.2;
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: 0 16px 36px rgba(34, 55, 43, 0.12);
@@ -535,16 +532,14 @@
         .hero-main-photo {
             width: 100%;
             height: 100%;
-            flex: 1;
-            min-height: 540px;
             object-fit: cover;
-            object-position: center 32%;
+            object-position: 45% center;
             display: block;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .hero-photo-frame:hover .hero-main-photo {
-            transform: scale(1.025);
+            transform: scale(1.02);
         }
 
         .hero-photo-frame::after {
@@ -553,23 +548,24 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 110px;
-            background: linear-gradient(to top, rgba(16, 28, 21, 0.62) 0%, transparent 100%);
+            height: 100px;
+            background: linear-gradient(to top, rgba(16, 28, 21, 0.58) 0%, transparent 100%);
             pointer-events: none;
         }
 
         .photo-floating-pill-top {
             position: absolute;
             top: 14px;
-            left: 14px;
+            right: 14px;
+            left: auto;
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             color: var(--brand-forest);
-            padding: 0.38rem 0.85rem;
+            padding: 0.35rem 0.85rem;
             border-radius: var(--radius-pill);
             font-family: 'Outfit', sans-serif;
-            font-size: 0.66rem;
+            font-size: 0.65rem;
             font-weight: 800;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -595,10 +591,10 @@
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             color: #FFFFFF;
-            padding: 0.5rem 1rem;
+            padding: 0.48rem 0.95rem;
             border-radius: var(--radius-pill);
             font-family: 'Outfit', sans-serif;
-            font-size: 0.72rem;
+            font-size: 0.71rem;
             font-weight: 700;
             letter-spacing: 0.06em;
             display: flex;
@@ -642,45 +638,48 @@
         .hero-right-col {
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
+            justify-content: space-between;
+            height: 100%;
+            gap: 0.85rem;
         }
 
         .hero-right-header {
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.1rem;
         }
 
         .hero-eyebrow {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             font-weight: 800;
-            letter-spacing: 0.18em;
+            letter-spacing: 0.16em;
             color: var(--brand-forest);
             text-transform: uppercase;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.15rem;
             display: block;
         }
 
         .hero-package-title {
             font-family: 'Playfair Display', Georgia, serif;
-            font-size: 2.85rem;
+            font-size: 2.25rem;
             line-height: 1.05;
             font-weight: 600;
             color: var(--text-dark);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.25rem;
             letter-spacing: -0.01em;
         }
 
         .hero-package-subtitle {
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             color: var(--text-muted);
-            line-height: 1.48;
+            line-height: 1.4;
         }
 
         /* Two Pricing Cards Grid */
         .purchase-cards-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.15rem;
+            gap: 0.85rem;
+            align-items: stretch;
         }
 
         @media (max-width: 640px) {
@@ -693,7 +692,7 @@
             background: #FFFFFF;
             border: 1px solid var(--border-medium);
             border-radius: var(--radius-md);
-            padding: 1.4rem 1.15rem 1.35rem;
+            padding: 1rem 0.95rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -715,17 +714,17 @@
 
         .card-badge {
             position: absolute;
-            top: -12px;
+            top: -11px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--brand-sage);
             color: #FFFFFF;
             font-family: 'Outfit', sans-serif;
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             font-weight: 800;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            padding: 0.25rem 0.85rem;
+            padding: 0.22rem 0.8rem;
             border-radius: var(--radius-pill);
             box-shadow: 0 3px 10px rgba(127, 146, 131, 0.35);
             white-space: nowrap;
@@ -733,29 +732,29 @@
 
         .card-brand-sub {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 800;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--text-light);
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.1rem;
         }
 
         .card-plan-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             font-weight: 800;
-            line-height: 1.18;
+            line-height: 1.15;
             color: var(--text-dark);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.15rem;
         }
 
         .card-plan-desc {
-            font-size: 0.74rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
-            line-height: 1.35;
-            min-height: 32px;
-            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            min-height: 26px;
+            margin-bottom: 0.5rem;
         }
 
         /* Product visual inside card */
@@ -764,13 +763,13 @@
             border-radius: var(--radius-sm);
             overflow: hidden;
             border: 1px solid var(--border-light);
-            margin-bottom: 0.85rem;
+            margin-bottom: 0.65rem;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
         }
 
         .card-product-visual img {
             width: 100%;
-            height: 92px;
+            height: 72px;
             object-fit: cover;
             display: block;
             transition: transform 0.4s ease;
@@ -783,13 +782,13 @@
         .card-price-block {
             display: flex;
             align-items: baseline;
-            gap: 0.45rem;
-            margin-bottom: 0.2rem;
+            gap: 0.4rem;
+            margin-bottom: 0.15rem;
         }
 
         .card-price-value {
             font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 800;
             color: var(--brand-terracotta);
             letter-spacing: -0.02em;
@@ -797,31 +796,31 @@
         }
 
         .card-price-shipping {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--text-light);
             font-weight: 500;
         }
 
         .card-features-list {
             list-style: none;
-            margin: 0.85rem 0 1.25rem;
+            margin: 0.55rem 0 0.85rem;
             display: flex;
             flex-direction: column;
-            gap: 0.48rem;
+            gap: 0.35rem;
         }
 
         .card-features-list li {
-            font-size: 0.75rem;
+            font-size: 0.71rem;
             color: var(--text-muted);
             display: flex;
             align-items: flex-start;
-            gap: 0.5rem;
-            line-height: 1.35;
+            gap: 0.45rem;
+            line-height: 1.28;
         }
 
         .card-features-list li i {
             color: var(--brand-sage);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             margin-top: 1px;
             flex-shrink: 0;
         }
@@ -831,10 +830,10 @@
             width: 100%;
             text-align: center;
             text-decoration: none;
-            padding: 0.78rem 0.85rem;
+            padding: 0.65rem 0.75rem;
             border-radius: var(--radius-pill);
             font-family: 'Outfit', sans-serif;
-            font-size: 0.76rem;
+            font-size: 0.72rem;
             font-weight: 800;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -872,12 +871,12 @@
             background: #FFFFFF;
             border: 1.5px dashed var(--brand-gold);
             border-radius: var(--radius-sm);
-            padding: 0.85rem 1.15rem;
+            padding: 0.65rem 0.95rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 1rem;
-            margin-top: 0.75rem;
+            gap: 0.85rem;
+            margin-top: 0.5rem;
             box-shadow: var(--shadow-subtle);
             transition: var(--transition);
         }
@@ -890,41 +889,41 @@
         .audio-sub-content {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.65rem;
         }
 
         .audio-sub-icon {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: rgba(185, 111, 75, 0.12);
             color: var(--brand-terracotta);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             flex-shrink: 0;
         }
 
         .audio-sub-text {
-            font-size: 0.76rem;
+            font-size: 0.72rem;
             color: var(--text-dark);
-            line-height: 1.38;
+            line-height: 1.35;
         }
 
         .audio-sub-text strong {
             color: var(--brand-terracotta);
             font-family: 'Outfit', sans-serif;
-            font-size: 0.88rem;
+            font-size: 0.84rem;
         }
 
         .audio-sub-badge {
             background: var(--brand-gold-light);
             color: var(--brand-gold-dark);
             font-family: 'Outfit', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 800;
-            padding: 0.3rem 0.8rem;
+            padding: 0.25rem 0.75rem;
             border-radius: var(--radius-pill);
             white-space: nowrap;
             letter-spacing: 0.08em;
