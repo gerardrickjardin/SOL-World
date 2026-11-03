@@ -81,6 +81,32 @@
 
             const [activeModal, setActiveModal] = useState(null); // 'terms' | 'privacy' | 'shipping' | 'guarantee'
 
+            useEffect(() => {
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    let stored = {};
+                    try {
+                        stored = JSON.parse(sessionStorage.getItem('customerOrder') || '{}') || {};
+                    } catch (_) {}
+                    const planParam = params.get('plan') || stored.plan;
+                    if (planParam === 'split' || planParam === 'full') {
+                        setPricingPlan(planParam);
+                    }
+                    setFormData(prev => ({
+                        ...prev,
+                        fullName: params.get('name') || stored.fullName || prev.fullName,
+                        email: params.get('email') || stored.email || prev.email,
+                        phone: params.get('phone') || stored.phone || prev.phone,
+                        address: params.get('address') || stored.address || prev.address,
+                        city: params.get('city') || stored.city || prev.city,
+                        state: params.get('state') || stored.state || prev.state,
+                        zip: params.get('zip') || stored.zip || prev.zip,
+                        country: params.get('country') || stored.country || prev.country,
+                        cardholderName: params.get('name') || stored.fullName || prev.cardholderName,
+                    }));
+                } catch (_) {}
+            }, []);
+
             const handleInputChange = (e) => {
                 const { name, value, type, checked } = e.target;
                 setFormData(prev => ({
@@ -152,7 +178,7 @@
                         {/* Top Center Logo */}
                         <header className="brand-header">
                             <img 
-                                src="assets/SOL REViBE Logo.png" 
+                                src="assets/SOL_REViBE_New_Logo.png?v=20261016" 
                                 alt="SOL REViBE" 
                                 className="brand-logo"
                                 onError={(e) => {
@@ -213,7 +239,7 @@
                                         </div>
                                     </div>
 
-                                    <div style={{display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '1.5rem'}}>
+                                    <div className="conf-actions-wrap" style={{display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '1.5rem', flexWrap: 'wrap'}}>
                                         <button 
                                             type="button" 
                                             className="reset-btn"
@@ -1187,6 +1213,7 @@
                             display: flex;
                             align-items: center;
                             justify-content: center;
+                            flex-shrink: 0;
                         }
 
                         .input-group {
@@ -1265,6 +1292,8 @@
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
+                            flex-wrap: wrap;
+                            gap: 8px;
                         }
 
                         .warranty-pill-tag {
@@ -1278,6 +1307,8 @@
                             font-weight: 700;
                             padding: 3px 8px;
                             border-radius: 999px;
+                            white-space: nowrap;
+                            flex-shrink: 0;
                         }
 
                         .warranty-explicit-callout {
@@ -1301,6 +1332,8 @@
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
+                            flex-wrap: wrap;
+                            gap: 8px;
                         }
 
                         .pci-shield-tag {
@@ -1314,11 +1347,14 @@
                             padding: 0.25rem 0.55rem;
                             border-radius: 6px;
                             border: 1px solid #a7f3d0;
+                            white-space: nowrap;
+                            flex-shrink: 0;
                         }
 
                         .pci-shield-tag svg {
                             width: 12px;
                             height: 12px;
+                            flex-shrink: 0;
                         }
 
                         .hosted-iframe-container {
@@ -1335,6 +1371,8 @@
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
+                            flex-wrap: wrap;
+                            gap: 6px 10px;
                         }
 
                         .iframe-title {
@@ -1350,11 +1388,13 @@
                             width: 12px;
                             height: 12px;
                             color: #059669;
+                            flex-shrink: 0;
                         }
 
                         .active-card-badges {
                             display: flex;
                             gap: 0.25rem;
+                            flex-shrink: 0;
                         }
 
                         .card-chip {
@@ -1492,12 +1532,14 @@
                             display: flex;
                             align-items: center;
                             gap: 0.35rem;
+                            text-align: center;
                         }
 
                         .guarantee-microtext svg {
                             width: 14px;
                             height: 14px;
                             color: #10b981;
+                            flex-shrink: 0;
                         }
 
                         /* Confirmation Screen */
@@ -1554,9 +1596,22 @@
                         .token-row {
                             display: flex;
                             justify-content: space-between;
+                            align-items: flex-start;
+                            gap: 12px;
                             font-size: 0.85rem;
                             border-bottom: 1px dashed #e2e8f0;
                             padding-bottom: 0.5rem;
+                        }
+
+                        .token-row span {
+                            flex-shrink: 0;
+                            color: #64748b;
+                        }
+
+                        .token-row strong,
+                        .token-row code {
+                            text-align: right;
+                            word-break: break-word;
                         }
 
                         .token-row:last-child {
@@ -1574,6 +1629,10 @@
                             font-size: 0.875rem;
                             color: #334155;
                             cursor: pointer;
+                        }
+
+                        .conf-actions-wrap .reset-btn {
+                            margin-top: 0;
                         }
 
                         /* Compliance Footer */
@@ -1657,6 +1716,7 @@
                             align-items: center;
                             justify-content: center;
                             padding: 1.5rem;
+                            overflow-y: auto;
                         }
 
                         .modal-content {
@@ -1664,6 +1724,7 @@
                             border-radius: 16px;
                             max-width: 580px;
                             width: 100%;
+                            margin: auto;
                             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
                             display: flex;
                             flex-direction: column;
@@ -1718,6 +1779,54 @@
                             font-size: 0.875rem;
                             font-weight: 600;
                             cursor: pointer;
+                        }
+
+                        @media (max-width: 600px) {
+                            .checkout-page-root {
+                                padding: 1.5rem 0.75rem;
+                            }
+                            .checkout-card {
+                                padding: 1.25rem;
+                            }
+                            .product-summary-pane {
+                                padding: 1.25rem;
+                            }
+                            .input-row-2col,
+                            .input-row-3col {
+                                grid-template-columns: 1fr;
+                                gap: 0.85rem;
+                            }
+                            .token-row {
+                                flex-direction: column;
+                                gap: 2px;
+                            }
+                            .token-row strong,
+                            .token-row code {
+                                text-align: left;
+                            }
+                            .conf-actions-wrap {
+                                flex-direction: column;
+                            }
+                            .conf-actions-wrap .reset-btn {
+                                width: 100%;
+                            }
+                        }
+
+                        @media print {
+                            .bg-decor-blob,
+                            .compliance-footer,
+                            .conf-actions-wrap {
+                                display: none !important;
+                            }
+                            .checkout-page-root {
+                                background: #ffffff !important;
+                                padding: 0 !important;
+                            }
+                            .checkout-card {
+                                box-shadow: none !important;
+                                border: none !important;
+                                padding: 0 !important;
+                            }
                         }
                     `}</style>
                 </div>
