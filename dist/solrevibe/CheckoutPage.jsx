@@ -1310,6 +1310,10 @@ export default function CheckoutPage() {
           gap: 8px;
         }
 
+        .warranty-title-bar .form-section-title {
+          font-size: 0.96rem;
+        }
+
         .warranty-pill-tag {
           display: inline-flex;
           align-items: center;
@@ -1317,7 +1321,7 @@ export default function CheckoutPage() {
           background: #D1FAE5;
           border: 1px solid #86EFAC;
           color: #065F46;
-          font-size: 11px;
+          font-size: 10.5px;
           font-weight: 700;
           padding: 3px 8px;
           border-radius: 999px;
