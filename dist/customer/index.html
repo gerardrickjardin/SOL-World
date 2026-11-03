@@ -867,71 +867,6 @@
             filter: brightness(1.08);
         }
 
-        /* $29.95 Take-Home Audio Library Membership Callout */
-        .audio-sub-callout {
-            background: #FFFFFF;
-            border: 1.5px dashed var(--brand-gold);
-            border-radius: var(--radius-sm);
-            padding: 0.65rem 0.95rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.85rem;
-            margin-top: 0.5rem;
-            box-shadow: var(--shadow-subtle);
-            transition: var(--transition);
-        }
-
-        .audio-sub-callout:hover {
-            border-color: var(--brand-terracotta);
-            background: #FAF8F4;
-        }
-
-        .audio-sub-content {
-            display: flex;
-            align-items: center;
-            gap: 0.65rem;
-        }
-
-        .audio-sub-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(185, 111, 75, 0.12);
-            color: var(--brand-terracotta);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            flex-shrink: 0;
-        }
-
-        .audio-sub-text {
-            font-size: 0.72rem;
-            color: var(--text-dark);
-            line-height: 1.35;
-        }
-
-        .audio-sub-text strong {
-            color: var(--brand-terracotta);
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.84rem;
-        }
-
-        .audio-sub-badge {
-            background: var(--brand-gold-light);
-            color: var(--brand-gold-dark);
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.62rem;
-            font-weight: 800;
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--radius-pill);
-            white-space: nowrap;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            border: 1px solid rgba(194, 155, 104, 0.35);
-        }
-
         /* ================= THE S.A.M. PROTOCOL AT HOME ================= */
         .sam-section {
             padding: 2.75rem 0 2rem;
@@ -1996,32 +1931,6 @@
             font-weight: 700;
         }
 
-        .audio-addon-toggle {
-            background: #FAF7F2;
-            border: 1px dashed var(--brand-gold);
-            border-radius: var(--radius-sm);
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.35rem;
-            cursor: pointer;
-        }
-
-        .audio-addon-toggle input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--brand-terracotta);
-            cursor: pointer;
-        }
-
-        .audio-addon-toggle label {
-            font-size: 0.8rem;
-            color: var(--text-dark);
-            cursor: pointer;
-            line-height: 1.35;
-        }
-
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -2326,20 +2235,6 @@
                                 </button>
                             </div>
 
-                        </div>
-
-                        <!-- Take-Home Audio Option Callout ($29.95) -->
-                        <div class="audio-sub-callout">
-                            <div class="audio-sub-content">
-                                <div class="audio-sub-icon">
-                                    <i class="fa-solid fa-headphones-simple"></i>
-                                </div>
-                                <div class="audio-sub-text">
-                                    <strong>$29.95/mo Take-Home Audio Library:</strong>
-                                    <span>Unlimited on-demand access to newly released Therapeutic Audio Guides (TAGs) &amp; specialized frequencies.</span>
-                                </div>
-                            </div>
-                            <span class="audio-sub-badge">+ Add-On</span>
                         </div>
 
                     </div>
@@ -2712,7 +2607,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </button>
                         <div class="faq-answer">
-                            You receive instant on-demand access to the SOL REViBE Therapeutic Audio Guides (TAGs) on any smartphone, tablet, or computer. Continued access to all newly released audio guides and specialized soundscapes is available for just $29.95/month, which you can manage or cancel anytime.
+                            You receive instant on-demand access to the SOL REViBE Therapeutic Audio Guides (TAGs) on any smartphone, tablet, or computer, allowing you to stream your restorative audio sessions anytime.
                         </div>
                     </div>
 
@@ -2850,11 +2745,6 @@
                     <strong>Complete Home Setup</strong>
                     <span>$2,995 (Turnkey)</span>
                 </div>
-            </div>
-
-            <div class="audio-addon-toggle" onclick="toggleAddon()">
-                <input type="checkbox" id="addonAudio" name="addonAudio">
-                <label for="addonAudio"><strong>Include Take-Home Audio Library ($29.95/month):</strong> Continued access to new Therapeutic Audio Guides (TAGs) and specialized soundscapes.</label>
             </div>
 
             <form id="customerOrderForm" onsubmit="handleOrderSubmit(event)">
@@ -3043,7 +2933,6 @@
         const tabComplete = document.getElementById('tabComplete');
         const selectedPlanInput = document.getElementById('selectedPlanInput');
         const orderSubmitBtn = document.getElementById('orderSubmitBtn');
-        const addonAudioCheckbox = document.getElementById('addonAudio');
 
         function openOrderModal(plan) {
             selectOrderPlan(plan || 'complete');
@@ -3075,10 +2964,6 @@
             }
         }
 
-        function toggleAddon() {
-            addonAudioCheckbox.checked = !addonAudioCheckbox.checked;
-        }
-
         function handleOrderSubmit(e) {
             e.preventDefault();
             const plan = selectedPlanInput.value;
@@ -3087,14 +2972,13 @@
             const email = document.getElementById('custEmail').value;
             const address = document.getElementById('custAddress').value;
             const notes = document.getElementById('custNotes').value;
-            const addonAudio = addonAudioCheckbox.checked;
 
             orderSubmitBtn.disabled = true;
             orderSubmitBtn.textContent = 'Redirecting to Order Portal...';
 
             try {
                 sessionStorage.setItem('customerOrder', JSON.stringify({
-                    plan, name, phone, email, address, notes, addonAudio, timestamp: new Date().toISOString()
+                    plan, name, phone, email, address, notes, timestamp: new Date().toISOString()
                 }));
             } catch(err) {}
 
