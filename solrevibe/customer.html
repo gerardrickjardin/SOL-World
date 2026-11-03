@@ -147,10 +147,44 @@
             color: inherit;
         }
 
+        .brand-logo-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 0.35rem;
+        }
+
         .brand-logo-img {
             height: 48px;
             width: auto;
             object-fit: contain;
+        }
+
+        .brand-logo-tm {
+            position: absolute;
+            top: 46%;
+            right: -11px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            line-height: 1;
+            color: #3D3830;
+            pointer-events: none;
+        }
+
+        .footer-logo-wrap {
+            width: fit-content;
+        }
+
+        .footer-logo-tm {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tm-symbol {
+            font-size: 0.95em;
+            letter-spacing: 0;
+            margin-left: -0.06em;
+            font-weight: 700;
         }
 
         .brand-divider {
@@ -2060,7 +2094,10 @@
         <div class="site-container">
             <div class="nav-inner">
                 <a href="index.html" class="brand-link" aria-label="SOL REViBE Homepage">
-                    <img src="assets/SOL_REViBE_New_Logo.png" alt="SOL REViBE Logo" class="brand-logo-img">
+                    <div class="brand-logo-wrap">
+                        <img src="assets/SOL_REViBE_New_Logo.png" alt="SOL REViBE™ Logo" class="brand-logo-img">
+                        <span class="brand-logo-tm" aria-hidden="true">&trade;</span>
+                    </div>
                     <div class="brand-divider"></div>
                     <div class="brand-tagline" style="text-align: center;">
                         THE 20-MINUTE<br>MIND-BODY RESET
@@ -2271,7 +2308,7 @@
         <section class="sam-section" id="technology">
             <div class="site-container">
                 <div class="section-header-center">
-                    <span class="section-eyebrow">The S.A.M. Protocol At Home</span>
+                    <span class="section-eyebrow">The S.A.M. Protocol<span class="tm-symbol">&trade;</span> At Home</span>
                     <p class="section-subtext">
                         A guided 20-minute experience combining Sound, Aroma, and Magnetic technologies to help you relax, reset, and feel more balanced.
                     </p>
@@ -2615,7 +2652,10 @@
         <div class="site-container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <img src="assets/SOL_REViBE_New_Logo.png" alt="SOL REViBE" style="height: 48px; filter: brightness(0) invert(1); opacity: 0.9;">
+                    <div class="brand-logo-wrap footer-logo-wrap">
+                        <img src="assets/SOL_REViBE_New_Logo.png" alt="SOL REViBE™" style="height: 48px; filter: brightness(0) invert(1); opacity: 0.9;">
+                        <span class="brand-logo-tm footer-logo-tm" aria-hidden="true">&trade;</span>
+                    </div>
                     <p>
                         The 20-minute mind-body reset combining Sound, Aroma, and Magnetic technology for social wellness spaces and private homes.
                     </p>
@@ -2625,7 +2665,7 @@
                     <h4>The Experience</h4>
                     <ul>
                         <li><a href="#experience">Home Station</a></li>
-                        <li><a href="#technology">S.A.M. Protocol</a></li>
+                        <li><a href="#technology">S.A.M. Protocol&trade;</a></li>
                         <li><a href="#audio-guides">Audio Guides</a></li>
                         <li><a href="experience.html">Studio Locations</a></li>
                     </ul>
