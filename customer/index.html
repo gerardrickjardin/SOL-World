@@ -654,7 +654,7 @@
             font-weight: 800;
             letter-spacing: 0.16em;
             color: var(--brand-forest);
-            text-transform: uppercase;
+            text-transform: none;
             margin-bottom: 0.15rem;
             display: block;
         }
@@ -736,7 +736,7 @@
             font-size: 0.62rem;
             font-weight: 800;
             letter-spacing: 0.12em;
-            text-transform: uppercase;
+            text-transform: none;
             color: var(--text-light);
             margin-bottom: 0.1rem;
         }
@@ -1947,6 +1947,10 @@
             margin-bottom: 1rem;
         }
 
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
         @media (max-width: 550px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -2015,6 +2019,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 1.35rem;
             margin-top: 1.15rem;
             font-size: 0.74rem;
@@ -2172,7 +2177,7 @@
                     <!-- Right Column: Eyebrow, Title & Pricing Cards -->
                     <div class="hero-right-col" id="purchase-options">
                         <div class="hero-right-header">
-                            <span class="hero-eyebrow">The SOL REViBE</span>
+                            <span class="hero-eyebrow">THE SOL REViBE</span>
                             <h2 class="hero-package-title">Home Experience</h2>
                             <p class="hero-package-subtitle">
                                 Bring the power of Sound, Aroma, and Magnetic technology into your daily life.
@@ -2838,6 +2843,7 @@
         function openVideoModal(vimeoId, title, desc) {
             // Stop background audio preview if playing
             stopAudioPreview();
+            if (!videoModal) return;
 
             modalVideoTitle.textContent = title;
             modalVideoDesc.textContent = desc;
@@ -2848,15 +2854,18 @@
         }
 
         function closeVideoModal() {
-            modalVimeoIframe.src = '';
+            if (!videoModal) return;
+            if (modalVimeoIframe) modalVimeoIframe.src = '';
             videoModal.classList.remove('open');
             videoModal.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
         }
 
-        videoModal.addEventListener('click', (e) => {
-            if (e.target === videoModal) closeVideoModal();
-        });
+        if (videoModal) {
+            videoModal.addEventListener('click', (e) => {
+                if (e.target === videoModal) closeVideoModal();
+            });
+        }
 
         // Audio Preview Manager
         const globalAudioPlayer = document.getElementById('globalAudioPlayer');
@@ -2992,7 +3001,7 @@
             } catch(err) {}
 
             setTimeout(() => {
-                window.location.href = `../order.html?plan=${plan}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`;
+                window.location.href = `../order.html?plan=${encodeURIComponent(plan)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}`;
             }, 600);
         }
 

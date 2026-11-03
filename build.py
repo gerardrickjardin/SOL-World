@@ -14,7 +14,7 @@ def copy_recursive(src, dest):
 
 out_dirs = ['dist', 'public']
 files_to_copy = [
-    'index.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html',
+    'index.html', 'customer.html', 'order.html', 'profile.html', 'survey.html', 'approach.html', 'how-to-use.html',
     'rebuilding-life-challenges.html', 'employment-challenges.html', 'style.css',
     'script.js', 'hope-survey.html', 'minds-eye-white-bg.mp4', 'minds-eye.png',
     'minds-eye-animated.mp4', 'minds-eye-animated.webm'
@@ -37,6 +37,10 @@ for out_dir in out_dirs:
     
     # Copy solgames
     copy_recursive('solgames', os.path.join(out_dir, 'solgames'))
+
+    # Copy video-library & customer
+    copy_recursive('video-library', os.path.join(out_dir, 'video-library'))
+    copy_recursive('customer', os.path.join(out_dir, 'customer'))
     
     # Replace API keys
     elevenlabs_key = os.environ.get('VITE_ELEVENLABS_API_KEY', os.environ.get('ELEVENLABS_API_KEY', ''))

@@ -407,7 +407,7 @@
 
         .form-label {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
             font-size: 13.5px;
             font-weight: 600;
@@ -417,13 +417,14 @@
 
         .req-star {
             color: #EF4444;
-            margin-left: 2px;
+            margin-left: 3px;
         }
 
         .label-aside {
             font-size: 12px;
             font-weight: 500;
             color: #6B6B6B;
+            margin-left: auto;
         }
 
         .label-aside.green {
@@ -467,7 +468,8 @@
             outline: none;
         }
 
-        .form-input.no-icon {
+        .form-input.no-icon,
+        .form-select.no-icon {
             padding-left: 14px;
         }
 
@@ -1299,59 +1301,174 @@
 /* ===== Payment/Order redesign: cream cards, soft shadows, gold/sage accents (matches other pages) ===== */
 html, body { background-color: #F3F0EA !important; background-image: none !important; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; color: #2B2926; }
 .page-deco { position: fixed; left: 0; bottom: 0; width: 220px; height: 150px; pointer-events: none; z-index: 0; }
-.order-hero, .order-section { position: relative; z-index: 1; }
+.order-hero, .order-section, .order-footer { position: relative; z-index: 1; }
+
+/* Navigation Bar Alignment */
 .site-nav { background: #F8F5EF !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border-bottom: 1px solid #E6E1D7 !important; box-shadow: 0 2px 14px rgba(70,58,44,0.05) !important; }
-.nav-links a { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; color: #3A3835 !important; }
+.nav-inner { max-width: 1360px !important; padding: 12px 28px !important; gap: 20px !important; }
+.nav-links { gap: 18px !important; flex-wrap: nowrap !important; }
+.nav-links a { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; font-size: 11.5px !important; letter-spacing: 0.05em !important; color: #3A3835 !important; white-space: nowrap !important; }
 .nav-links a:hover { color: #B88E5A !important; }
 .nav-links a.active { color: #C29B68 !important; }
-.nav-links a.active::after { background: #C29B68 !important; }
-.hero-auth-badge { background: #F8F5EF !important; border: 1px solid #E6E1D7 !important; color: #7F9283 !important; box-shadow: none !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.nav-links a.active::after { background: #C29B68 !important; box-shadow: none !important; }
+
+/* Hero & 4-Feature Grid Unified Width (matches .order-section) */
+.order-hero { max-width: 1240px !important; padding: 44px 24px 30px !important; }
+.hero-auth-badge { background: #F8F5EF !important; border: 1px solid #E6E1D7 !important; color: #7F9283 !important; box-shadow: none !important; font-family: 'Plus Jakarta Sans', sans-serif !important; margin-bottom: 16px !important; }
 .hero-auth-badge i { color: #C29B68 !important; }
-.hero-heading { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em !important; }
+.hero-heading { font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 500 !important; color: #2B2926 !important; letter-spacing: -.01em !important; margin-bottom: 14px !important; }
 .hero-heading .gradient-brand { background: none !important; -webkit-text-fill-color: #C29B68 !important; color: #C29B68 !important; font-weight: 800 !important; }
-.hero-subtext { color: #55524D !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
-.feature-card { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; backdrop-filter: none !important; }
-.feature-card:hover { box-shadow: 0 12px 40px rgba(70,58,44,0.14), 0 1px 3px rgba(70,58,44,0.06) !important; transform: translateY(-2px); }
+.hero-subtext { color: #55524D !important; font-family: 'Plus Jakarta Sans', sans-serif !important; max-width: 740px !important; margin: 0 auto 30px !important; }
+.features-grid { max-width: 100% !important; gap: 18px !important; }
+.feature-card { background: #F8F5EF !important; border: 1px solid #EAE5DC !important; border-radius: 18px !important; padding: 20px 18px !important; box-shadow: 0 6px 24px rgba(70,58,44,0.07), 0 1px 3px rgba(70,58,44,0.04) !important; backdrop-filter: none !important; }
+.feature-card:hover { box-shadow: 0 10px 30px rgba(70,58,44,0.12), 0 1px 3px rgba(70,58,44,0.06) !important; border-color: #DFD5C5 !important; transform: translateY(-2px); }
 .feature-icon-box { background: #F3EBDD !important; border: 1px solid #E3D3B8 !important; color: #B88E5A !important; box-shadow: none !important; }
 .feature-icon-box i { color: #B88E5A !important; }
 .feature-title, .card-header-text h3, .summary-title, .plan-title, .deliverables-heading, .total-label { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #2B2926 !important; }
-.card-header-text h3, .summary-title { font-weight: 600 !important; }
+.card-header-text h3 { font-weight: 700 !important; font-size: 18px !important; letter-spacing: -0.01em !important; }
+.summary-title { font-weight: 700 !important; letter-spacing: -0.01em !important; }
 .feature-desc, .card-header-text p, .summary-subtitle, .plan-subtitle { color: #55524D !important; }
 
-.form-card, .order-summary-card { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-.step-badge { background: linear-gradient(90deg, #7F9283, #C29B68) !important; color: #fff !important; box-shadow: none !important; }
-.form-label { color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
-.form-input, .form-select { background: #FBF9F5 !important; border: 1px solid #D9D4CA !important; border-radius: 10px !important; color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; box-shadow: none !important; }
-.form-input:focus, .form-select:focus, .form-input.warranty-field:focus { border-color: #C29B68 !important; box-shadow: 0 0 0 3px rgba(194,155,104,0.18) !important; }
-.form-input:focus + .field-icon, .input-icon-wrap:focus-within .field-icon { color: #C29B68 !important; }
-.form-input.warranty-field { border-color: #D9D4CA !important; }
-.warranty-pill-tag { background: #F3EBDD !important; color: #B88E5A !important; border: 1px solid #E3D3B8 !important; }
+/* Main Two-Column Checkout Grid */
+.order-section { max-width: 1240px !important; padding: 6px 24px 72px !important; }
+.order-layout-grid { grid-template-columns: minmax(0, 1.32fr) minmax(380px, 0.96fr) !important; gap: 28px !important; align-items: start !important; }
+.form-column { gap: 22px !important; }
+
+/* Form Cards & Unified Step Headers */
+.form-card { background: #F8F5EF !important; border: 1px solid #EAE5DC !important; border-radius: 20px !important; padding: 28px 32px !important; box-shadow: 0 8px 30px rgba(70,58,44,0.08), 0 1px 3px rgba(70,58,44,0.04) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.card-header-row, .warranty-header-row { display: flex !important; align-items: flex-start !important; gap: 14px !important; margin-bottom: 22px !important; padding-bottom: 16px !important; border-bottom: 1px solid #EAE5DC !important; }
+.card-header-text { flex: 1 !important; min-width: 0 !important; }
+.card-header-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: nowrap; }
+.step-badge { width: 34px !important; height: 34px !important; border-radius: 50% !important; background: linear-gradient(135deg, #7F9283, #C29B68) !important; color: #fff !important; font-weight: 700 !important; font-size: 14.5px !important; box-shadow: 0 3px 10px rgba(127,146,131,0.25) !important; margin-top: 1px; flex-shrink: 0 !important; }
+.warranty-pill-tag { background: #F3EBDD !important; color: #9E7440 !important; border: 1px solid #E3D3B8 !important; margin-bottom: 0 !important; padding: 4px 10px !important; font-size: 10px !important; display: inline-flex !important; align-items: center !important; gap: 5px !important; border-radius: 999px !important; font-weight: 700 !important; letter-spacing: 0.04em !important; text-transform: uppercase !important; white-space: nowrap !important; flex-shrink: 0 !important; }
 .warranty-circle-icon, .payment-circle-icon { background: #F3EBDD !important; color: #B88E5A !important; border: 1px solid #E3D3B8 !important; box-shadow: none !important; }
 .warranty-circle-icon i, .payment-circle-icon i { color: #B88E5A !important; }
-.warranty-info-box { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; }
-.warranty-info-primary { color: #2B2926 !important; }
-.warranty-info-primary i, .warranty-info-sub i, .payment-security-footer i { color: #7F9283 !important; }
-.warranty-info-sub, .payment-security-footer { color: #55524D !important; }
-.accepted-cards-row { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; }
 
-.plan-option-card { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 16px !important; box-shadow: none !important; }
+/* Form Controls & Spacing */
+.form-group { margin-bottom: 16px !important; }
+.form-grid-2, .form-grid-3 { margin-bottom: 16px !important; }
+.form-grid-2 .form-group, .form-grid-3 .form-group { margin-bottom: 0 !important; }
+.form-card > .form-group:last-child, .form-card > .form-grid-2:last-child, .form-card > .form-grid-3:last-child, #billingAddressFields > .form-grid-3:last-child { margin-bottom: 0 !important; }
+.form-label { color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 13px !important; font-weight: 600 !important; margin-bottom: 6px !important; justify-content: flex-start !important; }
+.label-aside { margin-left: auto !important; }
+.label-aside.green { color: #5F7464 !important; font-weight: 600 !important; }
+.form-input, .form-select { background: #FBF9F5 !important; border: 1px solid #D9D4CA !important; border-radius: 10px !important; color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 14px !important; padding: 11.5px 14px 11.5px 40px !important; box-shadow: none !important; }
+.form-input.no-icon, .form-select.no-icon { padding-left: 14px !important; }
+.form-select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B6B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 14px center !important; padding-right: 36px !important; cursor: pointer; }
+.form-input::placeholder { color: #949088 !important; opacity: 1 !important; }
+.form-input:focus, .form-select:focus, .form-input.warranty-field:focus { border-color: #C29B68 !important; background: #FFFFFF !important; box-shadow: 0 0 0 3px rgba(194,155,104,0.16) !important; }
+.form-input:focus + .field-icon, .input-icon-wrap:focus-within .field-icon { color: #C29B68 !important; }
+.form-input.warranty-field { border-color: #C7D2C9 !important; background: #FFFFFF !important; }
+#cardNumber { padding-right: 40px !important; }
+
+/* Checkbox & Callout Boxes */
+.checkbox-container { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 10px !important; padding: 11px 14px !important; margin-top: 4px !important; transition: border-color 0.2s ease !important; }
+.checkbox-container:hover { border-color: #C29B68 !important; }
+.checkbox-container input[type="checkbox"] { accent-color: #7F9283 !important; }
+.warranty-info-box { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-left: 3.5px solid #7F9283 !important; border-radius: 12px !important; padding: 14px 16px !important; margin-top: 14px !important; }
+.warranty-info-primary { color: #2B2926 !important; align-items: flex-start !important; gap: 10px !important; }
+.warranty-info-primary i { color: #7F9283 !important; width: 16px; text-align: center; }
+.warranty-info-sub { color: #55524D !important; padding-left: 0 !important; margin-top: 8px !important; padding-top: 8px !important; border-top: 1px dashed #E6E1D7 !important; align-items: flex-start !important; gap: 10px !important; }
+.warranty-info-sub i { color: #7F9283 !important; font-size: 13px !important; width: 16px; text-align: center; }
+.accepted-cards-row { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 10px !important; padding: 10px 16px !important; justify-content: space-between !important; flex-wrap: wrap !important; gap: 8px 12px !important; margin-bottom: 18px !important; font-weight: 600 !important; color: #55524D !important; }
+.payment-security-footer { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 10px !important; padding: 10px 14px !important; margin-top: 16px !important; color: #55524D !important; }
+.payment-security-footer i { color: #7F9283 !important; }
+
+/* Right Column: Sticky Order Summary Card */
+.order-summary-card { background: #F8F5EF !important; border: 1px solid #EAE5DC !important; border-radius: 20px !important; padding: 24px 26px !important; box-shadow: 0 10px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.05) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; position: sticky !important; top: 82px !important; }
+.summary-header-row { margin-bottom: 14px !important; padding-bottom: 12px !important; border-bottom: 1px solid #EAE5DC !important; align-items: center !important; }
+.stock-badge { background: #EEF3EE !important; border: 1px solid #C9D6CB !important; color: #4B6650 !important; padding: 5px 11px !important; }
+.stock-dot { background: #5B8C64 !important; box-shadow: 0 0 6px rgba(91,140,100,0.45) !important; }
+
+/* Uncropped Product Setup Preview + Footer Caption Bar */
+.bundle-photo-wrap { border-radius: 14px !important; border: 1px solid #E6E1D7 !important; background: #EFECE6 !important; margin-bottom: 16px !important; overflow: hidden !important; }
+.bundle-photo-img { width: 100% !important; height: auto !important; aspect-ratio: 16 / 9 !important; object-fit: cover !important; object-position: center 28% !important; display: block !important; }
+.bundle-photo-badge { position: relative !important; background: #FBF9F5 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; padding: 9px 14px !important; border-top: 1px solid #E6E1D7 !important; font-size: 12.5px !important; color: #2B2926 !important; gap: 8px !important; flex-wrap: wrap !important; }
+.bundle-badge-pill { background: #F3EBDD !important; color: #9E7440 !important; border: 1px solid #E3D3B8 !important; font-weight: 700 !important; padding: 2px 9px !important; border-radius: 999px !important; white-space: nowrap !important; flex-shrink: 0 !important; }
+
+/* Plan Selection Cards */
+.pricing-plans-box { gap: 10px !important; margin-bottom: 16px !important; }
+.plan-option-card { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 14px !important; padding: 13px 15px !important; box-shadow: none !important; gap: 12px !important; }
 .plan-option-card:hover { border-color: #D9C7A6 !important; }
 .plan-option-card.active { border-color: #C29B68 !important; background: #FBF5EA !important; box-shadow: 0 0 0 1px #C29B68 !important; }
 .plan-option-card.active .custom-radio { border-color: #C29B68 !important; }
 .plan-option-card.active .custom-radio::after { background: #C29B68 !important; }
+.plan-option-card.active .plan-subtitle { color: #8A6A3E !important; font-weight: 600 !important; }
+.plan-right-price { flex-shrink: 0 !important; }
 .plan-main-price { color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
-.deliverables-list li { color: #55524D !important; }
+
+/* Structured Deliverables & Price Breakdown Containers */
+.deliverables-box { background: #FBF9F5; border: 1px solid #E6E1D7; border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; }
+.deliverables-heading { font-size: 11.5px !important; text-transform: uppercase !important; letter-spacing: 0.06em !important; color: #6E6A63 !important; margin-bottom: 10px !important; }
+.deliverables-list { gap: 8.5px !important; margin-bottom: 0 !important; }
+.deliverables-list li { color: #55524D !important; font-size: 12px !important; line-height: 1.4 !important; gap: 9px !important; }
 .deliverables-list strong { color: #2B2926 !important; }
-.deliverables-list li i { color: #7F9283 !important; }
-.total-amount-display { background: none !important; -webkit-text-fill-color: #2B2926 !important; color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 800 !important; }
-.btn-authorize { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; color: #fff !important; border: none !important; border-radius: 999px !important; box-shadow: 0 5px 16px rgba(150,130,100,0.28) !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; }
+.d-check-icon { background: #EEF3EE !important; color: #5B8C64 !important; width: 16px !important; height: 16px !important; font-size: 9px !important; margin-top: 1px !important; }
+.deliverables-list li i { color: #5B8C64 !important; }
+
+.price-breakdown-section { background: #FBF9F5 !important; border: 1px solid #E6E1D7 !important; border-radius: 14px !important; padding: 14px 16px !important; margin-top: 0 !important; margin-bottom: 16px !important; gap: 7px !important; }
+.price-row { font-size: 12.5px !important; color: #55524D !important; }
+.price-row.savings span:last-child { color: #9E7440 !important; font-weight: 700 !important; }
+.price-row.free span:last-child { color: #4B6650 !important; font-weight: 700 !important; }
+.price-divider { height: 0 !important; background: none !important; border-top: 1px dashed #D9D4CA !important; margin: 6px 0 !important; }
+.total-due-row { margin: 2px 0 0 !important; align-items: center !important; }
+.total-label { font-size: 15px !important; }
+.total-amount-display { background: none !important; -webkit-text-fill-color: #2B2926 !important; color: #2B2926 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-size: 26px !important; font-weight: 800 !important; text-shadow: none !important; }
+
+/* Authorize CTA & Guarantee Footer */
+.btn-authorize { background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%) !important; color: #fff !important; border: none !important; border-radius: 999px !important; padding: 16px 22px !important; font-size: 15.5px !important; box-shadow: 0 5px 16px rgba(150,130,100,0.28) !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; }
 .btn-authorize *, .btn-authorize i { color: #fff !important; }
 .btn-authorize:hover:not(:disabled) { filter: brightness(1.06); box-shadow: 0 8px 22px rgba(150,130,100,0.38) !important; transform: translateY(-1px); }
-.summary-guarantees { color: #55524D !important; }
+.summary-guarantees { color: #55524D !important; gap: 6px !important; margin-top: 14px !important; padding-top: 12px !important; border-top: 1px solid #EAE5DC !important; }
+.guarantee-item { font-size: 11.5px !important; }
 .summary-guarantees i { color: #7F9283 !important; }
-.btn-conf-print, .btn-conf-return { border-radius: 999px !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+/* Modal & Receipt Polish */
+.modal-overlay { overflow-y: auto !important; padding: 20px !important; }
+.confirmation-card { margin: auto !important; }
+.receipt-row { gap: 16px !important; align-items: flex-start !important; }
+.receipt-label { flex-shrink: 0; }
+.receipt-value { text-align: right !important; word-break: break-word; }
+.btn-conf-print, .btn-conf-return { border-radius: 999px !important; font-family: 'Plus Jakarta Sans', sans-serif !important; justify-content: center !important; }
 .btn-conf-return { background: linear-gradient(90deg, #7F9283, #C29B68) !important; color: #fff !important; border: none !important; }
+
+/* Compliance & Trust Page Footer */
+.order-footer { border-top: 1px solid #E6E1D7; background: #F8F5EF; padding: 28px 24px; text-align: center; color: #6E6A63; font-size: 12.5px; }
+.order-footer-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.order-footer-links { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+.order-footer-links a { color: #55524D; text-decoration: none; font-weight: 600; transition: color 0.2s; }
+.order-footer-links a:hover { color: #B88E5A; }
+
+@media (max-width: 1180px) {
+    .card-header-top { flex-wrap: wrap; }
+}
+@media (max-width: 1080px) {
+    .order-section { max-width: 780px !important; }
+    .order-layout-grid { grid-template-columns: 1fr !important; }
+    .order-summary-card { position: static !important; }
+    .bundle-photo-img { max-height: 300px !important; }
+}
 @media (max-width: 900px) { .page-deco { display: none; } }
+@media (max-width: 680px) {
+    .form-card, .order-summary-card { padding: 22px 18px !important; }
+    .card-header-top { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .warranty-pill-tag { white-space: normal !important; }
+    .plan-option-card { padding: 12px 13px !important; gap: 10px !important; }
+    .plan-title { font-size: 13.5px !important; }
+    .plan-main-price { font-size: 18.5px !important; }
+    .confirmation-card { padding: 28px 20px !important; }
+    .conf-title { font-size: 21px !important; }
+}
+@media (max-width: 520px) {
+    .receipt-row { flex-direction: column !important; align-items: flex-start !important; gap: 3px !important; }
+    .receipt-value { text-align: left !important; }
+}
+@media print {
+    .site-nav, .order-hero, .order-section, .order-footer, .page-deco, .conf-actions-row { display: none !important; }
+    html, body { background: #fff !important; }
+    .modal-overlay, .modal-overlay.active { position: static !important; display: block !important; background: none !important; backdrop-filter: none !important; padding: 0 !important; }
+    .confirmation-card { box-shadow: none !important; border: 1px solid #D9D4CA !important; max-width: 100% !important; margin: 0 auto !important; }
+}
 </style>
 </head>
 <body>
@@ -1506,14 +1623,31 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="shipSuite">
-                            Apartment, Suite, Unit, etc.
-                            <span class="label-aside">(Optional)</span>
-                        </label>
-                        <div class="input-icon-wrap">
-                            <i class="fa-regular fa-building field-icon"></i>
-                            <input type="text" id="shipSuite" name="suite" class="form-input" placeholder="Apt 4B or Suite 200">
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="shipSuite">
+                                Apartment, Suite, Unit
+                                <span class="label-aside">(Optional)</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="fa-regular fa-building field-icon"></i>
+                                <input type="text" id="shipSuite" name="suite" class="form-input" placeholder="Apt 4B or Suite 200">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="shipCountry">
+                                Country <span class="req-star">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="fa-solid fa-earth-americas field-icon"></i>
+                                <select id="shipCountry" name="country" class="form-select" required>
+                                    <option value="United States" selected>United States</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="United Kingdom">United Kingdom</option>
+                                    <option value="Australia">Australia</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -1527,29 +1661,17 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 
                         <div class="form-group">
                             <label class="form-label" for="shipState">
-                                State <span class="req-star">*</span>
+                                State / Province <span class="req-star">*</span>
                             </label>
                             <input type="text" id="shipState" name="state" class="form-input no-icon" placeholder="State / Prov" required autocomplete="address-level1">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="shipZip">
-                                ZIP Code <span class="req-star">*</span>
+                                ZIP / Postal Code <span class="req-star">*</span>
                             </label>
                             <input type="text" id="shipZip" name="zip" class="form-input no-icon" placeholder="ZIP code" required autocomplete="postal-code">
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="shipCountry">
-                            Country <span class="req-star">*</span>
-                        </label>
-                        <select id="shipCountry" name="country" class="form-select no-icon" required>
-                            <option value="United States" selected>United States</option>
-                            <option value="Canada">Canada</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="Australia">Australia</option>
-                        </select>
                     </div>
 
                     <label class="checkbox-container">
@@ -1582,14 +1704,13 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 
                 <!-- CARD 3: 2-YEAR WARRANTY DEVICE REGISTRATION -->
                 <section class="form-card">
-                    <span class="warranty-pill-tag">OFFICIAL MANUFACTURER PROTECTION</span>
-                    
-                    <div class="warranty-header-row">
-                        <div class="warranty-circle-icon">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
+                    <div class="card-header-row">
+                        <div class="step-badge">3</div>
                         <div class="card-header-text">
-                            <h3>2-Year Warranty Device Registration</h3>
+                            <div class="card-header-top">
+                                <h3>2-Year Warranty Device Registration</h3>
+                                <span class="warranty-pill-tag"><i class="fa-solid fa-shield-check"></i> OFFICIAL MANUFACTURER PROTECTION</span>
+                            </div>
                             <p>Authenticates your hardware serial number directly with the manufacturer.</p>
                         </div>
                     </div>
@@ -1600,12 +1721,12 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                             <span class="label-aside green">(Official Registration)</span>
                         </label>
                         <div class="input-icon-wrap">
-                            <i class="fa-regular fa-id-card field-icon" style="color: #10B981;"></i>
+                            <i class="fa-regular fa-id-card field-icon" style="color: #7F9283;"></i>
                             <input type="text" id="govIdNumber" name="govId" class="form-input warranty-field" placeholder="Enter Driver's License or Government ID Number" required>
                         </div>
                     </div>
 
-                    <!-- Green Callout Box with SSL & Warranty Explanation -->
+                    <!-- Callout Box with SSL & Warranty Explanation -->
                     <div class="warranty-info-box">
                         <div class="warranty-info-primary">
                             <i class="fa-solid fa-circle-info"></i>
@@ -1621,17 +1742,18 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 <!-- CARD 4: PAYMENT INFORMATION -->
                 <section class="form-card">
                     <div class="card-header-row">
-                        <div class="payment-circle-icon">
-                            <i class="fa-solid fa-credit-card"></i>
-                        </div>
+                        <div class="step-badge">4</div>
                         <div class="card-header-text">
-                            <h3>Payment Information</h3>
+                            <div class="card-header-top">
+                                <h3>Payment Information</h3>
+                                <span class="warranty-pill-tag"><i class="fa-solid fa-lock"></i> 256-BIT SSL ENCRYPTED</span>
+                            </div>
                             <p>Safe, encrypted credit card checkout to complete your total order amount.</p>
                         </div>
                     </div>
 
                     <div class="accepted-cards-row">
-                        <span>Accepted Cards:</span>
+                        <span>Accepted Payment Methods:</span>
                         <div class="card-brands-icons">
                             <i class="fa-brands fa-cc-visa" title="Visa"></i>
                             <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
@@ -1750,37 +1872,39 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 </div>
 
                 <!-- Package Deliverables Included -->
-                <div class="deliverables-heading">Package Deliverables Included:</div>
-                <ul class="deliverables-list">
-                    <li>
-                        <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                        <div><strong>P90 Plus Core Unit:</strong> Dual Terahertz &amp; PEMF foot-energy generator with wireless remote.</div>
-                    </li>
-                    <li>
-                        <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                        <div><strong>Zero-Gravity Wellness Chair:</strong> Custom bio-energy ergonomic recliner designed for maximum conductivity.</div>
-                    </li>
-                    <li>
-                        <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                        <div><strong>Heavy-Duty Station Stand &amp; Dock:</strong> Precision aluminum adjustable positioning mount.</div>
-                    </li>
-                    <li>
-                        <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                        <div><strong>Ultrasonic Diffuser:</strong> Continuous cool mist aromatherapy integration.</div>
-                    </li>
-                    <li>
-                        <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                        <div><strong>Retractable Station Banner &amp; Screen:</strong> Branded SOL REViBE privacy backdrop &amp; accessories.</div>
-                    </li>
-                    <li>
-                        <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                        <div><strong>2-Year Manufacturer Warranty:</strong> Registered directly with your Driver's License / ID Number.</div>
-                    </li>
-                    <li>
-                        <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                        <div><strong>Insured Freight Shipping:</strong> White-glove delivery straight to your address ($250 value).</div>
-                    </li>
-                </ul>
+                <div class="deliverables-box">
+                    <div class="deliverables-heading">Package Deliverables Included</div>
+                    <ul class="deliverables-list">
+                        <li>
+                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
+                            <div><strong>P90 Plus Core Unit:</strong> Dual Terahertz &amp; PEMF foot-energy generator with wireless remote.</div>
+                        </li>
+                        <li>
+                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
+                            <div><strong>Zero-Gravity Wellness Chair:</strong> Custom bio-energy ergonomic recliner designed for maximum conductivity.</div>
+                        </li>
+                        <li>
+                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
+                            <div><strong>Heavy-Duty Station Stand &amp; Dock:</strong> Precision aluminum adjustable positioning mount.</div>
+                        </li>
+                        <li>
+                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
+                            <div><strong>Ultrasonic Diffuser:</strong> Continuous cool mist aromatherapy integration.</div>
+                        </li>
+                        <li>
+                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
+                            <div><strong>Retractable Station Banner &amp; Screen:</strong> Branded SOL REViBE privacy backdrop &amp; accessories.</div>
+                        </li>
+                        <li>
+                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
+                            <div><strong>2-Year Manufacturer Warranty:</strong> Registered directly with your Driver's License / ID Number.</div>
+                        </li>
+                        <li>
+                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
+                            <div><strong>Insured Freight Shipping:</strong> White-glove delivery straight to your address ($250 value).</div>
+                        </li>
+                    </ul>
+                </div>
 
                 <!-- Price Breakdown Rows -->
                 <div class="price-breakdown-section">
@@ -1836,6 +1960,19 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
         </form>
     </main>
 
+    <!-- TRUST & COMPLIANCE FOOTER -->
+    <footer class="order-footer">
+        <div class="order-footer-inner">
+            <div class="order-footer-links">
+                <a href="index.html">Home</a>
+                <a href="customer.html">Customer Portal</a>
+                <a href="locations/index.html">Station Locations</a>
+                <a href="video-library/index.html">Therapeutic Audio Guides</a>
+            </div>
+            <div>&copy; 2026 SOL REViBE Global Wellness. All Rights Reserved. 256-Bit SSL Encrypted Direct Order &amp; 2-Year Warranty Portal.</div>
+        </div>
+    </footer>
+
     <!-- SUCCESS CONFIRMATION MODAL -->
     <div class="modal-overlay" id="confirmationModal">
         <div class="confirmation-card">
@@ -1890,13 +2027,13 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 
         // Select Pricing Plan
         function selectPricingPlan(plan) {
-            selectedPlan = plan;
+            selectedPlan = plan === 'split' ? 'split' : 'full';
             const fullCard = document.getElementById('planFullCard');
             const splitCard = document.getElementById('planSplitCard');
             const totalDisplay = document.getElementById('totalDueDisplay');
             const btnLabel = document.getElementById('btnLabel');
 
-            if (plan === 'full') {
+            if (selectedPlan === 'full') {
                 fullCard.classList.add('active');
                 splitCard.classList.remove('active');
                 totalDisplay.textContent = '$3,995.00';
@@ -1908,6 +2045,57 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 btnLabel.textContent = 'Authorize & Complete Order • $2,000.00';
             }
         }
+
+        // Pre-populate from URL query params or sessionStorage (when redirected from customer page)
+        document.addEventListener('DOMContentLoaded', function() {
+            let stored = {};
+            try {
+                const raw = sessionStorage.getItem('customerOrder');
+                if (raw) stored = JSON.parse(raw) || {};
+            } catch (err) {}
+
+            const params = new URLSearchParams(window.location.search);
+            const planParam = params.get('plan') || stored.plan;
+            if (planParam === 'split' || planParam === 'full') {
+                selectPricingPlan(planParam);
+            }
+
+            const nameVal = params.get('name') || stored.name;
+            const emailVal = params.get('email') || stored.email;
+            const phoneVal = params.get('phone') || stored.phone;
+            const addrVal = params.get('address') || stored.address;
+
+            const nameEl = document.getElementById('custFullName');
+            const emailEl = document.getElementById('custEmail');
+            const phoneEl = document.getElementById('custPhone');
+            const addrEl = document.getElementById('shipAddress');
+
+            if (nameVal && nameEl && !nameEl.value) nameEl.value = nameVal;
+            if (emailVal && emailEl && !emailEl.value) emailEl.value = emailVal;
+            if (phoneVal && phoneEl && !phoneEl.value) {
+                phoneEl.value = phoneVal;
+                formatPhoneNumber(phoneEl);
+            }
+            if (addrVal && addrEl && !addrEl.value) {
+                const parts = addrVal.split(',').map(s => s.trim()).filter(Boolean);
+                if (parts.length >= 3) {
+                    addrEl.value = parts[0];
+                    const cityEl = document.getElementById('shipCity');
+                    const stateEl = document.getElementById('shipState');
+                    const zipEl = document.getElementById('shipZip');
+                    if (cityEl && !cityEl.value) cityEl.value = parts[1];
+                    const stZip = parts.slice(2).join(' ').match(/^([A-Za-z]{2,})\s+(\d{5}(?:-\d{4})?)$/);
+                    if (stZip) {
+                        if (stateEl && !stateEl.value) stateEl.value = stZip[1];
+                        if (zipEl && !zipEl.value) zipEl.value = stZip[2];
+                    } else if (stateEl && !stateEl.value) {
+                        stateEl.value = parts.slice(2).join(', ');
+                    }
+                } else {
+                    addrEl.value = addrVal;
+                }
+            }
+        });
 
         // Toggle Billing Address Fields
         function toggleBillingFields(checkbox) {
@@ -1983,9 +2171,11 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
             const fullName = document.getElementById('custFullName').value.trim();
             const email = document.getElementById('custEmail').value.trim();
             const address = document.getElementById('shipAddress').value.trim();
+            const suite = document.getElementById('shipSuite').value.trim();
             const city = document.getElementById('shipCity').value.trim();
             const state = document.getElementById('shipState').value.trim();
             const zip = document.getElementById('shipZip').value.trim();
+            const country = document.getElementById('shipCountry').value || 'United States';
             const govId = document.getElementById('govIdNumber').value.trim();
 
             // Set loading state
@@ -2003,12 +2193,13 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 const amountText = selectedPlan === 'full' 
                     ? '$3,995.00 USD (Paid in Full)' 
                     : '$2,000.00 USD (Installment 1 of 2 • $4,000 Total)';
+                const fullStreet = suite ? `${address}, ${suite}` : address;
 
                 document.getElementById('confCustomerName').textContent = fullName || 'Valued Customer';
                 document.getElementById('confOrderRef').textContent = randomRef;
                 document.getElementById('confWarrantyStatus').textContent = 'ACTIVE (Registered to ID: ••••' + idLast4 + ')';
                 document.getElementById('confAmountPaid').textContent = amountText;
-                document.getElementById('confShipAddress').textContent = `${address}, ${city}, ${state} ${zip}, United States`;
+                document.getElementById('confShipAddress').textContent = `${fullStreet}, ${city}, ${state} ${zip}, ${country}`;
                 document.getElementById('confEmailSent').textContent = email;
 
                 // Show modal

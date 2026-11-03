@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Checkout | SOL REViBE Mind-Body Station</title>
-    <meta name="description" content="Direct Customer Checkout and 1-Year Manufacturer Warranty Registration for SOL REViBE Mind-Body Station / P90 Plus Complete Package.">
+    <meta name="description" content="Direct Customer Checkout and 2-Year Manufacturer Warranty Registration for SOL REViBE Mind-Body Station / P90 Plus Complete Package.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -81,6 +81,32 @@
 
             const [activeModal, setActiveModal] = useState(null); // 'terms' | 'privacy' | 'shipping' | 'guarantee'
 
+            useEffect(() => {
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    let stored = {};
+                    try {
+                        stored = JSON.parse(sessionStorage.getItem('customerOrder') || '{}') || {};
+                    } catch (_) {}
+                    const planParam = params.get('plan') || stored.plan;
+                    if (planParam === 'split' || planParam === 'full') {
+                        setPricingPlan(planParam);
+                    }
+                    setFormData(prev => ({
+                        ...prev,
+                        fullName: params.get('name') || stored.fullName || prev.fullName,
+                        email: params.get('email') || stored.email || prev.email,
+                        phone: params.get('phone') || stored.phone || prev.phone,
+                        address: params.get('address') || stored.address || prev.address,
+                        city: params.get('city') || stored.city || prev.city,
+                        state: params.get('state') || stored.state || prev.state,
+                        zip: params.get('zip') || stored.zip || prev.zip,
+                        country: params.get('country') || stored.country || prev.country,
+                        cardholderName: params.get('name') || stored.fullName || prev.cardholderName,
+                    }));
+                } catch (_) {}
+            }, []);
+
             const handleInputChange = (e) => {
                 const { name, value, type, checked } = e.target;
                 setFormData(prev => ({
@@ -152,7 +178,7 @@
                         {/* Top Center Logo */}
                         <header className="brand-header">
                             <img 
-                                src="assets/SOL REViBE Logo.png" 
+                                src="assets/SOL_REViBE_New_Logo.png?v=20261016" 
                                 alt="SOL REViBE" 
                                 className="brand-logo"
                                 onError={(e) => {
@@ -194,7 +220,7 @@
                                             <code>{paymentState.orderId}</code>
                                         </div>
                                         <div className="token-row">
-                                            <span>Official 1-Year Warranty:</span>
+                                            <span>Official 2-Year Warranty:</span>
                                             <strong style={{color: '#059669'}}>
                                                 ACTIVE (Registered to ID: {formData.governmentId ? '••••' + formData.governmentId.slice(-4) : '••••8412'})
                                             </strong>
@@ -213,7 +239,7 @@
                                         </div>
                                     </div>
 
-                                    <div style={{display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '1.5rem'}}>
+                                    <div className="conf-actions-wrap" style={{display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '1.5rem', flexWrap: 'wrap'}}>
                                         <button 
                                             type="button" 
                                             className="reset-btn"
@@ -349,7 +375,7 @@
                                                         </svg>
                                                     </div>
                                                     <div>
-                                                        <strong>1-Year Manufacturer Warranty Registration</strong>
+                                                        <strong>2-Year Manufacturer Warranty Registration</strong>
                                                         <p>Official registration authenticated directly using your Government ID.</p>
                                                     </div>
                                                 </li>
@@ -375,7 +401,7 @@
                                             </svg>
                                             <div>
                                                 <strong>Direct Single-Page Customer Order</strong>
-                                                <p>Guaranteed genuine unit dispatch with 1-Year Manufacturer Warranty protection.</p>
+                                                <p>Guaranteed genuine unit dispatch with 2-Year Manufacturer Warranty protection.</p>
                                             </div>
                                         </div>
                                     </section>
@@ -538,7 +564,7 @@
                                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13">
                                                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                                         </svg>
-                                                        1-Year Manufacturer Warranty
+                                                        2-Year Manufacturer Warranty
                                                     </span>
                                                 </div>
 
@@ -547,7 +573,7 @@
                                                         Driver's License / Government ID Number *
                                                     </label>
                                                     <div className="hosted-field-input" style={{borderColor: '#10B981'}}>
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" width="18" height="18" style={{marginRight: '8px', flexShrink: 0}}>
+                                                        <svg className="field-card-icon" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" width="18" height="18">
                                                             <rect x="2" y="4" width="20" height="16" rx="2"/>
                                                             <circle cx="8" cy="10" r="2"/>
                                                             <path d="M15 8h2m-2 4h2m-8 4h8"/>
@@ -572,7 +598,7 @@
                                                             <line x1="12" y1="8" x2="12.01" y2="8"/>
                                                         </svg>
                                                         <p>
-                                                            <strong>Your Driver's License or Government ID Number is required strictly to register your device for the one-year manufacturer warranty.</strong>
+                                                            <strong>Your Driver's License or Government ID Number is required strictly to register your device for the two-year manufacturer warranty.</strong>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -701,7 +727,7 @@
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                                     </svg>
-                                                    Backed by 1-Year Manufacturer Warranty & 256-Bit SSL Encryption
+                                                    Backed by 2-Year Manufacturer Warranty & 256-Bit SSL Encryption
                                                 </p>
                                             </div>
                                         </form>
@@ -756,7 +782,7 @@
                                 <span className="link-divider">•</span>
                                 <button type="button" className="policy-link" onClick={() => setActiveModal('shipping')}>Shipping Policy</button>
                                 <span className="link-divider">•</span>
-                                <button type="button" className="policy-link" onClick={() => setActiveModal('guarantee')}>1-Year Warranty Terms</button>
+                                <button type="button" className="policy-link" onClick={() => setActiveModal('guarantee')}>2-Year Warranty Terms</button>
                             </div>
 
                             <div className="copyright-line">
@@ -774,7 +800,7 @@
                                         {activeModal === 'terms' && 'Terms of Service'}
                                         {activeModal === 'privacy' && 'Privacy & Warranty ID Policy'}
                                         {activeModal === 'shipping' && 'Insured Freight Shipping Policy'}
-                                        {activeModal === 'guarantee' && '1-Year Manufacturer Warranty Protection'}
+                                        {activeModal === 'guarantee' && '2-Year Manufacturer Warranty Protection'}
                                     </h3>
                                     <button type="button" className="close-modal-btn" onClick={() => setActiveModal(null)}>&times;</button>
                                 </header>
@@ -786,7 +812,7 @@
                                     )}
                                     {activeModal === 'privacy' && (
                                         <div>
-                                            <p><strong>Government ID & Privacy Policy:</strong> Your Driver's License or Government ID Number is required strictly to register your device for the one-year manufacturer warranty. It is encrypted in transit and never shared or sold.</p>
+                                            <p><strong>Government ID & Privacy Policy:</strong> Your Driver's License or Government ID Number is required strictly to register your device for the two-year manufacturer warranty. It is encrypted in transit and never shared or sold.</p>
                                         </div>
                                     )}
                                     {activeModal === 'shipping' && (
@@ -796,7 +822,7 @@
                                     )}
                                     {activeModal === 'guarantee' && (
                                         <div>
-                                            <p><strong>1-Year Manufacturer Warranty:</strong> Covers all mechanical, electronic, and frequency platform components of your P90 Plus device against defects for 1 full year from date of receipt.</p>
+                                            <p><strong>2-Year Manufacturer Warranty:</strong> Covers all mechanical, electronic, and frequency platform components of your P90 Plus device against defects for 2 full years from date of receipt.</p>
                                         </div>
                                     )}
                                 </div>
@@ -1187,6 +1213,7 @@
                             display: flex;
                             align-items: center;
                             justify-content: center;
+                            flex-shrink: 0;
                         }
 
                         .input-group {
@@ -1265,6 +1292,8 @@
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
+                            flex-wrap: wrap;
+                            gap: 8px;
                         }
 
                         .warranty-pill-tag {
@@ -1278,6 +1307,8 @@
                             font-weight: 700;
                             padding: 3px 8px;
                             border-radius: 999px;
+                            white-space: nowrap;
+                            flex-shrink: 0;
                         }
 
                         .warranty-explicit-callout {
@@ -1301,6 +1332,8 @@
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
+                            flex-wrap: wrap;
+                            gap: 8px;
                         }
 
                         .pci-shield-tag {
@@ -1314,11 +1347,14 @@
                             padding: 0.25rem 0.55rem;
                             border-radius: 6px;
                             border: 1px solid #a7f3d0;
+                            white-space: nowrap;
+                            flex-shrink: 0;
                         }
 
                         .pci-shield-tag svg {
                             width: 12px;
                             height: 12px;
+                            flex-shrink: 0;
                         }
 
                         .hosted-iframe-container {
@@ -1335,6 +1371,8 @@
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
+                            flex-wrap: wrap;
+                            gap: 6px 10px;
                         }
 
                         .iframe-title {
@@ -1350,11 +1388,13 @@
                             width: 12px;
                             height: 12px;
                             color: #059669;
+                            flex-shrink: 0;
                         }
 
                         .active-card-badges {
                             display: flex;
                             gap: 0.25rem;
+                            flex-shrink: 0;
                         }
 
                         .card-chip {
@@ -1396,9 +1436,16 @@
                             pointer-events: none;
                         }
 
-                        .hosted-field-input input {
+                        .hosted-field-input .field-card-icon + input {
                             padding-left: 2.6rem !important;
+                        }
+
+                        .hosted-field-input input:has(+ .field-secure-tag) {
                             padding-right: 5.5rem !important;
+                        }
+
+                        .hosted-field-input input:has(+ .cvv-lock) {
+                            padding-right: 2.5rem !important;
                         }
 
                         .field-secure-tag {
@@ -1485,12 +1532,14 @@
                             display: flex;
                             align-items: center;
                             gap: 0.35rem;
+                            text-align: center;
                         }
 
                         .guarantee-microtext svg {
                             width: 14px;
                             height: 14px;
                             color: #10b981;
+                            flex-shrink: 0;
                         }
 
                         /* Confirmation Screen */
@@ -1547,9 +1596,22 @@
                         .token-row {
                             display: flex;
                             justify-content: space-between;
+                            align-items: flex-start;
+                            gap: 12px;
                             font-size: 0.85rem;
                             border-bottom: 1px dashed #e2e8f0;
                             padding-bottom: 0.5rem;
+                        }
+
+                        .token-row span {
+                            flex-shrink: 0;
+                            color: #64748b;
+                        }
+
+                        .token-row strong,
+                        .token-row code {
+                            text-align: right;
+                            word-break: break-word;
                         }
 
                         .token-row:last-child {
@@ -1567,6 +1629,10 @@
                             font-size: 0.875rem;
                             color: #334155;
                             cursor: pointer;
+                        }
+
+                        .conf-actions-wrap .reset-btn {
+                            margin-top: 0;
                         }
 
                         /* Compliance Footer */
@@ -1650,6 +1716,7 @@
                             align-items: center;
                             justify-content: center;
                             padding: 1.5rem;
+                            overflow-y: auto;
                         }
 
                         .modal-content {
@@ -1657,6 +1724,7 @@
                             border-radius: 16px;
                             max-width: 580px;
                             width: 100%;
+                            margin: auto;
                             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
                             display: flex;
                             flex-direction: column;
@@ -1711,6 +1779,54 @@
                             font-size: 0.875rem;
                             font-weight: 600;
                             cursor: pointer;
+                        }
+
+                        @media (max-width: 600px) {
+                            .checkout-page-root {
+                                padding: 1.5rem 0.75rem;
+                            }
+                            .checkout-card {
+                                padding: 1.25rem;
+                            }
+                            .product-summary-pane {
+                                padding: 1.25rem;
+                            }
+                            .input-row-2col,
+                            .input-row-3col {
+                                grid-template-columns: 1fr;
+                                gap: 0.85rem;
+                            }
+                            .token-row {
+                                flex-direction: column;
+                                gap: 2px;
+                            }
+                            .token-row strong,
+                            .token-row code {
+                                text-align: left;
+                            }
+                            .conf-actions-wrap {
+                                flex-direction: column;
+                            }
+                            .conf-actions-wrap .reset-btn {
+                                width: 100%;
+                            }
+                        }
+
+                        @media print {
+                            .bg-decor-blob,
+                            .compliance-footer,
+                            .conf-actions-wrap {
+                                display: none !important;
+                            }
+                            .checkout-page-root {
+                                background: #ffffff !important;
+                                padding: 0 !important;
+                            }
+                            .checkout-card {
+                                box-shadow: none !important;
+                                border: none !important;
+                                padding: 0 !important;
+                            }
                         }
                     `}</style>
                 </div>

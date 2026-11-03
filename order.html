@@ -146,7 +146,7 @@
             background-color: var(--white);
             border: 1px solid var(--card-border-light);
             border-radius: 20px;
-            padding: 16px;
+            padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -162,9 +162,10 @@
         }
 
         .product-img-box img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .product-card-label {
@@ -282,6 +283,15 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .form-row-2col:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-row-2col .form-group {
+            margin-bottom: 0;
         }
 
         /* Section Block Heading */
@@ -290,12 +300,19 @@
             font-size: 18px;
             font-weight: 700;
             color: #0F172A;
-            margin: 28px 0 16px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #F1F5F9;
+            margin: 30px 0 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E2E8F0;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+
+        .section-separator-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .section-separator-title i {
@@ -307,10 +324,19 @@
         .checkbox-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             margin-top: 10px;
+            padding: 11px 14px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
             cursor: pointer;
             user-select: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .checkbox-row:hover {
+            border-color: #CBD5E1;
         }
 
         .checkbox-row input[type="checkbox"] {
@@ -333,22 +359,24 @@
         .warranty-box-container {
             background-color: #F0FDF4;
             border: 1px solid #86EFAC;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 24px 0;
+            border-radius: 12px;
+            padding: 22px;
+            margin: 26px 0;
         }
 
         .warranty-box-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .warranty-badge-pill {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             background: #DCFCE7;
             border: 1px solid #86EFAC;
             color: #15803D;
@@ -356,7 +384,8 @@
             font-size: 11.5px;
             font-weight: 700;
             text-transform: uppercase;
-            padding: 3px 9px;
+            letter-spacing: 0.04em;
+            padding: 4px 11px;
             border-radius: 999px;
         }
 
@@ -374,14 +403,14 @@
 
         /* EXPLICIT MANDATORY EXPLANATORY TEXT */
         .warranty-explicit-text-box {
-            margin-top: 10px;
-            padding: 10px 14px;
+            margin-top: 12px;
+            padding: 12px 14px;
             background-color: #FFFFFF;
             border-left: 3.5px solid #16A34A;
-            border-radius: 0 6px 6px 0;
+            border-radius: 0 8px 8px 0;
             display: flex;
             align-items: flex-start;
-            gap: 8px;
+            gap: 10px;
         }
 
         .warranty-explicit-text-box i {
@@ -402,29 +431,30 @@
         .warranty-subtext {
             font-size: 11.5px;
             color: #15803D;
-            margin-top: 3px;
+            margin-top: 4px;
             font-weight: 400;
         }
 
         /* ========================================================
-           4. PRODUCT SELECTION & BUNDLE PRICING ($2,495 / $2,500)
+           4. PRODUCT SELECTION & BUNDLE PRICING ($3,995 / $4,000)
            ======================================================== */
         .bundle-selection-card {
             background-color: #F8FAFC;
             border: 1.5px solid #CBD5E1;
             border-radius: 12px;
-            padding: 20px;
-            margin: 24px 0;
+            padding: 22px;
+            margin: 20px 0 26px;
         }
 
         .pricing-radio-option {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 14px;
+            gap: 14px;
+            padding: 14px 16px;
             background: #FFFFFF;
             border: 2px solid var(--primary-blue);
-            border-radius: 8px;
+            border-radius: 10px;
             margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -435,10 +465,14 @@
             background: #FFFFFF;
         }
 
+        .pricing-radio-option.inactive:hover {
+            border-color: #CBD5E1;
+        }
+
         .radio-left-wrap {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .radio-custom-circle {
@@ -449,6 +483,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .radio-custom-circle::after {
@@ -478,6 +513,7 @@
             font-size: 11.5px;
             color: #059669;
             font-weight: 600;
+            margin-top: 2px;
         }
 
         .plan-amount-display {
@@ -486,25 +522,29 @@
             font-weight: 800;
             color: #0F172A;
             letter-spacing: -0.02em;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            flex-shrink: 0;
         }
 
         /* Deliverables Checklist */
         .bundle-deliverables-box {
             margin-top: 14px;
-            padding: 14px;
+            padding: 16px;
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
-            border-radius: 8px;
+            border-radius: 10px;
         }
 
         .deliverable-item {
             display: flex;
             align-items: flex-start;
-            gap: 8px;
+            gap: 9px;
             font-size: 13px;
             color: #334155;
             margin-bottom: 8px;
-            line-height: 1.4;
+            line-height: 1.45;
         }
 
         .deliverable-item:last-child {
@@ -526,21 +566,23 @@
         .order-summary-row {
             display: flex;
             justify-content: space-between;
+            gap: 10px;
             font-size: 13.5px;
             color: #475569;
-            padding: 6px 0;
+            padding: 5px 0;
         }
 
         .order-total-row {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
+            align-items: center;
+            gap: 10px;
             font-family: var(--headlinefont);
             font-size: 17px;
             font-weight: 700;
             color: #0F172A;
             border-top: 1px dashed #CBD5E1;
-            padding-top: 10px;
+            padding-top: 12px;
             margin-top: 8px;
         }
 
@@ -556,21 +598,33 @@
         .payment-card-box {
             background-color: #FFFFFF;
             border: 1px solid #CBD5E1;
-            border-radius: 10px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 22px;
             margin-top: 12px;
         }
 
         .card-brands-row {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            padding: 10px 14px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .card-brands-icons-wrap {
+            display: flex;
+            align-items: center;
             gap: 10px;
-            margin-bottom: 14px;
         }
 
         .card-brand-icon {
             font-size: 24px;
-            color: #94A3B8;
+            color: #64748B;
             transition: color 0.2s, transform 0.2s;
         }
 
@@ -582,11 +636,11 @@
         /* Full Width Primary Submit Button (Exact to reference #1D63ED) */
         .submit-order-button {
             width: 100%;
-            height: 52px;
+            height: 54px;
             background-color: var(--primary-blue);
             color: var(--white);
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-family: var(--inter);
             font-size: 16.5px;
             font-weight: 600;
@@ -642,7 +696,8 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 20px 16px;
+            overflow-y: auto;
         }
 
         .confirmation-overlay.active {
@@ -655,6 +710,7 @@
             max-width: 620px;
             width: 100%;
             padding: 36px 32px;
+            margin: auto;
             text-align: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
         }
@@ -702,8 +758,21 @@
         .conf-row {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
             border-bottom: 1px dashed #E2E8F0;
             padding-bottom: 6px;
+        }
+
+        .conf-row span {
+            flex-shrink: 0;
+            color: #64748B;
+        }
+
+        .conf-row strong {
+            text-align: right;
+            word-break: break-word;
+            color: #0F172A;
         }
 
         .conf-row:last-child {
@@ -749,6 +818,9 @@
             .hero-section {
                 padding: 40px 16px 36px;
             }
+            .form-section-container {
+                padding: 32px 14px 60px;
+            }
             .form-card {
                 padding: 24px 16px;
             }
@@ -762,9 +834,45 @@
             .form-row-2col {
                 grid-template-columns: 1fr;
             }
+            .bundle-selection-card,
+            .payment-card-box,
+            .warranty-box-container {
+                padding: 16px 14px;
+            }
+            .pricing-radio-option {
+                padding: 12px 12px;
+                gap: 10px;
+            }
+            .radio-left-wrap {
+                gap: 9px;
+            }
+            .plan-title-bold {
+                font-size: 14px;
+            }
+            .plan-amount-display {
+                font-size: 19px;
+            }
+            .confirmation-card {
+                padding: 24px 18px;
+            }
+            .conf-row {
+                flex-direction: column;
+                gap: 2px;
+            }
+            .conf-row strong {
+                text-align: left;
+            }
             .conf-btn-row {
                 flex-direction: column;
             }
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #confirmation-overlay, #confirmation-overlay * { visibility: visible; }
+            #confirmation-overlay { position: absolute !important; inset: 0 !important; background: #fff !important; padding: 0 !important; display: block !important; }
+            .confirmation-card { box-shadow: none !important; max-width: 100% !important; padding: 20px !important; }
+            .conf-btn-row { display: none !important; }
         }
     </style>
 </head>
@@ -1027,7 +1135,10 @@
                                 <div class="plan-subtitle-tag">Pre-selected Special Offer (Save $1,000 vs MSRP)</div>
                             </div>
                         </div>
-                        <div class="plan-amount-display">$3,995</div>
+                        <div class="plan-amount-display">
+                            <span style="font-size: 13px; font-weight: 500; color: #94A3B8; text-decoration: line-through;">$4,995</span>
+                            <span>$3,995</span>
+                        </div>
                     </div>
 
                     <!-- Option 2: 2-Payment Split ($2,000 x 2 = $4,000) -->
@@ -1108,11 +1219,13 @@
 
                 <div class="payment-card-box">
                     <div class="card-brands-row">
-                        <span style="font-size: 12px; font-weight: 600; color: #64748B;">Accepted Cards:</span>
-                        <i class="fa-brands fa-cc-visa card-brand-icon" id="brand-visa"></i>
-                        <i class="fa-brands fa-cc-mastercard card-brand-icon" id="brand-mc"></i>
-                        <i class="fa-brands fa-cc-amex card-brand-icon" id="brand-amex"></i>
-                        <i class="fa-brands fa-cc-discover card-brand-icon" id="brand-disc"></i>
+                        <span style="font-size: 12px; font-weight: 600; color: #64748B;">Accepted Payment Methods:</span>
+                        <div class="card-brands-icons-wrap">
+                            <i class="fa-brands fa-cc-visa card-brand-icon" id="brand-visa"></i>
+                            <i class="fa-brands fa-cc-mastercard card-brand-icon" id="brand-mc"></i>
+                            <i class="fa-brands fa-cc-amex card-brand-icon" id="brand-amex"></i>
+                            <i class="fa-brands fa-cc-discover card-brand-icon" id="brand-disc"></i>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -1241,16 +1354,16 @@
     <!-- Script: Interactive Behaviors & Validation -->
     <script>
         let currentPlan = 'full';
-        let currentPrice = 2495.00;
+        let currentPrice = 3995.00;
 
         function selectPlan(plan) {
-            currentPlan = plan;
+            currentPlan = plan === 'split' ? 'split' : 'full';
             const cardFull = document.getElementById('plan-full-card');
             const cardSplit = document.getElementById('plan-split-card');
             const totalLabel = document.getElementById('total-amount-label');
             const btnText = document.getElementById('submit-btn-text');
 
-            if (plan === 'full') {
+            if (currentPlan === 'full') {
                 currentPrice = 3995.00;
                 cardFull.classList.remove('inactive');
                 cardSplit.classList.add('inactive');
@@ -1264,6 +1377,54 @@
                 btnText.textContent = 'Authorize 1st Payment - $2,000.00 (Total $4,000)';
             }
         }
+
+        // Pre-populate from URL query params or sessionStorage (when redirected from customer page)
+        document.addEventListener('DOMContentLoaded', () => {
+            let stored = {};
+            try {
+                const raw = sessionStorage.getItem('customerOrder');
+                if (raw) stored = JSON.parse(raw) || {};
+            } catch (err) {}
+
+            const params = new URLSearchParams(window.location.search);
+            const planParam = params.get('plan') || stored.plan;
+            if (planParam === 'split' || planParam === 'full') {
+                selectPlan(planParam);
+            }
+
+            const nameVal = params.get('name') || stored.name;
+            const emailVal = params.get('email') || stored.email;
+            const phoneVal = params.get('phone') || stored.phone;
+            const addrVal = params.get('address') || stored.address;
+
+            const nameEl = document.getElementById('full-name');
+            const emailEl = document.getElementById('email-address');
+            const phoneEl = document.getElementById('contact-phone');
+            const addrEl = document.getElementById('street-address');
+
+            if (nameVal && nameEl && !nameEl.value) nameEl.value = nameVal;
+            if (emailVal && emailEl && !emailEl.value) emailEl.value = emailVal;
+            if (phoneVal && phoneEl && !phoneEl.value) phoneEl.value = phoneVal;
+            if (addrVal && addrEl && !addrEl.value) {
+                const parts = addrVal.split(',').map(s => s.trim()).filter(Boolean);
+                if (parts.length >= 3) {
+                    addrEl.value = parts[0];
+                    const cityEl = document.getElementById('city');
+                    const stateEl = document.getElementById('state');
+                    const zipEl = document.getElementById('postal-code');
+                    if (cityEl && !cityEl.value) cityEl.value = parts[1];
+                    const stZip = parts.slice(2).join(' ').match(/^([A-Za-z]{2,})\s+(\d{5}(?:-\d{4})?)$/);
+                    if (stZip) {
+                        if (stateEl && !stateEl.value) stateEl.value = stZip[1];
+                        if (zipEl && !zipEl.value) zipEl.value = stZip[2];
+                    } else if (stateEl && !stateEl.value) {
+                        stateEl.value = parts.slice(2).join(', ');
+                    }
+                } else {
+                    addrEl.value = addrVal;
+                }
+            }
+        });
 
         // Billing address toggle
         const billingToggle = document.getElementById('billing-same-toggle');

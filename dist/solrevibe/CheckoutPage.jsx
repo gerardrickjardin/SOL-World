@@ -172,7 +172,7 @@ export default function CheckoutPage() {
                   type="button"
                   className="reset-btn"
                   onClick={() => window.print()}
-                  style={{ backgroundColor: '#2B2B2B', color: '#2B2B2B', border: 'none' }}
+                  style={{ backgroundColor: '#2B2B2B', color: '#FFFFFF', border: 'none' }}
                 >
                   Print Order & Warranty Receipt
                 </button>
@@ -521,13 +521,13 @@ export default function CheckoutPage() {
                       </label>
                       <div className="hosted-field-input" style={{ borderColor: '#10B981' }}>
                         <svg
+                          className="field-card-icon"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="#7A8776"
                           strokeWidth="2"
                           width="18"
                           height="18"
-                          style={{ marginRight: '8px', flexShrink: 0 }}
                         >
                           <rect x="2" y="4" width="20" height="16" rx="2" />
                           <circle cx="8" cy="10" r="2" />
