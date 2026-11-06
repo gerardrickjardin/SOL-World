@@ -339,12 +339,22 @@ h1.headline .a, h1.headline .b { background: none !important; -webkit-text-fill-
     h1.headline, .shell { max-width: 1420px !important; width: min(88vw, 1420px) !important; margin-left: auto !important; margin-right: auto !important; }
     h1.headline { padding-top: 0 !important; padding-bottom: clamp(22px, 3.2vh, 32px) !important; font-size: clamp(1.35rem, 2.2vw, 1.85rem) !important; }
     .shell { grid-template-columns: 1.05fr 1fr !important; }
+    .col { padding: 20px 22px !important; gap: 16px !important; }
     .col:first-of-type { justify-content: space-between !important; }
-    #p-start:not([hidden]) { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 14px !important; }
-    #benefitFieldset .stack { gap: 10px !important; }
-    #benefitFieldset .benefit { padding: 12px 14px !important; }
-    #p-start .offer { padding: 11px 14px !important; font-size: .84rem !important; }
-    #p-start .btn.cta { padding: 16px 18px !important; }
+    #p-start:not([hidden]) { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; justify-content: flex-start !important; gap: 16px !important; }
+    #p-start > .card:first-of-type { padding: 20px 22px !important; }
+    #p-start > .card:first-of-type .tag-row { margin-bottom: 12px !important; }
+    #p-start > .card:first-of-type .tag { padding: 4px 11px !important; font-size: .7rem !important; letter-spacing: .07em !important; }
+    #p-start > .card:first-of-type h2.ct { font-size: 1.28rem !important; font-weight: 700 !important; margin-bottom: 8px !important; letter-spacing: -.01em !important; }
+    #p-start > .card:first-of-type .sub { font-size: .92rem !important; line-height: 1.55 !important; }
+    #benefitFieldset { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; justify-content: center !important; padding: 20px 22px !important; }
+    #benefitFieldset > h2.ct { font-size: 1.08rem !important; font-weight: 700 !important; margin-bottom: 14px !important; line-height: 1.35 !important; }
+    #benefitFieldset .stack { gap: 12px !important; }
+    #benefitFieldset .benefit { padding: 15px 18px !important; gap: 14px !important; border-radius: 14px !important; }
+    #benefitFieldset .benefit b { font-size: 1.02rem !important; font-weight: 700 !important; margin-bottom: 3px !important; }
+    #benefitFieldset .benefit span:not(.dot) { font-size: .86rem !important; line-height: 1.45 !important; }
+    #p-start .offer { padding: 14px 18px !important; font-size: .88rem !important; line-height: 1.45 !important; border-radius: 14px !important; }
+    #p-start .btn.cta { padding: 18px 22px !important; font-size: .98rem !important; letter-spacing: .07em !important; margin-top: auto !important; }
 }
 .shell { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; }
 .col + .col { background: #F3F0EA !important; border-left: 1px solid #E6E1D7 !important; }
@@ -471,8 +481,39 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
         border-radius: 12px !important;
     }
     .card {
-        padding: 12px 14px !important;
+        padding: 16px 18px !important;
         border-radius: 14px !important;
+    }
+    #p-start:not([hidden]) {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
+    }
+    #p-start > .card:first-of-type .tag-row {
+        margin-bottom: 10px !important;
+    }
+    #p-start > .card:first-of-type h2.ct {
+        font-size: 1.18rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 6px !important;
+    }
+    #benefitFieldset > h2.ct {
+        font-size: 1.02rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 12px !important;
+        line-height: 1.35 !important;
+    }
+    #benefitFieldset .stack {
+        gap: 10px !important;
+    }
+    #benefitFieldset .benefit {
+        padding: 14px 16px !important;
+        gap: 12px !important;
+    }
+    #p-start .offer {
+        padding: 12px 15px !important;
+        font-size: 0.85rem !important;
+        line-height: 1.45 !important;
     }
     .points {
         display: flex !important;
