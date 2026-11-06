@@ -2473,7 +2473,6 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                     <strong>I want to experience the mind body reset station.</strong>
                 </a>
             </div>
-            <button type="button" class="aud-skip" id="audSkip">Just browsing for now</button>
         </div>
     </div>
     <script>
@@ -2486,7 +2485,6 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
             modal.hidden = false; document.body.classList.add('aud-open');
             document.getElementById('audOwner').addEventListener('click', function () { try { sessionStorage.setItem(KEY, 'owner'); } catch (e) {} });
             document.getElementById('audGuest').addEventListener('click', function () { try { sessionStorage.setItem(KEY, 'guest'); } catch (e) {} });
-            document.getElementById('audSkip').addEventListener('click', function () { done('browse'); });
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) done('browse'); });
             var box = modal.querySelector('.aud-modal'); box.setAttribute('tabindex', '-1'); box.style.outline = 'none'; box.focus({ preventScroll: true });
         })();

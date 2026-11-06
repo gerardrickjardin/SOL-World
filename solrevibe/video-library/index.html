@@ -308,6 +308,35 @@ footer b { color: #2B2926 !important; }
   .grid { grid-template-columns: 1fr !important; }
   .c-body h3 { white-space: normal !important; }
 }
+/* Tablet / touch full-bleed modal sizing (fills almost the entire screen on tablets while keeping desktop/laptop at 1000px) */
+@media (hover: none), (pointer: coarse), (min-width: 601px) and (max-width: 1366px) {
+  .modal { padding: 8px !important; }
+  .m-box {
+    width: min(calc(100vw - 16px), calc((100vh - 56px) * 16 / 9)) !important;
+    width: min(calc(100vw - 16px), calc((100dvh - 56px) * 16 / 9)) !important;
+    max-width: none !important;
+    border-radius: 16px !important;
+  }
+  .m-info { padding: 8px 18px !important; }
+  .m-info > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; width: 100%; flex-wrap: wrap; }
+  .m-info h2 { font-size: 1.02rem !important; }
+  .m-info p { font-size: .82rem !important; margin-top: 0 !important; }
+  .close { top: 10px !important; right: 10px !important; width: 44px !important; height: 44px !important; }
+  .exit-hint { top: 62px !important; right: 10px !important; }
+}
+html.is-tablet .modal { padding: 8px !important; }
+html.is-tablet .m-box {
+  width: min(calc(100vw - 16px), calc((100vh - 56px) * 16 / 9)) !important;
+  width: min(calc(100vw - 16px), calc((100dvh - 56px) * 16 / 9)) !important;
+  max-width: none !important;
+  border-radius: 16px !important;
+}
+html.is-tablet .m-info { padding: 8px 18px !important; }
+html.is-tablet .m-info > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; width: 100%; flex-wrap: wrap; }
+html.is-tablet .m-info h2 { font-size: 1.02rem !important; }
+html.is-tablet .m-info p { font-size: .82rem !important; margin-top: 0 !important; }
+html.is-tablet .close { top: 10px !important; right: 10px !important; width: 44px !important; height: 44px !important; }
+html.is-tablet .exit-hint { top: 62px !important; right: 10px !important; }
 </style>
 </head>
 <body>
@@ -377,6 +406,12 @@ footer b { color: #2B2926 !important; }
 
 <script>
 (() => {
+  const isTabletDevice = () =>
+    window.matchMedia("(pointer: coarse), (hover: none)").matches ||
+    /iPad|Tablet|PlayBook|Silk|Android/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (isTabletDevice()) document.documentElement.classList.add("is-tablet");
+
   const CATS = ["All", "TAGs"];
   const VIEWS = [
     {k:"all", label:"Browse All", ic:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'},
