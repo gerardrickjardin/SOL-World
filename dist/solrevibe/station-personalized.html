@@ -340,6 +340,11 @@ h1.headline .a, h1.headline .b { background: none !important; -webkit-text-fill-
     h1.headline { padding-top: 0 !important; padding-bottom: clamp(22px, 3.2vh, 32px) !important; font-size: clamp(1.35rem, 2.2vw, 1.85rem) !important; }
     .shell { grid-template-columns: 1.05fr 1fr !important; }
     .col:first-of-type { justify-content: space-between !important; }
+    #p-start:not([hidden]) { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 14px !important; }
+    #benefitFieldset .stack { gap: 10px !important; }
+    #benefitFieldset .benefit { padding: 12px 14px !important; }
+    #p-start .offer { padding: 11px 14px !important; font-size: .84rem !important; }
+    #p-start .btn.cta { padding: 16px 18px !important; }
 }
 .shell { background: #F8F5EF !important; border: none !important; border-radius: 22px !important; box-shadow: 0 8px 36px rgba(70,58,44,0.10), 0 1px 3px rgba(70,58,44,0.06) !important; }
 .col + .col { background: #F3F0EA !important; border-left: 1px solid #E6E1D7 !important; }
@@ -580,33 +585,9 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
 
                 <div class="offer"><b>&#127873; Your first session is free.</b> Subject to the approved offer details at your participating location.</div>
 
-                <div>
-                    <div class="steps" aria-hidden="true"><span class="on">1 Details</span><span>2 Waiver</span><span>3 How-to video</span><span>4 Start</span></div>
-                </div>
-
-                <div class="card">
-                    <div class="tag-row"><span class="tag green">Step 1 &bull; Your Details</span></div>
-                    <form id="introForm" novalidate>
-                        <div class="field">
-                            <label class="lbl" for="gName">Full Name *</label>
-                            <input type="text" id="gName" placeholder="Enter your full name" autocomplete="name" required>
-                        </div>
-                        <div class="field">
-                            <label class="lbl" for="gPhone">Phone Number *</label>
-                            <input type="tel" id="gPhone" placeholder="(555) 000-0000" autocomplete="tel" inputmode="tel" required>
-                        </div>
-                        <div class="field">
-                            <label class="lbl" for="gEmail">Email Address *</label>
-                            <input type="email" id="gEmail" placeholder="you@email.com" autocomplete="email" required>
-                        </div>
-                        <p class="error" id="introError" role="alert"></p>
-                        <p class="fine">We only use your details to manage your session and share your offer.</p>
-                    </form>
-                </div>
-
                 <button type="button" class="btn cta" id="ctaBtn">Get Started &mdash; Complete the Waiver</button>
                 <p class="error" id="ctaError" role="alert"></p>
-                <button type="button" class="link-btn" id="notAtStation">Not at a station right now? Find one &amp; get a free trial pass</button>
+                <button type="button" class="link-btn" id="notAtStation" hidden style="display:none">Not at a station right now? Find one &amp; get a free trial pass</button>
             </div>
 
             <!-- Panel: how-to -->
@@ -632,7 +613,7 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                     <p class="sub center" id="sessionNote">Time remaining</p>
                 </div>
                 <a class="btn" href="video-library/index.html" style="margin-top:16px">Explore the Therapeutic Audio Guides (TAGs)</a>
-                <a class="btn alt" href="experience.html" style="margin-top:16px">Find a Station &amp; Free Trial Pass</a>
+                <a class="btn alt" href="experience.html" hidden style="display:none;margin-top:16px">Find a Station &amp; Free Trial Pass</a>
             </div>
         </section>
     </main>
@@ -643,7 +624,6 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
     <section class="waiver-below" id="waiverSection" aria-label="Complete your waiver" hidden>
         <div class="card waiver-card">
             <div class="waiver-head">
-                <div class="tag-row"><span class="tag gold">Step 2 &bull; Waiver</span></div>
                 <h2 class="ct" id="waiverTitle" tabindex="-1">Complete Your Waiver</h2>
                 <p class="sub">Fill out and submit the waiver below. Once it&rsquo;s submitted, you&rsquo;ll be taken to the Therapeutic Audio Guides (TAGs).</p>
             </div>
@@ -750,45 +730,6 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
             $('restartUnmuteBtn').querySelector('span').textContent = 'Restart from the beginning';
         });
 
-        // ---- contact form ----
-        function validate() {
-            var name = $('gName').value.trim(), phone = $('gPhone').value.trim(), email = $('gEmail').value.trim();
-            ['gName', 'gPhone', 'gEmail'].forEach(function (i) { $(i).classList.remove('invalid'); });
-            var bad = null;
-            if (!name) bad = 'gName'; else if (phone.replace(/\D/g, '').length < 7) bad = 'gPhone'; else if (!/^\S+@\S+\.\S+$/.test(email)) bad = 'gEmail';
-            if (bad) {
-                $(bad).classList.add('invalid'); $(bad).focus();
-                $('introError').textContent = bad === 'gName' ? 'Please enter your full name.' : bad === 'gPhone' ? 'Please enter a valid phone number.' : 'Please enter a valid email address.';
-                return null;
-            }
-            $('introError').textContent = ''; $('introError').style.color = '';
-            return { name: name, phone: phone, email: email };
-        }
-        function saveContact() {
-            var v = validate();
-            if (!v) return false;
-            if (!saved || v.email !== guest.email || v.name !== guest.name || v.phone !== guest.phone) {
-                Object.assign(guest, v);
-                saved = true;
-                post({
-                    event: 'contact_captured', source: 'Station QR Landing Page',
-                    waiver_status: 'incomplete',
-                    selected_benefit: selectedBenefit,
-                    recommended_mvp: (PERSONALIZATION[selectedBenefit] || {}).mvp || '',
-                    tags: ['solrevibe-guest', 'experience-lead', 'waiver-incomplete', 'benefit-' + selectedBenefit]
-                }).catch(function (e) { console.error('Guest lead error:', e); });
-            }
-            return true;
-        }
-        $('introForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            $('ctaBtn').click();
-        });
-        ['gName', 'gPhone', 'gEmail'].forEach(function (i) {
-            $(i).addEventListener('input', function () { $(i).classList.remove('invalid'); });
-            $(i).addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); $('ctaBtn').click(); } });
-        });
-
         // ---- personalization: benefit radios -> "Let's Customize Your Experience" ----
         var selectedBenefit = '';
         try { selectedBenefit = sessionStorage.getItem('solrevibe_benefit') || ''; } catch (e) {}
@@ -820,18 +761,10 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
         }
 
         function getWaiverUrl() {
-            var nameParts = (guest.name || '').trim().split(/\s+/);
-            var firstName = nameParts[0] || '';
-            var lastName = nameParts.slice(1).join(' ') || '';
             var p = new URLSearchParams();
-            p.set('full_name', guest.name || '');
-            p.set('name', guest.name || '');
-            if (firstName) { p.set('first_name', firstName); p.set('firstName', firstName); }
-            if (lastName) { p.set('last_name', lastName); p.set('lastName', lastName); }
-            p.set('phone', guest.phone || '');
-            p.set('email', guest.email || '');
             if (selectedBenefit) p.set('benefit', selectedBenefit);
-            return 'https://link.visioncontrol.io/widget/form/' + WAIVER_FORM_ID + '?' + p.toString();
+            var qs = p.toString();
+            return 'https://link.visioncontrol.io/widget/form/' + WAIVER_FORM_ID + (qs ? '?' + qs : '');
         }
 
         // ---- CTA -> waiver (shown BELOW the landing box) ----
@@ -840,10 +773,6 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
             if (!selectedBenefit) {
                 $('benefitError').textContent = 'Please choose the benefit that matters most to you.';
                 $('benefitFieldset').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            }
-            if (!saveContact()) {
-                $('ctaError').textContent = 'Please complete your details above to continue.';
                 return;
             }
             if (!waiverMounted) {
@@ -866,7 +795,12 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                 var s = document.createElement('script');
                 s.src = 'https://link.visioncontrol.io/js/form_embed.js';
                 document.body.appendChild(s);
-                post({ event: 'waiver_started', source: 'Station QR Landing Page', selected_benefit: selectedBenefit, tags: ['solrevibe-waiver-started'] }).catch(function () {});
+                post({
+                    event: 'waiver_started', source: 'Station QR Landing Page',
+                    selected_benefit: selectedBenefit,
+                    recommended_mvp: (PERSONALIZATION[selectedBenefit] || {}).mvp || '',
+                    tags: ['solrevibe-waiver-started', 'benefit-' + selectedBenefit]
+                }).catch(function () {});
             }
             renderCustomize();
             openWaiver();
