@@ -271,7 +271,7 @@
             font-size: clamp(14.5px, 1.3vw, 17px);
             color: #6B6B6B;
             max-width: 760px;
-            margin: 0 auto 38px;
+            margin: 0 auto;
             line-height: 1.6;
         }
 
@@ -1485,24 +1485,6 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
             <a href="index.html" class="brand-container">
                 <img src="assets/SOL_REViBE_New_Logo.png?v=20261107" alt="SOL REViBE Logo" class="brand-logo-img">
             </a>
-
-            <!-- Navigation Links -->
-            <div class="nav-links" id="siteNavLinks">
-                <a href="index.html#experience">EXPERIENCE</a>
-                <a href="roi-calculator.html">ROI CALCULATOR</a>
-                <a href="locations/index.html">LOCATIONS</a>
-                <a href="index.html#science">SCIENCE</a>
-                <a href="index.html#payment">PAYMENT</a>
-                <a href="index.html#partnership">PARTNERSHIP</a>
-                <a href="order.html" class="active">ORDER</a>
-                <a href="customer.html">CUSTOMER</a>
-                <a href="video-library/index.html">THERAPEUTIC AUDIO GUIDES (TAGs)</a>
-            </div>
-
-
-            <button class="nav-hamburger" id="navHamburger" aria-label="Toggle navigation">
-                <i class="fa-solid fa-bars"></i>
-            </button>
         </div>
     </nav>
 
@@ -1520,41 +1502,6 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
         <p class="hero-subtext">
             Experience complete daily revitalization with the breakthrough P90 Plus Dual-Frequency (Terahertz + PEMF) complete station package. Pre-configured for immediate setup in your home or wellness studio.
         </p>
-
-        <!-- 4 Feature Preview Cards in a Row -->
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon-box">
-                    <i class="fa-solid fa-wave-square"></i>
-                </div>
-                <div class="feature-title">P90 Plus Core Device</div>
-                <div class="feature-desc">Dual Terahertz &amp; PEMF frequency resonance engine</div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon-box">
-                    <i class="fa-solid fa-couch"></i>
-                </div>
-                <div class="feature-title">Ergonomic Station Chair</div>
-                <div class="feature-desc">Zero-gravity alignment for bio-energy immersion</div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon-box">
-                    <i class="fa-solid fa-desktop"></i>
-                </div>
-                <div class="feature-title">Station Stand &amp; Banner</div>
-                <div class="feature-desc">Heavy-duty dock &amp; branded privacy presentation screen</div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon-box">
-                    <i class="fa-solid fa-spray-can-sparkles"></i>
-                </div>
-                <div class="feature-title">Ultrasonic Diffuser</div>
-                <div class="feature-desc">Sensory aromatherapy &amp; negative ion accompaniment</div>
-            </div>
-        </div>
     </header>
 
     <!-- MAIN ORDER GRID -->
@@ -2160,9 +2107,13 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
         }
 
         // Mobile Nav Hamburger Toggle
-        document.getElementById('navHamburger').addEventListener('click', function() {
-            document.getElementById('siteNavLinks').classList.toggle('active');
-        });
+        const navHamburgerEl = document.getElementById('navHamburger');
+        if (navHamburgerEl) {
+            navHamburgerEl.addEventListener('click', function() {
+                const navLinksEl = document.getElementById('siteNavLinks');
+                if (navLinksEl) navLinksEl.classList.toggle('active');
+            });
+        }
 
         // Form Submit Handler
         function handleOrderSubmit(e) {
