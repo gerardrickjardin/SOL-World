@@ -323,6 +323,147 @@
         .waiver-below .waiver-wrap { border-radius: 12px; overflow: hidden; }
         .waiver-below .waiver-actions { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 14px; }
         @media (max-width: 860px) { .waiver-below { width: calc(100% - 20px); margin-top: 16px; } }
+
+        /* ===== Station Location Autocomplete Dropdown (syncs to VisionControl Waiver) ===== */
+        .waiver-loc-card {
+            background: #ffffff;
+            border: 1px solid #E6E1D7;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 30;
+        }
+        .waiver-loc-label {
+            display: block;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.94rem;
+            font-weight: 700;
+            color: #2B2926;
+            margin-bottom: 8px;
+        }
+        .waiver-loc-label span {
+            color: #C29B68;
+        }
+        .vc-loc-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .waiver-loc-input {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 36px 10px 14px !important;
+            font-size: 0.95rem !important;
+            background: #ffffff !important;
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            color: #1e293b !important;
+            box-sizing: border-box;
+            transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+        .waiver-loc-input:focus {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14) !important;
+            outline: none;
+        }
+        .vc-loc-chevron {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: #475569;
+            pointer-events: none;
+            transition: transform 0.18s ease;
+            z-index: 2;
+        }
+        .vc-loc-wrapper.vc-open .vc-loc-chevron {
+            transform: translateY(-50%) rotate(180deg);
+        }
+        .vc-loc-dropdown {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.15);
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 99999;
+            display: none;
+            padding: 4px 0;
+        }
+        .vc-loc-wrapper.vc-open .vc-loc-dropdown {
+            display: block;
+        }
+        .vc-loc-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 10px 14px;
+            font-size: 0.92rem;
+            color: #1e293b;
+            cursor: pointer;
+            transition: background 0.12s ease;
+            user-select: none;
+        }
+        .vc-loc-item:hover,
+        .vc-loc-item.vc-active {
+            background: #f1f5f9;
+        }
+        .vc-loc-item-text {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .vc-loc-item-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #2563eb;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 2px 8px;
+            border-radius: 999px;
+            flex-shrink: 0;
+        }
+        .vc-loc-remove {
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 16px;
+            line-height: 1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .vc-loc-remove:hover {
+            color: #ef4444;
+            background: #fee2e2;
+        }
+        .vc-loc-section-label {
+            padding: 6px 14px 3px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+        }
+        .waiver-loc-hint {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.78rem;
+            color: #64748b;
+        }
+        .waiver-loc-hint.synced {
+            color: #0B7A48;
+            font-weight: 600;
+        }
     </style>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style id="station-redesign">
@@ -577,7 +718,7 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
 
     <div id="fit">
     <nav class="topbar" aria-label="Primary">
-        <a href="index.html" aria-label="SOL REViBE home"><img src="assets/SOL_REViBE_New_Logo.png?v=20261016" alt="SOL REViBE"></a>
+        <a href="index.html" aria-label="SOL REViBE home"><img src="assets/SOL_REViBE_New_Logo.png?v=20261107" alt="SOL REViBE"></a>
         <a class="pill-link" href="index.html">Explore Full Site &rarr;</a>
     </nav>
 
@@ -669,6 +810,15 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                 <p class="sub">Fill out and submit the waiver below. Once it&rsquo;s submitted, you&rsquo;ll be taken to the Therapeutic Audio Guides (TAGs).</p>
             </div>
             <div id="custWaiver" style="margin-bottom:14px"></div>
+            <div class="waiver-loc-card" id="stationLocationBox">
+                <label class="waiver-loc-label" for="stationLocationInput">Location <span aria-hidden="true">*</span></label>
+                <div class="vc-loc-wrapper" id="stationLocationWrap">
+                    <input type="text" id="stationLocationInput" class="waiver-loc-input" placeholder="Enter your text" autocomplete="off">
+                    <span class="vc-loc-chevron" aria-hidden="true">&#9660;</span>
+                    <div class="vc-loc-dropdown" id="stationLocationDropdown" role="listbox" aria-label="Saved locations"></div>
+                </div>
+                <span class="waiver-loc-hint" id="stationLocationStatus">Type or select your location above &mdash; it shows up in the dropdown below and fills the waiver&rsquo;s Location field automatically.</span>
+            </div>
             <div class="waiver-wrap" id="waiverMount"></div>
             <div class="waiver-actions">
                 <button type="button" class="link-btn" id="waiverBack">&uarr; Back to top</button>
@@ -815,6 +965,8 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
             state: '',
             postal_code: ''
         };
+        var currentStationLocation = '';
+
         function resetStickyContacts() {
             try {
                 localStorage.removeItem(WAIVER_LOCATION_ID);
@@ -822,6 +974,35 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                 localStorage.removeItem('user_data_' + WAIVER_LOCATION_ID);
                 localStorage.setItem('_ud', JSON.stringify(BLANK_STICKY_CONTACT));
             } catch (e) {}
+        }
+        function syncLocationToWaiver(locVal) {
+            currentStationLocation = (locVal || '').trim();
+            var f = document.getElementById('inline-' + WAIVER_FORM_ID);
+            if (f && f.contentWindow) {
+                try {
+                    f.contentWindow.postMessage([
+                        'query-params',
+                        {
+                            benefit: selectedBenefit || '',
+                            single_line_17w16: currentStationLocation
+                        },
+                        window.location.href,
+                        document.referrer || '',
+                        f.id,
+                        { consent: null, isConsentExpected: false }
+                    ], '*');
+                } catch (e) {}
+            }
+            var statusEl = $('stationLocationStatus');
+            if (statusEl) {
+                if (currentStationLocation) {
+                    statusEl.textContent = '\u2713 Synced to waiver Location: "' + currentStationLocation + '"';
+                    statusEl.classList.add('synced');
+                } else {
+                    statusEl.textContent = 'Type or select your location above \u2014 it shows up in the dropdown below and fills the waiver\u2019s Location field automatically.';
+                    statusEl.classList.remove('synced');
+                }
+            }
         }
         function pushBlankStickyToWaiver() {
             resetStickyContacts();
@@ -831,12 +1012,208 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
                     f.contentWindow.postMessage(['sticky-contacts', Object.assign({}, BLANK_STICKY_CONTACT, { _ts: Date.now() }), ''], '*');
                 } catch (e) {}
             }
+            if (currentStationLocation) {
+                syncLocationToWaiver(currentStationLocation);
+            }
         }
         resetStickyContacts();
+
+        // ---- Station Location Autocomplete (IndexedDB + localStorage + VisionControl Waiver Sync) ----
+        var LOC_DB_NAME = 'VisionControlLocationsDB';
+        var LOC_STORE_NAME = 'locations';
+        var LOC_LS_KEY = 'vc_saved_locations_v1';
+
+        function getLocalLocations() {
+            try {
+                var raw = localStorage.getItem(LOC_LS_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) { return []; }
+        }
+        function setLocalLocations(list) {
+            try { localStorage.setItem(LOC_LS_KEY, JSON.stringify(list)); } catch (e) {}
+        }
+        function openLocDB() {
+            return new Promise(function (resolve, reject) {
+                if (!window.indexedDB) return reject(new Error('No IndexedDB'));
+                var req = indexedDB.open(LOC_DB_NAME, 1);
+                req.onupgradeneeded = function (e) {
+                    var db = e.target.result;
+                    if (!db.objectStoreNames.contains(LOC_STORE_NAME)) {
+                        db.createObjectStore(LOC_STORE_NAME, { keyPath: 'name' });
+                    }
+                };
+                req.onsuccess = function (e) { resolve(e.target.result); };
+                req.onerror = function (e) { reject(e.target.error); };
+            });
+        }
+        function getSavedLocations() {
+            var merged = {};
+            getLocalLocations().forEach(function (l) {
+                if (l && typeof l === 'string' && l.trim()) merged[l.trim()] = true;
+            });
+            return openLocDB().then(function (db) {
+                return new Promise(function (resolve) {
+                    var tx = db.transaction(LOC_STORE_NAME, 'readonly');
+                    var req = tx.objectStore(LOC_STORE_NAME).getAll();
+                    req.onsuccess = function () {
+                        (req.result || []).forEach(function (item) {
+                            if (item && item.name && typeof item.name === 'string' && item.name.trim()) {
+                                merged[item.name.trim()] = true;
+                            }
+                        });
+                        resolve(Object.keys(merged).sort(function (a, b) { return a.localeCompare(b); }));
+                    };
+                    req.onerror = function () {
+                        resolve(Object.keys(merged).sort(function (a, b) { return a.localeCompare(b); }));
+                    };
+                });
+            }).catch(function () {
+                return Object.keys(merged).sort(function (a, b) { return a.localeCompare(b); });
+            });
+        }
+        function saveStationLocation(locName) {
+            if (!locName || !locName.trim()) return Promise.resolve();
+            var clean = locName.trim();
+            var current = getLocalLocations();
+            if (current.indexOf(clean) === -1) {
+                current.push(clean);
+                setLocalLocations(current);
+            }
+            return openLocDB().then(function (db) {
+                var tx = db.transaction(LOC_STORE_NAME, 'readwrite');
+                tx.objectStore(LOC_STORE_NAME).put({ name: clean });
+            }).catch(function () {});
+        }
+        function deleteStationLocation(locName) {
+            var clean = (locName || '').trim();
+            var filtered = getLocalLocations().filter(function (l) { return l !== clean; });
+            setLocalLocations(filtered);
+            return openLocDB().then(function (db) {
+                var tx = db.transaction(LOC_STORE_NAME, 'readwrite');
+                tx.objectStore(LOC_STORE_NAME).delete(clean);
+            }).catch(function () {});
+        }
+        function escHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+        (function initLocationAutocomplete() {
+            var input = $('stationLocationInput');
+            var wrap = $('stationLocationWrap');
+            var dropdown = $('stationLocationDropdown');
+            if (!input || !wrap || !dropdown) return;
+            var activeIdx = -1;
+
+            function renderDropdown() {
+                getSavedLocations().then(function (savedList) {
+                    var query = (input.value || '').trim();
+                    var qLower = query.toLowerCase();
+                    var matches = savedList.filter(function (loc) {
+                        return loc.toLowerCase().indexOf(qLower) !== -1;
+                    });
+                    var exactMatch = savedList.some(function (loc) {
+                        return loc.toLowerCase() === qLower;
+                    });
+                    var html = '';
+                    if (query && !exactMatch) {
+                        html += '<div class="vc-loc-item" data-val="' + escHtml(query) + '" data-new="true">' +
+                            '<span class="vc-loc-item-text">&#128205; Use "<strong>' + escHtml(query) + '</strong>"</span>' +
+                            '<span class="vc-loc-item-badge">Add &amp; Select</span>' +
+                            '</div>';
+                    }
+                    if (matches.length > 0) {
+                        html += '<div class="vc-loc-section-label">' + (query ? 'Matching Locations' : 'Saved Locations') + '</div>';
+                        matches.forEach(function (loc) {
+                            html += '<div class="vc-loc-item" data-val="' + escHtml(loc) + '">' +
+                                '<span class="vc-loc-item-text">&#128205; ' + escHtml(loc) + '</span>' +
+                                '<button type="button" class="vc-loc-remove" data-del="' + escHtml(loc) + '" title="Remove saved location">&times;</button>' +
+                                '</div>';
+                        });
+                    }
+                    if (!html) {
+                        dropdown.innerHTML = '';
+                        wrap.classList.remove('vc-open');
+                        return;
+                    }
+                    dropdown.innerHTML = html;
+                    wrap.classList.add('vc-open');
+                    activeIdx = -1;
+                });
+            }
+
+            function selectLocation(val) {
+                if (!val) return;
+                input.value = val;
+                syncLocationToWaiver(val);
+                saveStationLocation(val);
+                wrap.classList.remove('vc-open');
+            }
+
+            input.addEventListener('focus', renderDropdown);
+            input.addEventListener('click', renderDropdown);
+            input.addEventListener('input', function () {
+                syncLocationToWaiver(input.value);
+                renderDropdown();
+            });
+            input.addEventListener('keydown', function (e) {
+                var items = Array.prototype.slice.call(dropdown.querySelectorAll('.vc-loc-item'));
+                if (!items.length) return;
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    activeIdx = (activeIdx + 1) % items.length;
+                    items.forEach(function (el, i) { el.classList.toggle('vc-active', i === activeIdx); });
+                    items[activeIdx].scrollIntoView({ block: 'nearest' });
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    activeIdx = (activeIdx - 1 + items.length) % items.length;
+                    items.forEach(function (el, i) { el.classList.toggle('vc-active', i === activeIdx); });
+                    items[activeIdx].scrollIntoView({ block: 'nearest' });
+                } else if (e.key === 'Enter' && wrap.classList.contains('vc-open')) {
+                    var chosen = activeIdx >= 0 ? items[activeIdx] : items[0];
+                    if (chosen) {
+                        e.preventDefault();
+                        selectLocation(chosen.getAttribute('data-val'));
+                    }
+                } else if (e.key === 'Escape') {
+                    wrap.classList.remove('vc-open');
+                }
+            });
+            dropdown.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                var delBtn = e.target.closest('.vc-loc-remove');
+                if (delBtn) {
+                    var toDel = delBtn.getAttribute('data-del');
+                    deleteStationLocation(toDel).then(renderDropdown);
+                    return;
+                }
+                var item = e.target.closest('.vc-loc-item');
+                if (item) {
+                    selectLocation(item.getAttribute('data-val'));
+                }
+            });
+            input.addEventListener('blur', function () {
+                setTimeout(function () {
+                    wrap.classList.remove('vc-open');
+                    if (input.value && input.value.trim()) {
+                        saveStationLocation(input.value.trim());
+                        syncLocationToWaiver(input.value.trim());
+                    }
+                }, 180);
+            });
+            document.addEventListener('click', function (e) {
+                if (!wrap.contains(e.target)) {
+                    wrap.classList.remove('vc-open');
+                }
+            });
+        })();
 
         function getWaiverUrl() {
             var p = new URLSearchParams();
             if (selectedBenefit) p.set('benefit', selectedBenefit);
+            if (currentStationLocation) p.set('single_line_17w16', currentStationLocation);
             p.set('full_name', '');
             p.set('first_name', '');
             p.set('last_name', '');
@@ -913,6 +1290,9 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline-color: #C29
         function waiverDone() {
             if (redirecting) return;
             redirecting = true;
+            if (currentStationLocation) {
+                saveStationLocation(currentStationLocation);
+            }
             resetStickyContacts();
             window.location.href = TAGS_URL;
         }
