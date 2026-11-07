@@ -1,0 +1,398 @@
+<!-- VisionControl Waiver (VueCQzezxvPknbJ4GG5k) - HTML 1 Custom Location Autocomplete Dropdown -->
+<script>
+(function () {
+    const DB_NAME = "VisionControlLocationsDB";
+    const STORE_NAME = "locations";
+    const LS_KEY = "vc_saved_locations_v1";
+
+    function getLocalLocations() {
+        try {
+            const raw = localStorage.getItem(LS_KEY);
+            return raw ? JSON.parse(raw) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function setLocalLocations(list) {
+        try {
+            localStorage.setItem(LS_KEY, JSON.stringify(list));
+        } catch (e) {}
+    }
+
+    function openDB() {
+        return new Promise((resolve, reject) => {
+            if (!window.indexedDB) return reject(new Error("No IndexedDB"));
+            const request = indexedDB.open(DB_NAME, 1);
+            request.onupgradeneeded = function (e) {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains(STORE_NAME)) {
+                    db.createObjectStore(STORE_NAME, { keyPath: "name" });
+                }
+            };
+            request.onsuccess = (e) => resolve(e.target.result);
+            request.onerror = (e) => reject(e.target.error);
+        });
+    }
+
+    async function getSavedLocations() {
+        const merged = new Set(getLocalLocations());
+        try {
+            const db = await openDB();
+            const fromDb = await new Promise((resolve) => {
+                const tx = db.transaction(STORE_NAME, "readonly");
+                const req = tx.objectStore(STORE_NAME).getAll();
+                req.onsuccess = () => resolve(req.result.map((i) => i.name));
+                req.onerror = () => resolve([]);
+            });
+            fromDb.forEach((loc) => {
+                if (loc && typeof loc === "string") merged.add(loc.trim());
+            });
+        } catch (e) {}
+        return Array.from(merged).filter(Boolean).sort((a, b) => a.localeCompare(b));
+    }
+
+    async function saveNewLocation(locName) {
+        if (!locName || !locName.trim()) return;
+        const clean = locName.trim();
+        const current = new Set(getLocalLocations());
+        current.add(clean);
+        setLocalLocations(Array.from(current));
+        try {
+            const db = await openDB();
+            const tx = db.transaction(STORE_NAME, "readwrite");
+            tx.objectStore(STORE_NAME).put({ name: clean });
+        } catch (e) {}
+    }
+
+    async function deleteSavedLocation(locName) {
+        const clean = (locName || "").trim();
+        const filtered = getLocalLocations().filter((l) => l !== clean);
+        setLocalLocations(filtered);
+        try {
+            const db = await openDB();
+            const tx = db.transaction(STORE_NAME, "readwrite");
+            tx.objectStore(STORE_NAME).delete(clean);
+        } catch (e) {}
+    }
+
+    function setVueInputValue(input, value) {
+        const setter = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype,
+            "value"
+        )?.set;
+        if (setter) {
+            setter.call(input, value);
+        } else {
+            input.value = value;
+        }
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    function injectStyles() {
+        if (document.getElementById("vc-loc-dropdown-styles")) return;
+        const style = document.createElement("style");
+        style.id = "vc-loc-dropdown-styles";
+        style.textContent = `
+            .vc-loc-wrapper {
+                position: relative !important;
+                width: 100%;
+            }
+            .vc-loc-chevron {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 11px;
+                color: #475569;
+                pointer-events: none;
+                transition: transform 0.18s ease;
+                z-index: 2;
+            }
+            .vc-loc-wrapper.vc-open .vc-loc-chevron {
+                transform: translateY(-50%) rotate(180deg);
+            }
+            .vc-loc-dropdown {
+                position: absolute;
+                top: calc(100% + 4px);
+                left: 0;
+                right: 0;
+                background: #ffffff;
+                border: 1px solid #cbd5e1;
+                border-radius: 8px;
+                box-shadow: 0 10px 25px rgba(15, 23, 42, 0.14);
+                max-height: 220px;
+                overflow-y: auto;
+                z-index: 99999;
+                display: none;
+                padding: 4px 0;
+                font-family: inherit;
+            }
+            .vc-loc-wrapper.vc-open .vc-loc-dropdown {
+                display: block;
+            }
+            .vc-loc-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                padding: 10px 14px;
+                font-size: 14px;
+                color: #1e293b;
+                cursor: pointer;
+                transition: background 0.12s ease;
+                user-select: none;
+            }
+            .vc-loc-item:hover,
+            .vc-loc-item.vc-active {
+                background: #f1f5f9;
+            }
+            .vc-loc-item-text {
+                flex: 1;
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .vc-loc-item-badge {
+                font-size: 11px;
+                font-weight: 600;
+                color: #2563eb;
+                background: #eff6ff;
+                border: 1px solid #bfdbfe;
+                padding: 2px 7px;
+                border-radius: 999px;
+                flex-shrink: 0;
+            }
+            .vc-loc-remove {
+                border: none;
+                background: transparent;
+                color: #94a3b8;
+                font-size: 15px;
+                line-height: 1;
+                padding: 2px 6px;
+                border-radius: 4px;
+                cursor: pointer;
+                flex-shrink: 0;
+            }
+            .vc-loc-remove:hover {
+                color: #ef4444;
+                background: #fee2e2;
+            }
+            .vc-loc-section-label {
+                padding: 6px 14px 3px;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: #64748b;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+    }
+
+    function findLocationInput() {
+        const direct = document.getElementById("LrpUOtUGtpVaeIlLRTLo");
+        if (direct && direct.tagName === "INPUT") return direct;
+
+        const byQueryKey = document.querySelector('input[data-q="single_line_17w16"], input[name="LrpUOtUGtpVaeIlLRTLo"]');
+        if (byQueryKey) return byQueryKey;
+
+        const labels = Array.from(document.querySelectorAll("label"));
+        const targetLabel = labels.find((l) => {
+            const txt = l.textContent.trim().toLowerCase();
+            return txt.startsWith("location") && !txt.includes("not at a station");
+        });
+        if (!targetLabel) return null;
+
+        const forId = targetLabel.getAttribute("for");
+        if (forId) {
+            const byFor = document.getElementById(forId);
+            if (byFor && byFor.tagName === "INPUT") return byFor;
+        }
+        const container =
+            targetLabel.closest(".form-field-container, .field-container, .form-group") ||
+            targetLabel.parentElement;
+        return container ? container.querySelector("input") : null;
+    }
+
+    async function setupLocationAutocomplete() {
+        const input = findLocationInput();
+        if (!input || input.dataset.vcAutocompleteReady === "true") return;
+        input.dataset.vcAutocompleteReady = "true";
+
+        injectStyles();
+
+        input.removeAttribute("list");
+        input.setAttribute("autocomplete", "off");
+        input.style.paddingRight = "32px";
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "vc-loc-wrapper";
+        input.parentNode.insertBefore(wrapper, input);
+        wrapper.appendChild(input);
+
+        const chevron = document.createElement("span");
+        chevron.className = "vc-loc-chevron";
+        chevron.innerHTML = "&#9660;";
+        wrapper.appendChild(chevron);
+
+        const dropdown = document.createElement("div");
+        dropdown.className = "vc-loc-dropdown";
+        wrapper.appendChild(dropdown);
+
+        let savedLocations = await getSavedLocations();
+        let activeIndex = -1;
+
+        async function renderDropdown() {
+            savedLocations = await getSavedLocations();
+            const query = (input.value || "").trim();
+            const qLower = query.toLowerCase();
+
+            const matches = savedLocations.filter((loc) =>
+                loc.toLowerCase().includes(qLower)
+            );
+            const exactMatch = savedLocations.some(
+                (loc) => loc.toLowerCase() === qLower
+            );
+
+            let html = "";
+
+            if (query && !exactMatch) {
+                html += `
+                    <div class="vc-loc-item" data-val="${escapeHtml(query)}" data-new="true">
+                        <span class="vc-loc-item-text">&#128205; Use "<strong>${escapeHtml(query)}</strong>"</span>
+                        <span class="vc-loc-item-badge">Add &amp; Select</span>
+                    </div>
+                `;
+            }
+
+            if (matches.length > 0) {
+                html += `<div class="vc-loc-section-label">${query ? "Matching Locations" : "Saved Locations"}</div>`;
+                matches.forEach((loc) => {
+                    html += `
+                        <div class="vc-loc-item" data-val="${escapeHtml(loc)}">
+                            <span class="vc-loc-item-text">&#128205; ${escapeHtml(loc)}</span>
+                            <button type="button" class="vc-loc-remove" data-del="${escapeHtml(loc)}" title="Remove saved location">&times;</button>
+                        </div>
+                    `;
+                });
+            }
+
+            if (!html) {
+                dropdown.innerHTML = "";
+                wrapper.classList.remove("vc-open");
+                return;
+            }
+
+            dropdown.innerHTML = html;
+            wrapper.classList.add("vc-open");
+            activeIndex = -1;
+        }
+
+        function selectValue(val) {
+            if (!val) return;
+            setVueInputValue(input, val);
+            saveNewLocation(val);
+            wrapper.classList.remove("vc-open");
+        }
+
+        input.addEventListener("focus", () => {
+            renderDropdown();
+        });
+
+        input.addEventListener("click", () => {
+            renderDropdown();
+        });
+
+        input.addEventListener("input", () => {
+            renderDropdown();
+        });
+
+        input.addEventListener("keydown", (e) => {
+            const items = Array.from(dropdown.querySelectorAll(".vc-loc-item"));
+            if (!items.length) return;
+
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
+                activeIndex = (activeIndex + 1) % items.length;
+                items.forEach((el, idx) => el.classList.toggle("vc-active", idx === activeIndex));
+                items[activeIndex].scrollIntoView({ block: "nearest" });
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                activeIndex = (activeIndex - 1 + items.length) % items.length;
+                items.forEach((el, idx) => el.classList.toggle("vc-active", idx === activeIndex));
+                items[activeIndex].scrollIntoView({ block: "nearest" });
+            } else if (e.key === "Enter" && wrapper.classList.contains("vc-open")) {
+                const chosen = activeIndex >= 0 ? items[activeIndex] : items[0];
+                if (chosen) {
+                    e.preventDefault();
+                    selectValue(chosen.getAttribute("data-val"));
+                }
+            } else if (e.key === "Escape") {
+                wrapper.classList.remove("vc-open");
+            }
+        });
+
+        dropdown.addEventListener("mousedown", async (e) => {
+            e.preventDefault();
+            const delBtn = e.target.closest(".vc-loc-remove");
+            if (delBtn) {
+                const toDelete = delBtn.getAttribute("data-del");
+                await deleteSavedLocation(toDelete);
+                await renderDropdown();
+                return;
+            }
+            const item = e.target.closest(".vc-loc-item");
+            if (item) {
+                selectValue(item.getAttribute("data-val"));
+            }
+        });
+
+        input.addEventListener("blur", () => {
+            setTimeout(() => {
+                wrapper.classList.remove("vc-open");
+                if (input.value && input.value.trim()) {
+                    saveNewLocation(input.value.trim());
+                }
+            }, 180);
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!wrapper.contains(e.target)) {
+                wrapper.classList.remove("vc-open");
+            }
+        });
+
+        const form = input.closest("form") || document.querySelector("form");
+        if (form) {
+            form.addEventListener("submit", () => {
+                if (input.value && input.value.trim()) {
+                    saveNewLocation(input.value.trim());
+                }
+            });
+        }
+        document.addEventListener("click", (e) => {
+            const btn = e.target.closest("button");
+            if (btn && (btn.type === "submit" || /submit/i.test(btn.textContent || ""))) {
+                if (input.value && input.value.trim()) {
+                    saveNewLocation(input.value.trim());
+                }
+            }
+        }, true);
+    }
+
+    setupLocationAutocomplete();
+    const observer = new MutationObserver(() => setupLocationAutocomplete());
+    observer.observe(document.body, { childList: true, subtree: true });
+})();
+</script>
