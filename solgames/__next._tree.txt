@@ -1,5 +1,5 @@
 :HL["/solgames/_next/static/chunks/14-~coipxrakh.css","style"]
 :HL["/solgames/_next/static/media/5cf8828ea9d4dda3-s.p.01vj161xbdk2k.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/solgames/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/solgames/_next/static/chunks/0hd5jti~bc1vi.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"GG58U4o6OWwfiX54XdA4m"}
+:HL["/solgames/_next/static/chunks/079twt-nbkv~m.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"FbMv1ahLHUaULllk0hIqC"}
