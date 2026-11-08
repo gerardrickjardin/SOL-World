@@ -1,5 +1,5 @@
 1:"$Sreact.fragment"
-2:I[39756,["/solgames/_next/static/chunks/0x.~j7vy9ohz0.js","/solgames/_next/static/chunks/0ned1x.rkzf95.js","/solgames/_next/static/chunks/0d3shmwh5_nmn.js","/solgames/_next/static/chunks/06prm_1akc_.b.js","/solgames/_next/static/chunks/0s7fo94boo9nt.js"],"default"]
-3:I[37457,["/solgames/_next/static/chunks/0x.~j7vy9ohz0.js","/solgames/_next/static/chunks/0ned1x.rkzf95.js","/solgames/_next/static/chunks/0d3shmwh5_nmn.js","/solgames/_next/static/chunks/06prm_1akc_.b.js","/solgames/_next/static/chunks/0s7fo94boo9nt.js"],"default"]
+2:I[39756,["/solgames/_next/static/chunks/0x.~j7vy9ohz0.js","/solgames/_next/static/chunks/0ned1x.rkzf95.js","/solgames/_next/static/chunks/14ijgr0i18.i..js","/solgames/_next/static/chunks/0d3shmwh5_nmn.js"],"default"]
+3:I[37457,["/solgames/_next/static/chunks/0x.~j7vy9ohz0.js","/solgames/_next/static/chunks/0ned1x.rkzf95.js","/solgames/_next/static/chunks/14ijgr0i18.i..js","/solgames/_next/static/chunks/0d3shmwh5_nmn.js"],"default"]
 4:[]
-0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":"$W4","buildId":"oZ9YQaOK_KhCT_P0GD025"}
+0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":"$W4","buildId":"Qkr29SsvI3A0oee7bYUHS"}
