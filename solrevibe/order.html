@@ -1801,21 +1801,6 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                         </div>
                     </div>
 
-                    <!-- Option 2: 2-Payment Split Option ($2,000/mo) -->
-                    <div class="plan-option-card" id="planSplitCard" onclick="selectPricingPlan('split')">
-                        <div class="plan-left-wrap">
-                            <div class="custom-radio"></div>
-                            <div class="plan-details">
-                                <div class="plan-title">2-Payment Split Option</div>
-                                <div class="plan-subtitle">2 monthly installments of $2,000 ($4,000 total)</div>
-                            </div>
-                        </div>
-                        <div class="plan-right-price">
-                            <span class="plan-main-price">$2,000</span>
-                            <span class="plan-price-unit">/mo</span>
-                        </div>
-                    </div>
-
                 </div>
 
                 <!-- Package Deliverables Included -->
@@ -1914,7 +1899,7 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 <a href="index.html">Home</a>
                 <a href="customer.html">Customer Portal</a>
                 <a href="locations/index.html">Station Locations</a>
-                <a href="video-library/index.html">Therapeutic Audio Guides</a>
+                <a href="tags/index.html">Therapeutic Audio Guides</a>
             </div>
             <div>&copy; 2026 SOL REViBE Global Wellness. All Rights Reserved. 256-Bit SSL Encrypted Direct Order &amp; 2-Year Warranty Portal.</div>
         </div>
@@ -1974,23 +1959,14 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 
         // Select Pricing Plan
         function selectPricingPlan(plan) {
-            selectedPlan = plan === 'split' ? 'split' : 'full';
+            selectedPlan = 'full';
             const fullCard = document.getElementById('planFullCard');
-            const splitCard = document.getElementById('planSplitCard');
             const totalDisplay = document.getElementById('totalDueDisplay');
             const btnLabel = document.getElementById('btnLabel');
 
-            if (selectedPlan === 'full') {
-                fullCard.classList.add('active');
-                splitCard.classList.remove('active');
-                totalDisplay.textContent = '$3,995.00';
-                btnLabel.textContent = 'Authorize & Complete Order • $3,995.00';
-            } else {
-                splitCard.classList.add('active');
-                fullCard.classList.remove('active');
-                totalDisplay.textContent = '$2,000.00';
-                btnLabel.textContent = 'Authorize & Complete Order • $2,000.00';
-            }
+            if (fullCard) fullCard.classList.add('active');
+            totalDisplay.textContent = '$3,995.00';
+            btnLabel.textContent = 'Authorize & Complete Order • $3,995.00';
         }
 
         // Pre-populate from URL query params or sessionStorage (when redirected from customer page)

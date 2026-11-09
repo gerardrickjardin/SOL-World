@@ -56,6 +56,12 @@ const path = require('path');
     copyRecursiveSync(solgamesDirSrc, solgamesDirDest);
   }
 
+  const tagsDirSrc = path.join(__dirname, 'tags');
+  const tagsDirDest = path.join(outDir, 'tags');
+  if (fs.existsSync(tagsDirSrc)) {
+    copyRecursiveSync(tagsDirSrc, tagsDirDest);
+  }
+
   const videoLibDirSrc = path.join(__dirname, 'video-library');
   const videoLibDirDest = path.join(outDir, 'video-library');
   if (fs.existsSync(videoLibDirSrc)) {

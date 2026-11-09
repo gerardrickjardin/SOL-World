@@ -1,4 +1,26 @@
 {
   "cleanUrls": true,
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "redirects": [
+    {
+      "source": "/video-library",
+      "destination": "/tags",
+      "permanent": true
+    },
+    {
+      "source": "/video-library/index.html",
+      "destination": "/tags",
+      "permanent": true
+    },
+    {
+      "source": "/solrevibe/video-library",
+      "destination": "/solrevibe/tags",
+      "permanent": true
+    },
+    {
+      "source": "/solrevibe/video-library/index.html",
+      "destination": "/solrevibe/tags",
+      "permanent": true
+    }
+  ]
 }

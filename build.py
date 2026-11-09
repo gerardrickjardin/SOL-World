@@ -38,7 +38,8 @@ for out_dir in out_dirs:
     # Copy solgames
     copy_recursive('solgames', os.path.join(out_dir, 'solgames'))
 
-    # Copy video-library & customer
+    # Copy tags, video-library & customer
+    copy_recursive('tags', os.path.join(out_dir, 'tags'))
     copy_recursive('video-library', os.path.join(out_dir, 'video-library'))
     copy_recursive('customer', os.path.join(out_dir, 'customer'))
     

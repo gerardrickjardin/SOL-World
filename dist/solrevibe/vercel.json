@@ -1,6 +1,18 @@
 {
   "cleanUrls": true,
   "regions": ["iad1"],
+  "redirects": [
+    {
+      "source": "/video-library",
+      "destination": "/tags",
+      "permanent": true
+    },
+    {
+      "source": "/video-library/index.html",
+      "destination": "/tags",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",

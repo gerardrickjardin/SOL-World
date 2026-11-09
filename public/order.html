@@ -1141,18 +1141,6 @@
                         </div>
                     </div>
 
-                    <!-- Option 2: 2-Payment Split ($2,000 x 2 = $4,000) -->
-                    <div class="pricing-radio-option inactive" id="plan-split-card" onclick="selectPlan('split')">
-                        <div class="radio-left-wrap">
-                            <div class="radio-custom-circle" id="radio-split"></div>
-                            <div>
-                                <div class="plan-title-bold">2-Payment Split Option ($4,000 Total)</div>
-                                <div style="font-size: 11.5px; color: #64748B;">2 monthly payments of $2,000.00</div>
-                            </div>
-                        </div>
-                        <div class="plan-amount-display" style="font-size: 18px;">$2,000<span style="font-size: 12px; font-weight: 500; color: #64748B;">/mo</span></div>
-                    </div>
-
                     <!-- Bundled Deliverables Checklist -->
                     <div class="bundle-deliverables-box">
                         <div style="font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 8px;">
@@ -1357,25 +1345,15 @@
         let currentPrice = 3995.00;
 
         function selectPlan(plan) {
-            currentPlan = plan === 'split' ? 'split' : 'full';
+            currentPlan = 'full';
+            currentPrice = 3995.00;
             const cardFull = document.getElementById('plan-full-card');
-            const cardSplit = document.getElementById('plan-split-card');
             const totalLabel = document.getElementById('total-amount-label');
             const btnText = document.getElementById('submit-btn-text');
 
-            if (currentPlan === 'full') {
-                currentPrice = 3995.00;
-                cardFull.classList.remove('inactive');
-                cardSplit.classList.add('inactive');
-                totalLabel.textContent = '$3,995.00';
-                btnText.textContent = 'Authorize & Complete Order - $3,995.00';
-            } else {
-                currentPrice = 2000.00;
-                cardSplit.classList.remove('inactive');
-                cardFull.classList.add('inactive');
-                totalLabel.textContent = '$2,000.00';
-                btnText.textContent = 'Authorize 1st Payment - $2,000.00 (Total $4,000)';
-            }
+            if (cardFull) cardFull.classList.remove('inactive');
+            totalLabel.textContent = '$3,995.00';
+            btnText.textContent = 'Authorize & Complete Order - $3,995.00';
         }
 
         // Pre-populate from URL query params or sessionStorage (when redirected from customer page)
