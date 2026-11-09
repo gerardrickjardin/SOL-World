@@ -1,4 +1,16 @@
 {
   "cleanUrls": true,
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "redirects": [
+    {
+      "source": "/solgames",
+      "destination": "https://21games.ai",
+      "permanent": true
+    },
+    {
+      "source": "/solgames/:path*",
+      "destination": "https://21games.ai/:path*",
+      "permanent": true
+    }
+  ]
 }
