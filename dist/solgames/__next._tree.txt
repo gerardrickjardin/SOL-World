@@ -1,8 +1,5 @@
-:HL["/solgames/_next/static/chunks/05xldb6~psbpw.css","style"]
+:HL["/solgames/_next/static/chunks/10e07cy_04io0.css","style"]
 :HL["/solgames/_next/static/media/5cf8828ea9d4dda3-s.p.01vj161xbdk2k.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/solgames/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/solgames/_next/static/chunks/0hv3dywm_r.b-.css","style"]
-:HL["/solgames/logo.png","image"]
-:HL["/solgames/boxes-bg.png","image"]
-:HL["/solgames/hands.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"kvIPyabHLY8BdGyeLkOtx"}
+:HL["/solgames/_next/static/chunks/0.o76macjuml7.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"XNDHoDwLi5kRERONPt2aN"}

@@ -1,2 +1,2 @@
-:HL["/solgames/_next/static/chunks/05xldb6~psbpw.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"kvIPyabHLY8BdGyeLkOtx"}
+:HL["/solgames/_next/static/chunks/10e07cy_04io0.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"XNDHoDwLi5kRERONPt2aN"}

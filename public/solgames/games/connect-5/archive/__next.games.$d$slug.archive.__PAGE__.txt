@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[70467,["/solgames/_next/static/chunks/0x.~j7vy9ohz0.js","/solgames/_next/static/chunks/0ned1x.rkzf95.js","/solgames/_next/static/chunks/0euo8zf8hx5ox.js","/solgames/_next/static/chunks/0d3shmwh5_nmn.js","/solgames/_next/static/chunks/0z362532q19kh.js"],"GameArchiveView"]
+3:I[97367,["/solgames/_next/static/chunks/0x.~j7vy9ohz0.js","/solgames/_next/static/chunks/0ned1x.rkzf95.js","/solgames/_next/static/chunks/0euo8zf8hx5ox.js","/solgames/_next/static/chunks/0d3shmwh5_nmn.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"gameSlug":"connect-5"}],[["$","script","script-0",{"src":"/solgames/_next/static/chunks/0z362532q19kh.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"XNDHoDwLi5kRERONPt2aN"}
+5:null
