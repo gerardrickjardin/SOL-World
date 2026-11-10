@@ -2307,11 +2307,11 @@
                                     <p class="card-plan-desc">P90 Plus + Therapeutic Audio Guides (TAGs)</p>
 
                                     <!-- Product Visual -->
-                                    <div class="card-product-visual">
+                                    <div class="card-product-visual" onclick="openOrderModal('experience')" style="cursor: pointer;">
                                         <img src="assets/p90-unit-crop.jpg" alt="OlyLife P90+ Unit">
                                     </div>
 
-                                    <div class="card-price-block">
+                                    <div class="card-price-block" onclick="openOrderModal('experience')" style="cursor: pointer;">
                                         <span class="card-price-value">$1,995</span>
                                         <span class="card-price-shipping">Includes shipping</span>
                                     </div>
@@ -2338,12 +2338,12 @@
                                     <p class="card-plan-desc">Everything You Need for a Turnkey Experience</p>
 
                                     <!-- Product Visual -->
-                                    <div class="card-product-visual">
+                                    <div class="card-product-visual" onclick="openOrderModal('complete')" style="cursor: pointer;">
                                         <img src="assets/complete-chair-setup-crop.jpg"
                                             alt="SOL REViBE Complete Turnkey Setup">
                                     </div>
 
-                                    <div class="card-price-block">
+                                    <div class="card-price-block" onclick="openOrderModal('complete')" style="cursor: pointer;">
                                         <span class="card-price-value">$2,995</span>
                                         <span class="card-price-shipping">Includes shipping</span>
                                     </div>
@@ -3062,10 +3062,14 @@
         const orderSubmitBtn = document.getElementById('orderSubmitBtn');
 
         function openOrderModal(plan) {
-            selectOrderPlan(plan || 'complete');
-            orderModal.classList.add('open');
-            orderModal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
+            const selectedPlan = plan || 'complete';
+            const payload = JSON.stringify({
+                plan: selectedPlan,
+                timestamp: new Date().toISOString()
+            });
+            try { sessionStorage.setItem('customerOrder', payload); } catch (err) { }
+            try { localStorage.setItem('customerOrder', payload); } catch (err) { }
+            window.location.href = `order.html?plan=${encodeURIComponent(selectedPlan)}`;
         }
 
         function closeOrderModal() {

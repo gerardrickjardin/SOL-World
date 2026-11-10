@@ -1776,27 +1776,26 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 
                 <!-- Product Setup Photo Preview -->
                 <div class="bundle-photo-wrap">
-                    <img src="assets/Serene Sol Revive Wellness Session.png" alt="SOL REViBE Station Package" class="bundle-photo-img">
+                    <img src="assets/Serene Sol Revive Wellness Session.png" alt="SOL REViBE Station Package" class="bundle-photo-img" id="bundlePhotoImg">
                     <div class="bundle-photo-badge">
-                        <span>Complete Station Bundle</span>
-                        <span class="bundle-badge-pill">Includes All 5 Items</span>
+                        <span id="bundlePhotoTitle">Complete Home Setup</span>
+                        <span class="bundle-badge-pill" id="bundlePhotoPill">Includes All 5 Items</span>
                     </div>
                 </div>
 
                 <!-- Plan Selection Cards -->
                 <div class="pricing-plans-box">
                     
-                    <!-- Option 1: Complete Station Package ($3,995) -->
-                    <div class="plan-option-card active" id="planFullCard" onclick="selectPricingPlan('full')">
+                    <!-- Selected Package Card -->
+                    <div class="plan-option-card active" id="planFullCard">
                         <div class="plan-left-wrap">
                             <div class="custom-radio"></div>
                             <div class="plan-details">
-                                <div class="plan-title">Complete Station Package</div>
+                                <div class="plan-title" id="planCardTitle">Complete Home Setup</div>
                             </div>
                         </div>
                         <div class="plan-right-price">
-                            <span class="plan-msrp-strike">$4,995</span>
-                            <span class="plan-main-price">$3,995</span>
+                            <span class="plan-main-price" id="planCardPrice">$2,995</span>
                         </div>
                     </div>
 
@@ -1805,34 +1804,26 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 <!-- Package Deliverables Included -->
                 <div class="deliverables-box">
                     <div class="deliverables-heading">Package Deliverables Included</div>
-                    <ul class="deliverables-list">
+                    <ul class="deliverables-list" id="deliverablesList">
                         <li>
                             <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                            <div><strong>P90 Plus Core Unit:</strong> Dual Terahertz &amp; PEMF foot-energy generator with wireless remote.</div>
+                            <div>Everything in the Home Experience</div>
                         </li>
                         <li>
                             <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                            <div><strong>Zero-Gravity Wellness Chair:</strong> Custom bio-energy ergonomic recliner designed for maximum conductivity.</div>
+                            <div>Comfortable lounge chair</div>
                         </li>
                         <li>
                             <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                            <div><strong>Heavy-Duty Station Stand &amp; Dock:</strong> Precision aluminum adjustable positioning mount.</div>
+                            <div>Premium noise-canceling headphones</div>
                         </li>
                         <li>
                             <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                            <div><strong>Ultrasonic Diffuser:</strong> Continuous cool mist aromatherapy integration.</div>
+                            <div>Aromatherapy containers &amp; essential oils</div>
                         </li>
                         <li>
                             <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                            <div><strong>Retractable Station Banner &amp; Screen:</strong> Branded SOL REViBE privacy backdrop &amp; accessories.</div>
-                        </li>
-                        <li>
-                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                            <div><strong>2-Year Manufacturer Warranty:</strong> Registered directly with your Driver's License / ID Number.</div>
-                        </li>
-                        <li>
-                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
-                            <div><strong>Insured Freight Shipping:</strong> White-glove delivery straight to your address ($250 value).</div>
+                            <div>Complete accessory set for a ready-to-use station</div>
                         </li>
                     </ul>
                 </div>
@@ -1840,12 +1831,8 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 <!-- Price Breakdown Rows -->
                 <div class="price-breakdown-section">
                     <div class="price-row">
-                        <span>Package Regular Price:</span>
-                        <span style="text-decoration: line-through;">$4,995.00</span>
-                    </div>
-                    <div class="price-row savings">
-                        <span>Station Bundle Savings:</span>
-                        <span>-$1,000.00</span>
+                        <span id="breakdownPlanLabel">Complete Home Setup:</span>
+                        <span id="breakdownPlanPrice">$2,995.00</span>
                     </div>
                     <div class="price-row free">
                         <span>Insured Freight Delivery:</span>
@@ -1860,14 +1847,14 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 
                     <div class="total-due-row">
                         <span class="total-label">Total Due Today:</span>
-                        <span class="total-amount-display" id="totalDueDisplay">$3,995.00</span>
+                        <span class="total-amount-display" id="totalDueDisplay">$2,995.00</span>
                     </div>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit" id="authorizeOrderBtn" class="btn-authorize">
                     <i class="fa-solid fa-lock"></i>
-                    <span id="btnLabel">Authorize &amp; Complete Order • $3,995.00</span>
+                    <span id="btnLabel">Authorize &amp; Complete Order • $2,995.00</span>
                 </button>
 
                 <!-- Guarantee Notes Below Button -->
@@ -1913,7 +1900,7 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
             
             <h2 class="conf-title">Order Confirmed &amp; Warranty Registered!</h2>
             <p class="conf-subtitle">
-                Thank you, <strong id="confCustomerName">Valued Customer</strong>. Your order for the <strong>SOL REViBE Mind-Body Station (P90 Plus Complete Package)</strong> has been successfully authorized and registered.
+                Thank you, <strong id="confCustomerName">Valued Customer</strong>. Your order for the <strong id="confPackageName">SOL REViBE Complete Home Setup</strong> has been successfully authorized and registered.
             </p>
 
             <div class="conf-receipt-box">
@@ -1927,7 +1914,7 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 </div>
                 <div class="receipt-row">
                     <span class="receipt-label">Total Paid Today:</span>
-                    <span class="receipt-value" id="confAmountPaid">$3,995.00 USD</span>
+                    <span class="receipt-value" id="confAmountPaid">$2,995.00 USD</span>
                 </div>
                 <div class="receipt-row">
                     <span class="receipt-label">Freight Delivery Address:</span>
@@ -1954,33 +1941,82 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // State variables
-        let selectedPlan = 'full'; // 'full' ($3,995) or 'split' ($2,000)
+        let selectedPlan = 'complete'; // 'experience' ($1,995) or 'complete' ($2,995)
+
+        const PLAN_CONFIGS = {
+            experience: {
+                title: 'Home Experience',
+                badgePill: 'Includes 3 Items',
+                priceShort: '$1,995',
+                priceFormatted: '$1,995.00',
+                confPackage: 'SOL REViBE Home Experience',
+                deliverables: [
+                    'OlyLife P90+ device',
+                    'Therapeutic Audio Guides (TAGs) - a Curated Collection',
+                    'Ongoing customer support'
+                ]
+            },
+            complete: {
+                title: 'Complete Home Setup',
+                badgePill: 'Includes All 5 Items',
+                priceShort: '$2,995',
+                priceFormatted: '$2,995.00',
+                confPackage: 'SOL REViBE Complete Home Setup',
+                deliverables: [
+                    'Everything in the Home Experience',
+                    'Comfortable lounge chair',
+                    'Premium noise-canceling headphones',
+                    'Aromatherapy containers &amp; essential oils',
+                    'Complete accessory set for a ready-to-use station'
+                ]
+            }
+        };
 
         // Select Pricing Plan
         function selectPricingPlan(plan) {
-            selectedPlan = 'full';
+            selectedPlan = (plan === 'experience') ? 'experience' : 'complete';
+            const cfg = PLAN_CONFIGS[selectedPlan];
+
             const fullCard = document.getElementById('planFullCard');
+            const bundleTitle = document.getElementById('bundlePhotoTitle');
+            const bundlePill = document.getElementById('bundlePhotoPill');
+            const cardTitle = document.getElementById('planCardTitle');
+            const cardPrice = document.getElementById('planCardPrice');
+            const deliverablesList = document.getElementById('deliverablesList');
+            const breakdownLabel = document.getElementById('breakdownPlanLabel');
+            const breakdownPrice = document.getElementById('breakdownPlanPrice');
             const totalDisplay = document.getElementById('totalDueDisplay');
             const btnLabel = document.getElementById('btnLabel');
 
             if (fullCard) fullCard.classList.add('active');
-            totalDisplay.textContent = '$3,995.00';
-            btnLabel.textContent = 'Authorize & Complete Order • $3,995.00';
+            if (bundleTitle) bundleTitle.textContent = cfg.title;
+            if (bundlePill) bundlePill.textContent = cfg.badgePill;
+            if (cardTitle) cardTitle.textContent = cfg.title;
+            if (cardPrice) cardPrice.textContent = cfg.priceShort;
+            if (deliverablesList) {
+                deliverablesList.innerHTML = cfg.deliverables.map(item => `
+                        <li>
+                            <div class="d-check-icon"><i class="fa-solid fa-check"></i></div>
+                            <div>${item}</div>
+                        </li>`).join('');
+            }
+            if (breakdownLabel) breakdownLabel.textContent = cfg.title + ':';
+            if (breakdownPrice) breakdownPrice.textContent = cfg.priceFormatted;
+            if (totalDisplay) totalDisplay.textContent = cfg.priceFormatted;
+            if (btnLabel) btnLabel.textContent = 'Authorize & Complete Order • ' + cfg.priceFormatted;
         }
 
-        // Pre-populate from URL query params or sessionStorage (when redirected from customer page)
+        // Pre-populate from URL query params or sessionStorage/localStorage (when redirected from customer page)
         document.addEventListener('DOMContentLoaded', function() {
             let stored = {};
             try {
-                const raw = sessionStorage.getItem('customerOrder');
+                const raw = sessionStorage.getItem('customerOrder') || localStorage.getItem('customerOrder');
                 if (raw) stored = JSON.parse(raw) || {};
             } catch (err) {}
 
             const params = new URLSearchParams(window.location.search);
-            const planParam = params.get('plan') || stored.plan;
-            if (planParam === 'split' || planParam === 'full') {
-                selectPricingPlan(planParam);
-            }
+            const planParam = params.get('plan') || stored.plan || 'complete';
+            selectPricingPlan(planParam);
 
             const nameVal = params.get('name') || stored.name;
             const emailVal = params.get('email') || stored.email;
@@ -2116,12 +2152,13 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 // Populate confirmation modal
                 const randomRef = 'SR-' + Math.floor(100000 + Math.random() * 900000);
                 const idLast4 = govId.length > 4 ? govId.slice(-4) : '8412';
-                const amountText = selectedPlan === 'full' 
-                    ? '$3,995.00 USD (Paid in Full)' 
-                    : '$2,000.00 USD (Installment 1 of 2 • $4,000 Total)';
+                const cfg = PLAN_CONFIGS[selectedPlan] || PLAN_CONFIGS.complete;
+                const amountText = cfg.priceFormatted + ' USD (Paid in Full)';
                 const fullStreet = suite ? `${address}, ${suite}` : address;
 
                 document.getElementById('confCustomerName').textContent = fullName || 'Valued Customer';
+                const confPkgEl = document.getElementById('confPackageName');
+                if (confPkgEl) confPkgEl.textContent = cfg.confPackage;
                 document.getElementById('confOrderRef').textContent = randomRef;
                 document.getElementById('confWarrantyStatus').textContent = 'ACTIVE (Registered to ID: ••••' + idLast4 + ')';
                 document.getElementById('confAmountPaid').textContent = amountText;

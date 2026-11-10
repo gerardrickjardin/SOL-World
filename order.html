@@ -1126,64 +1126,53 @@
                 </div>
 
                 <div class="bundle-selection-card">
-                    <!-- Option 1: Pay in Full ($3,995) - Preselected -->
-                    <div class="pricing-radio-option" id="plan-full-card" onclick="selectPlan('full')">
+                    <!-- Selected Package Card -->
+                    <div class="pricing-radio-option" id="plan-full-card">
                         <div class="radio-left-wrap">
                             <div class="radio-custom-circle" id="radio-full"></div>
                             <div>
-                                <div class="plan-title-bold">Complete Station Package</div>
+                                <div class="plan-title-bold" id="plan-card-title">Complete Home Setup</div>
                             </div>
                         </div>
                         <div class="plan-amount-display">
-                            <span style="font-size: 13px; font-weight: 500; color: #94A3B8; text-decoration: line-through;">$4,995</span>
-                            <span>$3,995</span>
+                            <span id="plan-card-price">$2,995</span>
                         </div>
                     </div>
 
                     <!-- Bundled Deliverables Checklist -->
                     <div class="bundle-deliverables-box">
                         <div style="font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 8px;">
-                            Complete Package Deliverables Included:
+                            Package Deliverables Included:
                         </div>
-                        <div class="deliverable-item">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <div><strong>P90 Plus Dual-Frequency Core Platform:</strong> Terahertz resonance & PEMF bio-stimulation platform with remote.</div>
-                        </div>
-                        <div class="deliverable-item">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <div><strong>Zero-Gravity Ergonomic Station Chair:</strong> Ergonomic bio-alignment wellness recliner.</div>
-                        </div>
-                        <div class="deliverable-item">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <div><strong>Heavy-Duty Adjustable Station Stand & Dock:</strong> Multi-angle precision dock.</div>
-                        </div>
-                        <div class="deliverable-item">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <div><strong>Ultrasonic Ambient Diffuser:</strong> Sensory aromatherapy & cool mist accompanist.</div>
-                        </div>
-                        <div class="deliverable-item">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <div><strong>Retractable Banner & Display Screen Kit:</strong> Official branded SOL REViBE station backdrop.</div>
-                        </div>
-                        <div class="deliverable-item">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <div><strong>2-Year Manufacturer Warranty Registration:</strong> Registered directly with your Government ID.</div>
-                        </div>
-                        <div class="deliverable-item">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <div><strong>Insured White-Glove Freight Delivery:</strong> Doorstep crate delivery ($250 value — Included FREE).</div>
+                        <div id="deliverables-list-container">
+                            <div class="deliverable-item">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>Everything in the Home Experience</div>
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>Comfortable lounge chair</div>
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>Premium noise-canceling headphones</div>
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>Aromatherapy containers &amp; essential oils</div>
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>Complete accessory set for a ready-to-use station</div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Summary calculation -->
                     <div style="margin-top: 14px; border-top: 1px solid #E2E8F0; padding-top: 10px;">
                         <div class="order-summary-row">
-                            <span>Package Regular Price:</span>
-                            <span style="text-decoration: line-through;">$4,995.00</span>
-                        </div>
-                        <div class="order-summary-row">
-                            <span>Station Package Discount:</span>
-                            <span style="color: #E11D48; font-weight: 600;">-$1,000.00</span>
+                            <span id="breakdown-plan-label">Complete Home Setup:</span>
+                            <span id="breakdown-plan-price">$2,995.00</span>
                         </div>
                         <div class="order-summary-row">
                             <span>Insured Freight Delivery:</span>
@@ -1191,7 +1180,7 @@
                         </div>
                         <div class="order-total-row">
                             <span>Total Due Today:</span>
-                            <span class="order-total-amount" id="total-amount-label">$3,995.00</span>
+                            <span class="order-total-amount" id="total-amount-label">$2,995.00</span>
                         </div>
                     </div>
                 </div>
@@ -1278,7 +1267,7 @@
                 <!-- Submit Button -->
                 <button type="submit" class="submit-order-button" id="submit-btn">
                     <i class="fa-solid fa-lock"></i>
-                    <span id="submit-btn-text">Authorize & Complete Order - $3,995.00</span>
+                    <span id="submit-btn-text">Authorize & Complete Order - $2,995.00</span>
                 </button>
 
                 <div class="submit-trust-subtext">
@@ -1340,34 +1329,76 @@
 
     <!-- Script: Interactive Behaviors & Validation -->
     <script>
-        let currentPlan = 'full';
-        let currentPrice = 3995.00;
+        let currentPlan = 'complete';
+        let currentPrice = 2995.00;
+
+        const PLAN_CONFIGS = {
+            experience: {
+                title: 'Home Experience',
+                priceShort: '$1,995',
+                priceFormatted: '$1,995.00',
+                priceNum: 1995.00,
+                deliverables: [
+                    'OlyLife P90+ device',
+                    'Therapeutic Audio Guides (TAGs) - a Curated Collection',
+                    'Ongoing customer support'
+                ]
+            },
+            complete: {
+                title: 'Complete Home Setup',
+                priceShort: '$2,995',
+                priceFormatted: '$2,995.00',
+                priceNum: 2995.00,
+                deliverables: [
+                    'Everything in the Home Experience',
+                    'Comfortable lounge chair',
+                    'Premium noise-canceling headphones',
+                    'Aromatherapy containers &amp; essential oils',
+                    'Complete accessory set for a ready-to-use station'
+                ]
+            }
+        };
 
         function selectPlan(plan) {
-            currentPlan = 'full';
-            currentPrice = 3995.00;
+            currentPlan = (plan === 'experience') ? 'experience' : 'complete';
+            const cfg = PLAN_CONFIGS[currentPlan];
+            currentPrice = cfg.priceNum;
             const cardFull = document.getElementById('plan-full-card');
+            const cardTitle = document.getElementById('plan-card-title');
+            const cardPrice = document.getElementById('plan-card-price');
+            const listEl = document.getElementById('deliverables-list-container');
+            const brkLabel = document.getElementById('breakdown-plan-label');
+            const brkPrice = document.getElementById('breakdown-plan-price');
             const totalLabel = document.getElementById('total-amount-label');
             const btnText = document.getElementById('submit-btn-text');
 
             if (cardFull) cardFull.classList.remove('inactive');
-            totalLabel.textContent = '$3,995.00';
-            btnText.textContent = 'Authorize & Complete Order - $3,995.00';
+            if (cardTitle) cardTitle.textContent = cfg.title;
+            if (cardPrice) cardPrice.textContent = cfg.priceShort;
+            if (listEl) {
+                listEl.innerHTML = cfg.deliverables.map(item => `
+                    <div class="deliverable-item">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>${item}</div>
+                    </div>`).join('');
+            }
+            if (brkLabel) brkLabel.textContent = cfg.title + ':';
+            if (brkPrice) brkPrice.textContent = cfg.priceFormatted;
+            if (totalLabel) totalLabel.textContent = cfg.priceFormatted;
+            if (btnText) btnText.textContent = 'Authorize & Complete Order - ' + cfg.priceFormatted;
         }
 
-        // Pre-populate from URL query params or sessionStorage (when redirected from customer page)
+        // Pre-populate from URL query params or sessionStorage/localStorage (when redirected from customer page)
         document.addEventListener('DOMContentLoaded', () => {
             let stored = {};
             try {
-                const raw = sessionStorage.getItem('customerOrder');
+                const raw = sessionStorage.getItem('customerOrder') || localStorage.getItem('customerOrder');
                 if (raw) stored = JSON.parse(raw) || {};
             } catch (err) {}
 
             const params = new URLSearchParams(window.location.search);
-            const planParam = params.get('plan') || stored.plan;
-            if (planParam === 'split' || planParam === 'full') {
-                selectPlan(planParam);
-            }
+            const planParam = params.get('plan') || stored.plan || 'complete';
+            selectPlan(planParam);
 
             const nameVal = params.get('name') || stored.name;
             const emailVal = params.get('email') || stored.email;
@@ -1492,7 +1523,8 @@
                     document.getElementById('conf-name-display').textContent = fullName;
                     document.getElementById('conf-order-num').textContent = 'SR-' + Math.floor(100000 + Math.random() * 900000);
                     document.getElementById('conf-warranty-status').textContent = 'ACTIVE (Registered to ID: ••••' + govId.slice(-4) + ')';
-                    document.getElementById('conf-amount-display').textContent = currentPlan === 'full' ? '$3,995.00 USD' : '$2,000.00 USD (Installment 1 of 2 • $4,000 Total)';
+                    const cfg = PLAN_CONFIGS[currentPlan] || PLAN_CONFIGS.complete;
+                    document.getElementById('conf-amount-display').textContent = cfg.priceFormatted + ' USD';
                     document.getElementById('conf-address-display').textContent = `${street}, ${city}, ${state} ${zip}`;
                     document.getElementById('conf-email-display').textContent = email;
 
