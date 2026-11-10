@@ -354,51 +354,33 @@
 
         /* ================= HERO SECTION (TOP FOLD) ================= */
         .customer-hero {
-            padding: 2.25rem 0 2rem;
+            padding: 2.5rem 0 2.25rem;
             position: relative;
         }
 
         .hero-top-grid {
-            display: grid;
-            grid-template-columns: 280px minmax(520px, 1.4fr) minmax(480px, 1.15fr);
-            gap: 1.75rem;
-            align-items: stretch;
-        }
-
-        @media (max-width: 1400px) {
-            .hero-top-grid {
-                grid-template-columns: 260px minmax(440px, 1.3fr) minmax(450px, 1.15fr);
-                gap: 1.35rem;
-            }
-        }
-
-        @media (max-width: 1120px) {
-            .hero-top-grid {
-                grid-template-columns: 1fr;
-                gap: 2.25rem;
-                align-items: start;
-            }
-        }
-
-        /* Left Hero Column: Headline, Feature Cards & Reassurance */
-        .hero-left-col {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            gap: 0.95rem;
-            padding-top: 0.1rem;
+            align-items: center;
+            gap: 1.85rem;
+            max-width: 980px;
+            margin: 0 auto;
         }
 
-        .hero-left-top {
+        /* Top Centered Headline & Supporting Copy */
+        .hero-header-center {
+            text-align: center;
+            max-width: 780px;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 0.85rem;
+            align-items: center;
+            gap: 0.65rem;
         }
 
         .hero-main-title {
             font-family: 'Playfair Display', Georgia, serif;
-            font-size: 2.65rem;
+            font-size: clamp(2.35rem, 4vw, 3.35rem);
             line-height: 1.08;
             font-weight: 600;
             color: var(--text-dark);
@@ -411,23 +393,80 @@
         }
 
         .hero-subheadline {
-            font-size: 0.88rem;
-            line-height: 1.48;
+            font-size: 1.04rem;
+            line-height: 1.5;
             color: var(--text-muted);
             font-weight: 400;
+            max-width: 640px;
+        }
+
+        /* Primary Promotional Video Block (Directly Below Tagline) */
+        .hero-center-col {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 1.15rem;
+            position: relative;
+        }
+
+        .hero-photo-frame {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 18px 42px rgba(34, 55, 43, 0.14);
+            border: 1px solid rgba(220, 213, 201, 0.85);
+            background: #EAE6DF;
+            cursor: pointer;
+        }
+
+        .hero-video-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            border: 2px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-forest);
+            font-size: 1.65rem;
+            padding-left: 4px;
+            z-index: 3;
+            transition: var(--transition);
+        }
+
+        .hero-photo-frame:hover .hero-video-play-btn {
+            background: var(--brand-terracotta);
+            color: #FFFFFF;
+            transform: translate(-50%, -50%) scale(1.08);
+            box-shadow: 0 14px 36px rgba(185, 111, 75, 0.45);
+        }
+
+        /* Benefit Pills & Reassurance Underneath Promotional Video */
+        .hero-left-col {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 0.95rem;
         }
 
         .benefit-pills-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.48rem;
-            margin-top: 0.1rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.85rem;
+            width: 100%;
         }
 
-        @media (max-width: 1120px) {
+        @media (max-width: 768px) {
             .benefit-pills-list {
-                flex-direction: row;
-                flex-wrap: wrap;
+                grid-template-columns: 1fr;
             }
         }
 
@@ -438,7 +477,7 @@
             background: rgba(255, 255, 255, 0.92);
             border: 1px solid var(--border-medium);
             border-radius: var(--radius-sm);
-            padding: 0.48rem 0.8rem;
+            padding: 0.6rem 0.9rem;
             backdrop-filter: blur(10px);
             transition: var(--transition);
             box-shadow: 0 2px 8px rgba(30, 26, 22, 0.03);
@@ -553,26 +592,7 @@
             font-weight: 700;
         }
 
-        /* Center Hero Column: Station Photo (Shows Full Picture, Zero Cut-Through) */
-        .hero-center-col {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-            position: relative;
-        }
-
-        .hero-photo-frame {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 10.2;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: 0 16px 36px rgba(34, 55, 43, 0.12);
-            border: 1px solid rgba(220, 213, 201, 0.85);
-            background: #EAE6DF;
-        }
-
+        /* Promotional Video Image & Overlays */
         .hero-main-photo {
             width: 100%;
             height: 100%;
@@ -689,51 +709,54 @@
             }
         }
 
-        /* Right Hero Column: Eyebrow, Title & Pricing Cards */
+        /* Pricing Section Below Promotional Video */
         .hero-right-col {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            gap: 0.85rem;
+            width: 100%;
+            gap: 1.35rem;
+            margin-top: 0.65rem;
         }
 
         .hero-right-header {
-            margin-bottom: 0.1rem;
+            text-align: center;
+            margin-bottom: 0.25rem;
         }
 
         .hero-eyebrow {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.72rem;
+            font-size: 0.76rem;
             font-weight: 800;
             letter-spacing: 0.16em;
             color: var(--brand-forest);
             text-transform: none;
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.2rem;
             display: block;
         }
 
         .hero-package-title {
             font-family: 'Playfair Display', Georgia, serif;
-            font-size: 2.25rem;
-            line-height: 1.05;
+            font-size: 2.35rem;
+            line-height: 1.08;
             font-weight: 600;
             color: var(--text-dark);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.35rem;
             letter-spacing: -0.01em;
         }
 
         .hero-package-subtitle {
-            font-size: 0.82rem;
+            font-size: 0.92rem;
             color: var(--text-muted);
-            line-height: 1.4;
+            line-height: 1.45;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         /* Two Pricing Cards Grid */
         .purchase-cards-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.85rem;
+            gap: 1.5rem;
             align-items: stretch;
         }
 
@@ -2205,16 +2228,39 @@
             <div class="site-container">
                 <div class="hero-top-grid">
 
-                    <!-- Left Column: Headline, Benefit Cards & Reassurance (Full Height) -->
-                    <div class="hero-left-col">
-                        <div class="hero-left-top">
-                            <h1 class="hero-main-title">
-                                Take the<br>Experience<br>Home.
-                            </h1>
-                            <p class="hero-subheadline">
-                                The same calming, restorative experience you enjoyed — now in your own space.
-                            </p>
+                    <!-- Top-Centered Headline & Supporting Copy -->
+                    <div class="hero-header-center">
+                        <h1 class="hero-main-title">
+                            Take the Experience Home
+                        </h1>
+                        <p class="hero-subheadline">
+                            The calming, restorative experience you love — now in your own home.
+                        </p>
+                    </div>
 
+                    <!-- Primary Promotional Video Directly Below Tagline -->
+                    <div class="hero-center-col">
+                        <div class="hero-photo-frame">
+                            <div class="photo-floating-pill-top">
+                                <i class="fa-solid fa-sparkles"></i>
+                                <span>Terahertz &bull; PEMF &bull; Audio Sync</span>
+                            </div>
+                            <img src="assets/Serene Sol Revive Wellness Session.png"
+                                alt="Customer enjoying SOL REViBE Mind-Body Reset at home" class="hero-main-photo">
+                            <div class="hero-video-play-btn" aria-label="Play Promotional Video">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                            <div class="photo-floating-badge">
+                                <div class="photo-floating-badge-left">
+                                    <span class="dot"></span>
+                                    <span>20-Minute Daily Reset Ritual</span>
+                                </div>
+                                <span class="photo-floating-badge-tag">Home Edition</span>
+                            </div>
+                        </div>
+
+                        <!-- Benefit Cards & Reassurance Card -->
+                        <div class="hero-left-col">
                             <div class="benefit-pills-list">
                                 <div class="benefit-pill">
                                     <div class="benefit-pill-icon"><i class="fa-solid fa-spa"></i></div>
@@ -2238,49 +2284,30 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Customer Reassurance & Guarantee Card (Eliminates bottom void) -->
-                        <div class="hero-left-reassurance">
-                            <div class="reassurance-stars">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <span>Daily Sanctuary</span>
-                            </div>
-                            <p class="reassurance-quote">
-                                &ldquo;The exact same restorative stillness I felt in the wellness space, now welcoming
-                                me every single morning.&rdquo;
-                            </p>
-                            <div class="reassurance-footer">
-                                <div class="reassurance-author">
-                                    <strong>Sarah M.</strong> &bull; Verified Owner
+                            <!-- Customer Reassurance & Guarantee Card -->
+                            <div class="hero-left-reassurance">
+                                <div class="reassurance-stars">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <span>Daily Sanctuary</span>
                                 </div>
-                                <div class="reassurance-guarantee">
-                                    <i class="fa-solid fa-shield-heart"></i>
-                                    <span>2-Yr Warranty</span>
+                                <p class="reassurance-quote">
+                                    &ldquo;The exact same restorative stillness I felt in the wellness space, now welcoming
+                                    me every single morning.&rdquo;
+                                </p>
+                                <div class="reassurance-footer">
+                                    <div class="reassurance-author">
+                                        <strong>Sarah M.</strong> &bull; Verified Owner
+                                    </div>
+                                    <div class="reassurance-guarantee">
+                                        <i class="fa-solid fa-shield-heart"></i>
+                                        <span>2-Yr Warranty</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Center Column: Main Photo of Home Experience (Full Height, Matching Cards) -->
-                    <div class="hero-center-col">
-                        <div class="hero-photo-frame">
-                            <div class="photo-floating-pill-top">
-                                <i class="fa-solid fa-sparkles"></i>
-                                <span>Terahertz &bull; PEMF &bull; Audio Sync</span>
-                            </div>
-                            <img src="assets/Serene Sol Revive Wellness Session.png"
-                                alt="Customer enjoying SOL REViBE Mind-Body Reset at home" class="hero-main-photo">
-                            <div class="photo-floating-badge">
-                                <div class="photo-floating-badge-left">
-                                    <span class="dot"></span>
-                                    <span>20-Minute Daily Reset Ritual</span>
-                                </div>
-                                <span class="photo-floating-badge-tag">Home Edition</span>
                             </div>
                         </div>
                     </div>
