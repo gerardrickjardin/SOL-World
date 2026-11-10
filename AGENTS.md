@@ -9,7 +9,7 @@
   1. **SOLWorld** (`sol-world`, Root Directory = `/`) → `https://sol-world.vercel.app`
   2. **21 Games / SOL GaMES** (`sol-world`, Subpath `/solgames/`) → `https://sol-world.vercel.app/solgames/` (built from `../21-Games-Website`)
   3. **SOLREViBE** (`sol-revibe`, Root Directory = `solrevibe`) → `https://www.solrevibe.com`
-  4. **SOL Drive** (`sol-world`, Subpath `/soldrive/`) → compiled from `soldrive_src/` via `.github/workflows/build-soldrive.yml`
+  4. **SOL DRiVE** (`drive`, Standalone Repo `LucasSOLT/drive` in `/Users/lucashuff/.gemini/antigravity/scratch/drive`) → `https://drive.solworld.ai` (decoupled from `SOL-World`; `soldrive_src/` in this repo is deprecated legacy and does not power the live site)
 
 ---
 
@@ -34,6 +34,7 @@
    - The same applies to `order.html` + `order/index.html` and `roi-calculator.html` + `roi-calculator/index.html`.
    - Always update both the `.html` file and its `<slug>/index.html` counterpart (preserving `assets/` vs `../assets/` relative paths) when editing those pages.
 5. **`solgames/` (21 Games Static Export)**:
-   - Do **not** hand-edit compiled chunks in `solgames/`. Make source edits in `/Users/lucashuff/.gemini/antigravity/scratch/21-Games-Website` and run `npm run deploy:solworld` to regenerate `solgames/`.
-6. **`soldrive_src/` Auto-Commit Workflow**:
-   - Pushing to `soldrive_src/**` triggers `.github/workflows/build-soldrive.yml`, which auto-commits compiled assets back to `main`. Always run `git pull --rebase origin main` after pushing `soldrive_src` changes.
+   - Do **not** hand-edit compiled chunks in `solgames/`. Make source edits in `/Users/lucashuff/.gemini/antigravity/scratch/21-Games-Website` (`gerardrickjardin/21-Games-Website`, live at `https://21games.ai`).
+6. **`soldrive_src/` (Deprecated Legacy SOL DRiVE Prototype)**:
+   - **DO NOT EDIT `soldrive_src/`**: The live SOL DRiVE platform (`https://drive.solworld.ai`) is built and deployed from its standalone repository `LucasSOLT/drive` (`/Users/lucashuff/.gemini/antigravity/scratch/drive`).
+   - `SOL-World/soldrive_src/` and `.github/workflows/build-soldrive.yml` are deprecated legacy artifacts and do not deploy to `https://drive.solworld.ai`. Always make SOL DRiVE edits in `/Users/lucashuff/.gemini/antigravity/scratch/drive`.
