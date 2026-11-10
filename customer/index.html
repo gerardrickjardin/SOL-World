@@ -418,35 +418,58 @@
             box-shadow: 0 18px 42px rgba(34, 55, 43, 0.14);
             border: 1px solid rgba(220, 213, 201, 0.85);
             background: #EAE6DF;
-            cursor: pointer;
         }
 
-        .hero-video-play-btn {
+        .hero-promo-iframe {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 76px;
-            height: 76px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.92);
-            border: 2px solid rgba(255, 255, 255, 0.95);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        .hero-video-controls {
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            width: 100%;
+            margin-top: -0.35rem;
+        }
+
+        .hero-unmute-btn {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: var(--brand-forest);
-            font-size: 1.65rem;
-            padding-left: 4px;
-            z-index: 3;
+            gap: 0.5rem;
+            width: 100%;
+            background: linear-gradient(90deg, #7F9283 0%, #C29B68 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-pill);
+            padding: 0.85rem 1.25rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            box-shadow: 0 5px 16px rgba(150, 130, 100, 0.28);
+            cursor: pointer;
             transition: var(--transition);
         }
 
-        .hero-photo-frame:hover .hero-video-play-btn {
-            background: var(--brand-terracotta);
-            color: #FFFFFF;
-            transform: translate(-50%, -50%) scale(1.08);
-            box-shadow: 0 14px 36px rgba(185, 111, 75, 0.45);
+        .hero-unmute-btn:hover {
+            filter: brightness(1.06);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 22px rgba(150, 130, 100, 0.38);
+        }
+
+        .hero-video-mute-note {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin: 0;
         }
 
         /* Benefit Pills & Reassurance Underneath Promotional Video */
@@ -604,17 +627,6 @@
 
         .hero-photo-frame:hover .hero-main-photo {
             transform: scale(1.02);
-        }
-
-        .hero-photo-frame::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background: linear-gradient(to top, rgba(16, 28, 21, 0.58) 0%, transparent 100%);
-            pointer-events: none;
         }
 
         .photo-floating-pill-top {
@@ -2241,22 +2253,18 @@
                     <!-- Primary Promotional Video Directly Below Tagline -->
                     <div class="hero-center-col">
                         <div class="hero-photo-frame">
-                            <div class="photo-floating-pill-top">
-                                <i class="fa-solid fa-sparkles"></i>
-                                <span>Terahertz &bull; PEMF &bull; Audio Sync</span>
-                            </div>
-                            <img src="../assets/Serene Sol Revive Wellness Session.png"
-                                alt="Customer enjoying SOL REViBE Mind-Body Reset at home" class="hero-main-photo">
-                            <div class="hero-video-play-btn" aria-label="Play Promotional Video">
-                                <i class="fa-solid fa-play"></i>
-                            </div>
-                            <div class="photo-floating-badge">
-                                <div class="photo-floating-badge-left">
-                                    <span class="dot"></span>
-                                    <span>20-Minute Daily Reset Ritual</span>
-                                </div>
-                                <span class="photo-floating-badge-tag">Home Edition</span>
-                            </div>
+                            <iframe id="heroPromoIframe" class="hero-promo-iframe"
+                                src="https://www.youtube.com/embed/-t5wMPgFO4g?rel=0&amp;modestbranding=1&amp;playsinline=1&amp;autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=-t5wMPgFO4g&amp;enablejsapi=1"
+                                title="SOL REViBE Promotional Video" loading="eager"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                        </div>
+                        <div class="hero-video-controls">
+                            <button type="button" class="hero-unmute-btn" id="heroUnmuteBtn"
+                                onclick="unmuteAndPlayPromoVideo()" aria-label="Click to unmute and play">
+                                <span>&#8635; Click to unmute and play</span>
+                            </button>
+                            <p class="hero-video-mute-note" id="heroMuteNote">Playing muted &mdash; tap the button for sound.</p>
                         </div>
 
                         <!-- Benefit Cards & Reassurance Card -->
@@ -2969,6 +2977,35 @@
             // Toggle clicked
             if (!wasOpen) {
                 item.classList.add('open');
+            }
+        }
+
+        // Promotional YouTube Video Unmute & Play Controller
+        function ytPromoCmd(func, args) {
+            const iframe = document.getElementById('heroPromoIframe');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage(JSON.stringify({
+                    event: 'command',
+                    func: func,
+                    args: args || []
+                }), '*');
+            }
+        }
+
+        function unmuteAndPlayPromoVideo() {
+            stopAudioPreview();
+            ytPromoCmd('seekTo', [0, true]);
+            ytPromoCmd('unMute');
+            ytPromoCmd('setVolume', [100]);
+            ytPromoCmd('playVideo');
+            const btn = document.getElementById('heroUnmuteBtn');
+            if (btn) {
+                const span = btn.querySelector('span');
+                if (span) span.innerHTML = '&#8635; Restart from the beginning';
+            }
+            const note = document.getElementById('heroMuteNote');
+            if (note) {
+                note.textContent = 'Sound on — playing from the beginning.';
             }
         }
 
