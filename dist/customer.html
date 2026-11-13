@@ -1343,6 +1343,46 @@
             border-radius: 4px;
         }
 
+        .trailer-card.coming-soon {
+            cursor: default;
+        }
+
+        .trailer-card.coming-soon:hover {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .trailer-card.coming-soon .trailer-thumb img {
+            opacity: 0.72;
+        }
+
+        .trailer-card.coming-soon:hover .trailer-thumb img {
+            transform: none;
+            opacity: 0.72;
+        }
+
+        .trailer-coming-soon-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 30, 24, 0.84);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.34rem 0.75rem;
+            border-radius: 999px;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+        }
+
         .trailer-body {
             padding: 0.85rem 0.75rem 0.95rem;
             display: flex;
@@ -2691,19 +2731,16 @@
                             </a>
                         </div>
 
-                        <!-- Center: 4 Audio Trailer Cards with interactive samples -->
+                        <!-- Center: 4 Audio Trailer Cards (Coming Soon) -->
                         <div>
                             <div class="audio-trailers-row">
 
                                 <!-- Track 1 -->
-                                <div class="trailer-card"
-                                    onclick="toggleAudioPreview('The SOL REViBE™ Experience', 'assets/Audio for Joy.MP3', this)">
+                                <div class="trailer-card coming-soon" aria-disabled="true">
                                     <div class="trailer-thumb">
                                         <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500&auto=format&fit=crop&q=80"
                                             alt="Mountain lake reflection">
-                                        <div class="trailer-play-overlay">
-                                            <i class="fa-solid fa-play"></i>
-                                        </div>
+                                        <span class="trailer-coming-soon-badge">Coming Soon</span>
                                         <span class="trailer-duration">12:40</span>
                                     </div>
                                     <div class="trailer-body">
@@ -2713,14 +2750,11 @@
                                 </div>
 
                                 <!-- Track 2 -->
-                                <div class="trailer-card"
-                                    onclick="toggleAudioPreview('Calm & Centered', 'assets/Audio for Joy.MP3', this)">
+                                <div class="trailer-card coming-soon" aria-disabled="true">
                                     <div class="trailer-thumb">
                                         <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=500&auto=format&fit=crop&q=80"
                                             alt="Forest sunbeams">
-                                        <div class="trailer-play-overlay">
-                                            <i class="fa-solid fa-play"></i>
-                                        </div>
+                                        <span class="trailer-coming-soon-badge">Coming Soon</span>
                                         <span class="trailer-duration">08:24</span>
                                     </div>
                                     <div class="trailer-body">
@@ -2731,14 +2765,11 @@
                                 </div>
 
                                 <!-- Track 3 -->
-                                <div class="trailer-card"
-                                    onclick="toggleAudioPreview('Restorative Sleep', 'assets/Audio for Joy.MP3', this)">
+                                <div class="trailer-card coming-soon" aria-disabled="true">
                                     <div class="trailer-thumb">
                                         <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=80"
                                             alt="Serene ocean sunset">
-                                        <div class="trailer-play-overlay">
-                                            <i class="fa-solid fa-play"></i>
-                                        </div>
+                                        <span class="trailer-coming-soon-badge">Coming Soon</span>
                                         <span class="trailer-duration">12:40</span>
                                     </div>
                                     <div class="trailer-body">
@@ -2749,14 +2780,11 @@
                                 </div>
 
                                 <!-- Track 4 -->
-                                <div class="trailer-card"
-                                    onclick="toggleAudioPreview('Renewed Energy', 'assets/Audio for Joy.MP3', this)">
+                                <div class="trailer-card coming-soon" aria-disabled="true">
                                     <div class="trailer-thumb">
                                         <img src="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=500&auto=format&fit=crop&q=80"
                                             alt="Balanced zen stones">
-                                        <div class="trailer-play-overlay">
-                                            <i class="fa-solid fa-play"></i>
-                                        </div>
+                                        <span class="trailer-coming-soon-badge">Coming Soon</span>
                                         <span class="trailer-duration">10:15</span>
                                     </div>
                                     <div class="trailer-body">
