@@ -28,6 +28,7 @@ module.exports = function handler(req, res) {
   return res.status(200).json({
     ok: true,
     captchaProvider: captcha.provider,
+    captchaMode: captcha.mode || 'none',
     siteKey: captcha.siteKey,
     captchaRequired: captcha.configured,
     vcIntegrationEnabled: vcEnabled,

@@ -212,12 +212,18 @@ function parseJsonBody(req) {
 function getCaptchaConfig() {
   const turnstileSiteKey = String(process.env.TURNSTILE_SITE_KEY || '').trim();
   const turnstileSecretKey = String(process.env.TURNSTILE_SECRET_KEY || '').trim();
-  const recaptchaSiteKey = String(process.env.RECAPTCHA_SITE_KEY || '').trim();
-  const recaptchaSecretKey = String(process.env.RECAPTCHA_SECRET_KEY || '').trim();
+  const recaptchaMode = String(process.env.RECAPTCHA_MODE || 'v3').trim().toLowerCase() === 'v2' ? 'v2' : 'v3';
+  const recaptchaSiteKey = String(
+    (recaptchaMode === 'v2' && process.env.RECAPTCHA_V2_SITE_KEY) || process.env.RECAPTCHA_SITE_KEY || ''
+  ).trim();
+  const recaptchaSecretKey = String(
+    (recaptchaMode === 'v2' && process.env.RECAPTCHA_V2_SECRET_KEY) || process.env.RECAPTCHA_SECRET_KEY || ''
+  ).trim();
 
   if (turnstileSiteKey && turnstileSecretKey) {
     return {
       provider: 'turnstile',
+      mode: String(process.env.TURNSTILE_APPEARANCE || 'interaction-only').trim(),
       siteKey: turnstileSiteKey,
       secretKey: turnstileSecretKey,
       configured: true,
@@ -226,6 +232,7 @@ function getCaptchaConfig() {
   if (recaptchaSiteKey && recaptchaSecretKey) {
     return {
       provider: 'recaptcha',
+      mode: recaptchaMode,
       siteKey: recaptchaSiteKey,
       secretKey: recaptchaSecretKey,
       configured: true,
@@ -233,6 +240,7 @@ function getCaptchaConfig() {
   }
   return {
     provider: 'none',
+    mode: 'none',
     siteKey: '',
     secretKey: '',
     configured: false,

@@ -45,6 +45,7 @@
   let configPromise = null;
   let cachedConfig = {
     captchaProvider: 'none',
+    captchaMode: 'none',
     siteKey: '',
     captchaRequired: false,
     vcIntegrationEnabled: false,
@@ -53,6 +54,7 @@
   };
   let turnstileLoader = null;
   let recaptchaLoader = null;
+  let recaptchaV2Loader = null;
   let userInteracted = false;
 
   const markInteracted = () => { userInteracted = true; };
@@ -168,6 +170,61 @@
       document.head.appendChild(s);
     });
     return recaptchaLoader;
+  }
+
+  function loadRecaptchaV2Script() {
+    if (window.grecaptcha && typeof window.grecaptcha.render === 'function') {
+      return Promise.resolve(window.grecaptcha);
+    }
+    if (recaptchaV2Loader) return recaptchaV2Loader;
+    recaptchaV2Loader = new Promise((resolve) => {
+      const s = document.createElement('script');
+      s.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+      s.async = true;
+      s.defer = true;
+      s.onload = () => {
+        if (window.grecaptcha && window.grecaptcha.ready) {
+          window.grecaptcha.ready(() => resolve(window.grecaptcha));
+        } else {
+          resolve(window.grecaptcha || null);
+        }
+      };
+      s.onerror = () => resolve(null);
+      document.head.appendChild(s);
+    });
+    return recaptchaV2Loader;
+  }
+
+  function ensureRecaptchaV2Widget(containerEl, cfg) {
+    if (!containerEl || cfg.captchaProvider !== 'recaptcha' || cfg.captchaMode !== 'v2' || !cfg.siteKey) {
+      return Promise.resolve(null);
+    }
+    if (containerEl.dataset.grWidgetId !== undefined) {
+      return Promise.resolve(containerEl.dataset.grWidgetId);
+    }
+    return loadRecaptchaV2Script().then(gr => {
+      if (!gr || typeof gr.render !== 'function') return null;
+      if (containerEl.dataset.grWidgetId !== undefined) return containerEl.dataset.grWidgetId;
+      try {
+        const wid = gr.render(containerEl, {
+          sitekey: cfg.siteKey,
+          theme: 'light',
+          callback: (token) => {
+            containerEl._grToken = token;
+          },
+          'expired-callback': () => {
+            containerEl._grToken = '';
+          },
+          'error-callback': () => {
+            containerEl._grToken = '';
+          },
+        });
+        containerEl.dataset.grWidgetId = String(wid);
+        return String(wid);
+      } catch (_) {
+        return null;
+      }
+    });
   }
 
   function ensureHoneypots(form) {
@@ -289,6 +346,13 @@
       });
     }
     if (cfg.captchaProvider === 'recaptcha') {
+      if (cfg.captchaMode === 'v2') {
+        const wid = await ensureRecaptchaV2Widget(containerEl, cfg);
+        if (wid !== null && window.grecaptcha && typeof window.grecaptcha.getResponse === 'function') {
+          return window.grecaptcha.getResponse(Number(wid)) || (containerEl && containerEl._grToken) || '';
+        }
+        return (containerEl && containerEl._grToken) || '';
+      }
       const gr = await loadRecaptchaScript(cfg.siteKey);
       if (!gr || typeof gr.execute !== 'function') return '';
       try {
@@ -484,7 +548,11 @@
     if (slot && cfg.captchaRequired && cfg.captchaProvider === 'turnstile') {
       ensureTurnstileWidget(slot, cfg);
     } else if (cfg.captchaRequired && cfg.captchaProvider === 'recaptcha') {
-      loadRecaptchaScript(cfg.siteKey);
+      if (cfg.captchaMode === 'v2' && slot) {
+        ensureRecaptchaV2Widget(slot, cfg);
+      } else {
+        loadRecaptchaScript(cfg.siteKey);
+      }
     }
     return form;
   }
@@ -539,6 +607,16 @@
       throw err;
     }
 
+    const cfg = await fetchConfig();
+    const sec = await getSecurityPayload(form, opts.formId);
+    if (cfg.captchaRequired && cfg.captchaProvider === 'recaptcha' && cfg.captchaMode === 'v2' && !sec.captchaToken) {
+      const msg = 'Please complete the "I\'m not a robot" verification checkbox before submitting.';
+      if (form && opts.showErrors) showFormFeedback(form, msg, false);
+      const err = new Error(msg);
+      err.code = 'CAPTCHA_INCOMPLETE';
+      throw err;
+    }
+
     if (!checkClientRateLimit()) {
       const msg = 'Too many rapid submissions detected. Please wait a few minutes before trying again.';
       if (form && opts.showErrors) showFormFeedback(form, msg, false);
@@ -546,8 +624,6 @@
       err.code = 'RATE_LIMITED';
       throw err;
     }
-
-    const sec = await getSecurityPayload(form, opts.formId);
     const body = Object.assign({}, payload, {
       formType: opts.formId,
       requireName: opts.requireName,
@@ -574,6 +650,13 @@
     if (!res.ok || !data.ok) {
       const msg = data.error || 'Submission could not be completed. Please try again.';
       if (form && opts.showErrors) showFormFeedback(form, msg, false);
+      if (data.code === 'CAPTCHA_FAILED' && cfg.captchaProvider === 'recaptcha' && cfg.captchaMode === 'v2' && form) {
+        const slot = form.querySelector('.sol-captcha-slot');
+        if (slot && slot.dataset.grWidgetId !== undefined && window.grecaptcha && window.grecaptcha.reset) {
+          try { window.grecaptcha.reset(Number(slot.dataset.grWidgetId)); } catch (_) {}
+          slot._grToken = '';
+        }
+      }
       const err = new Error(msg);
       err.status = res.status;
       err.code = data.code || 'SUBMIT_REJECTED';
@@ -618,14 +701,27 @@
   async function verifyGate(containerEl, onVerified) {
     injectShieldStyles();
     const cfg = await fetchConfig();
-    if (!cfg.captchaRequired || !cfg.siteKey || !containerEl) {
+    if (cfg.vcPaused || !cfg.captchaRequired || !cfg.siteKey || !containerEl) {
       if (typeof onVerified === 'function') onVerified(cfg);
       return true;
     }
     const slot = document.createElement('div');
     slot.className = 'sol-captcha-slot';
     containerEl.appendChild(slot);
-    await executeCaptcha(slot, 'booking_gate');
+    if (cfg.captchaProvider === 'recaptcha' && cfg.captchaMode === 'v2') {
+      const gr = await loadRecaptchaV2Script();
+      if (gr && typeof gr.render === 'function') {
+        await new Promise((resolve) => {
+          gr.render(slot, {
+            sitekey: cfg.siteKey,
+            theme: 'light',
+            callback: () => resolve(),
+          });
+        });
+      }
+    } else {
+      await executeCaptcha(slot, 'booking_gate');
+    }
     if (typeof onVerified === 'function') onVerified(cfg);
     return true;
   }
