@@ -1213,6 +1213,7 @@
             position: relative;
             z-index: 30;
         }
+
         .waiver-loc-label {
             display: block;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -1221,13 +1222,16 @@
             color: #2B2926;
             margin-bottom: 8px;
         }
+
         .waiver-loc-label span {
             color: #C29B68;
         }
+
         .vc-loc-wrapper {
             position: relative;
             width: 100%;
         }
+
         .waiver-loc-input {
             width: 100%;
             min-height: 44px;
@@ -1240,11 +1244,13 @@
             box-sizing: border-box;
             transition: border-color 0.18s ease, box-shadow 0.18s ease;
         }
+
         .waiver-loc-input:focus {
             border-color: #2563eb !important;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14) !important;
             outline: none;
         }
+
         .vc-loc-chevron {
             position: absolute;
             right: 13px;
@@ -1256,9 +1262,11 @@
             transition: transform 0.18s ease;
             z-index: 2;
         }
+
         .vc-loc-wrapper.vc-open .vc-loc-chevron {
             transform: translateY(-50%) rotate(180deg);
         }
+
         .vc-loc-dropdown {
             position: absolute;
             top: calc(100% + 4px);
@@ -1274,9 +1282,11 @@
             display: none;
             padding: 4px 0;
         }
+
         .vc-loc-wrapper.vc-open .vc-loc-dropdown {
             display: block;
         }
+
         .vc-loc-item {
             display: flex;
             align-items: center;
@@ -1289,10 +1299,12 @@
             transition: background 0.12s ease;
             user-select: none;
         }
+
         .vc-loc-item:hover,
         .vc-loc-item.vc-active {
             background: #f1f5f9;
         }
+
         .vc-loc-item-text {
             flex: 1;
             min-width: 0;
@@ -1300,6 +1312,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         .vc-loc-item-badge {
             font-size: 0.72rem;
             font-weight: 700;
@@ -1310,6 +1323,7 @@
             border-radius: 999px;
             flex-shrink: 0;
         }
+
         .vc-loc-remove {
             border: none;
             background: transparent;
@@ -1321,10 +1335,12 @@
             cursor: pointer;
             flex-shrink: 0;
         }
+
         .vc-loc-remove:hover {
             color: #ef4444;
             background: #fee2e2;
         }
+
         .vc-loc-section-label {
             padding: 6px 14px 3px;
             font-size: 0.7rem;
@@ -1333,12 +1349,14 @@
             letter-spacing: 0.05em;
             color: #64748b;
         }
+
         .waiver-loc-hint {
             display: block;
             margin-top: 6px;
             font-size: 0.78rem;
             color: #64748b;
         }
+
         .waiver-loc-hint.synced {
             color: #0B7A48;
             font-weight: 600;
@@ -2127,13 +2145,17 @@
             </div>
             <div id="custWaiver" style="margin-bottom:14px"></div>
             <div class="waiver-loc-card" id="stationLocationBox">
-                <label class="waiver-loc-label" for="stationLocationInput">Location <span aria-hidden="true">*</span></label>
+                <label class="waiver-loc-label" for="stationLocationInput">Location <span
+                        aria-hidden="true">*</span></label>
                 <div class="vc-loc-wrapper" id="stationLocationWrap">
-                    <input type="text" id="stationLocationInput" class="waiver-loc-input" placeholder="Enter your text" autocomplete="off">
+                    <input type="text" id="stationLocationInput" class="waiver-loc-input" placeholder="Enter your text"
+                        autocomplete="off">
                     <span class="vc-loc-chevron" aria-hidden="true">&#9660;</span>
-                    <div class="vc-loc-dropdown" id="stationLocationDropdown" role="listbox" aria-label="Saved locations"></div>
+                    <div class="vc-loc-dropdown" id="stationLocationDropdown" role="listbox"
+                        aria-label="Saved locations"></div>
                 </div>
-                <span class="waiver-loc-hint" id="stationLocationStatus">Type or select your location above &mdash; it shows up in the dropdown below and fills the waiver&rsquo;s Location field automatically.</span>
+                <span class="waiver-loc-hint" id="stationLocationStatus">Type or select your location above &mdash; it
+                    shows up in the dropdown below and fills the waiver&rsquo;s Location field automatically.</span>
             </div>
             <div class="waiver-wrap" id="waiverMount"></div>
             <div class="waiver-actions">
