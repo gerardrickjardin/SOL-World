@@ -8,6 +8,8 @@ const {
   setSecurityCorsHeaders,
   getCaptchaConfig,
   isVCIntegrationEnabled,
+  isVisualChallengeEnabled,
+  issueVisualChallenge,
   issueFormChallengeToken,
 } = require('./_security');
 
@@ -24,6 +26,7 @@ module.exports = function handler(req, res) {
 
   const captcha = getCaptchaConfig();
   const vcEnabled = isVCIntegrationEnabled();
+  const visualRequired = isVisualChallengeEnabled();
 
   return res.status(200).json({
     ok: true,
@@ -31,6 +34,8 @@ module.exports = function handler(req, res) {
     captchaMode: captcha.mode || 'none',
     siteKey: captcha.siteKey,
     captchaRequired: captcha.configured,
+    visualChallengeRequired: visualRequired,
+    visualChallenge: visualRequired ? issueVisualChallenge() : null,
     vcIntegrationEnabled: vcEnabled,
     vcPaused: !vcEnabled,
     formToken: issueFormChallengeToken(req),

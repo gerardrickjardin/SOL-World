@@ -48,6 +48,8 @@
     captchaMode: 'none',
     siteKey: '',
     captchaRequired: false,
+    visualChallengeRequired: false,
+    visualChallenge: null,
     vcIntegrationEnabled: false,
     vcPaused: true,
     formToken: '',
@@ -81,9 +83,111 @@
       }
       .sol-captcha-slot {
         display: flex;
-        justify-content: center;
-        margin: 6px 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0 12px;
         min-height: 0;
+        width: 100%;
+      }
+      .sol-provider-slot {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+      .sol-visual-gate {
+        width: 100%;
+        max-width: 340px;
+        background: #faf8f4;
+        border: 1px solid rgba(43, 41, 38, 0.14);
+        border-radius: 12px;
+        padding: 11px 12px 12px;
+        box-sizing: border-box;
+        text-align: left;
+        color: #2b2926;
+        font-family: inherit;
+      }
+      .sol-visual-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .sol-visual-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #2b2926;
+        line-height: 1.25;
+      }
+      .sol-visual-sub {
+        font-size: 0.74rem;
+        font-weight: 500;
+        color: #6b655c;
+        display: block;
+        margin-top: 2px;
+      }
+      .sol-visual-refresh {
+        border: 1px solid rgba(43, 41, 38, 0.16);
+        background: #ffffff;
+        color: #4a453f;
+        font-size: 0.72rem;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 4px 8px;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .sol-visual-refresh:hover {
+        background: #f1ede4;
+      }
+      .sol-visual-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+      }
+      .sol-visual-tile {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 60px;
+        border-radius: 10px;
+        border: 1.5px solid rgba(43, 41, 38, 0.14);
+        background: #ffffff;
+        cursor: pointer;
+        padding: 6px;
+        transition: border-color 0.15s ease, background-color 0.15s ease;
+      }
+      .sol-visual-tile:hover {
+        border-color: #9c733e;
+      }
+      .sol-visual-tile svg {
+        width: 34px;
+        height: 34px;
+        pointer-events: none;
+      }
+      .sol-visual-tile.is-selected {
+        border-color: #7a8776;
+        background: rgba(122, 135, 118, 0.14);
+        box-shadow: inset 0 0 0 1px #7a8776;
+      }
+      .sol-visual-tile.is-selected::after {
+        content: "✓";
+        position: absolute;
+        top: 4px;
+        right: 6px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #7a8776;
+        color: #ffffff;
+        font-size: 10px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
       }
       .sol-shield-feedback {
         margin-top: 10px;
@@ -312,6 +416,102 @@
       }
     }
     return slot;
+  }
+
+  function getProviderSlot(slot) {
+    if (!slot) return null;
+    let pSlot = slot.querySelector('.sol-provider-slot');
+    if (!pSlot) {
+      pSlot = document.createElement('div');
+      pSlot.className = 'sol-provider-slot';
+      slot.appendChild(pSlot);
+    }
+    return pSlot;
+  }
+
+  function renderVisualGateIntoSlot(slot, challenge) {
+    if (!slot || !challenge || !Array.isArray(challenge.tiles)) return;
+    let gate = slot.querySelector('.sol-visual-gate');
+    if (!gate) {
+      gate = document.createElement('div');
+      gate.className = 'sol-visual-gate';
+      const pSlot = slot.querySelector('.sol-provider-slot');
+      if (pSlot) {
+        slot.insertBefore(gate, pSlot);
+      } else {
+        slot.appendChild(gate);
+      }
+    }
+
+    slot._visualSelected = new Set();
+    slot._visualToken = challenge.visualToken || '';
+    slot._visualPrompt = challenge.prompt || 'Tap matching images';
+
+    gate.innerHTML = '';
+    const head = document.createElement('div');
+    head.className = 'sol-visual-head';
+
+    const titleWrap = document.createElement('div');
+    const titleEl = document.createElement('span');
+    titleEl.className = 'sol-visual-title';
+    titleEl.textContent = challenge.prompt || 'Tap matching images';
+    const subEl = document.createElement('span');
+    subEl.className = 'sol-visual-sub';
+    subEl.textContent = `Human check — select ${challenge.targetCount || 'all'} matching image${challenge.targetCount === 1 ? '' : 's'}`;
+    titleWrap.appendChild(titleEl);
+    titleWrap.appendChild(subEl);
+
+    const refreshBtn = document.createElement('button');
+    refreshBtn.type = 'button';
+    refreshBtn.className = 'sol-visual-refresh';
+    refreshBtn.setAttribute('aria-label', 'Load new images');
+    refreshBtn.textContent = '↻ New';
+    refreshBtn.addEventListener('click', async () => {
+      refreshBtn.disabled = true;
+      const fresh = await fetchConfig(true);
+      if (fresh && fresh.visualChallenge) {
+        renderVisualGateIntoSlot(slot, fresh.visualChallenge);
+      }
+      refreshBtn.disabled = false;
+    });
+
+    head.appendChild(titleWrap);
+    head.appendChild(refreshBtn);
+    gate.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'sol-visual-grid';
+    challenge.tiles.forEach((svgMarkup, idx) => {
+      const tile = document.createElement('button');
+      tile.type = 'button';
+      tile.className = 'sol-visual-tile';
+      tile.setAttribute('aria-pressed', 'false');
+      tile.setAttribute('aria-label', `Image ${idx + 1}`);
+      tile.innerHTML = svgMarkup;
+      tile.addEventListener('click', () => {
+        if (slot._visualSelected.has(idx)) {
+          slot._visualSelected.delete(idx);
+          tile.classList.remove('is-selected');
+          tile.setAttribute('aria-pressed', 'false');
+        } else {
+          slot._visualSelected.add(idx);
+          tile.classList.add('is-selected');
+          tile.setAttribute('aria-pressed', 'true');
+        }
+      });
+      grid.appendChild(tile);
+    });
+    gate.appendChild(grid);
+  }
+
+  function refreshAllVisualGates(challenge) {
+    if (!challenge) return;
+    cachedConfig.visualChallenge = challenge;
+    document.querySelectorAll('.sol-captcha-slot').forEach(slot => {
+      if (slot.querySelector('.sol-visual-gate')) {
+        renderVisualGateIntoSlot(slot, challenge);
+      }
+    });
   }
 
   async function executeCaptcha(containerEl, action = 'submit') {
@@ -545,11 +745,15 @@
     ensureHoneypots(form);
     const slot = options.withCaptchaSlot !== false ? getCaptchaSlot(form) : null;
     const cfg = await fetchConfig();
-    if (slot && cfg.captchaRequired && cfg.captchaProvider === 'turnstile') {
-      ensureTurnstileWidget(slot, cfg);
+    if (slot && cfg.visualChallengeRequired && cfg.visualChallenge) {
+      renderVisualGateIntoSlot(slot, cfg.visualChallenge);
+    }
+    const providerContainer = slot ? getProviderSlot(slot) : null;
+    if (providerContainer && cfg.captchaRequired && cfg.captchaProvider === 'turnstile') {
+      ensureTurnstileWidget(providerContainer, cfg);
     } else if (cfg.captchaRequired && cfg.captchaProvider === 'recaptcha') {
-      if (cfg.captchaMode === 'v2' && slot) {
-        ensureRecaptchaV2Widget(slot, cfg);
+      if (cfg.captchaMode === 'v2' && providerContainer) {
+        ensureRecaptchaV2Widget(providerContainer, cfg);
       } else {
         loadRecaptchaScript(cfg.siteKey);
       }
@@ -561,11 +765,16 @@
     const form = resolveFormEl(formOrSelector);
     const cfg = await fetchConfig();
     const slot = form ? getCaptchaSlot(form) : null;
-    const captchaToken = await executeCaptcha(slot, action);
+    const providerContainer = slot ? getProviderSlot(slot) : null;
+    const captchaToken = await executeCaptcha(providerContainer || slot, action);
     const mountedAt = Number((form && form.dataset.solMountedAt) || Date.now());
+    const visualAnswer = slot && slot._visualSelected ? Array.from(slot._visualSelected).sort((a, b) => a - b) : [];
+    const visualToken = (slot && slot._visualToken) || (cfg.visualChallenge && cfg.visualChallenge.visualToken) || '';
     return {
       captchaToken,
       formToken: cfg.formToken || '',
+      visualToken,
+      visualAnswer,
       mountedAt,
       interacted: Boolean(userInteracted || (Date.now() - mountedAt > 1200)),
       honeypot: readHoneypots(form),
@@ -609,6 +818,14 @@
 
     const cfg = await fetchConfig();
     const sec = await getSecurityPayload(form, opts.formId);
+    if (cfg.visualChallengeRequired && (!sec.visualToken || !Array.isArray(sec.visualAnswer) || sec.visualAnswer.length === 0)) {
+      const promptLabel = (form && getCaptchaSlot(form) && getCaptchaSlot(form)._visualPrompt) || 'matching images';
+      const msg = `Please complete the visual check ("${promptLabel}") above before submitting.`;
+      if (form && opts.showErrors) showFormFeedback(form, msg, false);
+      const err = new Error(msg);
+      err.code = 'VISUAL_CHALLENGE_INCOMPLETE';
+      throw err;
+    }
     if (cfg.captchaRequired && cfg.captchaProvider === 'recaptcha' && cfg.captchaMode === 'v2' && !sec.captchaToken) {
       const msg = 'Please complete the "I\'m not a robot" verification checkbox before submitting.';
       if (form && opts.showErrors) showFormFeedback(form, msg, false);
@@ -650,8 +867,13 @@
     if (!res.ok || !data.ok) {
       const msg = data.error || 'Submission could not be completed. Please try again.';
       if (form && opts.showErrors) showFormFeedback(form, msg, false);
+      if (data.visualChallenge) {
+        const slot = form ? getCaptchaSlot(form) : null;
+        if (slot) renderVisualGateIntoSlot(slot, data.visualChallenge);
+        else refreshAllVisualGates(data.visualChallenge);
+      }
       if (data.code === 'CAPTCHA_FAILED' && cfg.captchaProvider === 'recaptcha' && cfg.captchaMode === 'v2' && form) {
-        const slot = form.querySelector('.sol-captcha-slot');
+        const slot = form.querySelector('.sol-provider-slot') || form.querySelector('.sol-captcha-slot');
         if (slot && slot.dataset.grWidgetId !== undefined && window.grecaptcha && window.grecaptcha.reset) {
           try { window.grecaptcha.reset(Number(slot.dataset.grWidgetId)); } catch (_) {}
           slot._grToken = '';
@@ -664,8 +886,10 @@
       throw err;
     }
 
-    // Refresh single-use token only after a successful submission
-    fetchConfig(true);
+    // Refresh single-use token & visual challenge for any follow-up forms
+    fetchConfig(true).then(fresh => {
+      if (fresh && fresh.visualChallenge) refreshAllVisualGates(fresh.visualChallenge);
+    });
     if (sig) recordClientDuplicate(sig);
     return data;
   }
@@ -821,10 +1045,33 @@
     boot();
   }
 
+  function syncErrorResponse(formOrSelector, data) {
+    if (data && data.visualChallenge) {
+      const form = resolveFormEl(formOrSelector);
+      const slot = form ? getCaptchaSlot(form) : null;
+      if (slot) renderVisualGateIntoSlot(slot, data.visualChallenge);
+      else refreshAllVisualGates(data.visualChallenge);
+    }
+  }
+
+  function validateVisualSelection(formOrSelector) {
+    const form = resolveFormEl(formOrSelector);
+    if (!cachedConfig.visualChallengeRequired) return { ok: true };
+    const slot = form ? getCaptchaSlot(form) : null;
+    const count = slot && slot._visualSelected ? slot._visualSelected.size : 0;
+    if (count === 0) {
+      const promptLabel = (slot && slot._visualPrompt) || 'matching images';
+      return { ok: false, error: `Please complete the visual check ("${promptLabel}") above before submitting.` };
+    }
+    return { ok: true };
+  }
+
   window.SOLFormShield = {
     ready: fetchConfig,
     protectForm,
     validateFormInputs,
+    validateVisualSelection,
+    syncErrorResponse,
     showFormFeedback,
     getSecurityPayload,
     submitLead,

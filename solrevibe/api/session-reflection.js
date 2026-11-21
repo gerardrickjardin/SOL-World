@@ -1,4 +1,4 @@
-const { setSecurityCorsHeaders, parseJsonBody, guardSubmission } = require('./_security');
+const { setSecurityCorsHeaders, parseJsonBody, isVisualChallengeEnabled, guardSubmission } = require('./_security');
 
 module.exports = async function handler(req, res) {
   setSecurityCorsHeaders(req, res);
@@ -21,6 +21,7 @@ module.exports = async function handler(req, res) {
       requirePhone: false,
       allowRepeat: true,
       requireHumanTiming: Boolean(body._security),
+      requireVisualChallenge: isVisualChallengeEnabled(),
       maxPerTenMin: 12,
       maxPerHour: 40,
       captchaOptionalWhenUnconfigured: true,
@@ -31,6 +32,7 @@ module.exports = async function handler(req, res) {
         ok: false,
         code: guard.code,
         error: guard.error || 'Submission blocked by security check.',
+        visualChallenge: guard.visualChallenge || undefined,
       });
     }
 

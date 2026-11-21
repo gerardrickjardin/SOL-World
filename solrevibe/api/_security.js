@@ -127,6 +127,170 @@ function verifyToken(token) {
   }
 }
 
+function getAesKey() {
+  return crypto.createHash('sha256').update(String(getSigningSecret())).digest();
+}
+
+function sealJson(obj) {
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv('aes-256-gcm', getAesKey(), iv);
+  const encrypted = Buffer.concat([cipher.update(JSON.stringify(obj), 'utf8'), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  return `${iv.toString('base64url')}.${tag.toString('base64url')}.${encrypted.toString('base64url')}`;
+}
+
+function openJson(token) {
+  if (!token || typeof token !== 'string') return null;
+  const parts = token.split('.');
+  if (parts.length !== 3) return null;
+  try {
+    const iv = Buffer.from(parts[0], 'base64url');
+    const tag = Buffer.from(parts[1], 'base64url');
+    const ciphertext = Buffer.from(parts[2], 'base64url');
+    const decipher = crypto.createDecipheriv('aes-256-gcm', getAesKey(), iv);
+    decipher.setAuthTag(tag);
+    const decrypted = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
+    return JSON.parse(decrypted.toString('utf8'));
+  } catch (_) {
+    return null;
+  }
+}
+
+const VISUAL_THEMES = [
+  {
+    key: 'leaf',
+    label: 'Leaf',
+    svg: (c, uid) => `<path id="p${uid}a" d="M12 3C7 7 5 11.8 5 15.2A7 7 0 0 0 12 22a7 7 0 0 0 7-6.8C19 11.8 17 7 12 3Z" fill="${c}" fill-opacity="0.18" stroke="${c}" stroke-width="1.9" stroke-linejoin="round"/><path d="M12 7v14M12 12l3-2.4M12 15.5l-3.2-2.2" stroke="${c}" stroke-width="1.7" stroke-linecap="round"/>`,
+  },
+  {
+    key: 'sun',
+    label: 'Sun',
+    svg: (c, uid) => `<circle id="p${uid}a" cx="12" cy="12" r="4.3" fill="${c}" fill-opacity="0.22" stroke="${c}" stroke-width="1.9"/><path d="M12 2.5v2.3M12 19.2v2.3M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/>`,
+  },
+  {
+    key: 'drop',
+    label: 'Water Drop',
+    svg: (c, uid) => `<path id="p${uid}a" d="M12 2.8S6 10.1 6 14.5A6 6 0 0 0 12 20.8a6 6 0 0 0 6-6.3C18 10.1 12 2.8 12 2.8Z" fill="${c}" fill-opacity="0.2" stroke="${c}" stroke-width="1.9" stroke-linejoin="round"/><path d="M9.6 14.8a2.6 2.6 0 0 0 2.2 2.5" stroke="${c}" stroke-width="1.7" stroke-linecap="round"/>`,
+  },
+  {
+    key: 'heart',
+    label: 'Heart',
+    svg: (c, uid) => `<path id="p${uid}a" d="M12 20.4s-7.4-4.7-9-8.8A4.9 4.9 0 0 1 7.6 4.8c1.9 0 3.5.9 4.4 2.4.9-1.5 2.5-2.4 4.4-2.4a4.9 4.9 0 0 1 4.6 6.8c-1.6 4.1-9 8.8-9 8.8Z" fill="${c}" fill-opacity="0.2" stroke="${c}" stroke-width="1.9" stroke-linejoin="round"/>`,
+  },
+  {
+    key: 'moon',
+    label: 'Moon',
+    svg: (c, uid) => `<path id="p${uid}a" d="M19.5 14.4A7.6 7.6 0 0 1 9.6 4.5a7.9 7.9 0 1 0 9.9 9.9Z" fill="${c}" fill-opacity="0.2" stroke="${c}" stroke-width="1.9" stroke-linejoin="round"/>`,
+  },
+  {
+    key: 'star',
+    label: 'Star',
+    svg: (c, uid) => `<path id="p${uid}a" d="m12 3.1 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3.1Z" fill="${c}" fill-opacity="0.2" stroke="${c}" stroke-width="1.9" stroke-linejoin="round"/>`,
+  },
+  {
+    key: 'house',
+    label: 'House',
+    svg: (c, uid) => `<path id="p${uid}a" d="M3.5 10.6 12 3.6l8.5 7v9.1a1.2 1.2 0 0 1-1.2 1.2H4.7a1.2 1.2 0 0 1-1.2-1.2v-9.1Z" fill="${c}" fill-opacity="0.16" stroke="${c}" stroke-width="1.9" stroke-linejoin="round"/><path d="M9.7 20.9v-5.7h4.6v5.7" stroke="${c}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+  },
+  {
+    key: 'flower',
+    label: 'Flower',
+    svg: (c, uid) => `<circle cx="12" cy="6.6" r="2.6" fill="${c}" fill-opacity="0.18" stroke="${c}" stroke-width="1.7"/><circle cx="17.1" cy="10.3" r="2.6" fill="${c}" fill-opacity="0.18" stroke="${c}" stroke-width="1.7"/><circle cx="15.2" cy="16.3" r="2.6" fill="${c}" fill-opacity="0.18" stroke="${c}" stroke-width="1.7"/><circle cx="8.8" cy="16.3" r="2.6" fill="${c}" fill-opacity="0.18" stroke="${c}" stroke-width="1.7"/><circle cx="6.9" cy="10.3" r="2.6" fill="${c}" fill-opacity="0.18" stroke="${c}" stroke-width="1.7"/><circle id="p${uid}a" cx="12" cy="12" r="2.4" fill="${c}"/>`,
+  },
+];
+
+const TILE_ACCENTS = ['#3F5746', '#9C733E', '#4F646F', '#7F4E4E', '#575148', '#4A6B5C'];
+
+function isVisualChallengeEnabled() {
+  return process.env.VISUAL_CHALLENGE_ENABLED !== 'false';
+}
+
+function issueVisualChallenge() {
+  const targetIdx = crypto.randomInt(0, VISUAL_THEMES.length);
+  const targetTheme = VISUAL_THEMES[targetIdx];
+  const others = VISUAL_THEMES.filter((_, idx) => idx !== targetIdx);
+  const targetCount = crypto.randomInt(2, 4); // 2 or 3 matching tiles out of 6
+  const items = [];
+
+  for (let i = 0; i < targetCount; i++) {
+    items.push({ theme: targetTheme, isTarget: true });
+  }
+  while (items.length < 6) {
+    const decoy = others[crypto.randomInt(0, others.length)];
+    items.push({ theme: decoy, isTarget: false });
+  }
+  // Fisher-Yates shuffle
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = crypto.randomInt(0, i + 1);
+    const tmp = items[i];
+    items[i] = items[j];
+    items[j] = tmp;
+  }
+
+  const expected = [];
+  const tiles = items.map((entry, idx) => {
+    if (entry.isTarget) expected.push(idx);
+    const color = TILE_ACCENTS[crypto.randomInt(0, TILE_ACCENTS.length)];
+    const rot = crypto.randomInt(-14, 15);
+    const scale = (crypto.randomInt(90, 108) / 100).toFixed(2);
+    const uid = crypto.randomBytes(3).toString('hex');
+    return `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="transform:rotate(${rot}deg) scale(${scale})">${entry.theme.svg(color, uid)}</svg>`;
+  });
+
+  const challengeId = crypto.randomBytes(10).toString('hex');
+  const visualToken = sealJson({
+    id: challengeId,
+    iat: Date.now(),
+    expected,
+  });
+
+  return {
+    prompt: `Tap every ${targetTheme.label}`,
+    targetLabel: targetTheme.label,
+    targetCount,
+    tiles,
+    visualToken,
+  };
+}
+
+function verifyVisualChallenge(securityMeta) {
+  const token = securityMeta && securityMeta.visualToken;
+  if (!token) {
+    return { ok: false, reason: 'MISSING_VISUAL_CHALLENGE', error: 'Please complete the image verification challenge above before submitting.' };
+  }
+  const decoded = openJson(token);
+  if (!decoded || !Array.isArray(decoded.expected) || typeof decoded.iat !== 'number') {
+    return { ok: false, reason: 'INVALID_VISUAL_CHALLENGE', error: 'Visual verification expired. Please try the refreshed images.' };
+  }
+  if (Date.now() - decoded.iat > 60 * 60 * 1000) {
+    return { ok: false, reason: 'EXPIRED_VISUAL_CHALLENGE', error: 'Visual verification timed out. Please complete the new images.' };
+  }
+  const key = `vis:${decoded.id}`;
+  if (usedNonces.has(key)) {
+    return { ok: false, reason: 'REUSED_VISUAL_CHALLENGE', error: 'Visual challenge was already used. Please complete the new images.' };
+  }
+  const rawAns = Array.isArray(securityMeta.visualAnswer) ? securityMeta.visualAnswer : [];
+  const cleanAns = Array.from(new Set(rawAns.map(n => Number(n)).filter(n => Number.isInteger(n) && n >= 0 && n < 6))).sort((a, b) => a - b);
+  const expected = decoded.expected.slice().sort((a, b) => a - b);
+
+  if (cleanAns.length !== expected.length || cleanAns.some((val, i) => val !== expected[i])) {
+    return { ok: false, reason: 'WRONG_VISUAL_CHALLENGE', error: 'Selection did not match all target images. Please try the new images above.' };
+  }
+
+  return { ok: true, id: decoded.id };
+}
+
+function markVisualChallengeUsed(id) {
+  if (!id) return;
+  const now = Date.now();
+  if (usedNonces.size > 5000) {
+    for (const [k, exp] of usedNonces.entries()) {
+      if (exp < now) usedNonces.delete(k);
+    }
+  }
+  usedNonces.set(`vis:${id}`, now + 60 * 60 * 1000);
+}
+
 function parseCookies(req) {
   const raw = req.headers && req.headers.cookie;
   const out = {};
@@ -726,6 +890,7 @@ async function guardSubmission(req, res, body, options = {}) {
     requireZip = false,
     allowRepeat = false,
     requireHumanTiming = true,
+    requireVisualChallenge = false,
     maxPerTenMin = 6,
     maxPerHour = 20,
     minDwellMs = 1200,
@@ -811,7 +976,25 @@ async function guardSubmission(req, res, body, options = {}) {
     };
   }
 
-  // Consume single-use form token only after validation & CAPTCHA succeed (and not on repeatable actions)
+  // 5b. Visual image-selection challenge check (when required)
+  let visualCheck = { ok: true, id: null };
+  if (requireVisualChallenge && isVisualChallengeEnabled()) {
+    visualCheck = verifyVisualChallenge(securityMeta);
+    if (!visualCheck.ok) {
+      return {
+        ok: false,
+        status: 403,
+        code: 'VISUAL_CHALLENGE_FAILED',
+        error: visualCheck.error,
+        visualChallenge: issueVisualChallenge(),
+      };
+    }
+  }
+
+  // Consume single-use tokens only after validation, CAPTCHA & visual checks succeed
+  if (visualCheck.id) {
+    markVisualChallengeUsed(visualCheck.id);
+  }
   if (requireHumanTiming && !allowRepeat && securityMeta.formToken && !consumeNonce(securityMeta.formToken)) {
     return {
       ok: false,
@@ -854,6 +1037,8 @@ module.exports = {
   parseJsonBody,
   getCaptchaConfig,
   isVCIntegrationEnabled,
+  isVisualChallengeEnabled,
+  issueVisualChallenge,
   issueFormChallengeToken,
   guardSubmission,
   isValidEmail,

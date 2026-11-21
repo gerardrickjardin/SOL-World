@@ -3194,13 +3194,21 @@
                 const billState = sameAsShipping ? state : (document.getElementById('billState')?.value || '').trim();
                 const billZip = sameAsShipping ? zip : (document.getElementById('billZip')?.value || '').trim();
 
+                const checkoutForm = document.getElementById('orderCheckoutForm');
+                if (window.SOLFormShield && window.SOLFormShield.validateVisualSelection) {
+                    const visCheck = window.SOLFormShield.validateVisualSelection(checkoutForm);
+                    if (!visCheck.ok) {
+                        showPaymentError(visCheck.error);
+                        return;
+                    }
+                }
+
                 const { error: submitError } = await stripeElements.submit();
                 if (submitError) {
                     showPaymentError(submitError.message || 'Please check your payment details and try again.');
                     return;
                 }
 
-                const checkoutForm = document.getElementById('orderCheckoutForm');
                 const _security = window.SOLFormShield
                     ? await window.SOLFormShield.getSecurityPayload(checkoutForm, 'stripe_checkout')
                     : undefined;
@@ -3234,6 +3242,9 @@
 
                 const intentData = await intentRes.json().catch(() => ({}));
                 if (!intentRes.ok || !intentData.clientSecret) {
+                    if (window.SOLFormShield && window.SOLFormShield.syncErrorResponse) {
+                        window.SOLFormShield.syncErrorResponse(checkoutForm, intentData);
+                    }
                     throw new Error(intentData.error || 'Could not initialize payment. Please try again.');
                 }
 

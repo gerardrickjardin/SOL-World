@@ -1,5 +1,5 @@
 const { resolvePlan, normalizeCountry, setCorsHeaders, stripeRequest } = require('./_stripe');
-const { parseJsonBody, guardSubmission } = require('./_security');
+const { parseJsonBody, isVisualChallengeEnabled, guardSubmission } = require('./_security');
 
 module.exports = async function handler(req, res) {
   setCorsHeaders(res);
@@ -23,6 +23,7 @@ module.exports = async function handler(req, res) {
       requirePhone: false,
       allowRepeat: true, // Allow legitimate customers to retry payment if a card declines
       requireHumanTiming: Boolean(body._security),
+      requireVisualChallenge: isVisualChallengeEnabled(),
       maxPerTenMin: 12,
       maxPerHour: 35,
       captchaOptionalWhenUnconfigured: true,
@@ -32,6 +33,7 @@ module.exports = async function handler(req, res) {
       return res.status(guard.status).json({
         error: guard.error || 'Unable to verify checkout submission.',
         code: guard.code,
+        visualChallenge: guard.visualChallenge || undefined,
       });
     }
 

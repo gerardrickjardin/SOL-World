@@ -17,6 +17,7 @@ const {
   setSecurityCorsHeaders,
   parseJsonBody,
   isVCIntegrationEnabled,
+  isVisualChallengeEnabled,
   getCaptchaConfig,
   guardSubmission,
 } = require('./_security');
@@ -84,6 +85,7 @@ module.exports = async function handler(req, res) {
       requireZip: Boolean(body.requireZip),
       allowRepeat: isTelemetry || Boolean(body.allowRepeat),
       requireHumanTiming: body.requireHumanTiming !== false,
+      requireVisualChallenge: !isTelemetry && isVisualChallengeEnabled(),
       maxPerTenMin: isTelemetry ? 20 : 5,
       maxPerHour: isTelemetry ? 60 : 15,
       // Fail closed before forwarding live CRM traffic if CAPTCHA isn't configured yet
@@ -96,6 +98,7 @@ module.exports = async function handler(req, res) {
         code: guard.code,
         duplicate: Boolean(guard.duplicate),
         error: guard.error,
+        visualChallenge: guard.visualChallenge || undefined,
       });
     }
 

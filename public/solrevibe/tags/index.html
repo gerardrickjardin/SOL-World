@@ -3229,6 +3229,15 @@ html.is-tablet .modal .m-box.survey-mode {
       return;
     }
 
+    if (window.SOLFormShield && window.SOLFormShield.validateVisualSelection) {
+      const visCheck = window.SOLFormShield.validateVisualSelection(tlcForm);
+      if (!visCheck.ok) {
+        tlcFormErr.textContent = visCheck.error;
+        tlcFormErr.hidden = false;
+        return;
+      }
+    }
+
     tlcSubmitBtn.disabled = true;
     tlcSubmitBtn.textContent = "Saving Check-In…";
     tlcFormErr.hidden = true;

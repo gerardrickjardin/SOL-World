@@ -2349,6 +2349,16 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 const billState = sameAsShipping ? state : (document.getElementById('billState')?.value || '').trim();
                 const billZip = sameAsShipping ? zip : (document.getElementById('billZip')?.value || '').trim();
 
+                // 0. Check visual verification before initializing payment
+                const checkoutForm = document.getElementById('orderCheckoutForm');
+                if (window.SOLFormShield && window.SOLFormShield.validateVisualSelection) {
+                    const visCheck = window.SOLFormShield.validateVisualSelection(checkoutForm);
+                    if (!visCheck.ok) {
+                        showPaymentError(visCheck.error);
+                        return;
+                    }
+                }
+
                 // 1. Validate Stripe Payment Element inputs
                 const { error: submitError } = await stripeElements.submit();
                 if (submitError) {
@@ -2357,7 +2367,6 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
                 }
 
                 // 2. Create server-side PaymentIntent with verified plan price & security payload
-                const checkoutForm = document.getElementById('orderCheckoutForm');
                 const _security = window.SOLFormShield
                     ? await window.SOLFormShield.getSecurityPayload(checkoutForm, 'stripe_checkout')
                     : undefined;
@@ -2391,6 +2400,9 @@ html, body { background-color: #F3F0EA !important; background-image: none !impor
 
                 const intentData = await intentRes.json().catch(() => ({}));
                 if (!intentRes.ok || !intentData.clientSecret) {
+                    if (window.SOLFormShield && window.SOLFormShield.syncErrorResponse) {
+                        window.SOLFormShield.syncErrorResponse(checkoutForm, intentData);
+                    }
                     throw new Error(intentData.error || 'Could not initialize payment. Please try again.');
                 }
 
