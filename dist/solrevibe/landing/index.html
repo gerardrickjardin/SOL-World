@@ -1152,7 +1152,8 @@
                         </div>
                         <div class="booking-calendar">
                             <iframe id="visioncontrol-calendar-iframe"
-                                src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
+                                data-vc-src="https://link.visioncontrol.io/widget/bookings/doug-cundiff-personal-calendar-cnnht4al7"
+                                src="about:blank"
                                 scrolling="auto"
                                 title="Book Discovery Call with Doug Cundiff"></iframe>
                         </div>
@@ -1186,8 +1187,12 @@
         </div>
     </div>
 
+    <script src="../form-shield.js?v=20261121"></script>
     <script>
         function initLandingPage() {
+            if (window.SOLFormShield) {
+                window.SOLFormShield.protectForm('#leadForm', { managed: true });
+            }
 
             // Quick Revenue Teaser slider interactivity (Daily Foot Traffic & Days Open Per Week, Constant $45/session)
             const trafficSlider = document.getElementById('t-traffic-slider');
@@ -1373,8 +1378,6 @@
                 btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-spinner fa-spin"></i> Submitting...</span>';
             }
 
-            // Webhook Endpoints
-            const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
             const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzh-Ev0POWeoD3mSoSIeqDzqt_dMjyxpuiiBIBZAXW1ZI7oBkjCqY4M-UwS8Cih6KlM/exec';
 
             const firstName = (document.getElementById('first-name')?.value || '').trim();
@@ -1403,45 +1406,44 @@
             };
 
             try {
-                // Submit to Vision Control Automation (LeadConnector) and Google Sheets simultaneously
-                const ghlPromise = fetch(GHL_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                }).catch(err => console.error('Vision Control Automation webhook error:', err));
+                if (!window.SOLFormShield) {
+                    throw new Error('Security module failed to load. Please refresh and try again.');
+                }
 
-                const sheetsPromise = fetch(GOOGLE_SHEETS_WEBAPP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    cache: 'no-cache',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8'
-                    },
-                    body: JSON.stringify(payload)
-                }).catch(err => console.error('Google Sheets submission error:', err));
+                // Enforce CAPTCHA, honeypot, validation, rate limit, duplicate check, and server-side VC pause guard
+                const shieldResult = await window.SOLFormShield.submitLead(this, payload, {
+                    formId: 'landing_gate',
+                    requireName: true,
+                    requireEmail: true,
+                    requirePhone: true,
+                    requireCompany: true
+                });
 
-                // 2.5s timeout race so the user is never stuck waiting on slow external webhook servers
-                const timeoutPromise = new Promise(resolve => setTimeout(resolve, 2500));
-                await Promise.race([
-                    Promise.all([ghlPromise, sheetsPromise]),
-                    timeoutPromise
-                ]);
+                // Only forward to Google Sheets backup after server-side validation passes and VC sync is active
+                if (shieldResult && shieldResult.forwardedToVC) {
+                    fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        cache: 'no-cache',
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8'
+                        },
+                        body: JSON.stringify(payload)
+                    }).catch(err => console.error('Google Sheets submission error:', err));
+                }
 
-                // Pre-fill the booking calendar's own details form so the visitor doesn't type twice
+                // Pre-fill the booking calendar's own details form only when calendar embed is active
                 try {
                     const cal = document.getElementById('visioncontrol-calendar-iframe');
-                    if (cal) {
-                        const calUrl = new URL(cal.getAttribute('src'), window.location.href);
+                    if (cal && (!shieldResult || !shieldResult.vcPaused)) {
+                        const rawSrc = cal.getAttribute('data-vc-src') || cal.getAttribute('src');
+                        const calUrl = new URL(rawSrc, window.location.href);
                         calUrl.searchParams.set('first_name', firstName);
                         calUrl.searchParams.set('last_name', lastName);
                         calUrl.searchParams.set('email', email);
                         if (phone) calUrl.searchParams.set('phone', phone);
                         if (company) calUrl.searchParams.set('company_name', company);
                         cal.src = calUrl.toString();
-                        // Open the calendar full-screen now that details are in (step 2)
                         window.__leadSubmitted = true;
                         const s1 = document.querySelector('.booking-steps [data-step="1"]');
                         const s2 = document.querySelector('.booking-steps [data-step="2"]');
@@ -1458,7 +1460,9 @@
                     btn.disabled = true;
                     btn.style.opacity = '1';
                     btn.style.background = 'linear-gradient(135deg, #10b981 0%, #7A8776 100%)';
-                    btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Details received &mdash; choose your time</span>';
+                    btn.innerHTML = shieldResult && shieldResult.vcPaused
+                        ? '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Submission verified &amp; received</span>'
+                        : '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Details received &mdash; choose your time</span>';
                 }
 
             } catch (error) {
@@ -1470,7 +1474,6 @@
                     btn.style.boxShadow = '';
                     btn.innerHTML = origContent;
                 }
-                alert("There was an issue submitting. Please try again.");
             }
         });
 
@@ -1486,7 +1489,7 @@
             };
             if (!cal || !fields.first_name) return;
             const STORE_KEY = 'solrevibe_lead_details';
-            const baseSrc = cal.getAttribute('src');
+            const baseSrc = cal.getAttribute('data-vc-src') || cal.getAttribute('src');
 
             const toE164 = (p) => {
                 const d = (p || '').replace(/[^\d+]/g, '');
@@ -1512,6 +1515,7 @@
             const pushToCalendar = () => {
                 const v = read();
                 save(v);
+                if (!window.__leadSubmitted || !baseSrc || baseSrc === 'about:blank') return;
                 if (!v.first_name && !v.last_name && !v.email && !v.phone) return;
                 const u = new URL(baseSrc, window.location.href);
                 if (v.first_name) u.searchParams.set('first_name', v.first_name);

@@ -3276,6 +3276,10 @@ html.is-tablet .modal .m-box.survey-mode {
       localStorage.setItem("solrevibe_tlc_reflections_v1", JSON.stringify(localHistory.slice(0, 30)));
     } catch (_) {}
 
+    if (window.SOLFormShield) {
+      payload._security = await window.SOLFormShield.getSecurityPayload(tlcForm, "tlc_reflection");
+    }
+
     const requests = [];
     if (TLC_CONFIG.googleSheetsWebAppUrl) {
       requests.push(
@@ -3668,5 +3672,6 @@ html.is-tablet .modal .m-box.survey-mode {
   renderFeatured(); update();
 })();
 </script>
+<script src="../form-shield.js?v=20261121"></script>
 </body>
 </html>

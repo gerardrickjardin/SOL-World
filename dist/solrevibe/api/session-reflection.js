@@ -1,39 +1,37 @@
-export const config = {
-  runtime: 'edge',
-  regions: ['iad1'],
-};
+const { setSecurityCorsHeaders, parseJsonBody, guardSubmission } = require('./_security');
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Accept',
-};
+module.exports = async function handler(req, res) {
+  setSecurityCorsHeaders(req, res);
 
-export default async function handler(req) {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 200, headers: CORS_HEADERS });
+    return res.status(200).end();
   }
 
   if (req.method !== 'POST') {
-    return new Response(
-      JSON.stringify({ error: 'Method not allowed. Please use POST.' }),
-      {
-        status: 405,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-      }
-    );
+    return res.status(405).json({ error: 'Method not allowed. Please use POST.' });
   }
 
   try {
-    const body = await req.json().catch(() => null);
-    if (!body || typeof body !== 'object') {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON payload.' }),
-        {
-          status: 400,
-          headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-        }
-      );
+    const body = parseJsonBody(req);
+
+    const guard = await guardSubmission(req, res, body, {
+      formType: 'session_reflection',
+      requireName: false,
+      requireEmail: false,
+      requirePhone: false,
+      allowRepeat: true,
+      requireHumanTiming: Boolean(body._security),
+      maxPerTenMin: 12,
+      maxPerHour: 40,
+      captchaOptionalWhenUnconfigured: true,
+    });
+
+    if (!guard.ok) {
+      return res.status(guard.status).json({
+        ok: false,
+        code: guard.code,
+        error: guard.error || 'Submission blocked by security check.',
+      });
     }
 
     const openingNumber = Number(body.openingNumber);
@@ -46,13 +44,7 @@ export default async function handler(req) {
       endingNumber < 1 ||
       endingNumber > 10
     ) {
-      return new Response(
-        JSON.stringify({ error: 'Opening and ending numbers must be integers from 1 to 10.' }),
-        {
-          status: 400,
-          headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-        }
-      );
+      return res.status(400).json({ error: 'Opening and ending numbers must be integers from 1 to 10.' });
     }
 
     const payload = {
@@ -73,7 +65,7 @@ export default async function handler(req) {
       bodyLocation: String(body.bodyLocation || '').slice(0, 2000),
       bodyLocationVoiceDataUrl: typeof body.bodyLocationVoiceDataUrl === 'string' ? body.bodyLocationVoiceDataUrl : '',
       bodyLocationVoiceDurationSec: Number(body.bodyLocationVoiceDurationSec || 0),
-      userAgent: req.headers.get('user-agent') || '',
+      userAgent: (req.headers && req.headers['user-agent']) || '',
     };
 
     const sheetsUrl = process.env.TLC_GOOGLE_SHEETS_WEBAPP_URL || '';
@@ -104,24 +96,14 @@ export default async function handler(req) {
       await Promise.allSettled(tasks);
     }
 
-    return new Response(
-      JSON.stringify({
-        ok: true,
-        forwardedToSheets: Boolean(sheetsUrl),
-        forwardedToWebhook: Boolean(webhookUrl),
-      }),
-      {
-        status: 200,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-      }
-    );
+    return res.status(200).json({
+      ok: true,
+      forwardedToSheets: Boolean(sheetsUrl),
+      forwardedToWebhook: Boolean(webhookUrl),
+    });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: 'Failed to process reflection submission.' }),
-      {
-        status: 500,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-      }
-    );
+    return res.status(err.statusCode || 500).json({
+      error: err.message || 'Failed to process reflection submission.',
+    });
   }
-}
+};

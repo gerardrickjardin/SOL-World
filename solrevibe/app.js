@@ -593,6 +593,10 @@ function initApplicationForm() {
     const form = document.getElementById('franchise-application-form');
     if (!form) return;
 
+    if (window.SOLFormShield) {
+        window.SOLFormShield.protectForm(form, { managed: true });
+    }
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -641,40 +645,52 @@ function initApplicationForm() {
                 submitBtn.innerHTML = 'Submitting Application... <i class="fa-solid fa-spinner fa-spin"></i>';
             }
 
-            const webhookUrl = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
-            const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbzh-Ev0POWeoD3mSoSIeqDzqt_dMjyxpuiiBIBZAXW1ZI7oBkjCqY4M-UwS8Cih6KlM/exec';
-
-            // Send to Google Sheets (using text/plain and no-cors to prevent preflight CORS blocking)
-            const sheetsPromise = fetch(googleSheetsUrl, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8'
-                },
-                body: JSON.stringify(payload)
-            }).catch(err => console.error('Error logging to Google Sheets:', err));
-
-            // Send to GoHighLevel Webhook
-            const ghlPromise = fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            const [response] = await Promise.all([ghlPromise, sheetsPromise]);
-
-            if (!response.ok) {
-                throw new Error(`Webhook submission returned status ${response.status}`);
+            if (!window.SOLFormShield) {
+                throw new Error('Security module is still loading. Please refresh and try again.');
             }
 
-            alert('Application submitted successfully! Our team will reach out shortly to finalize your discovery call.');
+            const result = await window.SOLFormShield.submitLead(form, payload, {
+                formId: 'claimed_territory',
+                requireName: true,
+                requireEmail: true,
+                requirePhone: true,
+                requireCompany: true
+            });
+
+            if (result && result.forwardedToVC) {
+                const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbzh-Ev0POWeoD3mSoSIeqDzqt_dMjyxpuiiBIBZAXW1ZI7oBkjCqY4M-UwS8Cih6KlM/exec';
+                fetch(googleSheetsUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
+                    body: JSON.stringify(payload)
+                }).catch(err => console.error('Error logging to Google Sheets:', err));
+            }
+
+            if (window.SOLFormShield) {
+                window.SOLFormShield.showFormFeedback(
+                    form,
+                    result && result.vcPaused
+                        ? 'Application validated & saved. CRM sync is currently paused during security rollout.'
+                        : 'Application submitted successfully! Our team will reach out shortly to finalize your discovery call.',
+                    true
+                );
+            }
             form.reset();
         } catch (error) {
             console.error('Error submitting application form:', error);
-            alert('There was an issue submitting your application. Please try again or contact support.');
+            if (window.SOLFormShield && error && error.code === 'VALIDATION_ERROR') {
+                return;
+            }
+            if (window.SOLFormShield) {
+                window.SOLFormShield.showFormFeedback(
+                    form,
+                    (error && error.message) || 'There was an issue submitting your application. Please try again or contact support.',
+                    false
+                );
+            }
         } finally {
             if (submitBtn) {
                 submitBtn.disabled = false;

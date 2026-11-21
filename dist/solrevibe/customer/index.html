@@ -3141,7 +3141,11 @@
     </div>
 
     <!-- ================= SCRIPTS ================= -->
+    <script src="../form-shield.js?v=20261121"></script>
     <script>
+        if (window.SOLFormShield) {
+            window.SOLFormShield.protectForm('#customerOrderForm', { managed: true });
+        }
         // Mobile Navigation Drawer Toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileDrawer = document.getElementById('mobileDrawer');
@@ -3430,27 +3434,55 @@
             }
         }
 
-        function handleOrderSubmit(e) {
+        async function handleOrderSubmit(e) {
             e.preventDefault();
+            const form = document.getElementById('customerOrderForm');
             const plan = selectedPlanInput.value;
-            const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            const email = document.getElementById('custEmail').value;
-            const address = document.getElementById('custAddress').value;
-            const notes = document.getElementById('custNotes').value;
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const email = document.getElementById('custEmail').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+            const notes = document.getElementById('custNotes').value.trim();
 
             orderSubmitBtn.disabled = true;
-            orderSubmitBtn.textContent = 'Redirecting to Order Portal...';
+            orderSubmitBtn.textContent = 'Verifying & Redirecting...';
 
             try {
-                sessionStorage.setItem('customerOrder', JSON.stringify({
-                    plan, name, phone, email, address, notes, timestamp: new Date().toISOString()
-                }));
-            } catch (err) { }
+                if (window.SOLFormShield) {
+                    await window.SOLFormShield.submitLead(form, {
+                        name,
+                        full_name: name,
+                        phone,
+                        phone_number: phone,
+                        email,
+                        address,
+                        notes,
+                        plan,
+                        source: 'Customer Home Order Modal',
+                        tags: ['solrevibe-customer-order']
+                    }, {
+                        formId: 'customer_order_start',
+                        requireName: true,
+                        requireEmail: true,
+                        requirePhone: true,
+                        allowRepeat: true
+                    });
+                }
 
-            setTimeout(() => {
-                window.location.href = `../order.html?plan=${encodeURIComponent(plan)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}`;
-            }, 600);
+                try {
+                    sessionStorage.setItem('customerOrder', JSON.stringify({
+                        plan, name, phone, email, address, notes, timestamp: new Date().toISOString()
+                    }));
+                } catch (err) { }
+
+                setTimeout(() => {
+                    window.location.href = `../order.html?plan=${encodeURIComponent(plan)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}`;
+                }, 400);
+            } catch (err) {
+                console.error('Customer order pre-check blocked:', err);
+                orderSubmitBtn.disabled = false;
+                selectOrderPlan(plan);
+            }
         }
 
         // ESC key modal close

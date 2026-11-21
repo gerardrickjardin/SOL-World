@@ -2142,6 +2142,7 @@
         </div>
     </section>
 
+    <script src="form-shield.js?v=20261121"></script>
     <script>
         (function () {
             // ---- CONFIG (same values/integration as experience.html) ----
@@ -2172,23 +2173,18 @@
             };
             var WAIVER_FORM_ID = 'VueCQzezxvPknbJ4GG5k';
             var SESSION_MINUTES = 20;
-            var WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
 
             var $ = function (id) { return document.getElementById(id); };
             var guest = { name: '', phone: '', email: '' };
             var saved = false, timerId = null, waiverMounted = false;
 
             function post(payload) {
-                return fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    keepalive: true,
-                    body: JSON.stringify(Object.assign({
-                        full_name: guest.name, name: guest.name, email: guest.email,
-                        phone: guest.phone, phone_number: guest.phone,
-                        submittedAt: new Date().toISOString()
-                    }, payload))
-                }).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r; });
+                if (!window.SOLFormShield) return Promise.resolve();
+                return window.SOLFormShield.submitTelemetry(Object.assign({
+                    full_name: guest.name, name: guest.name, email: guest.email,
+                    phone: guest.phone, phone_number: guest.phone,
+                    submittedAt: new Date().toISOString()
+                }, payload));
             }
             function embedUrl(u, autoplay) {
                 if (!u) return '';

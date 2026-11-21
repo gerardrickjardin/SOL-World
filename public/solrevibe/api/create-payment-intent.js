@@ -1,4 +1,5 @@
 const { resolvePlan, normalizeCountry, setCorsHeaders, stripeRequest } = require('./_stripe');
+const { parseJsonBody, guardSubmission } = require('./_security');
 
 module.exports = async function handler(req, res) {
   setCorsHeaders(res);
@@ -12,7 +13,28 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    const body = parseJsonBody(req);
+
+    // Run anti-bot, honeypot, rate-limit, and input validation checks before touching Stripe
+    const guard = await guardSubmission(req, res, body, {
+      formType: 'stripe_checkout',
+      requireName: true,
+      requireEmail: true,
+      requirePhone: false,
+      allowRepeat: true, // Allow legitimate customers to retry payment if a card declines
+      requireHumanTiming: Boolean(body._security),
+      maxPerTenMin: 12,
+      maxPerHour: 35,
+      captchaOptionalWhenUnconfigured: true,
+    });
+
+    if (!guard.ok) {
+      return res.status(guard.status).json({
+        error: guard.error || 'Unable to verify checkout submission.',
+        code: guard.code,
+      });
+    }
+
     const {
       plan,
       fullName = '',
@@ -24,8 +46,8 @@ module.exports = async function handler(req, res) {
       sameAsShipping = true,
     } = body;
 
-    const cleanName = String(fullName).trim();
-    const cleanEmail = String(email).trim();
+    const cleanName = guard.normalized.fullName || String(fullName).trim();
+    const cleanEmail = guard.normalized.email || String(email).trim();
     const cleanPhone = String(phone).trim();
     const cleanLine1 = String(shipping.line1 || '').trim();
     const cleanLine2 = String(shipping.line2 || '').trim();
@@ -33,10 +55,6 @@ module.exports = async function handler(req, res) {
     const cleanState = String(shipping.state || '').trim();
     const cleanPostal = String(shipping.postalCode || '').trim();
     const cleanCountry = normalizeCountry(shipping.country);
-
-    if (!cleanName || !cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-      return res.status(400).json({ error: 'Please enter a valid full name and email address.' });
-    }
 
     if (!cleanLine1 || !cleanCity || !cleanState || !cleanPostal) {
       return res.status(400).json({ error: 'Please complete all required shipping address fields.' });

@@ -1463,6 +1463,8 @@ input[type="range"]::-moz-range-thumb { background: #C29B68 !important; border: 
         &copy; 2026 SOL REViBE. All rights reserved. Calculations are commercial estimates based on a 15% conversion rate, $45 per session, and 4 weeks per month.
     </footer>
 
+    <!-- Centralized Form & Bot Protection -->
+    <script src="form-shield.js?v=20261121"></script>
     <!-- Vanilla JavaScript for Real-Time Responsive Dynamic Updates -->
     <script>
         (function() {
@@ -1594,10 +1596,47 @@ input[type="range"]::-moz-range-thumb { background: #C29B68 !important; border: 
                 if (e.target === modal) closeModal();
             });
 
-            window.handleLeadSubmit = function(e) {
+            window.handleLeadSubmit = async function(e) {
                 e.preventDefault();
-                alert(`Territory reservation requested for ZIP ${leadZip.value}! A SOL REViBE territory specialist will contact you shortly.`);
-                closeModal();
+                const form = document.getElementById('lead-form');
+                const btn = form ? form.querySelector('button[type="submit"]') : null;
+                const origHtml = btn ? btn.innerHTML : '';
+                if (window.SOLFormShield && form) {
+                    window.SOLFormShield.protectForm(form, { managed: true });
+                }
+                const payload = {
+                    companyName: (document.getElementById('lead-business')?.value || '').trim(),
+                    company: (document.getElementById('lead-business')?.value || '').trim(),
+                    name: (document.getElementById('lead-name')?.value || '').trim(),
+                    full_name: (document.getElementById('lead-name')?.value || '').trim(),
+                    email: (document.getElementById('lead-email')?.value || '').trim(),
+                    zip: (leadZip?.value || '').trim(),
+                    estimatedMonthlyRevenue: (document.getElementById('modal-projected-val')?.textContent || '').trim(),
+                    source: 'ROI Calculator Territory Modal',
+                    tags: ['solrevibe-roi-lead', 'territory-lock']
+                };
+                try {
+                    if (btn) { btn.disabled = true; btn.textContent = 'Verifying...'; }
+                    const res = await window.SOLFormShield.submitLead(form, payload, {
+                        formId: 'roi_calculator',
+                        requireName: true,
+                        requireEmail: true,
+                        requireZip: true,
+                        requireCompany: true
+                    });
+                    window.SOLFormShield.showFormFeedback(
+                        form,
+                        res && res.vcPaused
+                            ? `Territory reservation validated for ZIP ${payload.zip}. CRM sync is currently paused during security rollout.`
+                            : `Territory reservation requested for ZIP ${payload.zip}! A SOL REViBE territory specialist will contact you shortly.`,
+                        true
+                    );
+                    if (form) form.reset();
+                } catch (err) {
+                    console.error('ROI lead error:', err);
+                } finally {
+                    if (btn) { btn.disabled = false; btn.innerHTML = origHtml; }
+                }
             };
 
             // Run initial update

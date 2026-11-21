@@ -342,7 +342,8 @@
         <div class="card" id="waiverCard">
             <div id="waiverEmbed">
                 <iframe
-                    src="https://link.visioncontrol.io/widget/form/VueCQzezxvPknbJ4GG5k"
+                    data-vc-src="https://link.visioncontrol.io/widget/form/VueCQzezxvPknbJ4GG5k"
+                    src="about:blank"
                     style="width:100%;height:100%;min-height:1875px;border: none;border-radius: 8px"
                     id="inline-VueCQzezxvPknbJ4GG5k"
                     data-layout="{'id':'INLINE'}"
@@ -360,7 +361,6 @@
                     data-cookie-consent-provider="auto"
                     title="Tera-P90+ Session Waiver"
                 ></iframe>
-                <script src="https://link.visioncontrol.io/js/form_embed.js"></script>
             </div>
             <button type="button" class="submit" id="waiverContinueBtn" data-go="step-orientation">I've submitted my waiver &mdash; Continue</button>
             <button type="button" class="back-link" id="notAtStation">Not at a station right now? Find one &amp; get a free trial pass</button>
@@ -441,6 +441,7 @@
         </section>
     </main>
 
+    <script src="form-shield.js?v=20261121"></script>
     <script src="stations.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
@@ -456,24 +457,39 @@
                 orientation: { url: '', title: 'SOL REViBE How-To Video' }
             };
             const SESSION_MINUTES = 20;
-            const WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/yl7m9259ARgabLb2neQw/webhook-trigger/a60ed162-efe3-4b22-9d69-85c523dc8df3';
 
             const $ = id => document.getElementById(id);
             const guest = { name: '', phone: '', email: '' };
             let stationLabel = '';
-            let map = null, timerId = null;
+            let map = null, timerId = null, waiverLoaded = false;
+
+            if (window.SOLFormShield) {
+                window.SOLFormShield.protectForm('#introForm', { managed: true });
+                window.SOLFormShield.protectForm('#voucherForm', { managed: true });
+            }
 
             // ---- helpers ----
-            function post(payload) {
-                return fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(Object.assign({
-                        full_name: guest.name, name: guest.name, email: guest.email,
-                        phone: guest.phone, phone_number: guest.phone,
-                        submittedAt: new Date().toISOString()
-                    }, payload))
-                }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r; });
+            function buildGuestPayload(payload) {
+                return Object.assign({
+                    full_name: guest.name, name: guest.name, email: guest.email,
+                    phone: guest.phone, phone_number: guest.phone,
+                    submittedAt: new Date().toISOString()
+                }, payload);
+            }
+            function postTelemetry(payload) {
+                if (!window.SOLFormShield) return Promise.resolve();
+                return window.SOLFormShield.submitTelemetry(buildGuestPayload(payload));
+            }
+            function mountWaiverEmbed() {
+                if (waiverLoaded) return;
+                const frame = $('inline-VueCQzezxvPknbJ4GG5k');
+                if (frame && frame.dataset.vcSrc && (!frame.getAttribute('src') || frame.getAttribute('src') === 'about:blank')) {
+                    frame.src = frame.dataset.vcSrc;
+                    const s = document.createElement('script');
+                    s.src = 'https://link.visioncontrol.io/js/form_embed.js';
+                    $('waiverEmbed').appendChild(s);
+                    waiverLoaded = true;
+                }
             }
             function embedUrl(u) {
                 if (!u) return '';
@@ -504,7 +520,8 @@
             function go(id) {
                 steps.forEach(st => { st.hidden = st.id !== id; });
                 if (id === 'step-waiver') {
-                    [['fullName', guest.name], ['phone', guest.phone], ['email', guest.email]].forEach(([f, v]) => { if (v && !$(f).value) $(f).value = v; });
+                    mountWaiverEmbed();
+                    [['fullName', guest.name], ['phone', guest.phone], ['email', guest.email]].forEach(([f, v]) => { if (v && $(f) && !$(f).value) $(f).value = v; });
                     window.dispatchEvent(new Event('resize')); // re-measure signature canvas now that it is visible
                 }
                 if (id === 'step-orientation') mountVideo($('orientationVideo'), VIDEOS.orientation);
@@ -516,20 +533,34 @@
             document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
 
             // ---- step 1: intro ----
-            $('introForm').addEventListener('submit', e => {
+            $('introForm').addEventListener('submit', async e => {
                 e.preventDefault();
                 const name = $('gName').value.trim(), phone = $('gPhone').value.trim(), email = $('gEmail').value.trim();
-                if (!name || !phone || !email) { $('introError').textContent = 'Please complete your name, contact number and email.'; return; }
-                if (!/^\S+@\S+\.\S+$/.test(email)) { $('introError').textContent = 'Please enter a valid email address.'; return; }
-                $('introError').textContent = '';
+                const errEl = $('introError'), btn = $('introBtn');
+                if (!name || !phone || !email) { errEl.textContent = 'Please complete your name, contact number and email.'; return; }
+                errEl.textContent = '';
                 Object.assign(guest, { name, phone, email });
-                // Waiver not yet signed: CRM puts this contact in the incomplete-waiver nurture workflow.
-                post({
-                    event: 'contact_captured', source: 'Experience Contact Form',
-                    waiver_status: 'incomplete',
-                    tags: ['solrevibe-guest', 'experience-lead', 'waiver-incomplete']
-                }).catch(err => console.error('Guest lead error:', err));
-                go('step-welcome');
+                const origText = btn ? btn.textContent : 'Continue';
+                if (btn) { btn.disabled = true; btn.textContent = 'Verifying...'; }
+                try {
+                    await window.SOLFormShield.submitLead($('introForm'), buildGuestPayload({
+                        event: 'contact_captured', source: 'Experience Contact Form',
+                        waiver_status: 'incomplete',
+                        tags: ['solrevibe-guest', 'experience-lead', 'waiver-incomplete']
+                    }), {
+                        formId: 'experience_intro',
+                        requireName: true,
+                        requireEmail: true,
+                        requirePhone: true,
+                        allowRepeat: true,
+                        showErrors: false
+                    });
+                    go('step-welcome');
+                } catch (err) {
+                    errEl.textContent = (err && err.message) || 'Please check your contact details and try again.';
+                } finally {
+                    if (btn) { btn.disabled = false; btn.textContent = origText; }
+                }
             });
 
             // ---- step 2: welcome + intro video (video loads only after the visitor taps) ----
@@ -537,7 +568,7 @@
                 $('watchIntroBtn').hidden = true;
                 $('introVideoWrap').hidden = false;
                 mountVideo($('introVideo'), VIDEOS.intro);
-                post({ event: 'intro_video_started', source: 'Experience Intro Video', tags: ['solrevibe-intro-video-started'] })
+                postTelemetry({ event: 'intro_video_started', source: 'Experience Intro Video', tags: ['solrevibe-intro-video-started'] })
                     .catch(err => console.error('Intro video event error:', err));
                 $('introVideoWrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
@@ -549,7 +580,7 @@
                 const btn = $('startSessionBtn');
                 btn.disabled = true; btn.textContent = 'Starting...'; $('sessionError').textContent = '';
                 try {
-                    await post({
+                    await postTelemetry({
                         event: 'session_start', source: 'Session Launch',
                         station: stationLabel, session_minutes: SESSION_MINUTES,
                         tags: ['solrevibe-session-start']
@@ -651,10 +682,18 @@
                 const btn = $('voucherBtn'); btn.disabled = true; btn.textContent = 'Claiming...';
                 const code = makeCode();
                 try {
-                    await post({ event: 'free_trial_voucher', source: 'Free Trial Voucher', station, voucher_code: code, tags: ['solrevibe-free-trial-voucher'] });
+                    await window.SOLFormShield.submitLead($('voucherForm'), buildGuestPayload({
+                        event: 'free_trial_voucher', source: 'Free Trial Voucher', station, voucher_code: code, tags: ['solrevibe-free-trial-voucher']
+                    }), {
+                        formId: 'experience_voucher',
+                        requireName: true,
+                        requireEmail: true,
+                        requirePhone: true,
+                        showErrors: false
+                    });
                 } catch (ex) {
                     console.error('Voucher error:', ex);
-                    err.textContent = 'Sorry, something went wrong claiming your pass. Please try again.';
+                    err.textContent = (ex && ex.message) || 'Sorry, something went wrong claiming your pass. Please try again.';
                     btn.disabled = false; btn.textContent = 'Claim My Free Trial Pass';
                     return;
                 }
