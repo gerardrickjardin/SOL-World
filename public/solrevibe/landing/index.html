@@ -1464,6 +1464,16 @@
                         ? '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Submission verified &amp; received</span>'
                         : '<span style="display:inline-flex;align-items:center;gap:8px;"><i class="fa-solid fa-circle-check"></i> Details received &mdash; choose your time</span>';
                 }
+                if (window.SOLFormShield && shieldResult && shieldResult.vcPaused) {
+                    const via = shieldResult.captchaVerified
+                        ? ` (${shieldResult.captchaProvider || 'CAPTCHA'} verified)`
+                        : '';
+                    window.SOLFormShield.showFormFeedback(
+                        this,
+                        `Bot protection passed${via}. Step 2 ("Pick a Time" calendar) and Vision Control CRM sync remain intentionally paused during security verification.`,
+                        true
+                    );
+                }
 
             } catch (error) {
                 console.error('Submission failed:', error);
