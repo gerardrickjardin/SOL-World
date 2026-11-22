@@ -1962,21 +1962,13 @@ html.is-tablet .modal .m-box.survey-mode {
             <label class="tlc-q-label" for="tlcExpInput"><span class="tlc-q-num">4.</span> Describe your experience <span class="tlc-opt">(Optional)</span></label>
             <p class="tlc-helper">Share what you noticed — what the thought loop looked like, where you felt it in your body, or how it shifted.</p>
             <div class="tlc-field-wrap">
-              <textarea class="tlc-textarea" id="tlcExpInput" rows="3" placeholder="Speak with Talk-to-Text, leave a quick Voice Note, or type about your experience…"></textarea>
+              <textarea class="tlc-textarea" id="tlcExpInput" rows="3" placeholder="Speak with Talk-to-Text or type about your experience…"></textarea>
               <div class="tlc-voice-bar">
                 <button type="button" class="tlc-vbtn" id="tlcExpDictateBtn" data-dictate="exp">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg>
                   <span class="tlc-vbtn-lbl">Talk to Text</span>
                 </button>
-                <button type="button" class="tlc-vbtn" id="tlcExpRecordBtn" data-record="exp">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg>
-                  <span class="tlc-vbtn-lbl">Voice Note</span>
-                </button>
                 <span class="tlc-voice-status" id="tlcExpStatus" aria-live="polite"></span>
-              </div>
-              <div class="tlc-audio-pill" id="tlcExpAudioPill" hidden>
-                <audio id="tlcExpAudio" controls preload="metadata"></audio>
-                <button type="button" class="tlc-audio-remove" data-clear-audio="exp">Remove</button>
               </div>
             </div>
           </div>
@@ -2040,8 +2032,7 @@ html.is-tablet .modal .m-box.survey-mode {
     scaleMaxLabel: "Overwhelming",
     // Optional direct Google Apps Script Web App URL (or configure TLC_GOOGLE_SHEETS_WEBAPP_URL in Vercel env vars):
     googleSheetsWebAppUrl: "",
-    apiEndpoint: "../api/session-reflection",
-    maxVoiceSeconds: 90
+    apiEndpoint: "../api/session-reflection"
   };
 
   const CATS = ["All", "TAGs", "Teen & Emerging Mind", "Couples & Relational Reset", "Transitions & Vitality", "Sleep & Recovery"];
@@ -2748,10 +2739,7 @@ html.is-tablet .modal .m-box.survey-mode {
   const tlcState = {
     openNum: null,
     endNum: null,
-    submitted: false,
-    voice: {
-      exp: { dataUrl: "", durationSec: 0 }
-    }
+    submitted: false
   };
 
   function getEncourager(openNum, endNum){
@@ -2888,29 +2876,17 @@ html.is-tablet .modal .m-box.survey-mode {
     });
   });
 
-  // ---- Talk-to-Text (Web Speech API) & Voice Note Recorder (MediaRecorder) ----
+  // ---- Talk-to-Text (Web Speech API) ----
   const voiceEngine = {
     recognition: null,
-    dictateField: null,
-    recorder: null,
-    recordStream: null,
-    recordField: null,
-    recordChunks: [],
-    recordTimer: null,
-    recordSec: 0,
-    stopPromiseResolve: null
+    dictateField: null
   };
 
   const fieldDom = () => ({
     input: tlcExpInput,
     dictateBtn: $("tlcExpDictateBtn"),
-    recordBtn: $("tlcExpRecordBtn"),
-    status: $("tlcExpStatus"),
-    pill: $("tlcExpAudioPill"),
-    audio: $("tlcExpAudio")
+    status: $("tlcExpStatus")
   });
-
-  const fmtSec = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   function stopDictation(){
     if (voiceEngine.dictateField) {
@@ -2927,27 +2903,8 @@ html.is-tablet .modal .m-box.survey-mode {
     }
   }
 
-  function stopRecording(){
-    if (voiceEngine.recordTimer) {
-      clearInterval(voiceEngine.recordTimer);
-      voiceEngine.recordTimer = null;
-    }
-    if (!voiceEngine.recorder || voiceEngine.recorder.state === "inactive") {
-      if (voiceEngine.recordStream) {
-        voiceEngine.recordStream.getTracks().forEach(t => t.stop());
-        voiceEngine.recordStream = null;
-      }
-      return Promise.resolve();
-    }
-    return new Promise(resolve => {
-      voiceEngine.stopPromiseResolve = resolve;
-      try { voiceEngine.recorder.stop(); } catch (_) { resolve(); }
-    });
-  }
-
-  async function stopAllVoice(){
+  function stopAllVoice(){
     stopDictation();
-    await stopRecording();
   }
 
   function toggleDictation(fieldKey){
@@ -2956,11 +2913,10 @@ html.is-tablet .modal .m-box.survey-mode {
       return;
     }
     stopDictation();
-    stopRecording();
     const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
     const dom = fieldDom(fieldKey);
     if (!SpeechRec) {
-      dom.status.textContent = "Talk-to-Text isn't supported in this browser — tap Voice Note or use your keyboard mic.";
+      dom.status.textContent = "Talk-to-Text isn't supported in this browser — please type or use your keyboard mic.";
       return;
     }
     const baseText = dom.input.value.trim();
@@ -2999,100 +2955,9 @@ html.is-tablet .modal .m-box.survey-mode {
     try { rec.start(); } catch (_) { stopDictation(); }
   }
 
-  function pickAudioMime(){
-    if (typeof MediaRecorder === "undefined" || typeof MediaRecorder.isTypeSupported !== "function") return "";
-    const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"];
-    return candidates.find(t => MediaRecorder.isTypeSupported(t)) || "";
-  }
-
-  async function toggleRecording(fieldKey){
-    if (voiceEngine.recordField === fieldKey && voiceEngine.recorder && voiceEngine.recorder.state !== "inactive") {
-      await stopRecording();
-      return;
-    }
-    stopDictation();
-    await stopRecording();
-    const dom = fieldDom(fieldKey);
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined") {
-      dom.status.textContent = "Voice recording isn't available in this browser.";
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mimeType = pickAudioMime();
-      const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
-      voiceEngine.recordStream = stream;
-      voiceEngine.recorder = recorder;
-      voiceEngine.recordField = fieldKey;
-      voiceEngine.recordChunks = [];
-      voiceEngine.recordSec = 0;
-
-      dom.recordBtn.classList.add("active");
-      dom.recordBtn.querySelector(".tlc-vbtn-lbl").textContent = "Stop (0:00)";
-      dom.status.textContent = "Recording voice note…";
-
-      recorder.ondataavailable = e => {
-        if (e.data && e.data.size > 0) voiceEngine.recordChunks.push(e.data);
-      };
-      recorder.onstop = () => {
-        const finalDur = Math.max(1, voiceEngine.recordSec);
-        const actualMime = recorder.mimeType || mimeType || "audio/webm";
-        const blob = new Blob(voiceEngine.recordChunks, { type: actualMime });
-        stream.getTracks().forEach(t => t.stop());
-        voiceEngine.recordStream = null;
-        voiceEngine.recorder = null;
-        voiceEngine.recordField = null;
-        dom.recordBtn.classList.remove("active");
-        dom.recordBtn.querySelector(".tlc-vbtn-lbl").textContent = "Voice Note";
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (typeof reader.result === "string" && blob.size > 0) {
-            tlcState.voice[fieldKey] = { dataUrl: reader.result, durationSec: finalDur };
-            dom.audio.src = reader.result;
-            dom.pill.hidden = false;
-            dom.status.textContent = `Voice note attached (${fmtSec(finalDur)})`;
-          } else {
-            dom.status.textContent = "";
-          }
-          if (voiceEngine.stopPromiseResolve) {
-            const done = voiceEngine.stopPromiseResolve;
-            voiceEngine.stopPromiseResolve = null;
-            done();
-          }
-        };
-        reader.readAsDataURL(blob);
-      };
-
-      recorder.start();
-      voiceEngine.recordTimer = setInterval(() => {
-        voiceEngine.recordSec += 1;
-        dom.recordBtn.querySelector(".tlc-vbtn-lbl").textContent = `Stop (${fmtSec(voiceEngine.recordSec)})`;
-        if (voiceEngine.recordSec >= TLC_CONFIG.maxVoiceSeconds) {
-          stopRecording();
-        }
-      }, 1000);
-    } catch (_) {
-      dom.status.textContent = "Could not access microphone — please allow mic access or type above.";
-    }
-  }
-
-  function clearVoiceNote(fieldKey){
-    tlcState.voice[fieldKey] = { dataUrl: "", durationSec: 0 };
-    const dom = fieldDom(fieldKey);
-    dom.audio.pause();
-    dom.audio.removeAttribute("src");
-    dom.pill.hidden = true;
-    dom.status.textContent = "";
-  }
-
   tlcSurvey.addEventListener("click", e => {
     const dBtn = e.target.closest("[data-dictate]");
-    if (dBtn) { toggleDictation(dBtn.dataset.dictate); return; }
-    const rBtn = e.target.closest("[data-record]");
-    if (rBtn) { toggleRecording(rBtn.dataset.record); return; }
-    const cBtn = e.target.closest("[data-clear-audio]");
-    if (cBtn) { clearVoiceNote(cBtn.dataset.clearAudio); }
+    if (dBtn) { toggleDictation(dBtn.dataset.dictate); }
   });
 
   function resetTlcSurvey(){
@@ -3100,7 +2965,6 @@ html.is-tablet .modal .m-box.survey-mode {
     tlcState.openNum = null;
     tlcState.endNum = null;
     tlcState.submitted = false;
-    clearVoiceNote("exp");
     tlcExpInput.value = "";
     $("tlcExpStatus").textContent = "";
     tlcCardOpen.classList.remove("needs-attn");
@@ -3207,8 +3071,8 @@ html.is-tablet .modal .m-box.survey-mode {
     tlcSubmitBtn.textContent = "Submitting…";
     tlcFormErr.hidden = true;
 
-    // Ensure any live voice recording or dictation finishes cleanly before packaging payload
-    await stopAllVoice();
+    // Ensure any live voice dictation finishes cleanly before packaging payload
+    stopAllVoice();
 
     const enc = getEncourager(tlcState.openNum, tlcState.endNum);
     const payload = {
@@ -3224,17 +3088,11 @@ html.is-tablet .modal .m-box.survey-mode {
       distance: Math.abs(tlcState.openNum - tlcState.endNum),
       encouragerTitle: enc.title,
       experienceDescription: tlcExpInput.value.trim(),
-      experienceVoiceDataUrl: tlcState.voice.exp.dataUrl,
-      experienceVoiceDurationSec: tlcState.voice.exp.durationSec,
       loopAppearance: tlcExpInput.value.trim(),
-      loopAppearanceVoiceDataUrl: tlcState.voice.exp.dataUrl,
-      loopAppearanceVoiceDurationSec: tlcState.voice.exp.durationSec,
-      bodyLocation: "",
-      bodyLocationVoiceDataUrl: "",
-      bodyLocationVoiceDurationSec: 0
+      bodyLocation: ""
     };
 
-    // Keep lightweight local backup summary (without bulky base64 audio) for reliability
+    // Keep lightweight local backup summary for reliability
     try {
       const localHistory = JSON.parse(localStorage.getItem("solrevibe_tlc_reflections_v1") || "[]");
       localHistory.unshift({
@@ -3244,8 +3102,7 @@ html.is-tablet .modal .m-box.survey-mode {
         endingNumber: payload.endingNumber,
         pointDrop: payload.pointDrop,
         distance: payload.distance,
-        experienceDescription: payload.experienceDescription,
-        hasExperienceVoiceNote: Boolean(payload.experienceVoiceDataUrl)
+        experienceDescription: payload.experienceDescription
       });
       localStorage.setItem("solrevibe_tlc_reflections_v1", JSON.stringify(localHistory.slice(0, 30)));
     } catch (_) {}
