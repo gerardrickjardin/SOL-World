@@ -1957,49 +1957,26 @@ html.is-tablet .modal .m-box.survey-mode {
             </div>
           </div>
 
-          <!-- 4. What did the thought loop look like? (Optional) -->
+          <!-- 4. Describe your experience (Optional) -->
           <div class="tlc-open-q">
-            <label class="tlc-q-label" for="tlcLookInput"><span class="tlc-q-num">4.</span> What did the thought loop look like? <span class="tlc-opt">(Optional)</span></label>
-            <p class="tlc-helper">For example: color, shape, size, texture, etc.</p>
+            <label class="tlc-q-label" for="tlcExpInput"><span class="tlc-q-num">4.</span> Describe your experience <span class="tlc-opt">(Optional)</span></label>
+            <p class="tlc-helper">Share what you noticed — what the thought loop looked like, where you felt it in your body, or how it shifted.</p>
             <div class="tlc-field-wrap">
-              <textarea class="tlc-textarea" id="tlcLookInput" rows="3" placeholder="Speak with Talk-to-Text, leave a quick Voice Note, or type here…"></textarea>
+              <textarea class="tlc-textarea" id="tlcExpInput" rows="3" placeholder="Speak with Talk-to-Text, leave a quick Voice Note, or type about your experience…"></textarea>
               <div class="tlc-voice-bar">
-                <button type="button" class="tlc-vbtn" id="tlcLookDictateBtn" data-dictate="look">
+                <button type="button" class="tlc-vbtn" id="tlcExpDictateBtn" data-dictate="exp">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg>
                   <span class="tlc-vbtn-lbl">Talk to Text</span>
                 </button>
-                <button type="button" class="tlc-vbtn" id="tlcLookRecordBtn" data-record="look">
+                <button type="button" class="tlc-vbtn" id="tlcExpRecordBtn" data-record="exp">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg>
                   <span class="tlc-vbtn-lbl">Voice Note</span>
                 </button>
-                <span class="tlc-voice-status" id="tlcLookStatus" aria-live="polite"></span>
+                <span class="tlc-voice-status" id="tlcExpStatus" aria-live="polite"></span>
               </div>
-              <div class="tlc-audio-pill" id="tlcLookAudioPill" hidden>
-                <audio id="tlcLookAudio" controls preload="metadata"></audio>
-                <button type="button" class="tlc-audio-remove" data-clear-audio="look">Remove</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- 5. Where was it in your body? (Optional) -->
-          <div class="tlc-open-q">
-            <label class="tlc-q-label" for="tlcBodyInput"><span class="tlc-q-num">5.</span> Where was it in your body? <span class="tlc-opt">(Optional)</span></label>
-            <div class="tlc-field-wrap">
-              <textarea class="tlc-textarea tlc-textarea-compact" id="tlcBodyInput" rows="2" placeholder="Speak with Talk-to-Text, leave a Voice Note, or type (e.g., chest, shoulders, behind the eyes)…"></textarea>
-              <div class="tlc-voice-bar">
-                <button type="button" class="tlc-vbtn" id="tlcBodyDictateBtn" data-dictate="body">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg>
-                  <span class="tlc-vbtn-lbl">Talk to Text</span>
-                </button>
-                <button type="button" class="tlc-vbtn" id="tlcBodyRecordBtn" data-record="body">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg>
-                  <span class="tlc-vbtn-lbl">Voice Note</span>
-                </button>
-                <span class="tlc-voice-status" id="tlcBodyStatus" aria-live="polite"></span>
-              </div>
-              <div class="tlc-audio-pill" id="tlcBodyAudioPill" hidden>
-                <audio id="tlcBodyAudio" controls preload="metadata"></audio>
-                <button type="button" class="tlc-audio-remove" data-clear-audio="body">Remove</button>
+              <div class="tlc-audio-pill" id="tlcExpAudioPill" hidden>
+                <audio id="tlcExpAudio" controls preload="metadata"></audio>
+                <button type="button" class="tlc-audio-remove" data-clear-audio="exp">Remove</button>
               </div>
             </div>
           </div>
@@ -2747,7 +2724,7 @@ html.is-tablet .modal .m-box.survey-mode {
         tlcDistanceCard = $("tlcDistanceCard"), tlcDistNum = $("tlcDistNum"), tlcDistUnit = $("tlcDistUnit"),
         tlcEncTitle = $("tlcEncTitle"), tlcEncText = $("tlcEncText"),
         tlcShiftTrack = $("tlcShiftTrack"), tlcShiftPill = $("tlcShiftPill"), tlcShiftFill = $("tlcShiftFill"),
-        tlcLookInput = $("tlcLookInput"), tlcBodyInput = $("tlcBodyInput"),
+        tlcExpInput = $("tlcExpInput"),
         tlcFormErr = $("tlcFormErr"), tlcSubmitBtn = $("tlcSubmitBtn"),
         mCheckinTrigger = $("mCheckinTrigger");
 
@@ -2773,8 +2750,7 @@ html.is-tablet .modal .m-box.survey-mode {
     endNum: null,
     submitted: false,
     voice: {
-      look: { dataUrl: "", durationSec: 0 },
-      body: { dataUrl: "", durationSec: 0 }
+      exp: { dataUrl: "", durationSec: 0 }
     }
   };
 
@@ -2925,13 +2901,13 @@ html.is-tablet .modal .m-box.survey-mode {
     stopPromiseResolve: null
   };
 
-  const fieldDom = key => ({
-    input: key === "look" ? tlcLookInput : tlcBodyInput,
-    dictateBtn: key === "look" ? $("tlcLookDictateBtn") : $("tlcBodyDictateBtn"),
-    recordBtn: key === "look" ? $("tlcLookRecordBtn") : $("tlcBodyRecordBtn"),
-    status: key === "look" ? $("tlcLookStatus") : $("tlcBodyStatus"),
-    pill: key === "look" ? $("tlcLookAudioPill") : $("tlcBodyAudioPill"),
-    audio: key === "look" ? $("tlcLookAudio") : $("tlcBodyAudio")
+  const fieldDom = () => ({
+    input: tlcExpInput,
+    dictateBtn: $("tlcExpDictateBtn"),
+    recordBtn: $("tlcExpRecordBtn"),
+    status: $("tlcExpStatus"),
+    pill: $("tlcExpAudioPill"),
+    audio: $("tlcExpAudio")
   });
 
   const fmtSec = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
@@ -3124,12 +3100,9 @@ html.is-tablet .modal .m-box.survey-mode {
     tlcState.openNum = null;
     tlcState.endNum = null;
     tlcState.submitted = false;
-    clearVoiceNote("look");
-    clearVoiceNote("body");
-    tlcLookInput.value = "";
-    tlcBodyInput.value = "";
-    $("tlcLookStatus").textContent = "";
-    $("tlcBodyStatus").textContent = "";
+    clearVoiceNote("exp");
+    tlcExpInput.value = "";
+    $("tlcExpStatus").textContent = "";
     tlcCardOpen.classList.remove("needs-attn");
     tlcCardEnd.classList.remove("needs-attn");
     renderScaleSelection(tlcOpenScale, null);
@@ -3250,12 +3223,15 @@ html.is-tablet .modal .m-box.survey-mode {
       pointDrop: tlcState.openNum - tlcState.endNum,
       distance: Math.abs(tlcState.openNum - tlcState.endNum),
       encouragerTitle: enc.title,
-      loopAppearance: tlcLookInput.value.trim(),
-      loopAppearanceVoiceDataUrl: tlcState.voice.look.dataUrl,
-      loopAppearanceVoiceDurationSec: tlcState.voice.look.durationSec,
-      bodyLocation: tlcBodyInput.value.trim(),
-      bodyLocationVoiceDataUrl: tlcState.voice.body.dataUrl,
-      bodyLocationVoiceDurationSec: tlcState.voice.body.durationSec
+      experienceDescription: tlcExpInput.value.trim(),
+      experienceVoiceDataUrl: tlcState.voice.exp.dataUrl,
+      experienceVoiceDurationSec: tlcState.voice.exp.durationSec,
+      loopAppearance: tlcExpInput.value.trim(),
+      loopAppearanceVoiceDataUrl: tlcState.voice.exp.dataUrl,
+      loopAppearanceVoiceDurationSec: tlcState.voice.exp.durationSec,
+      bodyLocation: "",
+      bodyLocationVoiceDataUrl: "",
+      bodyLocationVoiceDurationSec: 0
     };
 
     // Keep lightweight local backup summary (without bulky base64 audio) for reliability
@@ -3268,10 +3244,8 @@ html.is-tablet .modal .m-box.survey-mode {
         endingNumber: payload.endingNumber,
         pointDrop: payload.pointDrop,
         distance: payload.distance,
-        loopAppearance: payload.loopAppearance,
-        hasLookVoiceNote: Boolean(payload.loopAppearanceVoiceDataUrl),
-        bodyLocation: payload.bodyLocation,
-        hasBodyVoiceNote: Boolean(payload.bodyLocationVoiceDataUrl)
+        experienceDescription: payload.experienceDescription,
+        hasExperienceVoiceNote: Boolean(payload.experienceVoiceDataUrl)
       });
       localStorage.setItem("solrevibe_tlc_reflections_v1", JSON.stringify(localHistory.slice(0, 30)));
     } catch (_) {}

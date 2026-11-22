@@ -62,9 +62,16 @@ module.exports = async function handler(req, res) {
       pointDrop: openingNumber - endingNumber,
       distance: Math.abs(openingNumber - endingNumber),
       encouragerTitle: String(body.encouragerTitle || '').slice(0, 240),
-      loopAppearance: String(body.loopAppearance || '').slice(0, 4000),
-      loopAppearanceVoiceDataUrl: typeof body.loopAppearanceVoiceDataUrl === 'string' ? body.loopAppearanceVoiceDataUrl : '',
-      loopAppearanceVoiceDurationSec: Number(body.loopAppearanceVoiceDurationSec || 0),
+      experienceDescription: String(body.experienceDescription || body.loopAppearance || '').slice(0, 4000),
+      experienceVoiceDataUrl: typeof (body.experienceVoiceDataUrl || body.loopAppearanceVoiceDataUrl) === 'string'
+        ? (body.experienceVoiceDataUrl || body.loopAppearanceVoiceDataUrl)
+        : '',
+      experienceVoiceDurationSec: Number(body.experienceVoiceDurationSec || body.loopAppearanceVoiceDurationSec || 0),
+      loopAppearance: String(body.loopAppearance || body.experienceDescription || '').slice(0, 4000),
+      loopAppearanceVoiceDataUrl: typeof (body.loopAppearanceVoiceDataUrl || body.experienceVoiceDataUrl) === 'string'
+        ? (body.loopAppearanceVoiceDataUrl || body.experienceVoiceDataUrl)
+        : '',
+      loopAppearanceVoiceDurationSec: Number(body.loopAppearanceVoiceDurationSec || body.experienceVoiceDurationSec || 0),
       bodyLocation: String(body.bodyLocation || '').slice(0, 2000),
       bodyLocationVoiceDataUrl: typeof body.bodyLocationVoiceDataUrl === 'string' ? body.bodyLocationVoiceDataUrl : '',
       bodyLocationVoiceDurationSec: Number(body.bodyLocationVoiceDurationSec || 0),
