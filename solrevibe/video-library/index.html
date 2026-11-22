@@ -1913,7 +1913,7 @@ html.is-tablet .modal .m-box.survey-mode {
           <p class="tlc-subtitle" id="tlcSubtitle">Take a quiet moment while your session is fresh to notice what shifted.</p>
         </div>
 
-        <form class="tlc-form" id="tlcForm" novalidate>
+        <form class="tlc-form" id="tlcForm" data-no-provider-captcha="true" novalidate>
           <!-- 1. Opening Number -->
           <div class="tlc-card" id="tlcCardOpen">
             <div class="tlc-q-label" id="tlcOpenLbl"><span class="tlc-q-num">1.</span> What was your opening number on a scale of 1 to 10?</div>
@@ -2004,13 +2004,15 @@ html.is-tablet .modal .m-box.survey-mode {
             </div>
           </div>
 
+          <div class="sol-captcha-slot" style="margin: 14px 0 6px;"></div>
+
           <p class="tlc-form-err" id="tlcFormErr" role="alert" hidden></p>
 
           <div class="tlc-footer">
             <span class="tlc-brand-mark">SOL REViBE</span>
             <div class="tlc-footer-actions">
               <button type="button" class="tlc-btn-skip" id="tlcSkipBottomBtn">Not now</button>
-              <button type="submit" class="tlc-btn-submit" id="tlcSubmitBtn">Complete Check-In</button>
+              <button type="submit" class="tlc-btn-submit" id="tlcSubmitBtn">Submit</button>
             </div>
           </div>
         </form>
@@ -3137,7 +3139,7 @@ html.is-tablet .modal .m-box.survey-mode {
     updateDistanceUI();
     tlcFormErr.hidden = true;
     tlcSubmitBtn.disabled = false;
-    tlcSubmitBtn.textContent = "Complete Check-In";
+    tlcSubmitBtn.textContent = "Submit";
     $("tlcSkipTopBtn").innerHTML = 'Not now <span aria-hidden="true">&#10005;</span>';
     tlcForm.hidden = false;
     $("tlcSubtitle").hidden = false;
@@ -3240,7 +3242,7 @@ html.is-tablet .modal .m-box.survey-mode {
     }
 
     tlcSubmitBtn.disabled = true;
-    tlcSubmitBtn.textContent = "Saving Check-In…";
+    tlcSubmitBtn.textContent = "Submitting…";
     tlcFormErr.hidden = true;
 
     // Ensure any live voice recording or dictation finishes cleanly before packaging payload
@@ -3302,13 +3304,26 @@ html.is-tablet .modal .m-box.survey-mode {
       );
     }
     if (TLC_CONFIG.apiEndpoint) {
-      requests.push(
-        fetch(TLC_CONFIG.apiEndpoint, {
+      try {
+        const apiRes = await fetch(TLC_CONFIG.apiEndpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify(payload)
-        }).catch(() => {})
-      );
+        });
+        if (!apiRes.ok) {
+          const errData = await apiRes.json().catch(() => ({}));
+          if (window.SOLFormShield && window.SOLFormShield.syncErrorResponse) {
+            window.SOLFormShield.syncErrorResponse(tlcForm, errData);
+          }
+          if (apiRes.status === 400 || apiRes.status === 403 || apiRes.status === 429) {
+            tlcFormErr.textContent = errData.error || "Please complete the verification above and try again.";
+            tlcFormErr.hidden = false;
+            tlcSubmitBtn.disabled = false;
+            tlcSubmitBtn.textContent = "Submit";
+            return;
+          }
+        }
+      } catch (_) {}
     }
 
     await Promise.race([

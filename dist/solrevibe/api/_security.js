@@ -891,6 +891,7 @@ async function guardSubmission(req, res, body, options = {}) {
     allowRepeat = false,
     requireHumanTiming = true,
     requireVisualChallenge = false,
+    skipProviderCaptcha = false,
     maxPerTenMin = 6,
     maxPerHour = 20,
     minDwellMs = 1200,
@@ -952,28 +953,31 @@ async function guardSubmission(req, res, body, options = {}) {
 
   // 5. Server-side CAPTCHA token verification (Turnstile / reCAPTCHA)
   const ip = getClientIp(req);
-  const captchaToken =
-    body.captchaToken ||
-    body['cf-turnstile-response'] ||
-    body['g-recaptcha-response'] ||
-    securityMeta.captchaToken ||
-    '';
-  const captchaResult = await verifyCaptchaToken(captchaToken, ip);
-  if (captchaResult.configured && !captchaResult.verified) {
-    return {
-      ok: false,
-      status: 403,
-      code: 'CAPTCHA_FAILED',
-      error: captchaResult.error || 'CAPTCHA verification failed. Please try again.',
-    };
-  }
-  if (!captchaResult.configured && !captchaOptionalWhenUnconfigured) {
-    return {
-      ok: false,
-      status: 503,
-      code: 'CAPTCHA_NOT_CONFIGURED',
-      error: 'Server-side CAPTCHA protection is required before live CRM forwarding.',
-    };
+  let captchaResult = { configured: false, verified: false, provider: 'none' };
+  if (!skipProviderCaptcha) {
+    const captchaToken =
+      body.captchaToken ||
+      body['cf-turnstile-response'] ||
+      body['g-recaptcha-response'] ||
+      securityMeta.captchaToken ||
+      '';
+    captchaResult = await verifyCaptchaToken(captchaToken, ip);
+    if (captchaResult.configured && !captchaResult.verified) {
+      return {
+        ok: false,
+        status: 403,
+        code: 'CAPTCHA_FAILED',
+        error: captchaResult.error || 'CAPTCHA verification failed. Please try again.',
+      };
+    }
+    if (!captchaResult.configured && !captchaOptionalWhenUnconfigured) {
+      return {
+        ok: false,
+        status: 503,
+        code: 'CAPTCHA_NOT_CONFIGURED',
+        error: 'Server-side CAPTCHA protection is required before live CRM forwarding.',
+      };
+    }
   }
 
   // 5b. Visual image-selection challenge check (when required)

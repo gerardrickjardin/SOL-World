@@ -748,6 +748,9 @@
     if (slot && cfg.visualChallengeRequired && cfg.visualChallenge) {
       renderVisualGateIntoSlot(slot, cfg.visualChallenge);
     }
+    if (form.dataset.noProviderCaptcha === 'true') {
+      return form;
+    }
     const providerContainer = slot ? getProviderSlot(slot) : null;
     if (providerContainer && cfg.captchaRequired && cfg.captchaProvider === 'turnstile') {
       ensureTurnstileWidget(providerContainer, cfg);
@@ -765,8 +768,9 @@
     const form = resolveFormEl(formOrSelector);
     const cfg = await fetchConfig();
     const slot = form ? getCaptchaSlot(form) : null;
-    const providerContainer = slot ? getProviderSlot(slot) : null;
-    const captchaToken = await executeCaptcha(providerContainer || slot, action);
+    const skipProvider = Boolean(form && form.dataset.noProviderCaptcha === 'true');
+    const providerContainer = slot && !skipProvider ? getProviderSlot(slot) : null;
+    const captchaToken = skipProvider ? '' : await executeCaptcha(providerContainer || slot, action);
     const mountedAt = Number((form && form.dataset.solMountedAt) || Date.now());
     const visualAnswer = slot && slot._visualSelected ? Array.from(slot._visualSelected).sort((a, b) => a - b) : [];
     const visualToken = (slot && slot._visualToken) || (cfg.visualChallenge && cfg.visualChallenge.visualToken) || '';
