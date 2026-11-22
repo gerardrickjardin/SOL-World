@@ -743,12 +743,14 @@
     if (!form) return null;
     if (options.managed) form.dataset.solManaged = 'true';
     ensureHoneypots(form);
-    const slot = options.withCaptchaSlot !== false ? getCaptchaSlot(form) : null;
+    const skipVisual = form.dataset.noVisualChallenge === 'true';
+    const skipProvider = form.dataset.noProviderCaptcha === 'true';
+    const slot = options.withCaptchaSlot !== false && !(skipVisual && skipProvider) ? getCaptchaSlot(form) : null;
     const cfg = await fetchConfig();
-    if (slot && cfg.visualChallengeRequired && cfg.visualChallenge) {
+    if (!skipVisual && slot && cfg.visualChallengeRequired && cfg.visualChallenge) {
       renderVisualGateIntoSlot(slot, cfg.visualChallenge);
     }
-    if (form.dataset.noProviderCaptcha === 'true') {
+    if (skipProvider) {
       return form;
     }
     const providerContainer = slot ? getProviderSlot(slot) : null;

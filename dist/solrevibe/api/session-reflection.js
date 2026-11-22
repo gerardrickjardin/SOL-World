@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
       requirePhone: false,
       allowRepeat: true,
       requireHumanTiming: Boolean(body._security),
-      requireVisualChallenge: isVisualChallengeEnabled(),
+      requireVisualChallenge: false,
       skipProviderCaptcha: true,
       maxPerTenMin: 12,
       maxPerHour: 40,

@@ -1913,7 +1913,7 @@ html.is-tablet .modal .m-box.survey-mode {
           <p class="tlc-subtitle" id="tlcSubtitle">Take a quiet moment while your session is fresh to notice what shifted.</p>
         </div>
 
-        <form class="tlc-form" id="tlcForm" data-no-provider-captcha="true" novalidate>
+        <form class="tlc-form" id="tlcForm" data-no-provider-captcha="true" data-no-visual-challenge="true" novalidate>
           <!-- 1. Opening Number -->
           <div class="tlc-card" id="tlcCardOpen">
             <div class="tlc-q-label" id="tlcOpenLbl"><span class="tlc-q-num">1.</span> What was your opening number on a scale of 1 to 10?</div>
@@ -2003,8 +2003,6 @@ html.is-tablet .modal .m-box.survey-mode {
               </div>
             </div>
           </div>
-
-          <div class="sol-captcha-slot" style="margin: 14px 0 6px;"></div>
 
           <p class="tlc-form-err" id="tlcFormErr" role="alert" hidden></p>
 
@@ -3230,15 +3228,6 @@ html.is-tablet .modal .m-box.survey-mode {
       const target = tlcState.openNum === null ? tlcCardOpen : tlcCardEnd;
       target.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
-    }
-
-    if (window.SOLFormShield && window.SOLFormShield.validateVisualSelection) {
-      const visCheck = window.SOLFormShield.validateVisualSelection(tlcForm);
-      if (!visCheck.ok) {
-        tlcFormErr.textContent = visCheck.error;
-        tlcFormErr.hidden = false;
-        return;
-      }
     }
 
     tlcSubmitBtn.disabled = true;
