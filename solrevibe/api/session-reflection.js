@@ -72,6 +72,9 @@ module.exports = async function handler(req, res) {
     const sheetsUrl = process.env.TLC_GOOGLE_SHEETS_WEBAPP_URL || '';
     const webhookUrl = process.env.TLC_WEBHOOK_URL || '';
 
+    let forwardedToSheets = false;
+    let forwardedToWebhook = false;
+
     const tasks = [];
     if (sheetsUrl) {
       tasks.push(
@@ -80,7 +83,11 @@ module.exports = async function handler(req, res) {
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload),
           redirect: 'follow',
-        })
+        }).then(async (r) => {
+          const ct = String((r.headers && r.headers.get('content-type')) || '');
+          const text = await r.text().catch(() => '');
+          forwardedToSheets = r.ok && ct.includes('application/json') && !text.includes('"ok":false');
+        }).catch(() => {})
       );
     }
     if (webhookUrl) {
@@ -89,7 +96,9 @@ module.exports = async function handler(req, res) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(payload),
-        })
+        }).then((r) => {
+          forwardedToWebhook = Boolean(r && r.ok);
+        }).catch(() => {})
       );
     }
 
@@ -99,8 +108,8 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({
       ok: true,
-      forwardedToSheets: Boolean(sheetsUrl),
-      forwardedToWebhook: Boolean(webhookUrl),
+      forwardedToSheets,
+      forwardedToWebhook,
     });
   } catch (err) {
     return res.status(err.statusCode || 500).json({
