@@ -1366,6 +1366,290 @@ footer b{font-style:normal;color:var(--text)}
 .fac-item-tag{font-size:.72rem;font-weight:700;color:#607764;white-space:nowrap}
 .fac-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 
+/* ===== Two-Stage Shadow Index Assessment Overlay (Dark Charcoal / Navy + Soft Gold) ===== */
+.m-box.shadow-mode > .m-info .m-checkin-trigger { display: none !important; }
+.close{z-index:10}
+.shadow-overlay{
+  position:absolute;
+  inset:0;
+  z-index:7;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px 18px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  background:radial-gradient(circle at 50% 42%,rgba(22,27,36,.84) 0%,rgba(12,15,21,.93) 100%);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .32s ease,visibility .32s ease;
+}
+.shadow-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+.shadow-overlay[hidden]{display:none !important}
+.si-card{
+  position:relative;
+  width:min(620px,100%);
+  margin:auto;
+  padding:24px 26px 22px;
+  border-radius:20px;
+  background:radial-gradient(circle at 50% 18%,rgba(37,43,54,.96) 0%,rgba(19,23,30,.99) 75%);
+  border:1px solid rgba(212,175,112,.34);
+  box-shadow:0 28px 72px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,244,218,.1);
+  color:#F7F2E8;
+  text-align:center;
+  overflow:hidden;
+}
+.si-rings{
+  position:absolute;
+  inset:0;
+  margin:auto;
+  width:420px;
+  height:420px;
+  pointer-events:none;
+  opacity:.18;
+}
+.si-stage{position:relative;z-index:2;display:flex;flex-direction:column;gap:12px}
+.si-stage[hidden]{display:none !important}
+.si-reminder{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  align-self:center;
+  padding:6px 14px;
+  border-radius:999px;
+  background:rgba(212,175,112,.14);
+  border:1px solid rgba(212,175,112,.32);
+  color:#E9CFA0;
+  font-size:.74rem;
+  font-weight:600;
+  line-height:1.35;
+}
+.si-reminder svg{width:15px;height:15px;flex:none;color:#D4AF70}
+.si-kicker{
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#C9A467;
+}
+.si-title{
+  font-size:clamp(1.28rem,2.2vw,1.62rem);
+  font-weight:700;
+  line-height:1.18;
+  color:#FAF5EC;
+  letter-spacing:-.01em;
+}
+.si-copy{
+  font-size:.87rem;
+  line-height:1.5;
+  color:#C8C0B2;
+  max-width:520px;
+  margin:0 auto;
+}
+.si-field-block{text-align:left;margin-top:2px}
+.si-input{
+  width:100%;
+  padding:13px 15px;
+  border-radius:12px;
+  border:1px solid rgba(212,175,112,.34);
+  background:rgba(11,14,20,.72);
+  color:#FAF5EC;
+  font:inherit;
+  font-size:.92rem;
+  outline:none;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.si-input::placeholder{color:#8E887D}
+.si-input:focus{
+  border-color:#E1BC7B;
+  background:rgba(14,18,26,.92);
+  box-shadow:0 0 0 3px rgba(212,175,112,.2);
+}
+.si-q-label{
+  font-size:.95rem;
+  font-weight:700;
+  color:#FAF5EC;
+  margin-top:4px;
+}
+.si-scale-wrap{position:relative;padding:6px 0 2px}
+.si-scale-track{
+  position:absolute;
+  left:12%;
+  right:12%;
+  top:34px;
+  height:2px;
+  background:linear-gradient(90deg,rgba(126,145,128,.55) 0%,rgba(212,175,112,.75) 55%,rgba(217,114,82,.85) 100%);
+  pointer-events:none;
+  z-index:1;
+}
+.si-scale-row{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.si-rate-btn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-height:74px;
+  padding:10px 6px;
+  border-radius:14px;
+  border:1px solid rgba(212,175,112,.26);
+  background:rgba(24,29,39,.94);
+  color:#EAE3D5;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .16s ease,border-color .16s ease,background .16s ease,box-shadow .16s ease;
+}
+.si-rate-btn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(225,188,123,.68);
+  background:rgba(36,42,56,.96);
+}
+.si-rate-btn:active{transform:scale(.97)}
+.si-rate-num{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:1.05rem;
+  font-weight:800;
+  border:1.5px solid rgba(212,175,112,.45);
+  background:rgba(15,19,26,.85);
+  color:#F3DEC0;
+  transition:all .18s ease;
+}
+.si-rate-lbl{
+  font-size:.7rem;
+  font-weight:600;
+  color:#ABA292;
+  line-height:1.2;
+}
+.si-rate-btn[aria-checked="true"]{
+  border-color:#E4BF7C;
+  background:linear-gradient(180deg,rgba(212,175,112,.26) 0%,rgba(194,155,104,.12) 100%);
+  box-shadow:0 0 0 2px rgba(212,175,112,.38),0 10px 24px rgba(0,0,0,.35);
+}
+.si-rate-btn[aria-checked="true"] .si-rate-num{
+  background:linear-gradient(135deg,#D4AF70 0%,#B48744 100%);
+  border-color:#FFF1D6;
+  color:#171410;
+  box-shadow:0 0 16px rgba(212,175,112,.55);
+}
+.si-rate-btn[data-val="4"][aria-checked="true"]{
+  border-color:#E08A5E;
+  box-shadow:0 0 0 2px rgba(224,138,94,.42),0 10px 24px rgba(0,0,0,.35);
+}
+.si-rate-btn[data-val="4"][aria-checked="true"] .si-rate-num{
+  background:linear-gradient(135deg,#E08A5E 0%,#C2593B 100%);
+  color:#FFFFFF;
+}
+.si-rate-btn[aria-checked="true"] .si-rate-lbl{color:#FBF6EC}
+.si-cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:100%;
+  min-height:50px;
+  padding:13px 26px;
+  border:0;
+  border-radius:999px;
+  background:linear-gradient(90deg,#7E9180 0%,#C89E5E 100%);
+  color:#FFFFFF;
+  font-size:.96rem;
+  font-weight:700;
+  letter-spacing:.02em;
+  cursor:pointer;
+  box-shadow:0 12px 28px rgba(0,0,0,.36);
+  transition:filter .18s ease,transform .18s ease,opacity .18s ease;
+}
+.si-cta:hover:not(:disabled){filter:brightness(1.07);transform:translateY(-1px)}
+.si-cta:disabled{opacity:.42;cursor:not-allowed;box-shadow:none;transform:none}
+.si-issue-chip{
+  padding:11px 14px;
+  border-radius:12px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(212,175,112,.26);
+  color:#EFE7D8;
+  font-size:.86rem;
+  line-height:1.45;
+  text-align:left;
+}
+.si-issue-chip span{
+  display:block;
+  font-size:.66rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:#C9A467;
+  margin-bottom:2px;
+}
+.si-compare-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin:4px 0;
+}
+.si-stat-box{
+  padding:14px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(212,175,112,.26);
+}
+.si-stat-box.after{
+  border-color:rgba(126,145,128,.55);
+  background:rgba(126,145,128,.12);
+}
+.si-stat-box h4{
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:#BFB7A8;
+  margin-bottom:4px;
+}
+.si-stat-val{
+  font-size:1.7rem;
+  font-weight:800;
+  line-height:1.1;
+  color:#FAF5EC;
+}
+.si-stat-sub{font-size:.74rem;color:#C9A467;margin-top:3px;font-weight:600}
+.si-outcome-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  align-self:center;
+  padding:6px 15px;
+  border-radius:999px;
+  background:rgba(212,175,112,.16);
+  border:1px solid rgba(212,175,112,.36);
+  color:#F2DDB4;
+  font-size:.81rem;
+  font-weight:700;
+}
+.si-outcome-pill.improved{
+  background:rgba(126,145,128,.24);
+  border-color:rgba(155,180,158,.5);
+  color:#DDEEE0;
+}
+.si-support{
+  font-size:.88rem;
+  font-style:italic;
+  color:#D4CBB9;
+}
+
 .exit-hint{position:absolute;top:64px;right:12px;z-index:4;width:max-content;max-width:min(300px,calc(100% - 24px));padding:13px 16px;border-radius:14px;background:#FBF9F5;color:#2B2926;border:1px solid #E6E1D7;box-shadow:0 12px 32px rgba(40,32,24,.28);font-size:.9rem;line-height:1.45;pointer-events:none;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .3s ease,transform .3s ease,visibility .3s ease}
 .exit-hint.show{opacity:1;visibility:visible;transform:none;animation:hintNudge 1.8s ease-in-out .4s infinite}
 .exit-hint::before{content:"";position:absolute;top:-8px;right:13px;width:14px;height:14px;background:#FBF9F5;border-left:1px solid #E6E1D7;border-top:1px solid #E6E1D7;transform:rotate(45deg)}
@@ -1501,6 +1785,30 @@ footer b{font-style:normal;color:var(--text)}
   .m-info p{font-size:.82rem !important;margin-top:0 !important}
   .close{top:10px !important;right:10px !important;width:46px !important;height:46px !important}
   .exit-hint{top:62px !important;right:10px !important}
+}
+@media (max-width:760px),(max-height:680px){
+  html .modal .m-box.shadow-mode,
+  html.is-tablet .modal .m-box.shadow-mode{
+    width:min(640px,calc(100vw - 16px)) !important;
+    max-height:calc(100vh - 16px) !important;
+    max-height:calc(100dvh - 16px) !important;
+    display:flex !important;
+    flex-direction:column !important;
+  }
+  .m-box.shadow-mode > .player{
+    aspect-ratio:auto !important;
+    min-height:min(540px,calc(100dvh - 96px)) !important;
+    max-height:calc(100dvh - 82px) !important;
+  }
+  .shadow-overlay{align-items:flex-start;padding:54px 12px 16px}
+  .si-card{padding:20px 16px 18px;border-radius:16px}
+  .si-scale-row{gap:7px}
+  .si-rate-btn{min-height:66px;padding:8px 4px}
+}
+@media (max-width:400px){
+  .si-scale-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .si-scale-track{display:none}
+  .si-compare-grid{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 
@@ -2463,6 +2771,96 @@ html.is-tablet .modal .m-box.survey-mode {
           </div>
         </div>
       </div>
+      <div class="shadow-overlay" id="shadowOverlay" aria-hidden="true">
+        <div class="si-card" role="region" aria-label="Shadow Index Assessment">
+          <svg class="si-rings" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+            <circle cx="200" cy="200" r="46" stroke="#D4AF70" stroke-width="1.4"/>
+            <circle cx="200" cy="200" r="82" stroke="#D4AF70" stroke-width="1.2"/>
+            <circle cx="200" cy="200" r="120" stroke="#7E9180" stroke-width="1.1"/>
+            <circle cx="200" cy="200" r="160" stroke="#D4AF70" stroke-width="1"/>
+          </svg>
+
+          <!-- Stage 1a: Pre-Exercise Assessment -->
+          <div class="si-stage" id="siStagePreForm">
+            <div class="si-reminder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+              Remain seated with your headphones on and your eye mask resting on your forehead.
+            </div>
+            <div class="si-kicker">Shadow Index · Before Your Reset</div>
+            <h3 class="si-title">Let&rsquo;s identify what&rsquo;s keeping you stuck.</h3>
+            <p class="si-copy">Think of one specific task, assignment, decision, or conversation you&rsquo;ve been putting off or struggling to move forward with. Focus on that one thing for this exercise.</p>
+            <div class="si-field-block">
+              <label for="siIssueInput" class="sr-only">What is one thing you currently feel stuck on?</label>
+              <input type="text" class="si-input" id="siIssueInput" maxlength="240" autocomplete="off" placeholder="What is one thing you currently feel stuck on?">
+            </div>
+            <div class="si-q-label" id="siPreScaleLbl">How stuck do you feel right now?</div>
+            <div class="si-scale-wrap">
+              <div class="si-scale-track" aria-hidden="true"></div>
+              <div class="si-scale-row" id="siScalePre" role="radiogroup" aria-labelledby="siPreScaleLbl">
+                <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="pre" data-val="1"><span class="si-rate-num">1</span><span class="si-rate-lbl">Slightly Stuck</span></button>
+                <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="pre" data-val="2"><span class="si-rate-num">2</span><span class="si-rate-lbl">Moderately</span></button>
+                <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="pre" data-val="3"><span class="si-rate-num">3</span><span class="si-rate-lbl">Very Stuck</span></button>
+                <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="pre" data-val="4"><span class="si-rate-num">4</span><span class="si-rate-lbl">Extremely Stuck</span></button>
+              </div>
+            </div>
+            <button type="button" class="si-cta" id="siLockPreBtn" disabled>Lock In My Rating</button>
+          </div>
+
+          <!-- Stage 1b: Locked Confirmation + Resume -->
+          <div class="si-stage" id="siStagePreLocked" hidden>
+            <div class="si-kicker">Shadow Index · Locked In</div>
+            <h3 class="si-title">Your starting point is locked in.</h3>
+            <div class="si-issue-chip"><span>Your Focus &amp; Starting Rating</span><div id="siLockedSummary"></div></div>
+            <p class="si-copy">Keep this one issue in mind throughout your reset. When you&rsquo;re ready, pull your eye mask down over your eyes and continue your experience.</p>
+            <button type="button" class="si-cta" id="siContinueBtn">Continue &amp; Play Video</button>
+          </div>
+
+          <!-- Stage 2a: Post-Session Assessment -->
+          <div class="si-stage" id="siStagePostForm" hidden>
+            <div class="si-kicker">Shadow Index · After Your Reset</div>
+            <h3 class="si-title">Let&rsquo;s see what has shifted.</h3>
+            <p class="si-copy">Lift your eye mask back onto your forehead and take a moment to think about the same issue you identified before your reset.</p>
+            <div class="si-issue-chip" id="siPostRecalledBox"><span>Issue Identified Before Reset</span><div id="siPostIssueText"></div></div>
+            <div class="si-field-block" id="siPostFallbackBox" hidden>
+              <label for="siPostIssueInput" class="sr-only">What is the issue you reflected on during this reset?</label>
+              <input type="text" class="si-input" id="siPostIssueInput" maxlength="240" autocomplete="off" placeholder="Optional: what issue did you focus on during this reset?">
+            </div>
+            <div class="si-q-label" id="siPostScaleLbl">How stuck do you feel about this now?</div>
+            <div class="si-scale-wrap">
+              <div class="si-scale-track" aria-hidden="true"></div>
+              <div class="si-scale-row" id="siScalePost" role="radiogroup" aria-labelledby="siPostScaleLbl">
+                <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="post" data-val="1"><span class="si-rate-num">1</span><span class="si-rate-lbl">Slightly Stuck</span></button>
+                <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="post" data-val="2"><span class="si-rate-num">2</span><span class="si-rate-lbl">Moderately</span></button>
+                <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="post" data-val="3"><span class="si-rate-num">3</span><span class="si-rate-lbl">Very Stuck</span></button>
+                <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="post" data-val="4"><span class="si-rate-num">4</span><span class="si-rate-lbl">Extremely Stuck</span></button>
+              </div>
+            </div>
+            <button type="button" class="si-cta" id="siLockPostBtn" disabled>Lock In My Final Rating</button>
+          </div>
+
+          <!-- Stage 2b: Comparison Summary & Finish -->
+          <div class="si-stage" id="siStagePostResult" hidden>
+            <div class="si-kicker">Shadow Index · Reflection Complete</div>
+            <h3 class="si-title">Session Assessment Complete</h3>
+            <div class="si-issue-chip" id="siResultIssueBox"><span>Your Focus</span><div id="siResultIssueText"></div></div>
+            <div class="si-compare-grid">
+              <div class="si-stat-box">
+                <h4>Before Your Reset</h4>
+                <div class="si-stat-val" id="siBeforeVal">&mdash;</div>
+                <div class="si-stat-sub" id="siBeforeLbl"></div>
+              </div>
+              <div class="si-stat-box after">
+                <h4>After Your Reset</h4>
+                <div class="si-stat-val" id="siAfterVal">&mdash;</div>
+                <div class="si-stat-sub" id="siAfterLbl"></div>
+              </div>
+            </div>
+            <div class="si-outcome-pill" id="siOutcomePill"></div>
+            <p class="si-support">Every reset is an opportunity to notice what has changed.</p>
+            <button type="button" class="si-cta" id="siFinishBtn">Finish My Session</button>
+          </div>
+        </div>
+      </div>
       <div class="tlc-invite-overlay" id="tlcInviteOverlay" aria-hidden="true">
         <div class="tlc-invite-card" role="region" aria-label="Post-session reflection">
           <div class="tlc-invite-eyebrow">Session Complete</div>
@@ -2657,6 +3055,20 @@ html.is-tablet .modal .m-box.survey-mode {
     apiEndpoint: "../api/session-reflection"
   };
 
+  // ---- Two-Stage Shadow Index Assessment Cue Points (seconds; postCueSeconds: null triggers at video completion) ----
+  const SHADOW_INDEX_CONFIG = {
+    cuePointsByVimeoId: {
+      "1249260783": { preCueSeconds: 120, postCueSeconds: null } // Rigging Future Echoes (adjustable pre/post cues)
+    },
+    scaleLabels: {
+      1: "Slightly Stuck",
+      2: "Moderately Stuck",
+      3: "Very Stuck",
+      4: "Extremely Stuck"
+    },
+    apiEndpoint: "../api/session-reflection"
+  };
+
   const CATS = ["All", "TAGs", "Teen & Emerging Mind", "Couples & Relational Reset", "Transitions & Vitality", "Sleep & Recovery"];
   const VIEWS = [
     {k:"home", label:"Home", ic:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'},
@@ -2793,6 +3205,7 @@ html.is-tablet .modal .m-box.survey-mode {
       days: 1,
       views: 0,
       featured: false,
+      endSurvey: "shadow-index", // Uses interactive two-stage Shadow Index assessment cue points
       tags: ["tag", "tags", "teen", "rigging future echoes", "law of action", "theo wilson", "jason mcbride"],
       thumb: "../assets/Thumbnail%20with%20no%20words.jpg",
       description: "In Your Favor — featuring Theo Wilson & Jason McBride (Law of Action Series)."
@@ -3858,6 +4271,297 @@ html.is-tablet .modal .m-box.survey-mode {
   $("tlcDoneCollectionsBtn").addEventListener("click", () => { closeModal(); state.view = "collections"; Object.assign(state, { cat:"All", collection:"All", series:"All" }); update(); });
   mCheckinTrigger.addEventListener("click", openTlcSurvey);
 
+  // =========================================================================
+  // Two-Stage Shadow Index Assessment (Cue-Triggered Modal Overlay)
+  // =========================================================================
+  const shadowOverlay = $("shadowOverlay"),
+        siStagePreForm = $("siStagePreForm"), siStagePreLocked = $("siStagePreLocked"),
+        siStagePostForm = $("siStagePostForm"), siStagePostResult = $("siStagePostResult"),
+        siIssueInput = $("siIssueInput"), siScalePre = $("siScalePre"), siLockPreBtn = $("siLockPreBtn"),
+        siLockedSummary = $("siLockedSummary"), siContinueBtn = $("siContinueBtn"),
+        siPostRecalledBox = $("siPostRecalledBox"), siPostIssueText = $("siPostIssueText"),
+        siPostFallbackBox = $("siPostFallbackBox"), siPostIssueInput = $("siPostIssueInput"),
+        siScalePost = $("siScalePost"), siLockPostBtn = $("siLockPostBtn"),
+        siResultIssueBox = $("siResultIssueBox"), siResultIssueText = $("siResultIssueText"),
+        siBeforeVal = $("siBeforeVal"), siBeforeLbl = $("siBeforeLbl"),
+        siAfterVal = $("siAfterVal"), siAfterLbl = $("siAfterLbl"),
+        siOutcomePill = $("siOutcomePill"), siFinishBtn = $("siFinishBtn");
+
+  const shadowState = {
+    cues: null,
+    stage: null,
+    preTriggered: false,
+    postTriggered: false,
+    issue: "",
+    initialRating: null,
+    finalRating: null,
+    blockingPlayback: false
+  };
+
+  function getShadowCuesForVideo(v){
+    if (!v) return null;
+    if (v.shadowIndex) return v.shadowIndex;
+    if (v.vimeoId && SHADOW_INDEX_CONFIG.cuePointsByVimeoId[v.vimeoId]) {
+      return SHADOW_INDEX_CONFIG.cuePointsByVimeoId[v.vimeoId];
+    }
+    return null;
+  }
+
+  function persistShadowSession(){
+    if (!activeVideo || !activeVideo.vimeoId) return;
+    try {
+      sessionStorage.setItem(`solrevibe_shadow_v1_${activeVideo.vimeoId}`, JSON.stringify({
+        issue: shadowState.issue,
+        initialRating: shadowState.initialRating,
+        finalRating: shadowState.finalRating,
+        updatedAt: new Date().toISOString()
+      }));
+    } catch (_) {}
+  }
+
+  function renderShadowScale(container, selectedVal){
+    container.querySelectorAll(".si-rate-btn").forEach(btn => {
+      const on = selectedVal !== null && +btn.dataset.val === selectedVal;
+      btn.setAttribute("aria-checked", on ? "true" : "false");
+    });
+  }
+
+  function updatePreLockButton(){
+    const ready = shadowState.issue.trim().length > 0 && shadowState.initialRating !== null;
+    siLockPreBtn.disabled = !ready;
+  }
+
+  function showShadowStage(stage){
+    shadowState.stage = stage;
+    shadowState.blockingPlayback = true;
+    mBox.classList.add("shadow-mode");
+    hideResume();
+    hideSeqOverlay();
+    hideFacOverlay();
+    hideExitHint();
+    [siStagePreForm, siStagePreLocked, siStagePostForm, siStagePostResult].forEach(el => { el.hidden = true; });
+    if (stage === "pre-form") siStagePreForm.hidden = false;
+    else if (stage === "pre-locked") siStagePreLocked.hidden = false;
+    else if (stage === "post-form") siStagePostForm.hidden = false;
+    else if (stage === "post-result") siStagePostResult.hidden = false;
+    shadowOverlay.hidden = false;
+    shadowOverlay.setAttribute("aria-hidden", "false");
+    void shadowOverlay.offsetWidth;
+    shadowOverlay.classList.add("show");
+    shadowOverlay.scrollTop = 0;
+  }
+
+  function hideShadowOverlay(){
+    shadowState.blockingPlayback = false;
+    shadowState.stage = null;
+    mBox.classList.remove("shadow-mode");
+    shadowOverlay.classList.remove("show");
+    shadowOverlay.setAttribute("aria-hidden", "true");
+    shadowOverlay.hidden = true;
+  }
+
+  function resetShadowState(v, preserveSavedData){
+    hideShadowOverlay();
+    shadowState.cues = getShadowCuesForVideo(v);
+    shadowState.preTriggered = false;
+    shadowState.postTriggered = false;
+    if (!preserveSavedData) {
+      shadowState.issue = "";
+      shadowState.initialRating = null;
+      shadowState.finalRating = null;
+      siIssueInput.value = "";
+      siPostIssueInput.value = "";
+      renderShadowScale(siScalePre, null);
+      renderShadowScale(siScalePost, null);
+      updatePreLockButton();
+      siLockPostBtn.disabled = true;
+    }
+  }
+
+  function openShadowPreAssessment(cuePoint){
+    if (shadowState.preTriggered) return;
+    shadowState.preTriggered = true;
+    vimeoCmd("pause");
+    if (typeof cuePoint === "number") {
+      vimeoCmd("setCurrentTime", cuePoint);
+      pauser.last = cuePoint;
+      pauser.holdAt = cuePoint;
+    }
+    siIssueInput.value = shadowState.issue;
+    renderShadowScale(siScalePre, shadowState.initialRating);
+    updatePreLockButton();
+    showShadowStage("pre-form");
+    setTimeout(() => siIssueInput.focus({ preventScroll: true }), 140);
+  }
+
+  function openShadowPostAssessment(cuePoint){
+    if (shadowState.postTriggered) return;
+    shadowState.postTriggered = true;
+    vimeoCmd("pause");
+    if (typeof cuePoint === "number") {
+      vimeoCmd("setCurrentTime", cuePoint);
+      pauser.last = cuePoint;
+      pauser.holdAt = cuePoint;
+    }
+    // Always leave post rating unselected so user independently assesses shift
+    shadowState.finalRating = null;
+    renderShadowScale(siScalePost, null);
+    siLockPostBtn.disabled = true;
+
+    const cleanIssue = shadowState.issue.trim();
+    if (cleanIssue) {
+      siPostRecalledBox.hidden = false;
+      siPostIssueText.textContent = cleanIssue;
+      siPostFallbackBox.hidden = true;
+    } else {
+      siPostRecalledBox.hidden = true;
+      siPostFallbackBox.hidden = false;
+    }
+    showShadowStage("post-form");
+    const firstPostBtn = siScalePost.querySelector(".si-rate-btn");
+    if (firstPostBtn) setTimeout(() => firstPostBtn.focus({ preventScroll: true }), 140);
+  }
+
+  siIssueInput.addEventListener("input", () => {
+    shadowState.issue = siIssueInput.value;
+    updatePreLockButton();
+  });
+
+  function bindShadowScale(container, isPre){
+    container.addEventListener("click", e => {
+      const btn = e.target.closest(".si-rate-btn");
+      if (!btn) return;
+      const val = +btn.dataset.val;
+      if (isPre) {
+        shadowState.initialRating = val;
+        renderShadowScale(siScalePre, val);
+        updatePreLockButton();
+      } else {
+        shadowState.finalRating = val;
+        renderShadowScale(siScalePost, val);
+        siLockPostBtn.disabled = false;
+      }
+    });
+    container.addEventListener("keydown", e => {
+      const btn = e.target.closest(".si-rate-btn");
+      if (!btn) return;
+      let v = +btn.dataset.val;
+      if (e.key === "ArrowRight" || e.key === "ArrowUp") v = Math.min(4, v + 1);
+      else if (e.key === "ArrowLeft" || e.key === "ArrowDown") v = Math.max(1, v - 1);
+      else return;
+      e.preventDefault();
+      const next = container.querySelector(`[data-val="${v}"]`);
+      if (next) {
+        next.focus();
+        next.click();
+      }
+    });
+  }
+  bindShadowScale(siScalePre, true);
+  bindShadowScale(siScalePost, false);
+
+  siLockPreBtn.addEventListener("click", () => {
+    shadowState.issue = siIssueInput.value.trim();
+    if (!shadowState.issue || shadowState.initialRating === null) return;
+    persistShadowSession();
+    const lbl = SHADOW_INDEX_CONFIG.scaleLabels[shadowState.initialRating] || "";
+    siLockedSummary.textContent = `“${shadowState.issue}” · Rated ${shadowState.initialRating}/4 (${lbl})`;
+    showShadowStage("pre-locked");
+    siContinueBtn.focus({ preventScroll: true });
+  });
+
+  siContinueBtn.addEventListener("click", () => {
+    hideShadowOverlay();
+    vimeoCmd("play");
+    $("close").focus({ preventScroll: true });
+  });
+
+  siLockPostBtn.addEventListener("click", () => {
+    if (shadowState.finalRating === null) return;
+    if (!shadowState.issue.trim() && siPostIssueInput.value.trim()) {
+      shadowState.issue = siPostIssueInput.value.trim();
+    }
+    persistShadowSession();
+
+    const pre = shadowState.initialRating;
+    const post = shadowState.finalRating;
+    const postLbl = SHADOW_INDEX_CONFIG.scaleLabels[post] || "";
+    const preLbl = pre !== null ? (SHADOW_INDEX_CONFIG.scaleLabels[pre] || "") : "Not recorded";
+
+    if (shadowState.issue.trim()) {
+      siResultIssueBox.hidden = false;
+      siResultIssueText.textContent = shadowState.issue.trim();
+    } else {
+      siResultIssueBox.hidden = true;
+    }
+
+    siBeforeVal.textContent = pre !== null ? `${pre} / 4` : "—";
+    siBeforeLbl.textContent = preLbl;
+    siAfterVal.textContent = `${post} / 4`;
+    siAfterLbl.textContent = postLbl;
+
+    siOutcomePill.classList.remove("improved");
+    if (pre === null) {
+      siOutcomePill.textContent = `Final Rating: ${post} / 4 (${postLbl})`;
+    } else if (post < pre) {
+      const diff = pre - post;
+      siOutcomePill.classList.add("improved");
+      siOutcomePill.textContent = `Decreased by ${diff} ${diff === 1 ? "level" : "levels"} (${pre} → ${post})`;
+    } else if (post === pre) {
+      siOutcomePill.textContent = `Stayed steady at ${post} / 4`;
+    } else {
+      siOutcomePill.textContent = `Before ${pre} / 4 · After ${post} / 4`;
+    }
+
+    // Store & dispatch lightweight session data cleanly if available (without PII)
+    try {
+      const list = JSON.parse(localStorage.getItem("solrevibe_shadow_assessments_v1") || "[]");
+      list.unshift({
+        submittedAt: new Date().toISOString(),
+        vimeoId: activeVideo ? activeVideo.vimeoId : "1249260783",
+        issue: shadowState.issue.trim(),
+        beforeRating: pre,
+        afterRating: post
+      });
+      localStorage.setItem("solrevibe_shadow_assessments_v1", JSON.stringify(list.slice(0, 30)));
+    } catch (_) {}
+
+    if (SHADOW_INDEX_CONFIG.apiEndpoint && pre !== null) {
+      const bodyPayload = {
+        formType: "shadow_index_assessment",
+        submittedAt: new Date().toISOString(),
+        videoId: activeVideo ? activeVideo.id : 3,
+        vimeoId: activeVideo ? activeVideo.vimeoId : "1249260783",
+        videoTitle: activeVideo ? activeVideo.title : "Rigging Future Echoes",
+        stationLocation: readSavedStationLocation(),
+        openingNumber: pre,
+        endingNumber: post,
+        scaleMax: 4,
+        pointDrop: pre - post,
+        distance: Math.abs(pre - post),
+        encouragerTitle: siOutcomePill.textContent,
+        experienceDescription: shadowState.issue.trim(),
+        loopAppearance: shadowState.issue.trim(),
+        bodyLocation: ""
+      };
+      Promise.resolve(
+        window.SOLFormShield ? window.SOLFormShield.getSecurityPayload(tlcForm, "shadow_index") : null
+      ).then(sec => {
+        if (sec) bodyPayload._security = sec;
+        return fetch(SHADOW_INDEX_CONFIG.apiEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(bodyPayload)
+        });
+      }).catch(() => {});
+    }
+
+    showShadowStage("post-result");
+    siFinishBtn.focus({ preventScroll: true });
+  });
+
+  siFinishBtn.addEventListener("click", closeModal);
+
   // ---- Auto-pause points, Guided Intro -> Thought Loop Transition & Facilitator Controls ----
   const VIMEO_ORIGIN = "https://player.vimeo.com";
   const pauser = { active: false, points: [], fired: {}, last: 0, holdAt: null, exitHint: false, nextVideoId: null, endSurvey: null, endHandled: false, atEnd: false, sdkReady: false };
@@ -3980,7 +4684,7 @@ html.is-tablet .modal .m-box.survey-mode {
     $("m-title").textContent = nextVideo.title;
     $("m-desc").textContent = `${nextVideo.category} · ${nextVideo.duration} · ${fmtViews(nextVideo.views)}`;
     mCheckinTrigger.classList.toggle("visible", nextVideo.endSurvey === "thought-loop");
-    mFacilitatorBtn.classList.toggle("visible", !!nextVideo.nextVideoId || nextVideo.endSurvey === "thought-loop");
+    mFacilitatorBtn.classList.toggle("visible", !!nextVideo.nextVideoId || nextVideo.endSurvey === "thought-loop" || nextVideo.endSurvey === "shadow-index");
 
     // Re-arm pauser WITHOUT tearing down SDK when using seamless loadVideo on the live player
     if (!fromUserGesture && vimeoSdk && pauser.sdkReady && typeof vimeoSdk.loadVideo === "function") {
@@ -3993,6 +4697,7 @@ html.is-tablet .modal .m-box.survey-mode {
       pauser.last = 0;
       pauser.endHandled = false;
       pauser.atEnd = false;
+      resetShadowState(nextVideo, false);
       vimeoSdk.loadVideo(Number(nextVideo.vimeoId)).then(() => vimeoSdk.play()).catch(() => {
         // Autoplay restricted across videos on this device: present crisp single CTA
         showSeqTransition(nextVideo, true);
@@ -4105,6 +4810,7 @@ html.is-tablet .modal .m-box.survey-mode {
     hideSeqOverlay();
     hideFacOverlay();
     hideExitHint();
+    resetShadowState(v, false);
   }
 
   function handleVideoEnd(){
@@ -4120,6 +4826,14 @@ html.is-tablet .modal .m-box.survey-mode {
         return;
       }
     }
+    if (pauser.endSurvey === "shadow-index" || shadowState.cues) {
+      if (!shadowState.postTriggered) {
+        openShadowPostAssessment();
+      } else {
+        showShadowStage(shadowState.finalRating !== null ? "post-result" : "post-form");
+      }
+      return;
+    }
     if (pauser.endSurvey === "thought-loop") {
       openTlcInvite();
     } else {
@@ -4130,7 +4844,13 @@ html.is-tablet .modal .m-box.survey-mode {
 
   function processVimeoEvent(ev, data){
     if (!pauser.active) return;
-    if (ev === "play") { hideResume(); hideSeqOverlay(); hideTlcInvite(); return; }
+    if (ev === "play") {
+      if (shadowState.blockingPlayback) {
+        vimeoCmd("pause");
+        return;
+      }
+      hideResume(); hideSeqOverlay(); hideTlcInvite(); return;
+    }
     if (ev === "ended") { handleVideoEnd(); return; }
     const t = data && typeof data.seconds === "number" ? data.seconds : null;
     if (t === null) return;
@@ -4148,11 +4868,36 @@ html.is-tablet .modal .m-box.survey-mode {
       }
     }
     pauser.points.forEach(p => { if (t < p - 0.5) pauser.fired[p] = false; });
+    if (shadowState.cues) {
+      if (typeof shadowState.cues.preCueSeconds === "number" && t < shadowState.cues.preCueSeconds - 0.5 && shadowState.initialRating === null) {
+        shadowState.preTriggered = false;
+      }
+      if (typeof shadowState.cues.postCueSeconds === "number" && t < shadowState.cues.postCueSeconds - 0.5 && shadowState.finalRating === null) {
+        shadowState.postTriggered = false;
+      }
+    }
     if (ev === "seeked") {
       if (pauser.holdAt === null || Math.abs(t - pauser.holdAt) > 0.5) hideResume();
       pauser.last = t; return;
     }
     if (ev !== "timeupdate") return;
+    if (shadowState.blockingPlayback) return;
+
+    if (shadowState.cues) {
+      const preCue = shadowState.cues.preCueSeconds;
+      const postCue = shadowState.cues.postCueSeconds;
+      if (typeof preCue === "number" && !shadowState.preTriggered && pauser.last < preCue && t >= preCue && t - pauser.last < 3) {
+        pauser.last = preCue;
+        openShadowPreAssessment(preCue);
+        return;
+      }
+      if (typeof postCue === "number" && !shadowState.postTriggered && pauser.last < postCue && t >= postCue && t - pauser.last < 3) {
+        pauser.last = postCue;
+        openShadowPostAssessment(postCue);
+        return;
+      }
+    }
+
     const hit = pauser.points.find(p => !pauser.fired[p] && pauser.last < p && t >= p && t - pauser.last < 3);
     pauser.last = t;
     if (hit !== undefined) {
@@ -4299,7 +5044,7 @@ html.is-tablet .modal .m-box.survey-mode {
     $("m-title").textContent = v.title;
     $("m-desc").textContent = `${v.series || v.category} · ${v.duration} · ${fmtViews(v.views)}`;
     mCheckinTrigger.classList.toggle("visible", v.endSurvey === "thought-loop");
-    mFacilitatorBtn.classList.toggle("visible", !!v.nextVideoId || v.endSurvey === "thought-loop");
+    mFacilitatorBtn.classList.toggle("visible", !!v.nextVideoId || v.endSurvey === "thought-loop" || v.endSurvey === "shadow-index");
     armPauses(v);
     player.src = `https://player.vimeo.com/video/${v.vimeoId}?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1&pip=0&api=1`;
     bindVimeoSdk();
@@ -4470,7 +5215,7 @@ html.is-tablet .modal .m-box.survey-mode {
 
   modal.addEventListener("click", e => {
     if (e.target === modal) {
-      if ((mBox.classList.contains("survey-mode") || mBox.classList.contains("invite-mode") || seqOverlay.classList.contains("show")) && !tlcState.submitted) return;
+      if ((mBox.classList.contains("survey-mode") || mBox.classList.contains("invite-mode") || mBox.classList.contains("shadow-mode") || seqOverlay.classList.contains("show")) && !tlcState.submitted) return;
       closeModal();
     }
   });
