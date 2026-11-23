@@ -59,6 +59,7 @@ module.exports = async function handler(req, res) {
       stationLocation: String(body.stationLocation || '').slice(0, 200),
       openingNumber,
       endingNumber,
+      scaleMax: Number(body.scaleMax) === 4 ? 4 : 10,
       pointDrop: openingNumber - endingNumber,
       distance: Math.abs(openingNumber - endingNumber),
       encouragerTitle: String(body.encouragerTitle || '').slice(0, 240),
