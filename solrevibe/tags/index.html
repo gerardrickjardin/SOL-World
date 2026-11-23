@@ -261,22 +261,23 @@ a{color:inherit}
 .avatar:hover{border-color:var(--gold);background:#F3ECE0}
 .avatar svg{width:18px;height:18px}
 
-/* ===== Featured Editorial Wave Banner ===== */
+/* ===== Featured Editorial Wave Banner (Home Intro Hero) ===== */
 .featured-hero{
   position:relative;
-  border-radius:20px;
+  border-radius:22px;
   border:1px solid var(--line);
   background:#FBF4E5;
   overflow:hidden;
-  min-height:224px;
-  display:flex;
+  min-height:330px;
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,1.05fr);
   align-items:center;
-  justify-content:space-between;
-  gap:24px;
-  padding:26px 38px;
-  margin-bottom:18px;
-  box-shadow:0 10px 30px rgba(68,54,38,.06);
+  gap:32px;
+  padding:34px 40px;
+  margin-bottom:22px;
+  box-shadow:0 12px 34px rgba(68,54,38,.07);
 }
+.featured-hero[hidden]{display:none !important}
 .hero-waves{
   position:absolute;
   inset:0;
@@ -284,31 +285,40 @@ a{color:inherit}
   height:100%;
   object-fit:cover;
   object-position:center;
+  opacity:.72;
   pointer-events:none;
 }
 .featured-hero::after{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(90deg,rgba(251,244,229,.88) 0%,rgba(251,244,229,.35) 34%,rgba(251,244,229,0) 56%,rgba(251,244,229,.68) 100%);
+  background:linear-gradient(100deg,rgba(251,244,229,.94) 0%,rgba(251,244,229,.74) 52%,rgba(251,244,229,.52) 100%);
   pointer-events:none;
   z-index:1;
 }
 .fh-left{
   position:relative;
   z-index:2;
-  max-width:410px;
+  max-width:480px;
 }
 .fh-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:4px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.78);
+  border:1px solid #DFD5C3;
   font-size:.66rem;
   font-weight:700;
   letter-spacing:.14em;
   text-transform:uppercase;
-  color:#726B61;
-  margin-bottom:4px;
+  color:#6E665B;
+  margin-bottom:10px;
 }
+.fh-eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sage)}
 .fh-title{
-  font-size:clamp(1.65rem,2.6vw,2.15rem);
+  font-size:clamp(1.75rem,2.7vw,2.35rem);
   font-weight:600;
   line-height:1.08;
   color:#25221E;
@@ -316,71 +326,210 @@ a{color:inherit}
 }
 .fh-brand{
   display:block;
-  font-size:clamp(1.95rem,3vw,2.45rem);
+  font-size:clamp(2.05rem,3.1vw,2.65rem);
   font-weight:700;
   letter-spacing:.05em;
   margin-top:2px;
 }
 .fh-subhead{
-  font-size:.7rem;
+  font-size:.73rem;
   font-weight:700;
-  letter-spacing:.09em;
+  letter-spacing:.1em;
   text-transform:uppercase;
   color:#4A453E;
-  margin:8px 0 8px;
+  margin:10px 0 8px;
 }
 .fh-desc{
-  font-size:.82rem;
-  line-height:1.45;
+  font-size:.9rem;
+  line-height:1.55;
   color:#4F4940;
-  max-width:340px;
-  margin-bottom:14px;
+  max-width:440px;
+  margin-bottom:20px;
 }
 .fh-actions{
   display:flex;
   align-items:center;
-  gap:12px;
+  flex-wrap:wrap;
+  gap:14px;
 }
 .btn-start-here{
   display:inline-flex;
   align-items:center;
-  gap:8px;
-  padding:9px 20px;
+  justify-content:center;
+  gap:10px;
+  min-height:52px;
+  padding:13px 32px;
   border-radius:999px;
   border:0;
-  background:linear-gradient(90deg,#A99274 0%,#C2A47E 100%);
+  background:linear-gradient(90deg,#7E9180 0%,#C29B68 100%);
   color:#FFFFFF;
-  font-size:.82rem;
+  font-size:1rem;
   font-weight:700;
+  letter-spacing:.02em;
   cursor:pointer;
-  box-shadow:0 6px 16px rgba(154,126,90,.28);
+  box-shadow:0 10px 24px rgba(127,146,131,.32);
   transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
 }
 .btn-start-here:hover{
-  transform:translateY(-1px);
+  transform:translateY(-2px);
   filter:brightness(1.05);
-  box-shadow:0 9px 22px rgba(154,126,90,.36);
+  box-shadow:0 14px 30px rgba(154,126,90,.38);
 }
-.btn-start-here svg{width:13px;height:13px}
+.btn-start-here svg{width:17px;height:17px}
+.fh-meta{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
 .fh-duration{
-  font-size:.78rem;
-  font-weight:600;
-  color:#5B554D;
+  font-size:.86rem;
+  font-weight:700;
+  color:#2E2A25;
 }
+.fh-next-note{
+  font-size:.76rem;
+  color:#6A645B;
+}
+.fh-returning{
+  margin-top:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.fh-returning-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:0;
+  background:transparent;
+  color:#6E573B;
+  font-size:.82rem;
+  font-weight:700;
+  padding:4px 0;
+  cursor:pointer;
+  text-decoration:underline;
+  text-underline-offset:3px;
+  text-decoration-color:rgba(194,155,104,.55);
+  transition:color .18s ease;
+}
+.fh-returning-link:hover{color:#25221E}
 .fh-right{
   position:relative;
   z-index:2;
-  text-align:right;
-  padding-right:8px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:12px;
 }
+.fh-preview-card{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.78);
+  background:#EDE6DA;
+  box-shadow:0 18px 44px rgba(56,44,30,.18);
+  cursor:pointer;
+  padding:0;
+  text-align:left;
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.fh-preview-card:hover,.fh-preview-card:focus-visible{
+  transform:translateY(-3px);
+  box-shadow:0 24px 52px rgba(56,44,30,.24);
+}
+.fh-preview-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 22%;
+  display:block;
+  transition:transform .5s ease;
+}
+.fh-preview-card:hover img{transform:scale(1.03)}
+.fh-preview-bar{
+  position:absolute;
+  inset:auto 0 0 0;
+  padding:22px 18px 14px;
+  background:linear-gradient(180deg,rgba(22,19,16,0) 0%,rgba(22,19,16,.58) 100%);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.fh-preview-caption{color:#FFFFFF}
+.fh-preview-caption strong{display:block;font-size:.96rem;font-weight:700;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.fh-preview-caption span{display:block;font-size:.76rem;color:rgba(255,255,255,.9);text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.fh-preview-play{
+  width:52px;
+  height:52px;
+  flex:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.96);
+  color:#25221E;
+  display:grid;
+  place-items:center;
+  box-shadow:0 6px 20px rgba(0,0,0,.28);
+  transition:transform .2s ease;
+}
+.fh-preview-card:hover .fh-preview-play{transform:scale(1.08)}
+.fh-preview-play svg{width:19px;height:19px;margin-left:2px}
 .fh-quote{
   font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:clamp(1.35rem,2.1vw,1.72rem);
-  font-weight:500;
-  line-height:1.22;
-  letter-spacing:.05em;
-  color:#25221E;
+  font-size:1.08rem;
+  font-style:italic;
+  font-weight:600;
+  letter-spacing:.04em;
+  color:#524B42;
+}
+
+/* Home Categories Section Header */
+.home-cats-block{
+  margin-top:4px;
+}
+.home-cats-label{
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.12em;
   text-transform:uppercase;
+  color:#7A7368;
+  margin-bottom:10px;
+}
+
+/* ===== View Header (Explore / Collections / My Resets) ===== */
+.view-header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+.view-header[hidden]{display:none !important}
+.view-header h1{
+  font-size:clamp(1.4rem,2.2vw,1.85rem);
+  font-weight:700;
+  letter-spacing:-.015em;
+  color:#25221E;
+  line-height:1.15;
+}
+.view-header p{
+  font-size:.86rem;
+  color:#6A645B;
+  margin-top:4px;
+}
+.view-count-pill{
+  font-size:.74rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:#6A645B;
+  background:var(--surface);
+  border:1px solid var(--line);
+  padding:6px 14px;
+  border-radius:999px;
 }
 
 /* ===== Hierarchy Organizer Toolbar (Categories, Collections, Series, Sort) ===== */
@@ -390,21 +539,23 @@ a{color:inherit}
   justify-content:space-between;
   gap:12px;
   flex-wrap:wrap;
-  margin-bottom:16px;
+  margin-bottom:20px;
 }
+.toolbar[hidden]{display:none !important}
 .chips{display:flex;gap:8px;flex-wrap:wrap;flex:1 1 auto}
 .chip{
-  padding:7px 15px;
+  min-height:40px;
+  padding:8px 16px;
   border-radius:999px;
   border:1px solid var(--line);
   background:var(--surface);
   color:#4A453E;
-  font-size:.79rem;
+  font-size:.82rem;
   font-weight:600;
   cursor:pointer;
   transition:all .18s ease;
 }
-.chip:hover{border-color:var(--gold);color:var(--text)}
+.chip:hover{border-color:var(--gold);color:var(--text);background:#FFFFFF}
 .chip[aria-pressed="true"]{
   background:#2B2722;
   border-color:#2B2722;
@@ -412,298 +563,452 @@ a{color:inherit}
   box-shadow:0 4px 12px rgba(37,34,30,.16);
 }
 .toolbar-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.toolbar-controls[hidden]{display:none !important}
 .sort{
-  padding:7px 12px;
+  min-height:40px;
+  padding:8px 12px;
   border-radius:10px;
   border:1px solid var(--line);
   background:var(--surface);
   color:var(--text);
   font:inherit;
-  font-size:.79rem;
+  font-size:.81rem;
   font-weight:600;
-  min-width:142px;
+  min-width:148px;
   cursor:pointer;
   outline:none;
 }
 .sort:focus{border-color:var(--gold)}
 
-/* ===== 3 Signature Tinted Collection Pillar Columns ===== */
-.pillars-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:16px;
-  align-items:start;
-}
-.pillars-grid[hidden]{display:none !important}
-.pillar-col{
-  border-radius:18px;
-  padding:14px 14px 16px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  border:1px solid rgba(37,34,30,.08);
-  box-shadow:0 6px 22px rgba(60,48,34,.05);
-}
-.pillar-col--stone{background:#DFDDD7}
-.pillar-col--rose{background:#E7D4CC}
-.pillar-col--sage{background:#CFDAD0}
-
-.pillar-head{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:10px;
-  padding:2px 2px 4px;
-}
-.pillar-head h2{
-  font-size:1.15rem;
-  font-weight:600;
-  line-height:1.18;
-  letter-spacing:-.01em;
-  color:#25221E;
-}
-.pillar-head p{
-  font-size:.77rem;
-  color:#4F4941;
-  margin-top:2px;
-}
-.pillar-view-all{
-  flex:none;
-  border:0;
-  background:transparent;
-  color:#2B2722;
-  font-size:.76rem;
-  font-weight:700;
-  padding:4px 2px;
-  cursor:pointer;
-  white-space:nowrap;
-  opacity:.82;
-  transition:opacity .15s,transform .15s;
-}
-.pillar-view-all:hover{opacity:1;transform:translateX(2px)}
-.pillar-cards{display:flex;flex-direction:column;gap:12px}
-
-/* ===== Editorial Landscape Overlay Card ===== */
+/* ===== Bright Streaming-Platform Episode Cards (Clean Image + Caption Body) ===== */
 .ec-card{
   position:relative;
-  border-radius:14px;
+  border-radius:16px;
   overflow:hidden;
-  min-height:164px;
-  aspect-ratio:16/9;
-  background:#221F1B;
+  background:var(--surface);
   cursor:pointer;
-  border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 6px 18px rgba(34,28,22,.16);
+  border:1px solid var(--line);
+  box-shadow:0 4px 16px rgba(46,38,28,.06);
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
-  padding:12px 14px 13px;
   text-align:left;
-  transition:transform .24s ease,box-shadow .24s ease;
-  animation:rise .4s both;
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+  animation:rise .36s both;
 }
 .ec-card:hover,.ec-card:focus-visible{
   transform:translateY(-3px);
-  box-shadow:0 14px 28px rgba(34,28,22,.24);
+  box-shadow:0 14px 30px rgba(46,38,28,.12);
+  border-color:#CFC3AF;
   outline:none;
 }
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ec-media{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  background:#EAE2D5;
+  overflow:hidden;
+}
 .ec-bg{
-  position:absolute;
-  inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center;
-  transition:transform .55s ease;
+  object-position:center 22%;
+  display:block;
+  filter:brightness(1.03);
+  transition:transform .5s ease;
 }
-.ec-card:hover .ec-bg{transform:scale(1.05)}
-.ec-scrim{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(96deg,rgba(18,16,14,.9) 0%,rgba(18,16,14,.68) 48%,rgba(18,16,14,.18) 100%);
-  pointer-events:none;
-}
+.ec-card:hover .ec-bg{transform:scale(1.04)}
 .ec-top{
-  position:relative;
+  position:absolute;
+  top:10px;
+  left:10px;
+  right:10px;
   z-index:2;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:8px;
+  pointer-events:none;
 }
+.ec-top > *{pointer-events:auto}
 .ec-top-left{
   display:flex;
   align-items:center;
-  gap:7px;
+  gap:6px;
   flex-wrap:wrap;
-}
-/* Upper-left speaker icon for direct background MP3 playback */
-.audio-speaker-btn{
-  width:30px;
-  height:30px;
-  flex:none;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.45);
-  background:rgba(22,19,16,.76);
-  color:#FFFFFF;
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  transition:transform .18s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease;
-}
-.audio-speaker-btn:hover{
-  transform:scale(1.09);
-  background:rgba(22,19,16,.94);
-  border-color:#E0BD8B;
-}
-.audio-speaker-btn.is-playing{
-  background:linear-gradient(135deg,#7E9180,#C29B68);
-  border-color:#FFFFFF;
-  box-shadow:0 0 0 3px rgba(194,155,104,.45);
-  animation:speakerPulse 1.8s ease-in-out infinite;
-}
-.audio-speaker-btn svg{width:14px;height:14px}
-@keyframes speakerPulse{
-  0%,100%{box-shadow:0 0 0 2px rgba(194,155,104,.45)}
-  50%{box-shadow:0 0 0 7px rgba(194,155,104,0)}
 }
 .ec-dur{
   display:inline-flex;
   align-items:center;
-  gap:5px;
-  padding:3px 9px;
+  gap:4px;
+  padding:4px 9px;
   border-radius:999px;
-  background:rgba(18,16,14,.58);
-  border:1px solid rgba(255,255,255,.18);
-  color:#F6F2EA;
+  background:rgba(28,24,20,.64);
+  color:#FFFFFF;
   font-size:.66rem;
   font-weight:700;
   letter-spacing:.04em;
-  backdrop-filter:blur(4px);
+  backdrop-filter:blur(6px);
 }
-.ec-dur svg{width:11px;height:11px;opacity:.9}
+.ec-dur svg{width:11px;height:11px;opacity:.95}
 .ec-ep{
-  padding:3px 8px;
+  padding:4px 9px;
   border-radius:999px;
-  background:rgba(248,245,239,.18);
-  border:1px solid rgba(255,255,255,.22);
-  color:#F6F2EA;
-  font-size:.62rem;
-  font-weight:700;
+  background:rgba(255,255,255,.9);
+  color:#2B2722;
+  font-size:.63rem;
+  font-weight:800;
   letter-spacing:.05em;
   text-transform:uppercase;
+  box-shadow:0 2px 6px rgba(0,0,0,.12);
 }
 .ec-top-right{display:flex;align-items:center;gap:6px}
 .ec-soon{
-  padding:3px 8px;
+  padding:4px 9px;
   border-radius:999px;
-  background:rgba(248,245,239,.9);
+  background:rgba(251,247,238,.94);
+  border:1px solid #E3D3B8;
   color:#7E5929;
-  font-size:.6rem;
+  font-size:.62rem;
   font-weight:800;
   letter-spacing:.06em;
   text-transform:uppercase;
 }
 .save{
-  width:28px;
-  height:28px;
+  width:32px;
+  height:32px;
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.28);
-  background:rgba(18,16,14,.55);
+  border:1px solid rgba(255,255,255,.55);
+  background:rgba(28,24,20,.56);
   color:#FFFFFF;
   display:grid;
   place-items:center;
   cursor:pointer;
-  opacity:0;
-  transition:opacity .18s,background .18s,color .18s;
+  transition:opacity .18s,background .18s,color .18s,transform .15s;
 }
-.ec-card:hover .save,.save.on,.save:focus-visible{opacity:1}
-.save svg{width:13px;height:13px}
-.save.on{color:#E8B67A;border-color:#E8B67A}
+.save:hover{background:rgba(28,24,20,.82);transform:scale(1.06)}
+.save svg{width:14px;height:14px}
+.save.on{background:#FBF7EE;color:#B2854B;border-color:#D8B88A}
 .save.on svg{fill:currentColor}
-
-.ec-middle{
-  position:relative;
-  z-index:2;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin:auto 0 6px;
-}
-.ec-text{max-width:74%}
-.ec-text h3{
-  font-size:1.02rem;
-  font-weight:700;
-  line-height:1.18;
-  color:#FFFFFF;
-  text-shadow:0 2px 10px rgba(0,0,0,.45);
-}
-.ec-sub{
-  font-size:.72rem;
-  color:rgba(246,242,234,.84);
-  margin-top:3px;
-  line-height:1.3;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
 .ec-play{
-  width:38px;
-  height:38px;
-  flex:none;
+  position:absolute;
+  right:12px;
+  bottom:12px;
+  z-index:2;
+  width:44px;
+  height:44px;
   border-radius:50%;
-  background:rgba(255,255,255,.92);
+  background:rgba(255,255,255,.95);
   color:#25221E;
   display:grid;
   place-items:center;
-  box-shadow:0 4px 14px rgba(0,0,0,.32);
+  box-shadow:0 6px 18px rgba(0,0,0,.22);
   transition:transform .2s ease,background .2s ease;
 }
 .ec-card:hover .ec-play{transform:scale(1.08);background:#FFFFFF}
-.ec-play svg{width:14px;height:14px;margin-left:2px}
-
+.ec-play svg{width:16px;height:16px;margin-left:2px}
+.ec-body{
+  padding:14px 16px 15px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  flex:1 1 auto;
+  justify-content:space-between;
+}
+.ec-text h3{
+  font-size:1.02rem;
+  font-weight:700;
+  line-height:1.25;
+  color:#25221E;
+}
+.ec-sub{
+  font-size:.78rem;
+  color:#6A645B;
+  margin-top:3px;
+  line-height:1.35;
+}
 .ec-bottom{
-  position:relative;
-  z-index:2;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:8px;
+  padding-top:4px;
 }
 .ec-pill{
   display:inline-flex;
   align-items:center;
-  max-width:100%;
+  max-width:70%;
   padding:4px 10px;
   border-radius:999px;
-  background:rgba(218,162,132,.88);
-  color:#251B14;
-  font-size:.66rem;
+  background:#EEE5D8;
+  color:#4A3F32;
+  font-size:.67rem;
   font-weight:700;
   letter-spacing:.02em;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
-.pillar-col--stone .ec-pill{background:rgba(224,186,154,.92)}
-.pillar-col--rose .ec-pill{background:rgba(232,190,174,.92)}
-.pillar-col--sage .ec-pill{background:rgba(201,218,199,.92);color:#1E2A1F}
+.ec-pill--stone{background:#E7E2D8;color:#3E3932}
+.ec-pill--rose{background:#EFE0D9;color:#5D3E34}
+.ec-pill--sage{background:#DCE6DD;color:#2E4231}
+.ec-status{
+  font-size:.71rem;
+  font-weight:700;
+  color:#607764;
+  white-space:nowrap;
+}
+.ec-status--soon{color:#8B6C42}
 
-/* ===== Explore / Filtered Hierarchy Grid (Collections -> Series -> Episodes) ===== */
-.grid-structured{display:flex;flex-direction:column;gap:26px}
+/* ===== Collections View: 4-Level Hierarchy (Category -> Collection -> Series -> Episode) ===== */
+.collections-view{display:flex;flex-direction:column;gap:24px}
+.collections-view[hidden]{display:none !important}
+.hier-crumbs{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  padding:10px 14px;
+  border-radius:12px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  font-size:.82rem;
+  color:var(--muted);
+}
+.hier-crumb-btn{
+  border:0;
+  background:transparent;
+  color:#6E573B;
+  font-weight:700;
+  cursor:pointer;
+  padding:2px 4px;
+  border-radius:6px;
+}
+.hier-crumb-btn:hover{background:#EFE8DC;color:#25221E}
+.hier-crumb-cur{font-weight:700;color:#25221E}
+.col-band{
+  border-radius:20px;
+  padding:20px;
+  border:1px solid rgba(37,34,30,.08);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.col-band--stone{background:#EAE7E1}
+.col-band--rose{background:#EFE3DD}
+.col-band--sage{background:#E1EAE2}
+.col-band-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.col-band-kicker{
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:#6A645B;
+  margin-bottom:3px;
+}
+.col-band-head h2{
+  font-size:1.3rem;
+  font-weight:700;
+  color:#25221E;
+  line-height:1.18;
+}
+.col-band-head p{
+  font-size:.84rem;
+  color:#5B554D;
+  margin-top:3px;
+}
+.series-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+.series-card{
+  position:relative;
+  border-radius:16px;
+  overflow:hidden;
+  background:var(--surface);
+  border:1px solid rgba(37,34,30,.1);
+  box-shadow:0 8px 22px rgba(46,38,28,.08);
+  display:flex;
+  flex-direction:column;
+  transition:transform .22s ease,box-shadow .22s ease;
+}
+.series-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 16px 32px rgba(46,38,28,.14);
+}
+.series-card-media{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  background:#E6DEC9;
+  overflow:hidden;
+  cursor:pointer;
+}
+.series-card-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 22%;
+  display:block;
+  filter:brightness(1.03);
+  transition:transform .5s ease;
+}
+.series-card:hover .series-card-media img{transform:scale(1.04)}
+.series-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.92);
+  color:#2B2722;
+  font-size:.63rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  box-shadow:0 2px 8px rgba(0,0,0,.14);
+}
+.series-info-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:3;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.85);
+  background:rgba(251,249,244,.94);
+  color:#25221E;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.18);
+  transition:transform .16s ease,background .16s ease,border-color .16s ease;
+}
+.series-info-btn:hover{
+  transform:scale(1.08);
+  background:#FFFFFF;
+  border-color:var(--gold);
+  color:#8D683A;
+}
+.series-info-btn svg{width:16px;height:16px}
+.series-card-body{
+  padding:15px 16px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  flex:1 1 auto;
+  justify-content:space-between;
+}
+.series-card-title{
+  font-size:1.08rem;
+  font-weight:700;
+  color:#25221E;
+  line-height:1.22;
+}
+.series-card-creators{
+  font-size:.79rem;
+  font-weight:600;
+  color:#7B6242;
+  margin-top:2px;
+}
+.series-card-desc{
+  font-size:.8rem;
+  color:#6A645B;
+  line-height:1.45;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.series-card-foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding-top:6px;
+  border-top:1px solid #EDE6D9;
+}
+.series-open-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 14px;
+  border-radius:999px;
+  border:1px solid #D9CEBC;
+  background:#FBF9F4;
+  color:#25221E;
+  font-size:.77rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .16s ease,border-color .16s ease;
+}
+.series-open-btn:hover{background:#EFE8DB;border-color:var(--gold)}
+
+/* Series Drill-Down Banner */
+.series-banner{
+  display:grid;
+  grid-template-columns:minmax(0,300px) minmax(0,1fr);
+  gap:22px;
+  align-items:center;
+  padding:20px;
+  border-radius:20px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  box-shadow:0 8px 26px rgba(46,38,28,.06);
+}
+.series-banner-img{
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:14px;
+  object-fit:cover;
+  object-position:center 22%;
+  display:block;
+}
+.series-banner-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.series-trailer-pill-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:40px;
+  padding:8px 16px;
+  border-radius:999px;
+  border:1px solid #D5C5AC;
+  background:#FAF5EC;
+  color:#6A4E29;
+  font-size:.82rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .16s ease,border-color .16s ease;
+}
+.series-trailer-pill-btn:hover{background:#F1E7D6;border-color:var(--gold)}
+.series-trailer-pill-btn svg{width:15px;height:15px}
+
+/* ===== Explore / Filtered Hierarchy Grid (Category -> Collection -> Series -> Episodes) ===== */
+.grid-structured{display:flex;flex-direction:column;gap:28px}
 .grid-structured[hidden]{display:none !important}
-.series-group{display:flex;flex-direction:column;gap:12px}
+.series-group{display:flex;flex-direction:column;gap:14px}
 .series-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
   flex-wrap:wrap;
-  padding:0 2px 8px;
+  padding:0 2px 10px;
   border-bottom:1px solid var(--line);
 }
 .series-crumbs{
@@ -711,12 +1016,35 @@ a{color:inherit}
   align-items:center;
   gap:8px;
   flex-wrap:wrap;
-  font-size:.82rem;
+  font-size:.84rem;
   color:var(--muted);
 }
+.series-crumbs .cat-label{font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7A7368}
 .series-crumbs .col-label{font-weight:700;color:var(--text);font-size:.98rem}
 .series-crumbs .sep{color:#B8B0A2;font-weight:600}
-.series-crumbs .ser-label{font-weight:600;color:var(--sage)}
+.series-crumbs .ser-label{font-weight:700;color:#5A6F5D}
+.series-creators-inline{font-size:.79rem;color:#7A7368;font-weight:500}
+.series-head-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.series-head-info-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 11px;
+  border-radius:999px;
+  border:1px solid var(--line-strong);
+  background:var(--surface);
+  color:#4A453E;
+  font-size:.73rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:border-color .16s ease,background .16s ease;
+}
+.series-head-info-btn:hover{border-color:var(--gold);background:#FFFFFF}
+.series-head-info-btn svg{width:13px;height:13px}
 .series-count{
   font-size:.7rem;
   font-weight:700;
@@ -725,7 +1053,7 @@ a{color:inherit}
   color:#7A7368;
   background:var(--surface);
   border:1px solid var(--line);
-  padding:4px 10px;
+  padding:5px 11px;
   border-radius:999px;
 }
 .series-cards{
@@ -759,7 +1087,7 @@ a{color:inherit}
 }
 
 footer{
-  margin-top:26px;
+  margin-top:28px;
   text-align:center;
   color:var(--muted);
   font-size:.82rem;
@@ -768,7 +1096,7 @@ footer{
 }
 footer b{font-style:normal;color:var(--text)}
 
-/* ===== Video Modal & Controls ===== */
+/* ===== Video Modal & Guided Sequence Controls ===== */
 .modal{
   position:fixed;
   inset:0;
@@ -776,8 +1104,8 @@ footer b{font-style:normal;color:var(--text)}
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:24px;
-  background:rgba(243,240,234,.84);
+  padding:20px;
+  background:rgba(243,240,234,.86);
   -webkit-backdrop-filter:blur(16px);
   backdrop-filter:blur(16px);
   opacity:0;
@@ -787,7 +1115,7 @@ footer b{font-style:normal;color:var(--text)}
 .modal.open{opacity:1;visibility:visible}
 .m-box{
   position:relative;
-  width:min(1000px,100%);
+  width:min(1120px,100%);
   border-radius:22px;
   background:#F8F5EF;
   overflow:hidden;
@@ -798,40 +1126,246 @@ footer b{font-style:normal;color:var(--text)}
 .modal.open .m-box{transform:none}
 .player{position:relative;aspect-ratio:16/9;background:#000}
 .player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.m-info{padding:16px 22px;display:flex;gap:16px;align-items:center;justify-content:space-between}
-.m-info h2{font-size:1.15rem;font-weight:600;color:#2B2926}
-.m-info p{color:#55524D;font-size:.88rem;margin-top:2px}
+.m-info{padding:14px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.m-info-main{min-width:200px;flex:1 1 auto}
+.m-info h2{font-size:1.12rem;font-weight:700;color:#2B2926}
+.m-info p{color:#55524D;font-size:.84rem;margin-top:2px}
+.m-info-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.m-facilitator-btn{
+  display:none;
+  align-items:center;
+  gap:6px;
+  min-height:40px;
+  padding:8px 14px;
+  border-radius:999px;
+  border:1px solid #DDD4C4;
+  background:#FFFFFF;
+  color:#4A453E;
+  font-size:.78rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:border-color .16s ease,background .16s ease;
+}
+.m-facilitator-btn.visible{display:inline-flex}
+.m-facilitator-btn:hover{border-color:var(--gold);background:#F5EFE3}
+.m-facilitator-btn svg{width:14px;height:14px;color:#8D683A}
 .close{
   position:absolute;
   top:12px;
   right:12px;
-  z-index:2;
-  width:40px;
-  height:40px;
+  z-index:8;
+  width:44px;
+  height:44px;
   border-radius:50%;
   border:1px solid #E6E1D7;
-  background:#F8F5EF;
+  background:rgba(248,245,239,.96);
   color:#2B2926;
   cursor:pointer;
   display:grid;
   place-items:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
   transition:.2s;
 }
 .close:hover{background:#C29B68;color:#fff;transform:rotate(90deg)}
 .close svg{width:18px;height:18px}
 
-/* Auto-pause "Play Again" overlay */
-.resume-overlay{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(30,26,22,.42);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease}
-.resume-overlay.end-cover{background:linear-gradient(160deg,rgba(32,28,24,.97) 0%,rgba(20,18,15,.98) 100%);backdrop-filter:blur(8px)}
+/* Auto-pause "Continue" overlay & Completed "Play Again" overlay */
+.resume-overlay{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  padding:24px;
+  background:rgba(28,24,20,.56);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .25s ease,visibility .25s ease;
+}
+.resume-overlay.end-cover{background:linear-gradient(160deg,rgba(32,28,24,.97) 0%,rgba(20,18,15,.98) 100%);backdrop-filter:blur(10px)}
 .resume-overlay.show{opacity:1;visibility:visible}
-.resume-btn{display:inline-flex;align-items:center;gap:10px;padding:16px 34px;border:0;border-radius:999px;background:linear-gradient(90deg,#7F9283 0%,#C29B68 100%);color:#fff;font-weight:700;font-size:1.05rem;letter-spacing:.02em;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.35);transform:scale(.94);transition:transform .25s ease,filter .2s ease}
+.resume-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:54px;
+  padding:16px 38px;
+  border:0;
+  border-radius:999px;
+  background:linear-gradient(90deg,#7F9283 0%,#C29B68 100%);
+  color:#fff;
+  font-weight:700;
+  font-size:1.08rem;
+  letter-spacing:.02em;
+  cursor:pointer;
+  box-shadow:0 12px 32px rgba(0,0,0,.38);
+  transform:scale(.94);
+  transition:transform .25s ease,filter .2s ease;
+}
 .resume-overlay.show .resume-btn{transform:none;animation:resumePulse 2.2s ease-in-out infinite}
 .resume-btn:hover{filter:brightness(1.08)}
 .resume-btn svg{width:20px;height:20px}
-.resume-note{color:#fff;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.resume-note{color:#fff;font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.5);text-align:center}
+.resume-alt-btn{
+  border:1px solid rgba(255,255,255,.35);
+  background:rgba(28,24,20,.55);
+  color:#F6F2EA;
+  padding:8px 16px;
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:background .16s ease,border-color .16s ease;
+}
+.resume-alt-btn:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.6)}
 @keyframes resumePulse{0%,100%{box-shadow:0 10px 30px rgba(0,0,0,.35),0 0 0 0 rgba(194,155,104,.6)}50%{box-shadow:0 10px 30px rgba(0,0,0,.35),0 0 0 14px rgba(194,155,104,0)}}
 
-.exit-hint{position:absolute;top:62px;right:12px;z-index:3;width:max-content;max-width:min(300px,calc(100% - 24px));padding:13px 16px;border-radius:14px;background:#FBF9F5;color:#2B2926;border:1px solid #E6E1D7;box-shadow:0 12px 32px rgba(40,32,24,.28);font-size:.9rem;line-height:1.45;pointer-events:none;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .3s ease,transform .3s ease,visibility .3s ease}
+/* Branded Intro -> Thought Loop Clearing Sequence Transition Overlay */
+.seq-overlay{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:radial-gradient(circle at 50% 40%,rgba(42,37,31,.9) 0%,rgba(22,19,16,.97) 100%);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .35s ease,visibility .35s ease;
+}
+.seq-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+.seq-card{
+  width:min(480px,100%);
+  padding:28px 28px 24px;
+  border-radius:22px;
+  background:#F8F5EF;
+  border:1px solid #E5DFD3;
+  box-shadow:0 24px 64px rgba(14,12,9,.46);
+  text-align:center;
+  color:#2B2926;
+}
+.seq-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 12px;
+  border-radius:999px;
+  background:#EEF1EC;
+  border:1px solid #DCE3D9;
+  color:#5A6E5E;
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+.seq-card h3{font-size:1.35rem;font-weight:700;line-height:1.2;color:#25221E;margin-bottom:8px}
+.seq-card p{font-size:.9rem;line-height:1.55;color:#5B554D;margin-bottom:18px}
+.seq-actions{display:flex;flex-direction:column;align-items:center;gap:10px}
+.seq-primary-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+  min-height:52px;
+  padding:14px 28px;
+  border-radius:999px;
+  border:0;
+  background:linear-gradient(90deg,#7F9283 0%,#C29B68 100%);
+  color:#FFFFFF;
+  font-size:.98rem;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 10px 26px rgba(127,146,131,.3);
+  transition:filter .18s ease,transform .18s ease;
+}
+.seq-primary-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.seq-secondary-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:4px;
+}
+.seq-link-btn{
+  border:0;
+  background:transparent;
+  color:#6A645B;
+  font-size:.8rem;
+  font-weight:600;
+  padding:6px 10px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.seq-link-btn:hover{background:#ECE5D8;color:#25221E}
+
+/* Facilitator Switcher Overlay (Pause default sequence / Pick alternative TAG) */
+.fac-overlay{
+  position:absolute;
+  inset:0;
+  z-index:6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(28,24,20,.78);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .22s ease,visibility .22s ease;
+}
+.fac-overlay.open{opacity:1;visibility:visible;pointer-events:auto}
+.fac-card{
+  width:min(490px,100%);
+  max-height:100%;
+  overflow-y:auto;
+  border-radius:20px;
+  background:#F8F5EF;
+  border:1px solid #E5DFD3;
+  padding:22px 24px;
+  box-shadow:0 24px 64px rgba(14,12,9,.46);
+  color:#25221E;
+  text-align:left;
+}
+.fac-card h3{font-size:1.12rem;font-weight:700;margin-bottom:4px}
+.fac-card p{font-size:.83rem;color:#6A645B;margin-bottom:14px}
+.fac-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.fac-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  width:100%;
+  padding:11px 14px;
+  border-radius:12px;
+  border:1px solid #E2DBD0;
+  background:#FFFFFF;
+  text-align:left;
+  cursor:pointer;
+  transition:border-color .16s ease,background .16s ease;
+}
+.fac-item:hover{border-color:var(--gold);background:#FAF6EE}
+.fac-item strong{display:block;font-size:.88rem;color:#25221E}
+.fac-item span{display:block;font-size:.76rem;color:#6A645B}
+.fac-item-tag{font-size:.72rem;font-weight:700;color:#607764;white-space:nowrap}
+.fac-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+.exit-hint{position:absolute;top:64px;right:12px;z-index:4;width:max-content;max-width:min(300px,calc(100% - 24px));padding:13px 16px;border-radius:14px;background:#FBF9F5;color:#2B2926;border:1px solid #E6E1D7;box-shadow:0 12px 32px rgba(40,32,24,.28);font-size:.9rem;line-height:1.45;pointer-events:none;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .3s ease,transform .3s ease,visibility .3s ease}
 .exit-hint.show{opacity:1;visibility:visible;transform:none;animation:hintNudge 1.8s ease-in-out .4s infinite}
 .exit-hint::before{content:"";position:absolute;top:-8px;right:13px;width:14px;height:14px;background:#FBF9F5;border-left:1px solid #E6E1D7;border-top:1px solid #E6E1D7;transform:rotate(45deg)}
 .exit-hint strong{display:block;color:#B88E5A;font-weight:700;margin-bottom:2px}
@@ -840,7 +1374,7 @@ footer b{font-style:normal;color:var(--text)}
 .close.attn{animation:closePulse 1.6s ease-out infinite}
 @keyframes closePulse{0%{box-shadow:0 0 0 0 rgba(194,155,104,.75)}70%{box-shadow:0 0 0 14px rgba(194,155,104,0)}100%{box-shadow:0 0 0 0 rgba(194,155,104,0)}}
 
-/* Coming Soon Pop-Up Modal */
+/* Coming Soon & Series Audio Trailer Modals */
 .cs-modal{
   position:fixed;
   inset:0;
@@ -849,7 +1383,7 @@ footer b{font-style:normal;color:var(--text)}
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:rgba(243,240,234,.84);
+  background:rgba(243,240,234,.86);
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
   opacity:0;
@@ -859,7 +1393,7 @@ footer b{font-style:normal;color:var(--text)}
 .cs-modal.open{opacity:1;visibility:visible}
 .cs-box{
   position:relative;
-  width:min(500px,100%);
+  width:min(540px,100%);
   background:#F8F5EF;
   border:1px solid #E6E1D7;
   border-radius:22px;
@@ -870,7 +1404,8 @@ footer b{font-style:normal;color:var(--text)}
 }
 .cs-modal.open .cs-box{transform:none}
 .cs-thumb{position:relative;aspect-ratio:16/9;background:#EFEBE3;overflow:hidden}
-.cs-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.cs-thumb img{width:100%;height:100%;object-fit:cover;object-position:center 22%;display:block}
+.cs-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .cs-pill{
   position:absolute;
   left:16px;
@@ -890,11 +1425,12 @@ footer b{font-style:normal;color:var(--text)}
 }
 .cs-body{padding:22px 26px 24px;text-align:left}
 .cs-crumbs{font-size:.74rem;font-weight:700;color:var(--sage);letter-spacing:.03em;margin-bottom:6px}
-.cs-body h2{font-size:1.32rem;font-weight:700;color:#2B2926;margin-bottom:8px}
-.cs-body p{font-size:.92rem;color:#55524D;line-height:1.55;margin-bottom:14px}
+.cs-body h2{font-size:1.32rem;font-weight:700;color:#2B2926;margin-bottom:6px}
+.cs-creators{font-size:.82rem;font-weight:600;color:#7B6242;margin-bottom:10px}
+.cs-body p{font-size:.9rem;color:#55524D;line-height:1.55;margin-bottom:14px}
 .cs-note{padding:12px 14px;border-radius:12px;background:#FBF9F5;border:1px solid #E6E1D7;font-size:.84rem;color:#4A4640;margin-bottom:18px}
 .cs-note strong{color:#B88E5A}
-.cs-actions{display:flex;justify-content:flex-end}
+.cs-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
 .cs-btn{
   padding:10px 24px;
   border:0;
@@ -905,10 +1441,26 @@ footer b{font-style:normal;color:var(--text)}
   font-size:.9rem;
   cursor:pointer;
 }
+.cs-btn-alt{
+  padding:10px 18px;
+  border:1px solid #DCD4C6;
+  border-radius:999px;
+  background:#FFFFFF;
+  color:#4A453E;
+  font-weight:600;
+  font-size:.88rem;
+  cursor:pointer;
+}
 
 /* Responsive Breakpoints */
 @media (max-width:1180px){
-  .pillars-grid,.series-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .series-grid,.series-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .featured-hero{gap:24px;padding:28px 28px}
+}
+@media (max-width:960px){
+  .featured-hero{grid-template-columns:1fr;padding:26px 24px}
+  .fh-right{align-items:stretch}
+  .series-banner{grid-template-columns:1fr}
 }
 @media (max-width:900px){
   .app-shell{flex-direction:column}
@@ -926,29 +1478,27 @@ footer b{font-style:normal;color:var(--text)}
   .sidebar-nav button,.sidebar-nav a.nav-ext{width:auto;white-space:nowrap;padding:8px 12px;font-size:.82rem}
   .sidebar-foot{display:none}
   .app-main{padding:14px 16px 28px}
-  .featured-hero{flex-direction:column;align-items:flex-start;padding:24px 22px}
-  .fh-right{text-align:left;padding-right:0}
-  .pillars-grid,.series-cards{grid-template-columns:1fr}
+  .series-grid,.series-cards{grid-template-columns:1fr}
 }
 @media (max-width:600px){
   .topbar{flex-wrap:wrap}
   .search{flex:1 1 200px}
   .toolbar-controls{width:100%}
   .toolbar-controls .sort{flex:1 1 calc(50% - 4px);min-width:0}
+  .btn-start-here{width:100%}
 }
 @media (hover: none), (pointer: coarse), (min-width: 601px) and (max-width: 1366px){
   .modal{padding:8px !important}
   .m-box{
-    width:min(calc(100vw - 16px),calc((100vh - 56px) * 16 / 9)) !important;
-    width:min(calc(100vw - 16px),calc((100dvh - 56px) * 16 / 9)) !important;
+    width:min(calc(100vw - 16px),calc((100vh - 64px) * 16 / 9)) !important;
+    width:min(calc(100vw - 16px),calc((100dvh - 64px) * 16 / 9)) !important;
     max-width:none !important;
     border-radius:16px !important;
   }
-  .m-info{padding:8px 18px !important}
-  .m-info > div{display:flex;align-items:baseline;justify-content:space-between;gap:12px;width:100%;flex-wrap:wrap}
+  .m-info{padding:10px 18px !important}
   .m-info h2{font-size:1.02rem !important}
   .m-info p{font-size:.82rem !important;margin-top:0 !important}
-  .close{top:10px !important;right:10px !important;width:44px !important;height:44px !important}
+  .close{top:10px !important;right:10px !important;width:46px !important;height:46px !important}
   .exit-hint{top:62px !important;right:10px !important}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
@@ -1831,33 +2381,44 @@ html.is-tablet .modal .m-box.survey-mode {
 
     <section class="featured-hero" id="featured" aria-label="Featured Experience"></section>
 
-    <div class="toolbar" id="library-organizers">
-      <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
-      <div class="toolbar-controls">
-        <label class="sr-only" for="collectionSel">Filter by collection</label>
-        <select class="sort" id="collectionSel" aria-label="Filter by collection">
-          <option value="All">Collection: All</option>
-        </select>
-        <label class="sr-only" for="seriesSel">Filter by series</label>
-        <select class="sort" id="seriesSel" aria-label="Filter by series">
-          <option value="All">Series: All</option>
-        </select>
-        <label class="sr-only" for="sort">Sort videos</label>
-        <select class="sort" id="sort">
-          <option value="recent">Sort: Featured Order</option>
-          <option value="views">Sort: Most Viewed</option>
-          <option value="title">Sort: Title A–Z</option>
-        </select>
+    <section class="view-header" id="viewHeader" hidden>
+      <div>
+        <h1 id="viewTitle">Explore TAG Library</h1>
+        <p id="viewSubtitle">Browse Therapeutic Audio Guides by Category, Collection, Series, and Episode.</p>
+      </div>
+      <span class="view-count-pill" id="viewCountPill"></span>
+    </section>
+
+    <div class="home-cats-block" id="homeCatsBlock">
+      <div class="home-cats-label" id="homeCatsLabel">Browse TAG Library by Category</div>
+      <div class="toolbar" id="library-organizers">
+        <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+        <div class="toolbar-controls" id="exploreControls" hidden>
+          <label class="sr-only" for="collectionSel">Filter by collection</label>
+          <select class="sort" id="collectionSel" aria-label="Filter by collection">
+            <option value="All">Collection: All</option>
+          </select>
+          <label class="sr-only" for="seriesSel">Filter by series</label>
+          <select class="sort" id="seriesSel" aria-label="Filter by series">
+            <option value="All">Series: All</option>
+          </select>
+          <label class="sr-only" for="sort">Sort videos</label>
+          <select class="sort" id="sort">
+            <option value="recent">Sort: Featured Order</option>
+            <option value="views">Sort: Most Viewed</option>
+            <option value="title">Sort: Title A–Z</option>
+          </select>
+        </div>
       </div>
     </div>
 
     <main>
-      <section class="pillars-grid" id="pillarsSection" aria-label="Curated Collections"></section>
+      <section class="collections-view" id="collectionsSection" aria-label="Collections &amp; Series Hierarchy" hidden></section>
       <section class="grid-structured" id="grid" aria-label="Filtered Videos" hidden></section>
       <section class="empty" id="empty" aria-live="polite">
-        <h2>No experiences found matching your query</h2>
-        <p>Try a different keyword, category, collection, or series.</p>
-        <button class="btn-watch" id="reset" type="button">Reset Filters</button>
+        <h2 id="emptyTitle">No experiences found matching your query</h2>
+        <p id="emptyDesc">Try a different keyword, category, collection, or series.</p>
+        <button class="btn-watch" id="reset" type="button">Explore All TAGs</button>
       </section>
     </main>
 
@@ -1868,11 +2429,38 @@ html.is-tablet .modal .m-box.survey-mode {
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" aria-hidden="true">
   <div class="m-box" id="mBox">
     <button class="close" id="close" type="button" aria-label="Close video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    <div class="exit-hint" id="exitHint" role="status" aria-live="polite" aria-hidden="true"><strong>Finished watching?</strong>Click the &ldquo;<span class="x-chip" aria-hidden="true">&#10005;</span><span class="sr-only">X</span>&rdquo; button here to return to the main page and continue.</div>
+    <div class="exit-hint" id="exitHint" role="status" aria-live="polite" aria-hidden="true"><strong>Finished watching?</strong>Click the &ldquo;<span class="x-chip" aria-hidden="true">&#10005;</span><span class="sr-only">X</span>&rdquo; button here to return and continue.</div>
     <div class="player"><iframe id="player" title="Vimeo video player" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
       <div class="resume-overlay" id="resumeOverlay" aria-hidden="true">
-        <button type="button" class="resume-btn" id="resumeBtn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg><span id="resumeBtnLabel">Play Again</span></button>
+        <button type="button" class="resume-btn" id="resumeBtn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg><span id="resumeBtnLabel">Continue</span></button>
         <span class="resume-note" id="resumeNote" aria-live="polite"></span>
+        <button type="button" class="resume-alt-btn" id="resumeFacBtn" hidden>Facilitator: Switch Session</button>
+      </div>
+      <div class="seq-overlay" id="seqOverlay" aria-hidden="true">
+        <div class="seq-card" role="region" aria-label="Next guided experience">
+          <div class="seq-eyebrow" id="seqEyebrow">Orientation Complete</div>
+          <h3 id="seqTitle">Continue to Thought Loop Clearing</h3>
+          <p id="seqDesc">Adjust your eye mask and settle back comfortably. Your 15-minute reset is ready to begin.</p>
+          <div class="seq-actions">
+            <button type="button" class="seq-primary-btn" id="seqContinueBtn">Continue to Thought Loop Clearing</button>
+            <div class="seq-secondary-row">
+              <button type="button" class="seq-link-btn" id="seqPauseBtn">Pause Countdown</button>
+              <button type="button" class="seq-link-btn" id="seqReplayBtn">Play Again</button>
+              <button type="button" class="seq-link-btn" id="seqFacBtn">Switch Session</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fac-overlay" id="facOverlay" aria-hidden="true">
+        <div class="fac-card" role="region" aria-label="Facilitator session options">
+          <h3>Facilitator Session Switcher</h3>
+          <p>Pause the default orientation flow or select a different session directly.</p>
+          <div class="fac-list" id="facList"></div>
+          <div class="fac-actions">
+            <button type="button" class="cs-btn-alt" id="facResumeBtn">Resume Current Video</button>
+            <button type="button" class="cs-btn" id="facExploreBtn">Open Explore Library</button>
+          </div>
+        </div>
       </div>
       <div class="tlc-invite-overlay" id="tlcInviteOverlay" aria-hidden="true">
         <div class="tlc-invite-card" role="region" aria-label="Post-session reflection">
@@ -1890,11 +2478,17 @@ html.is-tablet .modal .m-box.survey-mode {
       </div>
     </div>
     <div class="m-info">
-      <div><h2 id="m-title"></h2><p id="m-desc"></p></div>
-      <button type="button" class="m-checkin-trigger" id="mCheckinTrigger">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Post-Session Check-In
-      </button>
+      <div class="m-info-main"><h2 id="m-title"></h2><p id="m-desc"></p></div>
+      <div class="m-info-actions">
+        <button type="button" class="m-facilitator-btn" id="mFacilitatorBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          Facilitator: Switch Session
+        </button>
+        <button type="button" class="m-checkin-trigger" id="mCheckinTrigger">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Post-Session Check-In
+        </button>
+      </div>
     </div>
 
     <!-- End-of-Session Interactive Survey (TAG 1 - Thought Loop Clearing ONLY) -->
@@ -1902,7 +2496,7 @@ html.is-tablet .modal .m-box.survey-mode {
       <div class="tlc-topbar">
         <button type="button" class="tlc-replay-link" id="tlcReplayBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
-          Replay video
+          Play Again
         </button>
         <button type="button" class="tlc-skip-top" id="tlcSkipTopBtn" aria-label="Skip check-in and close">Not now <span aria-hidden="true">&#10005;</span></button>
       </div>
@@ -1959,9 +2553,9 @@ html.is-tablet .modal .m-box.survey-mode {
           <!-- 4. Describe your experience (Optional) -->
           <div class="tlc-open-q">
             <label class="tlc-q-label" for="tlcExpInput"><span class="tlc-q-num">4.</span> Describe your experience <span class="tlc-opt">(Optional)</span></label>
-            <p class="tlc-helper">Share what you noticed — what the thought loop looked like, where you felt it in your body, or how it shifted.</p>
+            <p class="tlc-helper">Where did you notice it in your body? What did it look or feel like, and what happened as the experience continued?</p>
             <div class="tlc-field-wrap">
-              <textarea class="tlc-textarea" id="tlcExpInput" rows="3" placeholder="Speak with Talk-to-Text or type about your experience…"></textarea>
+              <textarea class="tlc-textarea" id="tlcExpInput" rows="3" placeholder="Type or tap Talk to Text to describe your experience…"></textarea>
               <div class="tlc-voice-bar">
                 <button type="button" class="tlc-vbtn" id="tlcExpDictateBtn" data-dictate="exp">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg>
@@ -1989,15 +2583,19 @@ html.is-tablet .modal .m-box.survey-mode {
           </div>
           <h3>Check-In Saved</h3>
           <div class="tlc-done-summary" id="tlcDoneSummary"></div>
-          <p id="tlcDoneText">Thank you for sharing your reflection. Take a deep breath and carry this clarity into the rest of your day.</p>
-          <button type="button" class="tlc-btn-submit" id="tlcDoneCloseBtn">Return to Audio Guides</button>
+          <p id="tlcDoneText">Thank you for completing your SOL REViBE experience. You&rsquo;re welcome to finish here or browse additional sessions whenever you&rsquo;re ready.</p>
+          <div class="cs-actions" style="justify-content:center;">
+            <button type="button" class="tlc-btn-submit" id="tlcDoneCloseBtn">Finish</button>
+            <button type="button" class="cs-btn-alt" id="tlcDoneExploreBtn">Explore More TAGs</button>
+            <button type="button" class="cs-btn-alt" id="tlcDoneCollectionsBtn">Browse Collections</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Coming Soon Modal for upcoming mock episodes -->
+<!-- Coming Soon Modal for upcoming episodes -->
 <div class="cs-modal" id="comingSoonModal" role="dialog" aria-modal="true" aria-labelledby="csTitle" aria-hidden="true">
   <div class="cs-box">
     <button class="close" id="csClose" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
@@ -2012,6 +2610,30 @@ html.is-tablet .modal .m-box.survey-mode {
       <div class="cs-note"><strong>Coming Soon:</strong> This session is in final mastering and will be available to stream shortly.</div>
       <div class="cs-actions">
         <button type="button" class="cs-btn" id="csDoneBtn">Got It</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Series Info & Audio Trailer Modal (Series-level only) -->
+<div class="cs-modal" id="seriesModal" role="dialog" aria-modal="true" aria-labelledby="serModalTitle" aria-hidden="true">
+  <div class="cs-box">
+    <button class="close" id="serClose" type="button" aria-label="Close series info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="cs-thumb" id="serMediaBox">
+      <img id="serImg" src="" alt="">
+      <span class="cs-pill" id="serPill">Series Trailer</span>
+    </div>
+    <div class="cs-body">
+      <div class="cs-crumbs" id="serCrumbs"></div>
+      <h2 id="serModalTitle">Series Overview</h2>
+      <div class="cs-creators" id="serCreators"></div>
+      <p id="serDesc"></p>
+      <div class="cs-note" id="serPlaceholderNote">
+        <strong>Audio Trailer Coming Soon:</strong> An introductory audio preview for this series has not been uploaded yet and will be added soon.
+      </div>
+      <div class="cs-actions">
+        <button type="button" class="cs-btn-alt" id="serCloseBtn">Close</button>
+        <button type="button" class="cs-btn" id="serViewEpisodesBtn">View Episodes</button>
       </div>
     </div>
   </div>
@@ -2042,38 +2664,83 @@ html.is-tablet .modal .m-box.survey-mode {
     {k:"saved", label:"My Resets", ic:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'}
   ];
 
-  // Three signature collection pillars matching the dashboard layout
-  const PILLARS = [
+  // Standardized 4-Level Hierarchy: Category -> Collection -> Series -> Episode
+  const CATEGORIES_META = [
+    { name: "Teen & Emerging Mind", subtitle: "Navigate change. Discover your center.", theme: "stone" },
+    { name: "Couples & Relational Reset", subtitle: "Confronting disconnect. Building resonance.", theme: "rose" },
+    { name: "Transitions & Vitality", subtitle: "Embrace transition. Find your rhythm.", theme: "sage" },
+    { name: "Sleep & Recovery", subtitle: "Calm the evening mind. Deepen overnight recovery.", theme: "stone" }
+  ];
+
+  const COLLECTIONS_META = [
+    { name: "Teen & Emerging Mind", category: "Teen & Emerging Mind", subtitle: "Navigate change. Discover your center.", theme: "stone" },
+    { name: "Couples & Relational Reset", category: "Couples & Relational Reset", subtitle: "Confronting disconnect. Building resonance.", theme: "rose" },
+    { name: "Transitions & Vitality", category: "Transitions & Vitality", subtitle: "Embrace transition. Find your rhythm.", theme: "sage" },
+    { name: "Restorative Night Rituals", category: "Sleep & Recovery", subtitle: "Evening nervous system downshifts for deeper rest.", theme: "stone" }
+  ];
+
+  // Dedicated Series Registry (audio trailers live ONLY at the series level)
+  const SERIES_META = [
     {
+      name: "Thought Loop Series",
+      category: "Teen & Emerging Mind",
       collection: "Teen & Emerging Mind",
-      subtitle: "Navigate change. Discover your center.",
-      theme: "stone",
-      limit: 4
+      creators: "SOL REViBE Team",
+      thumb: "../assets/tag-thumb-thought-loop-person.jpg",
+      description: "Guided resets with post-session check-ins crafted to clear repetitive mental loops and restore mind-body balance.",
+      trailerVimeoId: ""
     },
     {
+      name: "Law of Action Series",
+      category: "Teen & Emerging Mind",
+      collection: "Teen & Emerging Mind",
+      creators: "Theo Wilson & Jason McBride",
+      thumb: "../assets/Thumbnail%20with%20no%20words.jpg",
+      description: "Collaborations with Theo Wilson & Jason McBride exploring personal agency, interrupting stress patterns, and grounded daily momentum.",
+      trailerVimeoId: ""
+    },
+    {
+      name: "Relational Somatics",
+      category: "Couples & Relational Reset",
       collection: "Couples & Relational Reset",
-      subtitle: "Confronting disconnect. Building resonance.",
-      theme: "rose",
-      limit: 3
+      creators: "SOL REViBE Relational Guides",
+      thumb: "../assets/tag-pillar-couples-bridge.jpg",
+      description: "Guided somatic practices helping partners soften defensiveness, co-regulate, and rebuild emotional warmth.",
+      trailerVimeoId: ""
     },
     {
+      name: "Transitions Guide",
+      category: "Transitions & Vitality",
       collection: "Transitions & Vitality",
-      subtitle: "Embrace transition. Find your rhythm.",
-      theme: "sage",
-      limit: 3
+      creators: "SOL REViBE Vitality Guides",
+      thumb: "../assets/tag-pillar-transitions-stillness.jpg",
+      description: "Grounding sessions honoring seasons of life transition with nervous system ease, steadiness, and forward vitality.",
+      trailerVimeoId: ""
+    },
+    {
+      name: "Delta Recovery Series",
+      category: "Sleep & Recovery",
+      collection: "Restorative Night Rituals",
+      creators: "SOL REViBE Rest Guides",
+      thumb: "../assets/tag-thumb-calming-mind-person.jpg",
+      description: "Slow evening frequency downshifts crafted to settle racing thoughts and prepare the body for deep restorative sleep.",
+      trailerVimeoId: ""
     }
   ];
 
-  // Structured hierarchy: Categories -> Collections -> Series -> Episodes
+  // Videos & Episodes Registry
+  // Note: To combine Intro Video + Thought Loop Clearing into one file later, replace vimeoId on id:1, remove nextVideoId, and set endSurvey:"thought-loop".
   const videos = [
     {
       id: 1,
       vimeoId: "1240033068",
+      nextVideoId: 2, // Automatically guides directly into TAG 1 - Thought Loop Clearing upon completion
       title: "Customer Instructional Video",
       category: "Video",
       collection: "Getting Started",
       series: "Station Onboarding",
       episode: 1,
+      creator: "SOL REViBE Team",
       duration: "04:47",
       durationBadge: "5 MIN",
       guidePill: "Station Orientation",
@@ -2082,50 +2749,52 @@ html.is-tablet .modal .m-box.survey-mode {
       views: 24,
       featured: true,
       hideFromGrid: true,
-      pausePoints: [82, 224], // auto-pause: 1:22 (Step 1 -> 2) and 3:44 (Step 2 -> 3)
-      exitHint: true,         // show "Finished watching? Click the X" callout near the end
+      pausePoints: [82, 224], // Auto-pause: 1:22 (Step 1 -> 2) and 3:44 (Step 2 -> 3)
+      exitHint: false,        // Flows seamlessly into Thought Loop Clearing instead of ending on home prompt
       tags: ["instructional", "walkthrough", "guide", "orientation", "how to"],
-      thumb: "https://i.vimeocdn.com/video/2217758590-d98bd4510ce42fee34be55ef0efd514cc1fc24f9a34f234ccee01d22c523d96c-d_640x360",
-      description: "Your guided orientation to the station, our guides, and how to get the most from your 20-minute reset."
-    },
-    {
-      id: 3,
-      vimeoId: "1249260783",
-      title: "Rigging Future Echoes",
-      category: "TAGs",
-      collection: "Teen & Emerging Mind",
-      series: "Law of Action Series",
-      episode: 1,
-      duration: "12:50",
-      durationBadge: "13 MIN",
-      guidePill: "Theo Wilson | Law of Action",
-      subtitleLine: "(with Theo Wilson & Jason McBride)",
-      days: 1,
-      views: 0,
-      featured: false,
-      tags: ["tag", "tags", "teen", "rigging future echoes", "law of action", "theo wilson", "jason mcbride"],
-      thumb: "../assets/Thumbnail%20with%20no%20words.jpg",
-      description: "In Your Favor — featuring Theo Wilson & Jason McBride (The Law of Action Series)."
+      thumb: "../assets/tag-intro-preview.jpg",
+      description: "Your guided orientation to the station, comfort setup, and seamless entry into your first 20-minute reset."
     },
     {
       id: 2,
       vimeoId: "1245793823",
       title: "TAG 1 - Thought Loop Clearing",
-      category: "TAGs",
+      category: "Teen & Emerging Mind",
       collection: "Teen & Emerging Mind",
       series: "Thought Loop Series",
       episode: 1,
+      creator: "SOL REViBE Team",
       duration: "15:01",
       durationBadge: "15 MIN",
       guidePill: "Thought Loop Clearing",
-      subtitleLine: "(Guided Reset + Post-Session Check-In)",
+      subtitleLine: "SOL REViBE Team · Guided Reset + Check-In",
       days: 1,
       views: 12,
       featured: false,
       endSurvey: "thought-loop", // ONLY this session opens the Thought Loop Clearing check-in at completion
       tags: ["tag", "tags", "teen", "thought loop", "clearing", "relaxation"],
-      thumb: "https://i.vimeocdn.com/video/2225226848-d5e96fb7165271dd0bc3b40051b7eea6411da29a0ca53a3a35d18a3742968550-d_640x360",
+      thumb: "../assets/tag-thumb-thought-loop-person.jpg",
       description: "A synchronized 15-minute therapeutic audio guide designed to clear thought loops, quiet mental noise, and restore mind-body balance."
+    },
+    {
+      id: 3,
+      vimeoId: "1249260783",
+      title: "Rigging Future Echoes",
+      category: "Teen & Emerging Mind",
+      collection: "Teen & Emerging Mind",
+      series: "Law of Action Series",
+      episode: 1,
+      creator: "Theo Wilson & Jason McBride",
+      duration: "12:50",
+      durationBadge: "13 MIN",
+      guidePill: "Law of Action Series",
+      subtitleLine: "with Theo Wilson & Jason McBride",
+      days: 1,
+      views: 0,
+      featured: false,
+      tags: ["tag", "tags", "teen", "rigging future echoes", "law of action", "theo wilson", "jason mcbride"],
+      thumb: "../assets/Thumbnail%20with%20no%20words.jpg",
+      description: "In Your Favor — featuring Theo Wilson & Jason McBride (Law of Action Series)."
     },
     {
       id: 4,
@@ -2137,10 +2806,11 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Teen & Emerging Mind",
       series: "Law of Action Series",
       episode: 2,
+      creator: "Inspired by Theo Wilson",
       duration: "15:00",
       durationBadge: "15 MIN",
-      guidePill: "Theo Wilson | Law of Action",
-      subtitleLine: "(inspired by Theo Wilson)",
+      guidePill: "Law of Action Series",
+      subtitleLine: "Inspired by Theo Wilson",
       days: 2,
       views: 0,
       featured: false,
@@ -2158,10 +2828,11 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Teen & Emerging Mind",
       series: "Law of Action Series",
       episode: 3,
+      creator: "Inspired by Theo Wilson",
       duration: "15:00",
       durationBadge: "15 MIN",
-      guidePill: "Theo Wilson | Law of Action",
-      subtitleLine: "(inspired by Theo Wilson)",
+      guidePill: "Law of Action Series",
+      subtitleLine: "Inspired by Theo Wilson",
       days: 2,
       views: 0,
       featured: false,
@@ -2179,14 +2850,15 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Couples & Relational Reset",
       series: "Relational Somatics",
       episode: 1,
+      creator: "SOL REViBE Relational Guides",
       duration: "15:00",
       durationBadge: "15 MIN",
       guidePill: "Relational Somatics",
-      subtitleLine: "(inspired by Relational Somatics)",
+      subtitleLine: "SOL REViBE Relational Guides",
       days: 2,
       views: 0,
       featured: false,
-      tags: ["couples", "relational", "armor", "somatics"],
+      tags: ["tag", "tags", "couples", "relational", "armor", "somatics"],
       thumb: "../assets/tag-pillar-couples-armor.jpg",
       description: "Guided somatic dialogue reset to soften defensiveness and create emotional safety together."
     },
@@ -2200,14 +2872,15 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Couples & Relational Reset",
       series: "Relational Somatics",
       episode: 2,
+      creator: "SOL REViBE Relational Guides",
       duration: "15:00",
       durationBadge: "15 MIN",
       guidePill: "Relational Somatics",
-      subtitleLine: "(inspired by Relational Somatics)",
+      subtitleLine: "SOL REViBE Relational Guides",
       days: 3,
       views: 0,
       featured: false,
-      tags: ["couples", "relational", "coregulation", "somatics"],
+      tags: ["tag", "tags", "couples", "relational", "coregulation", "somatics"],
       thumb: "../assets/tag-pillar-couples-sofa.jpg",
       description: "Shared breath and heart-rate synchronization session designed to bridge distance without forcing conversation."
     },
@@ -2221,14 +2894,15 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Couples & Relational Reset",
       series: "Relational Somatics",
       episode: 3,
+      creator: "SOL REViBE Relational Guides",
       duration: "15:00",
       durationBadge: "15 MIN",
       guidePill: "Relational Somatics",
-      subtitleLine: "(inspired by Relational Somatics)",
+      subtitleLine: "SOL REViBE Relational Guides",
       days: 3,
       views: 0,
       featured: false,
-      tags: ["couples", "relational", "bridge", "connection"],
+      tags: ["tag", "tags", "couples", "relational", "bridge", "connection"],
       thumb: "../assets/tag-pillar-couples-bridge.jpg",
       description: "Restorative session inviting presence, curiosity, and quiet warmth back into partnership."
     },
@@ -2242,14 +2916,15 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Transitions & Vitality",
       series: "Transitions Guide",
       episode: 1,
+      creator: "SOL REViBE Vitality Guides",
       duration: "15:00",
       durationBadge: "15 MIN",
       guidePill: "Transitions Guide",
-      subtitleLine: "(inspired by Transitions Guide)",
+      subtitleLine: "SOL REViBE Vitality Guides",
       days: 3,
       views: 0,
       featured: false,
-      tags: ["transitions", "vitality", "horizon", "sage"],
+      tags: ["tag", "tags", "transitions", "vitality", "horizon", "sage"],
       thumb: "../assets/tag-pillar-transitions-horizon.jpg",
       description: "Session honoring life transitions with calm spaciousness, confidence, and forward vitality."
     },
@@ -2263,14 +2938,15 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Transitions & Vitality",
       series: "Transitions Guide",
       episode: 2,
+      creator: "SOL REViBE Vitality Guides",
       duration: "15:00",
       durationBadge: "15 MIN",
       guidePill: "Transitions Guide",
-      subtitleLine: "(inspired by Transitions Guide)",
+      subtitleLine: "SOL REViBE Vitality Guides",
       days: 4,
       views: 0,
       featured: false,
-      tags: ["transitions", "vitality", "decompression", "ease", "movement"],
+      tags: ["tag", "tags", "transitions", "vitality", "decompression", "ease", "movement"],
       thumb: "../assets/tag-pillar-transitions-ease.jpg",
       description: "Gentle somatic unwinding paired with harmonic entrainment for joint ease, posture, and steady breath."
     },
@@ -2284,14 +2960,15 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Transitions & Vitality",
       series: "Transitions Guide",
       episode: 3,
+      creator: "SOL REViBE Vitality Guides",
       duration: "15:00",
       durationBadge: "15 MIN",
       guidePill: "Transitions Guide",
-      subtitleLine: "(inspired by Transitions Guide)",
+      subtitleLine: "SOL REViBE Vitality Guides",
       days: 4,
       views: 0,
       featured: false,
-      tags: ["transitions", "vitality", "stillness", "mindfulness"],
+      tags: ["tag", "tags", "transitions", "vitality", "stillness", "mindfulness"],
       thumb: "../assets/tag-pillar-transitions-stillness.jpg",
       description: "Cultivate a quiet anchor in seasons of change so inner steadiness remains untouched."
     },
@@ -2305,15 +2982,16 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Restorative Night Rituals",
       series: "Delta Recovery Series",
       episode: 1,
+      creator: "SOL REViBE Rest Guides",
       duration: "22:30",
       durationBadge: "23 MIN",
-      guidePill: "Delta Recovery",
-      subtitleLine: "(Evening Nervous System Downshift)",
+      guidePill: "Delta Recovery Series",
+      subtitleLine: "SOL REViBE Rest Guides · Night Downshift",
       days: 5,
       views: 0,
       featured: false,
-      tags: ["sleep", "recovery", "delta", "nightfall", "rest"],
-      thumb: "../assets/tag-thumb-delta-nightfall.jpg",
+      tags: ["tag", "tags", "sleep", "recovery", "delta", "nightfall", "rest"],
+      thumb: "../assets/tag-thumb-delta-nightfall-person.jpg",
       description: "Slow delta-wave soundscape crafted to transition mind and body into uninterrupted restorative sleep."
     },
     {
@@ -2326,23 +3004,27 @@ html.is-tablet .modal .m-box.survey-mode {
       collection: "Restorative Night Rituals",
       series: "Delta Recovery Series",
       episode: 2,
+      creator: "SOL REViBE Rest Guides",
       duration: "14:20",
       durationBadge: "14 MIN",
-      guidePill: "Rest Ritual",
-      subtitleLine: "(Evening Mental Downshift)",
+      guidePill: "Delta Recovery Series",
+      subtitleLine: "SOL REViBE Rest Guides · Rest Ritual",
       days: 5,
       views: 0,
       featured: false,
       tags: ["tag", "tags", "sleep", "calming", "racing mind"],
-      thumb: "../assets/tag-thumb-calming-mind.jpg",
+      thumb: "../assets/tag-thumb-calming-mind-person.jpg",
       description: "Guided frequency session to release evening mental chatter and anchor into steady calm."
     }
   ];
 
   const $ = id => document.getElementById(id);
-  const pillarsSection=$("pillarsSection"), grid=$("grid"), empty=$("empty"), search=$("search"), clearBtn=$("clear"),
+  const collectionsSection=$("collectionsSection"), grid=$("grid"), empty=$("empty"), search=$("search"), clearBtn=$("clear"),
         chips=$("chips"), side=$("side"), sortSel=$("sort"), collectionSel=$("collectionSel"), seriesSel=$("seriesSel"),
-        modal=$("modal"), mBox=$("mBox"), player=$("player"), featuredEl=$("featured"), comingSoonModal=$("comingSoonModal");
+        exploreControls=$("exploreControls"), homeCatsBlock=$("homeCatsBlock"), homeCatsLabel=$("homeCatsLabel"),
+        viewHeader=$("viewHeader"), viewTitle=$("viewTitle"), viewSubtitle=$("viewSubtitle"), viewCountPill=$("viewCountPill"),
+        modal=$("modal"), mBox=$("mBox"), player=$("player"), featuredEl=$("featured"),
+        comingSoonModal=$("comingSoonModal"), seriesModal=$("seriesModal");
   const saved = new Set(JSON.parse(localStorage.getItem("sol-saved") || "[]"));
   const viewCounts = JSON.parse(localStorage.getItem("sol-views") || "{}");
   videos.forEach(v => {
@@ -2386,160 +3068,28 @@ html.is-tablet .modal .m-box.survey-mode {
   const state = {query:"", cat:"All", collection:"All", series:"All", view:"home", sort:"recent"};
   let lastFocus = null;
   let activeVideo = null;
-  let playingAudioId = null;
-  const directAudio = new Audio();
-  directAudio.preload = "none";
-
-  // Off-screen Vimeo audio host so clicking the speaker button on a live video plays THAT video's audio without rendering any player on screen
-  const bgAudioHost = document.createElement("div");
-  bgAudioHost.id = "bgAudioHost";
-  bgAudioHost.setAttribute("aria-hidden", "true");
-  bgAudioHost.style.cssText = "position:fixed;left:-9999px;top:-9999px;width:2px;height:2px;opacity:0.001;pointer-events:none;overflow:hidden;";
-  document.body.appendChild(bgAudioHost);
-  const bgVimeoPlayers = new Map();
-
-  const hasAudioTrack = v => Boolean(v && !v.comingSoon && (v.vimeoId || v.audioSrc));
-
-  function sendBgVimeoCmd(iframe, method, value){
-    if (!iframe || !iframe.contentWindow) return;
-    try { iframe.contentWindow.postMessage(JSON.stringify(value === undefined ? { method } : { method, value }), "https://player.vimeo.com"); } catch(_){}
-  }
-
-  function bindBgVimeoSdk(v, entry){
-    if (!entry || entry.sdk || !window.Vimeo || typeof window.Vimeo.Player !== "function") return;
-    try {
-      const sdk = new window.Vimeo.Player(entry.iframe);
-      entry.sdk = sdk;
-      sdk.on("play", () => {
-        entry.playing = true;
-        playingAudioId = v.id;
-        syncSpeakerButtons();
-      });
-      sdk.on("pause", () => {
-        entry.playing = false;
-        if (playingAudioId === v.id) {
-          playingAudioId = null;
-          syncSpeakerButtons();
-        }
-      });
-      sdk.on("ended", () => {
-        entry.playing = false;
-        if (playingAudioId === v.id) {
-          playingAudioId = null;
-          syncSpeakerButtons();
-        }
-      });
-    } catch(_){}
-  }
-
-  function ensureBgVimeoPlayer(v){
-    if (!v || !v.vimeoId || v.comingSoon) return null;
-    if (bgVimeoPlayers.has(v.id)) {
-      const existing = bgVimeoPlayers.get(v.id);
-      bindBgVimeoSdk(v, existing);
-      return existing;
-    }
-    const iframe = document.createElement("iframe");
-    iframe.title = `${v.title} background audio`;
-    iframe.allow = "autoplay; fullscreen; picture-in-picture";
-    iframe.src = `https://player.vimeo.com/video/${v.vimeoId}?playsinline=1&title=0&byline=0&portrait=0&dnt=1&pip=0&api=1`;
-    bgAudioHost.appendChild(iframe);
-    const entry = { iframe, sdk: null, playing: false };
-    bgVimeoPlayers.set(v.id, entry);
-    iframe.addEventListener("load", () => {
-      bindBgVimeoSdk(v, entry);
-      if (playingAudioId === v.id) {
-        if (entry.sdk) {
-          entry.sdk.setMuted(false).catch(()=>{});
-          entry.sdk.setVolume(1).catch(()=>{});
-          entry.sdk.play().catch(() => {
-            if (playingAudioId === v.id) { playingAudioId = null; syncSpeakerButtons(); }
-          });
-        } else {
-          sendBgVimeoCmd(iframe, "setVolume", 1);
-          sendBgVimeoCmd(iframe, "play");
-        }
-      }
-    });
-    bindBgVimeoSdk(v, entry);
-    return entry;
-  }
-
-  function prewarmBgAudio(){
-    videos.forEach(v => {
-      if (!v.hideFromGrid && !v.comingSoon && v.vimeoId) ensureBgVimeoPlayer(v);
-    });
-  }
-  if (document.readyState === "complete") prewarmBgAudio();
-  else window.addEventListener("load", prewarmBgAudio);
 
   const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const svg = (p, extra="") => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${p}</svg>`;
   const fmtViews = n => n >= 1000 ? (n/1000).toFixed(1)+"K views" : n+" views";
   const PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>';
   const CLOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
-  const SPEAKER_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+  const INFO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>';
 
-  function syncSpeakerButtons(){
-    document.querySelectorAll(".audio-speaker-btn").forEach(btn => {
-      const id = +btn.dataset.audioId;
-      const bgEntry = bgVimeoPlayers.get(id);
-      const isBgPlaying = playingAudioId === id && ((bgEntry && bgEntry.playing) || (!directAudio.paused && directAudio.src));
-      btn.classList.toggle("is-playing", isBgPlaying || playingAudioId === id);
-      btn.setAttribute("aria-pressed", (isBgPlaying || playingAudioId === id) ? "true" : "false");
-    });
+  const getCategoryTheme = catName => {
+    const found = CATEGORIES_META.find(c => c.name === catName);
+    return found ? found.theme : "stone";
+  };
+  const getSeriesMeta = (serName, colName) =>
+    SERIES_META.find(s => s.name === serName && (!colName || s.collection === colName)) ||
+    SERIES_META.find(s => s.name === serName) ||
+    null;
+
+  function matchesCategory(v, cat){
+    if (cat === "All") return true;
+    if (cat === "TAGs") return /tag/i.test(v.category) || (v.tags && v.tags.some(t => /tag/i.test(t)));
+    return v.category === cat;
   }
-
-  function stopDirectAudio(){
-    directAudio.pause();
-    bgVimeoPlayers.forEach(entry => {
-      entry.playing = false;
-      if (entry.sdk) entry.sdk.pause().catch(()=>{});
-      else sendBgVimeoCmd(entry.iframe, "pause");
-    });
-    playingAudioId = null;
-    syncSpeakerButtons();
-  }
-
-  function toggleDirectAudio(v){
-    if (!hasAudioTrack(v)) return;
-    if (playingAudioId === v.id) {
-      stopDirectAudio();
-      return;
-    }
-    stopDirectAudio();
-    if (v.vimeoId) {
-      const entry = ensureBgVimeoPlayer(v);
-      playingAudioId = v.id;
-      syncSpeakerButtons();
-      if (entry && entry.sdk) {
-        entry.sdk.setMuted(false).catch(()=>{});
-        entry.sdk.setVolume(1).catch(()=>{});
-        entry.sdk.play().then(() => {
-          entry.playing = true;
-          syncSpeakerButtons();
-        }).catch(() => {
-          playingAudioId = null;
-          entry.playing = false;
-          syncSpeakerButtons();
-        });
-      } else if (entry) {
-        sendBgVimeoCmd(entry.iframe, "setVolume", 1);
-        sendBgVimeoCmd(entry.iframe, "play");
-      }
-      return;
-    }
-    if (v.audioSrc) {
-      directAudio.src = v.audioSrc;
-      playingAudioId = v.id;
-      directAudio.play().then(syncSpeakerButtons).catch(() => {
-        playingAudioId = null;
-        syncSpeakerButtons();
-      });
-    }
-  }
-
-  directAudio.addEventListener("ended", stopDirectAudio);
 
   function renderFeatured(){
     const v = videos.find(x => x.featured) || videos[0];
@@ -2547,22 +3097,38 @@ html.is-tablet .modal .m-box.survey-mode {
     featuredEl.innerHTML = `
       <img class="hero-waves" src="../assets/tag-header-design.jpg?v=20261120" alt="" aria-hidden="true">
       <div class="fh-left">
-        <div class="fh-eyebrow">FEATURED EXPERIENCE</div>
+        <div class="fh-eyebrow">First-Time Orientation</div>
         <h1 class="fh-title">Welcome to<span class="fh-brand">SOL REViBE</span></h1>
-        <div class="fh-subhead">THE 20-MINUTE MIND BODY RESET</div>
+        <div class="fh-subhead">The 20-Minute Mind-Body Reset</div>
         <p class="fh-desc">${esc(v.description)}</p>
         <div class="fh-actions">
           <button class="btn-start-here" type="button" data-id="${v.id}">${PLAY} Start Here</button>
-          <span class="fh-duration">${v.duration}</span>
+          <div class="fh-meta">
+            <span class="fh-duration">${v.duration} Orientation</span>
+            <span class="fh-next-note">Flows directly into Thought Loop Clearing</span>
+          </div>
+        </div>
+        <div class="fh-returning">
+          <button type="button" class="fh-returning-link" data-go-explore="true">Returning visitor or facilitator? Explore all TAGs &rarr;</button>
         </div>
       </div>
       <div class="fh-right">
-        <div class="fh-quote">Quiet the Mind<br>Recharge the Body</div>
+        <button type="button" class="fh-preview-card" data-id="${v.id}" aria-label="Play Customer Instructional Video">
+          <img src="${esc(v.thumb)}" alt="SOL REViBE Mind-Body Station Orientation">
+          <div class="fh-preview-bar">
+            <div class="fh-preview-caption">
+              <strong>Customer Instructional Video</strong>
+              <span>Guided Setup · ${v.duration}</span>
+            </div>
+            <span class="fh-preview-play" aria-hidden="true">${PLAY}</span>
+          </div>
+        </button>
+        <div class="fh-quote">Quiet the Mind &middot; Recharge the Body</div>
       </div>`;
   }
 
   function renderOrganizerSelects(){
-    const visible = videos.filter(v => !v.hideFromGrid && (state.cat==="All" || v.category===state.cat || (state.cat==="TAGs" && (/tag/i.test(v.category) || (v.tags && v.tags.some(t => /tag/i.test(t)))))));
+    const visible = videos.filter(v => !v.hideFromGrid && matchesCategory(v, state.cat));
     const collections = ["All", ...new Set(visible.map(v => v.collection).filter(Boolean))];
     if (!collections.includes(state.collection)) state.collection = "All";
     collectionSel.innerHTML = collections.map(c => `<option value="${esc(c)}"${c===state.collection?" selected":""}>Collection: ${esc(c)}</option>`).join("");
@@ -2574,7 +3140,11 @@ html.is-tablet .modal .m-box.survey-mode {
   }
 
   function renderNav(){
-    chips.innerHTML = CATS.map(c => `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${c===state.cat}">${c==="All"?"All Categories":esc(c)}</button>`).join("");
+    const q = state.query.trim();
+    chips.innerHTML = CATS.map(c => {
+      const active = state.view === "home" && !q ? false : (c === state.cat);
+      return `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${active}">${c==="All"?"All Categories":esc(c)}</button>`;
+    }).join("");
     side.innerHTML = VIEWS.map(v => `<button type="button" data-view="${v.k}" aria-pressed="${v.k===state.view}">${svg(v.ic)}<span>${v.label}</span></button>`).join("")
       + `<a class="nav-ext" href="../customer.html">${svg('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>')}<span>Settings</span></a>`;
     renderOrganizerSelects();
@@ -2584,97 +3154,213 @@ html.is-tablet .modal .m-box.survey-mode {
     const q = state.query.trim().toLowerCase();
     let out = videos.filter(v =>
       !v.hideFromGrid &&
-      (state.cat==="All" || v.category===state.cat || (state.cat==="TAGs" && (/tag/i.test(v.category) || (v.tags && v.tags.some(t => /tag/i.test(t)))))) &&
+      matchesCategory(v, state.cat) &&
       (state.collection==="All" || v.collection===state.collection) &&
       (state.series==="All" || v.series===state.series) &&
       (state.view!=="saved" || saved.has(v.id)) &&
-      (!q || [v.title, v.category, v.collection, v.series, `Episode ${v.episode || ""}`, v.guidePill || "", v.subtitleLine || "", v.description, ...(v.tags || [])].join(" ").toLowerCase().includes(q)));
+      (!q || [v.title, v.category, v.collection, v.series, v.creator || "", `Episode ${v.episode || ""}`, v.guidePill || "", v.subtitleLine || "", v.description, ...(v.tags || [])].join(" ").toLowerCase().includes(q)));
     const s = state.sort;
     out.sort((a,b) => s==="recent" ? (a.days-b.days || (a.episode||1)-(b.episode||1)) : s==="views" ? b.views-a.views : a.title.localeCompare(b.title));
     return out;
   }
 
-  function editorialCardHtml(v, i){
-    const canPlayAudio = hasAudioTrack(v);
-    const isPlayingAudio = canPlayAudio && playingAudioId === v.id;
-    const speakerBtn = canPlayAudio
-      ? `<button type="button" class="audio-speaker-btn ${isPlayingAudio?"is-playing":""}" data-audio-id="${v.id}" aria-label="Play audio from ${esc(v.title)}" aria-pressed="${isPlayingAudio?"true":"false"}" title="Play audio from this session">${SPEAKER_SVG}</button>`
-      : "";
+  function episodeCardHtml(v, i){
     const epBadge = v.episode ? `<span class="ec-ep">Ep ${v.episode}</span>` : "";
     const soonBadge = v.comingSoon ? `<span class="ec-soon">Coming Soon</span>` : "";
-    const pillLabel = v.guidePill || v.series || v.category;
-    const subLabel = v.subtitleLine || `${v.series || ""}`;
+    const pillLabel = v.series || v.guidePill || v.category;
+    const subLabel = v.creator || v.subtitleLine || "";
+    const theme = getCategoryTheme(v.category);
+    const statusHtml = v.comingSoon
+      ? `<span class="ec-status ec-status--soon">In Mastering</span>`
+      : `<span class="ec-status">Ready to Play</span>`;
     return `
       <article class="ec-card" tabindex="0" role="button" data-id="${v.id}" style="animation-delay:${i*35}ms" aria-label="${v.comingSoon?"Preview coming soon details for ":"Play "}${esc(v.title)}">
-        <img class="ec-bg" src="${esc(v.thumb)}" alt="${esc(v.title)}" loading="lazy">
-        <div class="ec-scrim" aria-hidden="true"></div>
-        <div class="ec-top">
-          <div class="ec-top-left">
-            ${speakerBtn}
-            <span class="ec-dur">${CLOCK}${esc(v.durationBadge || v.duration)}</span>
-            ${epBadge}
+        <div class="ec-media">
+          <img class="ec-bg" src="${esc(v.thumb)}" alt="${esc(v.title)}" loading="lazy">
+          <div class="ec-top">
+            <div class="ec-top-left">
+              <span class="ec-dur">${CLOCK}${esc(v.durationBadge || v.duration)}</span>
+              ${epBadge}
+            </div>
+            <div class="ec-top-right">
+              ${soonBadge}
+              <button type="button" class="save ${saved.has(v.id)?"on":""}" data-save="${v.id}" aria-label="${saved.has(v.id)?"Remove from":"Add to"} My Resets" aria-pressed="${saved.has(v.id)}">${svg('<path d="M6 3h12v18l-6-4-6 4z"/>')}</button>
+            </div>
           </div>
-          <div class="ec-top-right">
-            ${soonBadge}
-            <button type="button" class="save ${saved.has(v.id)?"on":""}" data-save="${v.id}" aria-label="${saved.has(v.id)?"Remove from":"Add to"} My Resets" aria-pressed="${saved.has(v.id)}">${svg('<path d="M6 3h12v18l-6-4-6 4z"/>')}</button>
-          </div>
+          <span class="ec-play" aria-hidden="true">${PLAY}</span>
         </div>
-        <div class="ec-middle">
+        <div class="ec-body">
           <div class="ec-text">
             <h3>${esc(v.title)}</h3>
             <div class="ec-sub">${esc(subLabel)}</div>
           </div>
-          <span class="ec-play" aria-hidden="true">${PLAY}</span>
-        </div>
-        <div class="ec-bottom">
-          <span class="ec-pill">${esc(pillLabel)}</span>
+          <div class="ec-bottom">
+            <span class="ec-pill ec-pill--${theme}">${esc(pillLabel)}</span>
+            ${statusHtml}
+          </div>
         </div>
       </article>`;
   }
 
-  function render(){
-    const q = state.query.trim();
-    const isDefaultHome = state.view === "home" && state.cat === "All" && state.collection === "All" && state.series === "All" && !q;
-    clearBtn.classList.toggle("visible", !!state.query);
+  function renderSeriesCardHtml(ser, epCount){
+    return `
+      <article class="series-card" data-series-card="${esc(ser.name)}">
+        <div class="series-card-media" tabindex="0" role="button" data-open-series="${esc(ser.name)}" data-open-col="${esc(ser.collection)}" aria-label="View episodes in ${esc(ser.name)}">
+          <img src="${esc(ser.thumb)}" alt="${esc(ser.name)}" loading="lazy">
+          <span class="series-badge">Series · ${epCount} ${epCount===1?"Ep":"Eps"}</span>
+        </div>
+        <button type="button" class="series-info-btn" data-series-info="${esc(ser.name)}" aria-label="Series info and audio trailer for ${esc(ser.name)}" title="Series overview &amp; audio trailer">${INFO_SVG}</button>
+        <div class="series-card-body">
+          <div>
+            <h3 class="series-card-title">${esc(ser.name)}</h3>
+            <div class="series-card-creators">${esc(ser.creators)}</div>
+            <p class="series-card-desc">${esc(ser.description)}</p>
+          </div>
+          <div class="series-card-foot">
+            <span class="ec-status">${esc(ser.category)}</span>
+            <button type="button" class="series-open-btn" data-open-series="${esc(ser.name)}" data-open-col="${esc(ser.collection)}">View Episodes &rsaquo;</button>
+          </div>
+        </div>
+      </article>`;
+  }
 
-    if (isDefaultHome) {
-      let idx = 0;
-      pillarsSection.innerHTML = PILLARS.map(p => {
-        const colItems = videos
-          .filter(v => !v.hideFromGrid && v.collection === p.collection)
-          .sort((a,b) => state.sort === "views" ? b.views - a.views : state.sort === "title" ? a.title.localeCompare(b.title) : (a.days - b.days || (a.episode || 1) - (b.episode || 1)));
-        const shown = colItems.slice(0, p.limit || 4);
-        return `
-          <section class="pillar-col pillar-col--${p.theme}" aria-label="${esc(p.collection)}">
-            <div class="pillar-head">
-              <div>
-                <h2>${esc(p.collection)}</h2>
-                <p>${esc(p.subtitle)}</p>
-              </div>
-              <button type="button" class="pillar-view-all" data-open-collection="${esc(p.collection)}">View All &rsaquo;</button>
+  function renderCollectionsView(){
+    const q = state.query.trim().toLowerCase();
+    // Filtered or searched items determine what's visible, respecting Category / Collection / Series drill-down
+    const matchingEpisodes = videos.filter(v =>
+      !v.hideFromGrid &&
+      matchesCategory(v, state.cat) &&
+      (state.collection === "All" || v.collection === state.collection) &&
+      (state.series === "All" || v.series === state.series) &&
+      (!q || [v.title, v.category, v.collection, v.series, v.creator || "", v.description, ...(v.tags || [])].join(" ").toLowerCase().includes(q))
+    );
+
+    const crumbParts = [`<button type="button" class="hier-crumb-btn" data-crumb-reset="true">All Collections</button>`];
+    if (state.cat !== "All") {
+      crumbParts.push(`<span class="sep">&rsaquo;</span><button type="button" class="hier-crumb-btn" data-crumb-cat="${esc(state.cat)}">${esc(state.cat)}</button>`);
+    }
+    if (state.collection !== "All") {
+      crumbParts.push(`<span class="sep">&rsaquo;</span><button type="button" class="hier-crumb-btn" data-crumb-col="${esc(state.collection)}">${esc(state.collection)}</button>`);
+    }
+    if (state.series !== "All") {
+      crumbParts.push(`<span class="sep">&rsaquo;</span><span class="hier-crumb-cur">${esc(state.series)}</span>`);
+    }
+    const crumbsHtml = `<nav class="hier-crumbs" aria-label="Library Hierarchy Breadcrumb">${crumbParts.join("")}</nav>`;
+
+    // If user drilled down into a specific Series, show the Series Header Banner + its Episodes
+    if (state.series !== "All") {
+      const ser = getSeriesMeta(state.series, state.collection === "All" ? null : state.collection);
+      const eps = matchingEpisodes.slice().sort((a,b) => (a.episode||99) - (b.episode||99));
+      const serBannerHtml = ser ? `
+        <div class="series-banner">
+          <img class="series-banner-img" src="${esc(ser.thumb)}" alt="${esc(ser.name)}">
+          <div>
+            <div class="col-band-kicker">${esc(ser.category)} &rsaquo; ${esc(ser.collection)}</div>
+            <h2 style="font-size:1.45rem;font-weight:700;color:#25221E;margin-bottom:4px;">${esc(ser.name)}</h2>
+            <div class="series-card-creators" style="margin-bottom:8px;">${esc(ser.creators)} · ${eps.length} ${eps.length===1?"Episode":"Episodes"}</div>
+            <p style="font-size:.9rem;color:#55524D;line-height:1.5;">${esc(ser.description)}</p>
+            <div class="series-banner-actions">
+              <button type="button" class="series-trailer-pill-btn" data-series-info="${esc(ser.name)}">${INFO_SVG}<span>Series Audio Trailer &amp; Info</span></button>
+              <button type="button" class="series-open-btn" data-crumb-reset="true">&larr; Back to Collections</button>
             </div>
-            <div class="pillar-cards">
-              ${shown.map(v => editorialCardHtml(v, idx++)).join("")}
-            </div>
-          </section>`;
-      }).join("");
-      pillarsSection.hidden = false;
-      grid.hidden = true;
-      empty.classList.remove("show");
-      syncSpeakerButtons();
+          </div>
+        </div>` : "";
+      collectionsSection.innerHTML = crumbsHtml + serBannerHtml + (eps.length
+        ? `<div class="series-cards">${eps.map((ep, i) => episodeCardHtml(ep, i)).join("")}</div>`
+        : "");
+      empty.classList.toggle("show", eps.length === 0);
       return;
     }
 
-    pillarsSection.hidden = true;
+    // Otherwise display Collections -> Series cards cleanly
+    const activeCollections = COLLECTIONS_META.filter(col =>
+      (state.cat === "All" || state.cat === "TAGs" || col.category === state.cat) &&
+      (state.collection === "All" || col.name === state.collection)
+    );
+    const colHtml = activeCollections.map(col => {
+      const colSeries = SERIES_META.filter(ser => ser.collection === col.name).filter(ser =>
+        matchingEpisodes.some(v => v.series === ser.name && v.collection === col.name)
+      );
+      if (!colSeries.length) return "";
+      const seriesCardsHtml = colSeries.map(ser => {
+        const epCount = videos.filter(v => !v.hideFromGrid && v.series === ser.name && v.collection === col.name).length;
+        return renderSeriesCardHtml(ser, epCount);
+      }).join("");
+      return `
+        <section class="col-band col-band--${col.theme}" aria-label="${esc(col.name)}">
+          <div class="col-band-head">
+            <div>
+              <div class="col-band-kicker">${esc(col.category)}</div>
+              <h2>${esc(col.name)}</h2>
+              <p>${esc(col.subtitle)}</p>
+            </div>
+            ${state.collection === "All"
+              ? `<button type="button" class="series-open-btn" data-open-collection="${esc(col.name)}">Open Collection &rsaquo;</button>`
+              : `<button type="button" class="series-open-btn" data-crumb-reset="true">&larr; All Collections</button>`}
+          </div>
+          <div class="series-grid">${seriesCardsHtml}</div>
+        </section>`;
+    }).filter(Boolean).join("");
+
+    collectionsSection.innerHTML = crumbsHtml + colHtml;
+    empty.classList.toggle("show", !colHtml);
+  }
+
+  function render(){
+    const q = state.query.trim();
+    clearBtn.classList.toggle("visible", !!q);
+
+    // Clear visual modes cleanly first
+    const isHome = state.view === "home" && !q;
+    featuredEl.hidden = !isHome;
+    viewHeader.hidden = isHome;
+    homeCatsLabel.hidden = !isHome;
+    homeCatsBlock.hidden = state.view === "collections" || state.view === "saved";
+    exploreControls.hidden = state.view !== "explore";
+
+    if (isHome) {
+      collectionsSection.hidden = true;
+      grid.hidden = true;
+      empty.classList.remove("show");
+      return;
+    }
+
+    if (state.view === "collections") {
+      viewTitle.textContent = state.series !== "All" ? state.series : state.collection !== "All" ? state.collection : "Collections & Series";
+      viewSubtitle.textContent = "Browse the complete SOL REViBE hierarchy from Category to Collection, Series, and Episodes.";
+      const totalSer = SERIES_META.length;
+      viewCountPill.textContent = `${COLLECTIONS_META.length} Collections · ${totalSer} Series`;
+      grid.hidden = true;
+      collectionsSection.hidden = false;
+      renderCollectionsView();
+      return;
+    }
+
+    collectionsSection.hidden = true;
     const items = list();
+    if (state.view === "saved") {
+      viewTitle.textContent = "My Resets";
+      viewSubtitle.textContent = "Sessions you have bookmarked for quick access on your next reset.";
+      viewCountPill.textContent = `${items.length} Saved`;
+      emptyTitle.textContent = "No saved resets yet";
+      emptyDesc.textContent = "Tap the bookmark icon on any episode in Explore to save it here.";
+    } else {
+      viewTitle.textContent = state.cat === "All" ? "Explore TAG Library" : state.cat;
+      viewSubtitle.textContent = "Search, filter, and play every available Therapeutic Audio Guide.";
+      viewCountPill.textContent = `${items.length} ${items.length === 1 ? "Episode" : "Episodes"}`;
+      emptyTitle.textContent = "No experiences found matching your query";
+      emptyDesc.textContent = "Try a different keyword, category, collection, or series.";
+    }
+
     const groups = [];
     const groupMap = new Map();
     items.forEach(v => {
+      const cat = v.category || "TAGs";
       const col = v.collection || "SOL REViBE Library";
       const ser = v.series || "Sessions";
       const key = `${col}|||${ser}`;
       if (!groupMap.has(key)) {
-        const g = { collection: col, series: ser, items: [] };
+        const g = { category: cat, collection: col, series: ser, items: [] };
         groupMap.set(key, g);
         groups.push(g);
       }
@@ -2684,23 +3370,33 @@ html.is-tablet .modal .m-box.survey-mode {
     let idx = 0;
     grid.innerHTML = groups.map(g => {
       const eps = g.items.slice().sort((a, b) => (a.episode || 99) - (b.episode || 99));
+      const serMeta = getSeriesMeta(g.series, g.collection);
+      const creatorsTxt = serMeta ? serMeta.creators : "";
+      const infoBtn = serMeta
+        ? `<button type="button" class="series-head-info-btn" data-series-info="${esc(g.series)}">${INFO_SVG}<span>Series Trailer</span></button>`
+        : "";
       return `
         <section class="series-group" aria-label="${esc(g.collection)} - ${esc(g.series)}">
           <div class="series-head">
             <div class="series-crumbs">
+              <span class="cat-label">${esc(g.category)}</span>
+              <span class="sep" aria-hidden="true">&rsaquo;</span>
               <span class="col-label">${esc(g.collection)}</span>
               <span class="sep" aria-hidden="true">&rsaquo;</span>
               <span class="ser-label">${esc(g.series)}</span>
+              ${creatorsTxt ? `<span class="series-creators-inline">· ${esc(creatorsTxt)}</span>` : ""}
             </div>
-            <span class="series-count">${eps.length} ${eps.length===1?"Episode":"Episodes"}</span>
+            <div class="series-head-actions">
+              ${infoBtn}
+              <span class="series-count">${eps.length} ${eps.length===1?"Episode":"Episodes"}</span>
+            </div>
           </div>
-          <div class="series-cards">${eps.map(v => editorialCardHtml(v, idx++)).join("")}</div>
+          <div class="series-cards">${eps.map(v => episodeCardHtml(v, idx++)).join("")}</div>
         </section>`;
     }).join("");
 
     empty.classList.toggle("show", items.length === 0);
     grid.hidden = items.length === 0;
-    syncSpeakerButtons();
   }
 
   const update = () => { renderNav(); render(); };
@@ -2716,7 +3412,7 @@ html.is-tablet .modal .m-box.survey-mode {
         tlcShiftTrack = $("tlcShiftTrack"), tlcShiftPill = $("tlcShiftPill"), tlcShiftFill = $("tlcShiftFill"),
         tlcExpInput = $("tlcExpInput"),
         tlcFormErr = $("tlcFormErr"), tlcSubmitBtn = $("tlcSubmitBtn"),
-        mCheckinTrigger = $("mCheckinTrigger");
+        mCheckinTrigger = $("mCheckinTrigger"), mFacilitatorBtn = $("mFacilitatorBtn");
 
   document.querySelectorAll("[data-tlc-min-label]").forEach(el => { el.textContent = TLC_CONFIG.scaleMinLabel; });
   document.querySelectorAll("[data-tlc-max-label]").forEach(el => { el.textContent = TLC_CONFIG.scaleMaxLabel; });
@@ -2747,7 +3443,7 @@ html.is-tablet .modal .m-box.survey-mode {
     if (endNum === 1 && drop >= 1) {
       return {
         badge: String(drop),
-        unit: drop === 1 ? "pt drop" : "pt drop",
+        unit: "pt drop",
         pill: `${openNum} → 1 · Cleared`,
         fillPct: 100,
         title: "Cleared all the way down to a 1!",
@@ -2777,7 +3473,7 @@ html.is-tablet .modal .m-box.survey-mode {
     if (drop >= 1) {
       return {
         badge: String(drop),
-        unit: drop === 1 ? "pt drop" : "pt drop",
+        unit: "pt drop",
         pill: `${openNum} → ${endNum} · -${drop} ${drop === 1 ? "pt" : "pts"}`,
         fillPct: Math.max(30, Math.round((drop / 9) * 100) + 22),
         title: "Great shift — the loop is unwinding!",
@@ -2831,7 +3527,7 @@ html.is-tablet .modal .m-box.survey-mode {
     }
     const enc = getEncourager(o, e);
     tlcDistanceCard.classList.remove("active");
-    void tlcDistanceCard.offsetWidth; // retrigger pop animation on value change
+    void tlcDistanceCard.offsetWidth;
     tlcDistanceCard.classList.add("active");
     tlcDistNum.textContent = enc.badge;
     tlcDistUnit.textContent = enc.unit;
@@ -2876,16 +3572,8 @@ html.is-tablet .modal .m-box.survey-mode {
   });
 
   // ---- Talk-to-Text (Web Speech API) ----
-  const voiceEngine = {
-    recognition: null,
-    dictateField: null
-  };
-
-  const fieldDom = () => ({
-    input: tlcExpInput,
-    dictateBtn: $("tlcExpDictateBtn"),
-    status: $("tlcExpStatus")
-  });
+  const voiceEngine = { recognition: null, dictateField: null };
+  const fieldDom = () => ({ input: tlcExpInput, dictateBtn: $("tlcExpDictateBtn"), status: $("tlcExpStatus") });
 
   function stopDictation(){
     if (voiceEngine.dictateField) {
@@ -2902,15 +3590,10 @@ html.is-tablet .modal .m-box.survey-mode {
     }
   }
 
-  function stopAllVoice(){
-    stopDictation();
-  }
+  function stopAllVoice(){ stopDictation(); }
 
   function toggleDictation(fieldKey){
-    if (voiceEngine.dictateField === fieldKey) {
-      stopDictation();
-      return;
-    }
+    if (voiceEngine.dictateField === fieldKey) { stopDictation(); return; }
     stopDictation();
     const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
     const dom = fieldDom(fieldKey);
@@ -2997,6 +3680,7 @@ html.is-tablet .modal .m-box.survey-mode {
     vimeoCmd("setCurrentTime", 0);
     vimeoCmd("pause");
     hideResume();
+    hideSeqOverlay();
     hideExitHint();
     tlcInviteOverlay.classList.remove("fading-out");
     mBox.classList.add("invite-mode");
@@ -3021,6 +3705,7 @@ html.is-tablet .modal .m-box.survey-mode {
   function openTlcSurvey(){
     if (mBox.classList.contains("survey-mode")) return;
     hideTlcInvite();
+    hideSeqOverlay();
     vimeoCmd("pause");
     hideResume();
     hideExitHint();
@@ -3069,8 +3754,6 @@ html.is-tablet .modal .m-box.survey-mode {
     tlcSubmitBtn.disabled = true;
     tlcSubmitBtn.textContent = "Submitting…";
     tlcFormErr.hidden = true;
-
-    // Ensure any live voice dictation finishes cleanly before packaging payload
     stopAllVoice();
 
     const enc = getEncourager(tlcState.openNum, tlcState.endNum);
@@ -3091,7 +3774,6 @@ html.is-tablet .modal .m-box.survey-mode {
       bodyLocation: ""
     };
 
-    // Keep lightweight local backup summary for reliability
     try {
       const localHistory = JSON.parse(localStorage.getItem("solrevibe_tlc_reflections_v1") || "[]");
       localHistory.unshift({
@@ -3170,14 +3852,19 @@ html.is-tablet .modal .m-box.survey-mode {
   $("tlcSkipTopBtn").addEventListener("click", closeModal);
   $("tlcSkipBottomBtn").addEventListener("click", closeModal);
   $("tlcDoneCloseBtn").addEventListener("click", closeModal);
+  $("tlcDoneExploreBtn").addEventListener("click", () => { closeModal(); state.view = "explore"; Object.assign(state, { cat:"All", collection:"All", series:"All" }); update(); });
+  $("tlcDoneCollectionsBtn").addEventListener("click", () => { closeModal(); state.view = "collections"; Object.assign(state, { cat:"All", collection:"All", series:"All" }); update(); });
   mCheckinTrigger.addEventListener("click", openTlcSurvey);
 
-  // ---- Auto-pause points & Vimeo end-screen suppression (Official SDK + postMessage fallback) ----
+  // ---- Auto-pause points, Guided Intro -> Thought Loop Transition & Facilitator Controls ----
   const VIMEO_ORIGIN = "https://player.vimeo.com";
-  const pauser = { active: false, points: [], fired: {}, last: 0, holdAt: null, exitHint: false, endSurvey: null, endHandled: false, atEnd: false, sdkReady: false };
-  const resumeOverlay = $("resumeOverlay"), resumeBtn = $("resumeBtn"), resumeBtnLabel = $("resumeBtnLabel"), resumeNote = $("resumeNote");
+  const pauser = { active: false, points: [], fired: {}, last: 0, holdAt: null, exitHint: false, nextVideoId: null, endSurvey: null, endHandled: false, atEnd: false, sdkReady: false };
+  const resumeOverlay = $("resumeOverlay"), resumeBtn = $("resumeBtn"), resumeBtnLabel = $("resumeBtnLabel"), resumeNote = $("resumeNote"), resumeFacBtn = $("resumeFacBtn");
+  const seqOverlay = $("seqOverlay"), seqTitle = $("seqTitle"), seqDesc = $("seqDesc"), seqContinueBtn = $("seqContinueBtn"), seqPauseBtn = $("seqPauseBtn");
+  const facOverlay = $("facOverlay"), facList = $("facList");
   let vimeoBindTimers = [];
   let vimeoSdk = null;
+  let seqCountdownTimer = null;
 
   function detachVimeoSdk(){
     if (!vimeoSdk) return;
@@ -3207,8 +3894,9 @@ html.is-tablet .modal .m-box.survey-mode {
   function showResume(idx){
     pauser.atEnd = false;
     resumeOverlay.classList.remove("end-cover");
-    resumeBtnLabel.textContent = "Play Again";
-    resumeNote.textContent = `Paused · Up next: Step ${idx + 2}`;
+    resumeBtnLabel.textContent = "Continue";
+    resumeNote.textContent = `Paused · Step ${idx + 2} Ready When You Are`;
+    resumeFacBtn.hidden = !pauser.nextVideoId;
     resumeOverlay.classList.add("show"); resumeOverlay.setAttribute("aria-hidden", "false");
     resumeBtn.focus({ preventScroll: true });
   }
@@ -3216,8 +3904,9 @@ html.is-tablet .modal .m-box.survey-mode {
   function showEndReplay(){
     pauser.atEnd = true;
     resumeOverlay.classList.add("end-cover");
-    resumeBtnLabel.textContent = "Watch Again";
+    resumeBtnLabel.textContent = "Play Again";
     resumeNote.textContent = "Session Complete";
+    resumeFacBtn.hidden = true;
     resumeOverlay.classList.add("show"); resumeOverlay.setAttribute("aria-hidden", "false");
     vimeoCmd("setCurrentTime", 0);
     vimeoCmd("pause");
@@ -3227,8 +3916,116 @@ html.is-tablet .modal .m-box.survey-mode {
     pauser.holdAt = null;
     pauser.atEnd = false;
     resumeOverlay.classList.remove("end-cover");
+    resumeFacBtn.hidden = true;
     if (!resumeOverlay.classList.contains("show")) return;
     resumeOverlay.classList.remove("show"); resumeOverlay.setAttribute("aria-hidden", "true");
+  }
+
+  function hideSeqOverlay(){
+    clearInterval(seqCountdownTimer);
+    seqCountdownTimer = null;
+    if (!seqOverlay.classList.contains("show")) return;
+    seqOverlay.classList.remove("show");
+    seqOverlay.setAttribute("aria-hidden", "true");
+  }
+
+  function showSeqTransition(nextVideo, manualFallback){
+    clearInterval(seqCountdownTimer);
+    seqCountdownTimer = null;
+    if (!nextVideo) { showEndReplay(); return; }
+    hideResume();
+    hideExitHint();
+    vimeoCmd("pause");
+    seqTitle.textContent = `Up Next: ${nextVideo.title}`;
+    seqContinueBtn.textContent = nextVideo.id === 2 ? "Continue to Thought Loop Clearing" : `Continue to ${nextVideo.title}`;
+    if (manualFallback) {
+      seqPauseBtn.hidden = true;
+      seqDesc.textContent = "Tap the button below to begin your 15-minute reset cleanly with audio enabled.";
+      seqOverlay.classList.add("show");
+      seqOverlay.setAttribute("aria-hidden", "false");
+      seqContinueBtn.focus({ preventScroll: true });
+      return;
+    }
+    let secs = 4;
+    seqPauseBtn.hidden = false;
+    seqPauseBtn.textContent = "Pause Countdown";
+    seqDesc.textContent = `Adjust your eye mask and settle back comfortably. Starting automatically in ${secs}s…`;
+    seqOverlay.classList.add("show");
+    seqOverlay.setAttribute("aria-hidden", "false");
+    seqContinueBtn.focus({ preventScroll: true });
+    seqCountdownTimer = setInterval(() => {
+      secs -= 1;
+      if (secs <= 0) {
+        clearInterval(seqCountdownTimer);
+        seqCountdownTimer = null;
+        transitionToVideo(nextVideo, false);
+      } else {
+        seqDesc.textContent = `Adjust your eye mask and settle back comfortably. Starting automatically in ${secs}s…`;
+      }
+    }, 1000);
+  }
+
+  function transitionToVideo(nextVideo, fromUserGesture){
+    if (!nextVideo) return;
+    hideSeqOverlay();
+    hideFacOverlay();
+    hideResume();
+    hideExitHint();
+    activeVideo = nextVideo;
+    countView(nextVideo);
+    resetTlcSurvey();
+    hideTlcInvite();
+    $("m-title").textContent = nextVideo.title;
+    $("m-desc").textContent = `${nextVideo.category} · ${nextVideo.duration} · ${fmtViews(nextVideo.views)}`;
+    mCheckinTrigger.classList.toggle("visible", nextVideo.endSurvey === "thought-loop");
+    mFacilitatorBtn.classList.toggle("visible", !!nextVideo.nextVideoId || nextVideo.endSurvey === "thought-loop");
+
+    // Re-arm pauser WITHOUT tearing down SDK when using seamless loadVideo on the live player
+    if (!fromUserGesture && vimeoSdk && pauser.sdkReady && typeof vimeoSdk.loadVideo === "function") {
+      pauser.active = true;
+      pauser.points = nextVideo.pausePoints ? nextVideo.pausePoints.slice().sort((a,b) => a-b) : [];
+      pauser.exitHint = !!nextVideo.exitHint;
+      pauser.nextVideoId = nextVideo.nextVideoId || null;
+      pauser.endSurvey = nextVideo.endSurvey || null;
+      pauser.fired = {};
+      pauser.last = 0;
+      pauser.endHandled = false;
+      pauser.atEnd = false;
+      vimeoSdk.loadVideo(Number(nextVideo.vimeoId)).then(() => vimeoSdk.play()).catch(() => {
+        // Autoplay restricted across videos on this device: present crisp single CTA
+        showSeqTransition(nextVideo, true);
+      });
+      return;
+    }
+
+    armPauses(nextVideo);
+    player.src = `https://player.vimeo.com/video/${nextVideo.vimeoId}?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1&pip=0&api=1`;
+    bindVimeoSdk();
+    vimeoBindTimers = [setTimeout(listenVimeo, 500), setTimeout(listenVimeo, 1400), setTimeout(listenVimeo, 3000)];
+  }
+
+  function openFacOverlay(){
+    if (!activeVideo) return;
+    clearInterval(seqCountdownTimer);
+    seqCountdownTimer = null;
+    vimeoCmd("pause");
+    const playable = videos.filter(v => !v.comingSoon && v.vimeoId);
+    facList.innerHTML = playable.map(v => `
+      <button type="button" class="fac-item" data-fac-vid="${v.id}">
+        <div>
+          <strong>${esc(v.title)}</strong>
+          <span>${esc(v.series || v.category)} · ${esc(v.duration)}</span>
+        </div>
+        <span class="fac-item-tag">${v.id === activeVideo.id ? "Playing Now" : "Switch →"}</span>
+      </button>`).join("");
+    facOverlay.classList.add("open");
+    facOverlay.setAttribute("aria-hidden", "false");
+  }
+
+  function hideFacOverlay(){
+    if (!facOverlay.classList.contains("open")) return;
+    facOverlay.classList.remove("open");
+    facOverlay.setAttribute("aria-hidden", "true");
   }
 
   resumeBtn.addEventListener("click", () => {
@@ -3243,6 +4040,37 @@ html.is-tablet .modal .m-box.survey-mode {
     }
     vimeoCmd("play");
     $("close").focus({ preventScroll: true });
+  });
+  resumeFacBtn.addEventListener("click", openFacOverlay);
+  mFacilitatorBtn.addEventListener("click", openFacOverlay);
+  seqContinueBtn.addEventListener("click", () => {
+    const nextVid = pauser.nextVideoId ? videos.find(v => v.id === pauser.nextVideoId) : null;
+    transitionToVideo(nextVid, true);
+  });
+  seqPauseBtn.addEventListener("click", () => {
+    clearInterval(seqCountdownTimer);
+    seqCountdownTimer = null;
+    seqPauseBtn.hidden = true;
+    seqDesc.textContent = "Sequence paused. Tap below whenever you are ready to enter Thought Loop Clearing.";
+  });
+  $("seqReplayBtn").addEventListener("click", () => {
+    hideSeqOverlay();
+    pauser.endHandled = false;
+    pauser.fired = {};
+    pauser.last = 0;
+    vimeoCmd("setCurrentTime", 0);
+    vimeoCmd("play");
+  });
+  $("seqFacBtn").addEventListener("click", openFacOverlay);
+  $("facResumeBtn").addEventListener("click", () => { hideFacOverlay(); vimeoCmd("play"); });
+  $("facExploreBtn").addEventListener("click", () => { hideFacOverlay(); closeModal(); state.view = "explore"; Object.assign(state, { cat:"All", collection:"All", series:"All" }); update(); });
+  facList.addEventListener("click", e => {
+    const btn = e.target.closest("[data-fac-vid]");
+    if (!btn) return;
+    const vid = videos.find(v => v.id === +btn.dataset.facVid);
+    if (!vid) return;
+    if (activeVideo && vid.id === activeVideo.id) { hideFacOverlay(); vimeoCmd("play"); return; }
+    transitionToVideo(vid, true);
   });
 
   // End-of-video exit callout (points at the × button)
@@ -3265,12 +4093,15 @@ html.is-tablet .modal .m-box.survey-mode {
     pauser.active = !!v;
     pauser.points = (v && v.pausePoints) ? v.pausePoints.slice().sort((a,b) => a-b) : [];
     pauser.exitHint = !!(v && v.exitHint);
+    pauser.nextVideoId = (v && v.nextVideoId) || null;
     pauser.endSurvey = (v && v.endSurvey) || null;
     pauser.fired = {};
     pauser.last = 0;
     pauser.endHandled = false;
     pauser.atEnd = false;
     hideResume();
+    hideSeqOverlay();
+    hideFacOverlay();
     hideExitHint();
   }
 
@@ -3280,6 +4111,13 @@ html.is-tablet .modal .m-box.survey-mode {
     pauser.last = 0;
     hideResume();
     vimeoCmd("pause"); // Prevent Vimeo's default "More from SOL REViBE Team" end-screen from taking over
+    if (pauser.nextVideoId) {
+      const nextVid = videos.find(v => v.id === pauser.nextVideoId);
+      if (nextVid) {
+        showSeqTransition(nextVid, false);
+        return;
+      }
+    }
     if (pauser.endSurvey === "thought-loop") {
       openTlcInvite();
     } else {
@@ -3290,7 +4128,7 @@ html.is-tablet .modal .m-box.survey-mode {
 
   function processVimeoEvent(ev, data){
     if (!pauser.active) return;
-    if (ev === "play") { hideResume(); hideTlcInvite(); return; }           // resumed via the player's own controls
+    if (ev === "play") { hideResume(); hideSeqOverlay(); hideTlcInvite(); return; }
     if (ev === "ended") { handleVideoEnd(); return; }
     const t = data && typeof data.seconds === "number" ? data.seconds : null;
     if (t === null) return;
@@ -3300,32 +4138,28 @@ html.is-tablet .modal .m-box.survey-mode {
       if (left <= EXIT_HINT_SECONDS && t > 0) showExitHint();
       else if (left > EXIT_HINT_SECONDS + 2) hideExitHint();
 
-      // Re-arm end handler if viewer rewinds back into the video
       if (left > 2) pauser.endHandled = false;
 
-      // Soft-delete Vimeo's native "Recommended videos" end-screen by intercepting right at completion
       if (!pauser.endHandled && t > 1 && left <= 0.75) {
         handleVideoEnd();
         return;
       }
     }
-    // Re-arm any pause point that is ahead of the playhead (restart or seek back)
     pauser.points.forEach(p => { if (t < p - 0.5) pauser.fired[p] = false; });
-    if (ev === "seeked") {                                                  // manual seeks never trigger a step pause
+    if (ev === "seeked") {
       if (pauser.holdAt === null || Math.abs(t - pauser.holdAt) > 0.5) hideResume();
       pauser.last = t; return;
     }
     if (ev !== "timeupdate") return;
-    // Only pause when normal playback crosses the point (not when the user jumps past it)
     const hit = pauser.points.find(p => !pauser.fired[p] && pauser.last < p && t >= p && t - pauser.last < 3);
     pauser.last = t;
     if (hit !== undefined) {
-      pauser.fired[hit] = true;                                              // once per playback cycle
+      pauser.fired[hit] = true;
       vimeoCmd("pause");
-      vimeoCmd("setCurrentTime", hit);                                       // hold exactly on the mark; Play resumes from here
+      vimeoCmd("setCurrentTime", hit);
       pauser.last = hit;
       pauser.holdAt = hit;
-      showResume(pauser.points.indexOf(hit));                                // "Play Again" button over the video
+      showResume(pauser.points.indexOf(hit));
     }
   }
 
@@ -3352,7 +4186,6 @@ html.is-tablet .modal .m-box.survey-mode {
     if (!pauser.active) return;
     bindVimeoSdk();
     if (pauser.sdkReady) return;
-    // Raw postMessage fallback for environments where player.js hasn't loaded yet
     ["timeupdate", "playProgress", "seeked", "seek", "ended", "finish", "play"].forEach(ev => {
       if (!player.contentWindow) return;
       try { player.contentWindow.postMessage(JSON.stringify({method: "addEventListener", value: ev}), VIMEO_ORIGIN); } catch(_) {}
@@ -3395,23 +4228,76 @@ html.is-tablet .modal .m-box.survey-mode {
     if(lastFocus) lastFocus.focus({ preventScroll: true });
   }
 
+  // ---- Series Info & Audio Trailer Modal ----
+  let activeSeriesModalName = null;
+  function openSeriesModal(seriesName){
+    const ser = getSeriesMeta(seriesName);
+    if (!ser) return;
+    lastFocus = document.activeElement;
+    activeSeriesModalName = ser.name;
+    const mediaBox = $("serMediaBox");
+    const oldFrame = mediaBox.querySelector("iframe");
+    if (oldFrame) oldFrame.remove();
+
+    $("serImg").src = ser.thumb || "";
+    $("serImg").alt = ser.name;
+    $("serCrumbs").textContent = `${ser.category} › ${ser.collection}`;
+    $("serModalTitle").textContent = ser.name;
+    $("serCreators").textContent = `Created with ${ser.creators}`;
+    $("serDesc").textContent = ser.description || "";
+
+    if (ser.trailerVimeoId) {
+      $("serPill").textContent = "Audio Trailer";
+      $("serImg").hidden = true;
+      $("serPlaceholderNote").hidden = true;
+      const iframe = document.createElement("iframe");
+      iframe.title = `${ser.name} Audio Trailer`;
+      iframe.allow = "autoplay; fullscreen; picture-in-picture";
+      iframe.src = `https://player.vimeo.com/video/${ser.trailerVimeoId}?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1&pip=0`;
+      mediaBox.insertBefore(iframe, $("serPill"));
+    } else {
+      $("serPill").textContent = "Series Overview";
+      $("serImg").hidden = false;
+      $("serPlaceholderNote").hidden = false;
+      $("serPlaceholderNote").innerHTML = `<strong>Audio Trailer Coming Soon:</strong> An audio introduction from <b>${esc(ser.creators)}</b> for this series has not been uploaded yet.`;
+    }
+
+    seriesModal.classList.add("open");
+    seriesModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    $("serClose").focus();
+  }
+
+  function closeSeriesModal(){
+    if (!seriesModal.classList.contains("open")) return;
+    const oldFrame = $("serMediaBox").querySelector("iframe");
+    if (oldFrame) { oldFrame.src = "about:blank"; oldFrame.remove(); }
+    seriesModal.classList.remove("open");
+    seriesModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+    activeSeriesModalName = null;
+    if (lastFocus) lastFocus.focus({ preventScroll: true });
+  }
+
   function openModal(v){
     if(!v) return;
     if (v.comingSoon) {
       openComingSoon(v);
       return;
     }
-    stopDirectAudio();
     activeVideo = v;
     countView(v);
     lastFocus = document.activeElement;
     resetTlcSurvey();
     hideTlcInvite();
+    hideSeqOverlay();
+    hideFacOverlay();
     mBox.classList.remove("survey-mode");
     tlcSurvey.setAttribute("aria-hidden", "true");
     $("m-title").textContent = v.title;
-    $("m-desc").textContent = `${v.category} · ${v.duration} · ${fmtViews(v.views)}`;
+    $("m-desc").textContent = `${v.series || v.category} · ${v.duration} · ${fmtViews(v.views)}`;
     mCheckinTrigger.classList.toggle("visible", v.endSurvey === "thought-loop");
+    mFacilitatorBtn.classList.toggle("visible", !!v.nextVideoId || v.endSurvey === "thought-loop");
     armPauses(v);
     player.src = `https://player.vimeo.com/video/${v.vimeoId}?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1&pip=0&api=1`;
     bindVimeoSdk();
@@ -3423,23 +4309,37 @@ html.is-tablet .modal .m-box.survey-mode {
 
   function closeModal(){
     if(!modal.classList.contains("open")) return;
-    const backToTags = pauser.exitHint || pauser.endSurvey === "thought-loop";
     resetTlcSurvey();
     hideTlcInvite();
+    hideSeqOverlay();
+    hideFacOverlay();
     mBox.classList.remove("survey-mode");
     tlcSurvey.setAttribute("aria-hidden", "true");
     modal.classList.remove("open"); modal.setAttribute("aria-hidden","true");
     document.body.classList.remove("modal-open");
     armPauses(null);
     activeVideo = null;
-    player.src = "about:blank"; player.removeAttribute("src"); // stop audio
-    if(lastFocus) lastFocus.focus({ preventScroll: backToTags });
-    if (backToTags) window.scrollTo({ top: 0, behavior: "smooth" });
+    player.src = "about:blank"; player.removeAttribute("src");
+    if(lastFocus && document.body.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
   }
 
-  search.addEventListener("input", () => { state.query = search.value; render(); });
-  clearBtn.addEventListener("click", () => { search.value=""; state.query=""; render(); search.focus(); });
-  chips.addEventListener("click", e => { const b=e.target.closest(".chip"); if(b){ state.cat=b.dataset.cat; update(); }});
+  search.addEventListener("input", () => {
+    state.query = search.value;
+    if (state.query.trim() && state.view === "home") {
+      state.view = "explore";
+    }
+    update();
+  });
+  clearBtn.addEventListener("click", () => { search.value=""; state.query=""; update(); search.focus(); });
+  chips.addEventListener("click", e => {
+    const b = e.target.closest(".chip");
+    if (!b) return;
+    state.cat = b.dataset.cat;
+    state.collection = "All";
+    state.series = "All";
+    if (state.view === "home") state.view = "explore";
+    update();
+  });
   collectionSel.addEventListener("change", () => { state.collection = collectionSel.value; state.series = "All"; update(); });
   seriesSel.addEventListener("change", () => { state.series = seriesSel.value; update(); });
   side.addEventListener("click", e => {
@@ -3449,24 +4349,68 @@ html.is-tablet .modal .m-box.survey-mode {
     if (state.view === "home") {
       search.value = "";
       Object.assign(state, { query:"", cat:"All", collection:"All", series:"All" });
+    } else if (state.view === "collections") {
+      Object.assign(state, { cat:"All", collection:"All", series:"All" });
     }
     update();
   });
   sortSel.addEventListener("change", () => { state.sort = sortSel.value; update(); });
-  $("reset").addEventListener("click", () => { search.value=""; Object.assign(state,{query:"",cat:"All",collection:"All",series:"All",view:"home",sort:"recent"}); sortSel.value="recent"; update(); });
-  featuredEl.addEventListener("click", e => { const b=e.target.closest("[data-id]"); if(b) openModal(videos.find(v=>v.id===+b.dataset.id)); });
+  $("reset").addEventListener("click", () => { search.value=""; Object.assign(state,{query:"",cat:"All",collection:"All",series:"All",view:"explore",sort:"recent"}); sortSel.value="recent"; update(); });
+
+  featuredEl.addEventListener("click", e => {
+    if (e.target.closest("[data-go-explore]")) {
+      state.view = "explore";
+      Object.assign(state, { cat:"All", collection:"All", series:"All" });
+      update();
+      return;
+    }
+    const b = e.target.closest("[data-id]");
+    if (b) openModal(videos.find(v => v.id === +b.dataset.id));
+  });
 
   function handleContainerClick(e){
-    const viewAll = e.target.closest("[data-open-collection]");
-    if (viewAll) {
+    const serInfo = e.target.closest("[data-series-info]");
+    if (serInfo) {
+      e.stopPropagation();
+      openSeriesModal(serInfo.dataset.seriesInfo);
+      return;
+    }
+    const openSer = e.target.closest("[data-open-series]");
+    if (openSer) {
       state.view = "collections";
-      state.collection = viewAll.dataset.openCollection;
+      state.collection = openSer.dataset.openCol || state.collection;
+      state.series = openSer.dataset.openSeries;
+      update();
+      return;
+    }
+    const openCol = e.target.closest("[data-open-collection]");
+    if (openCol) {
+      state.view = "collections";
+      state.collection = openCol.dataset.openCollection;
       state.series = "All";
       update();
       return;
     }
-    const spk = e.target.closest("[data-audio-id]");
-    if (spk) { e.stopPropagation(); e.preventDefault(); toggleDirectAudio(videos.find(v=>v.id===+spk.dataset.audioId)); return; }
+    if (e.target.closest("[data-crumb-reset]")) {
+      Object.assign(state, { cat:"All", collection:"All", series:"All" });
+      update();
+      return;
+    }
+    const crumbCat = e.target.closest("[data-crumb-cat]");
+    if (crumbCat) {
+      state.cat = crumbCat.dataset.crumbCat;
+      state.collection = "All";
+      state.series = "All";
+      update();
+      return;
+    }
+    const crumbCol = e.target.closest("[data-crumb-col]");
+    if (crumbCol) {
+      state.collection = crumbCol.dataset.crumbCol;
+      state.series = "All";
+      update();
+      return;
+    }
     const sv = e.target.closest("[data-save]");
     if (sv) {
       e.stopPropagation();
@@ -3480,28 +4424,56 @@ html.is-tablet .modal .m-box.survey-mode {
     if (c) openModal(videos.find(v=>v.id===+c.dataset.id));
   }
   function handleContainerKeydown(e){
-    if ((e.key==="Enter"||e.key===" ") && e.target.classList.contains("ec-card")) {
-      e.preventDefault();
-      openModal(videos.find(v=>v.id===+e.target.dataset.id));
+    if (e.key==="Enter" || e.key===" ") {
+      const serOpen = e.target.closest("[data-open-series]");
+      if (serOpen) {
+        e.preventDefault();
+        state.view = "collections";
+        state.collection = serOpen.dataset.openCol || state.collection;
+        state.series = serOpen.dataset.openSeries;
+        update();
+        return;
+      }
+      if (e.target.classList.contains("ec-card")) {
+        e.preventDefault();
+        openModal(videos.find(v=>v.id===+e.target.dataset.id));
+      }
     }
   }
-  pillarsSection.addEventListener("click", handleContainerClick);
-  pillarsSection.addEventListener("keydown", handleContainerKeydown);
+  collectionsSection.addEventListener("click", handleContainerClick);
+  collectionsSection.addEventListener("keydown", handleContainerKeydown);
   grid.addEventListener("click", handleContainerClick);
   grid.addEventListener("keydown", handleContainerKeydown);
+
   $("close").addEventListener("click", closeModal);
   $("csClose").addEventListener("click", closeComingSoon);
   $("csDoneBtn").addEventListener("click", closeComingSoon);
   comingSoonModal.addEventListener("click", e => { if (e.target === comingSoonModal) closeComingSoon(); });
+
+  $("serClose").addEventListener("click", closeSeriesModal);
+  $("serCloseBtn").addEventListener("click", closeSeriesModal);
+  $("serViewEpisodesBtn").addEventListener("click", () => {
+    const serName = activeSeriesModalName;
+    const ser = serName ? getSeriesMeta(serName) : null;
+    closeSeriesModal();
+    if (ser) {
+      state.view = "collections";
+      state.cat = ser.category;
+      state.collection = ser.collection;
+      state.series = ser.name;
+      update();
+    }
+  });
+  seriesModal.addEventListener("click", e => { if (e.target === seriesModal) closeSeriesModal(); });
+
   modal.addEventListener("click", e => {
     if (e.target === modal) {
-      // Prevent accidental backdrop tap from discarding an in-progress check-in on tablets
-      if ((mBox.classList.contains("survey-mode") || mBox.classList.contains("invite-mode")) && !tlcState.submitted) return;
+      if ((mBox.classList.contains("survey-mode") || mBox.classList.contains("invite-mode") || seqOverlay.classList.contains("show")) && !tlcState.submitted) return;
       closeModal();
     }
   });
   document.addEventListener("keydown", e => {
-    if(e.key==="Escape") { closeComingSoon(); closeModal(); }
+    if(e.key==="Escape") { closeSeriesModal(); closeComingSoon(); closeModal(); }
     if(e.key==="Tab" && modal.classList.contains("open") && !mBox.classList.contains("survey-mode") && !mBox.classList.contains("invite-mode")){
       const hasCheckinBtn = mCheckinTrigger.classList.contains("visible");
       const r = resumeOverlay.classList.contains("show");
