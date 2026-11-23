@@ -3462,8 +3462,9 @@ html.is-tablet .modal .m-box.survey-mode {
         chips=$("chips"), side=$("side"), sortSel=$("sort"), collectionSel=$("collectionSel"), seriesSel=$("seriesSel"),
         exploreControls=$("exploreControls"), homeCatsBlock=$("homeCatsBlock"), homeCatsLabel=$("homeCatsLabel"),
         viewHeader=$("viewHeader"), viewTitle=$("viewTitle"), viewSubtitle=$("viewSubtitle"), viewCountPill=$("viewCountPill"),
-        modal=$("modal"), mBox=$("mBox"), player=$("player"), featuredEl=$("featured"),
+        modal=$("modal"), mBox=$("mBox"), featuredEl=$("featured"),
         comingSoonModal=$("comingSoonModal"), seriesModal=$("seriesModal");
+  let player=$("player"), playerSeq=0;
   const saved = new Set(JSON.parse(localStorage.getItem("sol-saved") || "[]"));
   const viewCounts = JSON.parse(localStorage.getItem("sol-views") || "{}");
   videos.forEach(v => {
@@ -4596,15 +4597,38 @@ html.is-tablet .modal .m-box.survey-mode {
   let vimeoSdk = null;
   let seqCountdownTimer = null;
 
-  function detachVimeoSdk(){
-    if (!vimeoSdk) return;
-    try {
-      ["play", "ended", "timeupdate", "seeked"].forEach(ev => {
-        if (typeof vimeoSdk.off === "function") vimeoSdk.off(ev);
-      });
-    } catch(_) {}
+  function detachVimeoSdk(destroyInstance){
+    const inst = vimeoSdk;
     vimeoSdk = null;
     pauser.sdkReady = false;
+    if (!inst) return;
+    try {
+      ["play", "ended", "timeupdate", "seeked"].forEach(ev => {
+        if (typeof inst.off === "function") inst.off(ev);
+      });
+      if (destroyInstance && typeof inst.destroy === "function") {
+        inst.destroy().catch(() => {});
+      }
+    } catch(_) {}
+  }
+
+  function recreatePlayerFrame(){
+    detachVimeoSdk(true);
+    if (!player || !player.parentNode) return player;
+    const fresh = document.createElement("iframe");
+    fresh.id = "player";
+    fresh.title = player.title || "Vimeo video player";
+    fresh.allow = player.getAttribute("allow") || "autoplay; fullscreen; picture-in-picture";
+    fresh.allowFullscreen = true;
+    fresh.addEventListener("load", listenVimeo);
+    player.parentNode.replaceChild(fresh, player);
+    player = fresh;
+    return player;
+  }
+
+  function buildVimeoEmbedUrl(vimeoId){
+    playerSeq += 1;
+    return `https://player.vimeo.com/video/${vimeoId}?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1&pip=0&api=1&player_id=sol-player-${playerSeq}#t=0s`;
   }
 
   function vimeoCmd(method, value){
@@ -4732,7 +4756,7 @@ html.is-tablet .modal .m-box.survey-mode {
     }
 
     armPauses(nextVideo);
-    player.src = `https://player.vimeo.com/video/${nextVideo.vimeoId}?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1&pip=0&api=1`;
+    player.src = buildVimeoEmbedUrl(nextVideo.vimeoId);
     bindVimeoSdk();
     vimeoBindTimers = [setTimeout(listenVimeo, 500), setTimeout(listenVimeo, 1400), setTimeout(listenVimeo, 3000)];
   }
@@ -4824,7 +4848,7 @@ html.is-tablet .modal .m-box.survey-mode {
   function armPauses(v){
     vimeoBindTimers.forEach(clearTimeout);
     vimeoBindTimers = [];
-    detachVimeoSdk();
+    recreatePlayerFrame();
     pauser.active = !!v;
     pauser.points = (v && v.pausePoints) ? v.pausePoints.slice().sort((a,b) => a-b) : [];
     pauser.exitHint = !!(v && v.exitHint);
@@ -4941,16 +4965,21 @@ html.is-tablet .modal .m-box.survey-mode {
   function bindVimeoSdk(){
     if (!pauser.active || vimeoSdk) return;
     if (!window.Vimeo || typeof window.Vimeo.Player !== "function") return;
+    const targetFrame = player;
     try {
-      const inst = new window.Vimeo.Player(player);
+      const inst = new window.Vimeo.Player(targetFrame);
       vimeoSdk = inst;
+      inst.on("play", () => { if (vimeoSdk === inst) processVimeoEvent("play", null); });
+      inst.on("ended", () => { if (vimeoSdk === inst) processVimeoEvent("ended", null); });
+      inst.on("timeupdate", d => { if (vimeoSdk === inst) processVimeoEvent("timeupdate", d); });
+      inst.on("seeked", d => { if (vimeoSdk === inst) processVimeoEvent("seeked", d); });
       inst.ready().then(() => {
-        if (vimeoSdk === inst) pauser.sdkReady = true;
-      }).catch(() => {});
-      inst.on("play", () => processVimeoEvent("play", null));
-      inst.on("ended", () => processVimeoEvent("ended", null));
-      inst.on("timeupdate", d => processVimeoEvent("timeupdate", d));
-      inst.on("seeked", d => processVimeoEvent("seeked", d));
+        if (vimeoSdk === inst && targetFrame === player && pauser.active) {
+          pauser.sdkReady = true;
+        }
+      }).catch(() => {
+        if (vimeoSdk === inst) pauser.sdkReady = false;
+      });
     } catch(_) {
       vimeoSdk = null;
       pauser.sdkReady = false;
@@ -5074,7 +5103,7 @@ html.is-tablet .modal .m-box.survey-mode {
     mCheckinTrigger.classList.toggle("visible", v.endSurvey === "thought-loop");
     mFacilitatorBtn.classList.toggle("visible", !!v.nextVideoId || v.endSurvey === "thought-loop" || v.endSurvey === "shadow-index");
     armPauses(v);
-    player.src = `https://player.vimeo.com/video/${v.vimeoId}?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1&pip=0&api=1`;
+    player.src = buildVimeoEmbedUrl(v.vimeoId);
     bindVimeoSdk();
     vimeoBindTimers = [setTimeout(listenVimeo, 500), setTimeout(listenVimeo, 1400), setTimeout(listenVimeo, 3000)];
     modal.classList.add("open"); modal.setAttribute("aria-hidden","false");
@@ -5094,7 +5123,7 @@ html.is-tablet .modal .m-box.survey-mode {
     document.body.classList.remove("modal-open");
     armPauses(null);
     activeVideo = null;
-    player.src = "about:blank"; player.removeAttribute("src");
+    if (player) { player.removeAttribute("src"); }
     if(lastFocus && document.body.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
   }
 
