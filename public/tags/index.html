@@ -1110,9 +1110,10 @@ footer b{font-style:normal;color:var(--text)}
   backdrop-filter:blur(16px);
   opacity:0;
   visibility:hidden;
+  pointer-events:none;
   transition:.24s;
 }
-.modal.open{opacity:1;visibility:visible}
+.modal.open{opacity:1;visibility:visible;pointer-events:auto}
 .m-box{
   position:relative;
   width:min(1120px,100%);
@@ -1678,9 +1679,10 @@ footer b{font-style:normal;color:var(--text)}
   -webkit-backdrop-filter:blur(14px);
   opacity:0;
   visibility:hidden;
+  pointer-events:none;
   transition:opacity .22s ease,visibility .22s ease;
 }
-.cs-modal.open{opacity:1;visibility:visible}
+.cs-modal.open{opacity:1;visibility:visible;pointer-events:auto}
 .cs-box{
   position:relative;
   width:min(540px,100%);
@@ -2651,11 +2653,18 @@ html.is-tablet .modal .m-box.survey-mode {
 }
 .tlc-done p {
   max-width: 440px;
-  margin: 0 auto 22px;
+  margin: 0 auto 14px;
   color: #5E5952;
   font-size: .94rem;
   line-height: 1.55;
 }
+.tlc-done-countdown {
+  font-size: .8rem;
+  font-weight: 600;
+  color: #6B655D;
+  margin: 0 auto 16px;
+}
+.tlc-done-countdown[hidden] { display: none !important; }
 
 @media (max-width: 600px) {
   html .modal .m-box.survey-mode {
@@ -3007,6 +3016,7 @@ html.is-tablet .modal .m-box.survey-mode {
           <h3>Check-In Saved</h3>
           <div class="tlc-done-summary" id="tlcDoneSummary"></div>
           <p id="tlcDoneText">Thank you for completing your SOL REViBE experience. You&rsquo;re welcome to finish here or browse additional sessions whenever you&rsquo;re ready.</p>
+          <div class="tlc-done-countdown" id="tlcDoneCountdown" aria-live="polite" hidden></div>
           <div class="cs-actions" style="justify-content:center;">
             <button type="button" class="tlc-btn-submit" id="tlcDoneCloseBtn">Finish</button>
             <button type="button" class="cs-btn-alt" id="tlcDoneExploreBtn">Explore More TAGs</button>
@@ -4084,6 +4094,10 @@ html.is-tablet .modal .m-box.survey-mode {
 
   function resetTlcSurvey(){
     stopAllVoice();
+    clearTimeout(tlcFocusTimer);
+    tlcFocusTimer = null;
+    clearInterval(tlcDoneAutoTimer);
+    tlcDoneAutoTimer = null;
     tlcState.openNum = null;
     tlcState.endNum = null;
     tlcState.submitted = false;
@@ -4095,21 +4109,34 @@ html.is-tablet .modal .m-box.survey-mode {
     renderScaleSelection(tlcEndScale, null);
     updateDistanceUI();
     tlcFormErr.hidden = true;
+    tlcFormErr.textContent = "";
+    const shieldFeedback = tlcForm.querySelector(".sol-shield-feedback");
+    if (shieldFeedback) shieldFeedback.remove();
+    tlcForm.dataset.solMountedAt = String(Date.now());
     tlcSubmitBtn.disabled = false;
     tlcSubmitBtn.textContent = "Submit";
     $("tlcSkipTopBtn").innerHTML = 'Not now <span aria-hidden="true">&#10005;</span>';
     tlcForm.hidden = false;
     $("tlcSubtitle").hidden = false;
     tlcDoneView.hidden = true;
+    if ($("tlcDoneCountdown")) {
+      $("tlcDoneCountdown").textContent = "";
+      $("tlcDoneCountdown").hidden = true;
+    }
+    $("tlcScroll").scrollTop = 0;
   }
 
   const tlcInviteOverlay = $("tlcInviteOverlay"),
         tlcBeginBtn = $("tlcBeginBtn"),
         tlcInviteSkipBtn = $("tlcInviteSkipBtn");
   let tlcInviteTransitionTimer = null;
+  let tlcFocusTimer = null;
+  let tlcDoneAutoTimer = null;
+  let shadowFocusTimer = null;
 
   function hideTlcInvite(){
     clearTimeout(tlcInviteTransitionTimer);
+    tlcInviteTransitionTimer = null;
     mBox.classList.remove("invite-mode");
     tlcInviteOverlay.classList.remove("show", "fading-out");
     tlcInviteOverlay.setAttribute("aria-hidden", "true");
@@ -4138,12 +4165,12 @@ html.is-tablet .modal .m-box.survey-mode {
     clearTimeout(tlcInviteTransitionTimer);
     tlcInviteTransitionTimer = setTimeout(() => {
       hideTlcInvite();
-      openTlcSurvey();
+      if (modal.classList.contains("open")) openTlcSurvey();
     }, 380);
   }
 
   function openTlcSurvey(){
-    if (mBox.classList.contains("survey-mode")) return;
+    if (mBox.classList.contains("survey-mode") || !modal.classList.contains("open")) return;
     hideTlcInvite();
     hideSeqOverlay();
     vimeoCmd("pause");
@@ -4153,7 +4180,14 @@ html.is-tablet .modal .m-box.survey-mode {
     tlcSurvey.setAttribute("aria-hidden", "false");
     $("tlcScroll").scrollTop = 0;
     const firstBtn = tlcOpenScale.querySelector(".tlc-num-btn");
-    if (firstBtn) setTimeout(() => firstBtn.focus({ preventScroll: true }), 180);
+    clearTimeout(tlcFocusTimer);
+    if (firstBtn) {
+      tlcFocusTimer = setTimeout(() => {
+        if (modal.classList.contains("open") && mBox.classList.contains("survey-mode")) {
+          firstBtn.focus({ preventScroll: true });
+        }
+      }, 180);
+    }
   }
 
   function closeTlcSurveyToVideo(restart){
@@ -4284,16 +4318,36 @@ html.is-tablet .modal .m-box.survey-mode {
     tlcDoneView.hidden = false;
     $("tlcScroll").scrollTop = 0;
     $("tlcDoneCloseBtn").focus({ preventScroll: true });
+
+    clearInterval(tlcDoneAutoTimer);
+    let returnSecs = 6;
+    const countdownEl = $("tlcDoneCountdown");
+    if (countdownEl) {
+      countdownEl.hidden = false;
+      countdownEl.textContent = `Returning to home screen in ${returnSecs}s…`;
+    }
+    tlcDoneAutoTimer = setInterval(() => {
+      returnSecs -= 1;
+      if (returnSecs <= 0) {
+        clearInterval(tlcDoneAutoTimer);
+        tlcDoneAutoTimer = null;
+        if (modal.classList.contains("open") && tlcState.submitted) {
+          closeModal({ returnHome: true });
+        }
+      } else if (countdownEl) {
+        countdownEl.textContent = `Returning to home screen in ${returnSecs}s…`;
+      }
+    }, 1000);
   });
 
   tlcBeginBtn.addEventListener("click", beginSurveyFromInvite);
-  tlcInviteSkipBtn.addEventListener("click", closeModal);
+  tlcInviteSkipBtn.addEventListener("click", () => closeModal({ returnHome: true }));
   $("tlcReplayBtn").addEventListener("click", () => closeTlcSurveyToVideo(true));
-  $("tlcSkipTopBtn").addEventListener("click", closeModal);
-  $("tlcSkipBottomBtn").addEventListener("click", closeModal);
-  $("tlcDoneCloseBtn").addEventListener("click", closeModal);
-  $("tlcDoneExploreBtn").addEventListener("click", () => { closeModal(); state.view = "explore"; Object.assign(state, { cat:"All", collection:"All", series:"All" }); update(); });
-  $("tlcDoneCollectionsBtn").addEventListener("click", () => { closeModal(); state.view = "collections"; Object.assign(state, { cat:"All", collection:"All", series:"All" }); update(); });
+  $("tlcSkipTopBtn").addEventListener("click", () => closeModal({ returnHome: true }));
+  $("tlcSkipBottomBtn").addEventListener("click", () => closeModal({ returnHome: true }));
+  $("tlcDoneCloseBtn").addEventListener("click", () => closeModal({ returnHome: true }));
+  $("tlcDoneExploreBtn").addEventListener("click", () => { closeModal({ returnHome: false }); state.view = "explore"; Object.assign(state, { query:"", cat:"All", collection:"All", series:"All" }); search.value = ""; update(); });
+  $("tlcDoneCollectionsBtn").addEventListener("click", () => { closeModal({ returnHome: false }); state.view = "collections"; Object.assign(state, { query:"", cat:"All", collection:"All", series:"All" }); search.value = ""; update(); });
   mCheckinTrigger.addEventListener("click", openTlcSurvey);
 
   // =========================================================================
@@ -4386,6 +4440,8 @@ html.is-tablet .modal .m-box.survey-mode {
   }
 
   function resetShadowState(v, preserveSavedData){
+    clearTimeout(shadowFocusTimer);
+    shadowFocusTimer = null;
     hideShadowOverlay();
     shadowState.cues = getShadowCuesForVideo(v);
     shadowState.preTriggered = false;
@@ -4400,7 +4456,16 @@ html.is-tablet .modal .m-box.survey-mode {
       renderShadowScale(siScalePost, null);
       updatePreLockButton();
       siLockPostBtn.disabled = true;
+      siBeforeVal.textContent = "—";
+      siBeforeLbl.textContent = "";
+      siAfterVal.textContent = "—";
+      siAfterLbl.textContent = "";
+      siOutcomePill.textContent = "";
+      siOutcomePill.classList.remove("improved");
+      siPostIssueText.textContent = "";
+      siResultIssueText.textContent = "";
     }
+    if (shadowOverlay) shadowOverlay.scrollTop = 0;
   }
 
   function openShadowPreAssessment(cuePoint){
@@ -4416,7 +4481,12 @@ html.is-tablet .modal .m-box.survey-mode {
     renderShadowScale(siScalePre, shadowState.initialRating);
     updatePreLockButton();
     showShadowStage("pre-form");
-    setTimeout(() => siIssueInput.focus({ preventScroll: true }), 140);
+    clearTimeout(shadowFocusTimer);
+    shadowFocusTimer = setTimeout(() => {
+      if (modal.classList.contains("open") && mBox.classList.contains("shadow-mode")) {
+        siIssueInput.focus({ preventScroll: true });
+      }
+    }, 140);
   }
 
   function openShadowPostAssessment(cuePoint){
@@ -4444,7 +4514,14 @@ html.is-tablet .modal .m-box.survey-mode {
     }
     showShadowStage("post-form");
     const firstPostBtn = siScalePost.querySelector(".si-rate-btn");
-    if (firstPostBtn) setTimeout(() => firstPostBtn.focus({ preventScroll: true }), 140);
+    clearTimeout(shadowFocusTimer);
+    if (firstPostBtn) {
+      shadowFocusTimer = setTimeout(() => {
+        if (modal.classList.contains("open") && mBox.classList.contains("shadow-mode")) {
+          firstPostBtn.focus({ preventScroll: true });
+        }
+      }, 140);
+    }
   }
 
   siIssueInput.addEventListener("input", () => {
@@ -4585,7 +4662,7 @@ html.is-tablet .modal .m-box.survey-mode {
     siFinishBtn.focus({ preventScroll: true });
   });
 
-  siFinishBtn.addEventListener("click", closeModal);
+  siFinishBtn.addEventListener("click", () => closeModal({ returnHome: true }));
 
   // ---- Auto-pause points, Guided Intro -> Thought Loop Transition & Facilitator Controls ----
   const VIMEO_ORIGIN = "https://player.vimeo.com";
@@ -4738,6 +4815,8 @@ html.is-tablet .modal .m-box.survey-mode {
 
     // Re-arm pauser WITHOUT tearing down SDK when using seamless loadVideo on the live player
     if (!fromUserGesture && vimeoSdk && pauser.sdkReady && typeof vimeoSdk.loadVideo === "function") {
+      const targetSdk = vimeoSdk;
+      const targetVidId = nextVideo.id;
       pauser.active = true;
       pauser.points = nextVideo.pausePoints ? nextVideo.pausePoints.slice().sort((a,b) => a-b) : [];
       pauser.exitHint = !!nextVideo.exitHint;
@@ -4748,7 +4827,11 @@ html.is-tablet .modal .m-box.survey-mode {
       pauser.endHandled = false;
       pauser.atEnd = false;
       resetShadowState(nextVideo, false);
-      vimeoSdk.loadVideo(Number(nextVideo.vimeoId)).then(() => vimeoSdk.play()).catch(() => {
+      vimeoSdk.loadVideo(Number(nextVideo.vimeoId)).then(() => {
+        if (!pauser.active || vimeoSdk !== targetSdk || !activeVideo || activeVideo.id !== targetVidId) return;
+        return targetSdk.play();
+      }).catch(() => {
+        if (!pauser.active || vimeoSdk !== targetSdk || !activeVideo || activeVideo.id !== targetVidId) return;
         // Autoplay restricted across videos on this device: present crisp single CTA
         showSeqTransition(nextVideo, true);
       });
@@ -4987,7 +5070,7 @@ html.is-tablet .modal .m-box.survey-mode {
   }
 
   function listenVimeo(){
-    if (!pauser.active) return;
+    if (!pauser.active || !modal.classList.contains("open") || !player || !player.getAttribute("src")) return;
     bindVimeoSdk();
     if (pauser.sdkReady) return;
     ["timeupdate", "playProgress", "seeked", "seek", "ended", "finish", "play"].forEach(ev => {
@@ -5083,48 +5166,109 @@ html.is-tablet .modal .m-box.survey-mode {
     if (lastFocus) lastFocus.focus({ preventScroll: true });
   }
 
+  function clearSessionTimers(){
+    vimeoBindTimers.forEach(clearTimeout);
+    vimeoBindTimers = [];
+    clearInterval(seqCountdownTimer);
+    seqCountdownTimer = null;
+    clearTimeout(tlcInviteTransitionTimer);
+    tlcInviteTransitionTimer = null;
+    clearTimeout(tlcFocusTimer);
+    tlcFocusTimer = null;
+    clearInterval(tlcDoneAutoTimer);
+    tlcDoneAutoTimer = null;
+    clearTimeout(shadowFocusTimer);
+    shadowFocusTimer = null;
+  }
+
+  function clearTemporarySessionStorage(){
+    try {
+      const toDelete = [];
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const k = sessionStorage.key(i);
+        if (k && k.startsWith("solrevibe_shadow_v1_")) toDelete.push(k);
+      }
+      toDelete.forEach(k => sessionStorage.removeItem(k));
+    } catch (_) {}
+  }
+
+  function resetHomeViewState(){
+    search.value = "";
+    sortSel.value = "recent";
+    Object.assign(state, { query:"", cat:"All", collection:"All", series:"All", view:"home", sort:"recent" });
+    renderFeatured();
+    update();
+    try { window.scrollTo({ top: 0, behavior: "auto" }); } catch (_) {}
+  }
+
   function openModal(v){
     if(!v) return;
     if (v.comingSoon) {
       openComingSoon(v);
       return;
     }
+    const triggerEl = document.activeElement;
+    if (comingSoonModal.classList.contains("open")) closeComingSoon();
+    if (seriesModal.classList.contains("open")) closeSeriesModal();
+    clearSessionTimers();
     activeVideo = v;
     countView(v);
-    lastFocus = document.activeElement;
+    lastFocus = (triggerEl && document.body.contains(triggerEl)) ? triggerEl : null;
     resetTlcSurvey();
     hideTlcInvite();
     hideSeqOverlay();
     hideFacOverlay();
-    mBox.classList.remove("survey-mode");
+    mBox.classList.remove("survey-mode", "invite-mode", "seq-mode", "fac-mode", "shadow-mode");
     tlcSurvey.setAttribute("aria-hidden", "true");
     $("m-title").textContent = v.title;
     $("m-desc").textContent = `${v.series || v.category} · ${v.duration} · ${fmtViews(v.views)}`;
     mCheckinTrigger.classList.toggle("visible", v.endSurvey === "thought-loop");
     mFacilitatorBtn.classList.toggle("visible", !!v.nextVideoId || v.endSurvey === "thought-loop" || v.endSurvey === "shadow-index");
+    modal.classList.add("open"); modal.setAttribute("aria-hidden","false");
+    document.body.classList.add("modal-open");
     armPauses(v);
     player.src = buildVimeoEmbedUrl(v.vimeoId);
     bindVimeoSdk();
     vimeoBindTimers = [setTimeout(listenVimeo, 500), setTimeout(listenVimeo, 1400), setTimeout(listenVimeo, 3000)];
-    modal.classList.add("open"); modal.setAttribute("aria-hidden","false");
-    document.body.classList.add("modal-open");
     $("close").focus();
   }
 
-  function closeModal(){
+  function closeModal(opts){
     if(!modal.classList.contains("open")) return;
+    const wasCompleted = Boolean(tlcState.submitted);
+    const shouldReturnHome = (opts && typeof opts.returnHome === "boolean") ? opts.returnHome : wasCompleted;
+    clearSessionTimers();
     resetTlcSurvey();
     hideTlcInvite();
     hideSeqOverlay();
     hideFacOverlay();
-    mBox.classList.remove("survey-mode");
+    hideResume();
+    hideExitHint();
+    mBox.classList.remove("survey-mode", "invite-mode", "seq-mode", "fac-mode", "shadow-mode");
     tlcSurvey.setAttribute("aria-hidden", "true");
+    mCheckinTrigger.classList.remove("visible");
+    mFacilitatorBtn.classList.remove("visible");
+    $("m-title").textContent = "";
+    $("m-desc").textContent = "";
+    if (seqOverlay) seqOverlay.scrollTop = 0;
+    if (facOverlay) facOverlay.scrollTop = 0;
     modal.classList.remove("open"); modal.setAttribute("aria-hidden","true");
     document.body.classList.remove("modal-open");
     armPauses(null);
     activeVideo = null;
     if (player) { player.removeAttribute("src"); }
-    if(lastFocus && document.body.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+    if (shouldReturnHome) {
+      clearTemporarySessionStorage();
+      resetHomeViewState();
+      lastFocus = null;
+      if (window.SOLFormShield && typeof window.SOLFormShield.ready === "function") {
+        window.SOLFormShield.ready(true);
+      }
+      const startBtn = featuredEl.querySelector(".btn-start-here");
+      if (startBtn) startBtn.focus({ preventScroll: true });
+    } else if (lastFocus && document.body.contains(lastFocus)) {
+      lastFocus.focus({ preventScroll: true });
+    }
   }
 
   search.addEventListener("input", () => {
