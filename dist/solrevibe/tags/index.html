@@ -4670,6 +4670,7 @@ html.is-tablet .modal .m-box.survey-mode {
   const resumeOverlay = $("resumeOverlay"), resumeBtn = $("resumeBtn"), resumeBtnLabel = $("resumeBtnLabel"), resumeNote = $("resumeNote"), resumeFacBtn = $("resumeFacBtn");
   const seqOverlay = $("seqOverlay"), seqTitle = $("seqTitle"), seqDesc = $("seqDesc"), seqContinueBtn = $("seqContinueBtn"), seqPauseBtn = $("seqPauseBtn");
   const facOverlay = $("facOverlay"), facList = $("facList");
+  const playerContainer = (player && player.parentNode) || mBox.querySelector(".player");
   let vimeoBindTimers = [];
   let vimeoSdk = null;
   let seqCountdownTimer = null;
@@ -4690,15 +4691,21 @@ html.is-tablet .modal .m-box.survey-mode {
   }
 
   function recreatePlayerFrame(){
+    const container = (player && player.parentNode) || playerContainer || mBox.querySelector(".player");
+    const titleTxt = (player && player.title) || "Vimeo video player";
+    const allowAttr = (player && typeof player.getAttribute === "function" && player.getAttribute("allow")) || "autoplay; fullscreen; picture-in-picture";
     detachVimeoSdk(true);
-    if (!player || !player.parentNode) return player;
+    if (!container) return player;
+    Array.from(container.querySelectorAll("iframe")).forEach(el => {
+      try { el.remove(); } catch(_) {}
+    });
     const fresh = document.createElement("iframe");
     fresh.id = "player";
-    fresh.title = player.title || "Vimeo video player";
-    fresh.allow = player.getAttribute("allow") || "autoplay; fullscreen; picture-in-picture";
+    fresh.title = titleTxt;
+    fresh.allow = allowAttr;
     fresh.allowFullscreen = true;
     fresh.addEventListener("load", listenVimeo);
-    player.parentNode.replaceChild(fresh, player);
+    container.insertBefore(fresh, container.firstChild || null);
     player = fresh;
     return player;
   }
