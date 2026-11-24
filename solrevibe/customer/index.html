@@ -1201,7 +1201,33 @@
         .audio-intro {
             display: flex;
             flex-direction: column;
-            gap: 1.15rem;
+            gap: 1.05rem;
+        }
+
+        .audio-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            width: fit-content;
+            padding: 0.28rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(194, 155, 104, 0.14);
+            border: 1px solid rgba(194, 155, 104, 0.36);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.64rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--brand-gold-light);
+        }
+
+        .audio-live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4ADE80;
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.22);
+            flex-shrink: 0;
         }
 
         .audio-intro h2 {
@@ -1264,142 +1290,190 @@
         }
 
         .trailer-card {
-            background: rgba(255, 255, 255, 0.09);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
             border-radius: var(--radius-md);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            text-decoration: none;
+            color: inherit;
             transition: var(--transition);
             cursor: pointer;
             backdrop-filter: blur(12px);
         }
 
+        .trailer-card.is-live {
+            background: rgba(255, 255, 255, 0.11);
+            border-color: rgba(194, 155, 104, 0.42);
+        }
+
         .trailer-card:hover,
+        .trailer-card:focus-visible,
         .trailer-card.is-playing {
-            background: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.17);
             border-color: var(--brand-gold);
             transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.32);
+            outline: none;
+        }
+
+        .trailer-card.is-upcoming:hover,
+        .trailer-card.is-upcoming:focus-visible {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.34);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
         }
 
         .trailer-thumb {
             position: relative;
             width: 100%;
-            height: 105px;
+            height: 112px;
             overflow: hidden;
-            background: #000;
+            background: #0d1611;
+        }
+
+        .trailer-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(10, 18, 14, 0.35) 0%, transparent 45%, rgba(10, 18, 14, 0.65) 100%);
+            pointer-events: none;
         }
 
         .trailer-thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.88;
-            transition: transform 0.5s ease;
+            object-position: center 22%;
+            opacity: 0.94;
+            transition: transform 0.5s ease, opacity 0.3s ease;
         }
 
         .trailer-card:hover .trailer-thumb img {
-            transform: scale(1.08);
-            opacity: 0.98;
+            transform: scale(1.06);
+            opacity: 1;
+        }
+
+        .trailer-card.is-upcoming .trailer-thumb img {
+            opacity: 0.82;
         }
 
         .trailer-play-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 36px;
-            height: 36px;
+            transform: translate(-50%, -44%);
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.65);
-            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            background: rgba(14, 24, 18, 0.72);
+            border: 1.5px solid rgba(255, 255, 255, 0.88);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #FFFFFF;
-            font-size: 0.82rem;
+            font-size: 0.76rem;
+            padding-left: 2px;
+            z-index: 2;
             transition: var(--transition);
         }
 
         .trailer-card:hover .trailer-play-overlay,
+        .trailer-card:focus-visible .trailer-play-overlay,
         .trailer-card.is-playing .trailer-play-overlay {
             background: var(--brand-gold);
             color: #FFFFFF;
-            transform: translate(-50%, -50%) scale(1.15);
+            transform: translate(-50%, -44%) scale(1.14);
             border-color: #FFFFFF;
         }
 
         .trailer-duration {
             position: absolute;
-            bottom: 6px;
-            right: 6px;
-            background: rgba(0, 0, 0, 0.78);
+            bottom: 7px;
+            right: 7px;
+            z-index: 2;
+            background: rgba(10, 16, 13, 0.82);
             color: #FFFFFF;
             font-family: 'Outfit', sans-serif;
-            font-size: 0.62rem;
+            font-size: 0.60rem;
             font-weight: 700;
-            padding: 0.18rem 0.45rem;
+            letter-spacing: 0.04em;
+            padding: 0.16rem 0.42rem;
             border-radius: 4px;
         }
 
-        .trailer-card.coming-soon {
-            cursor: default;
-        }
-
-        .trailer-card.coming-soon:hover {
-            background: rgba(255, 255, 255, 0.09);
-            border-color: rgba(255, 255, 255, 0.18);
-            transform: none;
-            box-shadow: none;
-        }
-
-        .trailer-card.coming-soon .trailer-thumb img {
-            opacity: 0.72;
-        }
-
-        .trailer-card.coming-soon:hover .trailer-thumb img {
-            transform: none;
-            opacity: 0.72;
-        }
-
-        .trailer-coming-soon-badge {
+        .trailer-status-badge {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(20, 30, 24, 0.84);
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            top: 7px;
+            left: 7px;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.34rem;
             backdrop-filter: blur(8px);
-            color: #FFFFFF;
             font-family: 'Outfit', sans-serif;
-            font-size: 0.66rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
+            font-size: 0.56rem;
+            font-weight: 800;
+            letter-spacing: 0.07em;
             text-transform: uppercase;
-            padding: 0.34rem 0.75rem;
+            padding: 0.2rem 0.52rem;
             border-radius: 999px;
             white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+        }
+
+        .trailer-status-badge.live {
+            background: rgba(16, 36, 25, 0.86);
+            border: 1px solid rgba(74, 222, 128, 0.52);
+            color: #ECFDF5;
+        }
+
+        .trailer-status-badge.live .live-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #4ADE80;
+        }
+
+        .trailer-status-badge.upcoming {
+            background: rgba(18, 28, 22, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            color: rgba(255, 255, 255, 0.88);
         }
 
         .trailer-body {
-            padding: 0.85rem 0.75rem 0.95rem;
+            padding: 0.78rem 0.75rem 0.88rem;
             display: flex;
             flex-direction: column;
-            gap: 0.3rem;
+            gap: 0.26rem;
+            flex: 1;
+        }
+
+        .trailer-kicker {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: var(--brand-gold-light);
+            line-height: 1.2;
+        }
+
+        .trailer-card.is-upcoming .trailer-kicker {
+            color: rgba(255, 255, 255, 0.62);
         }
 
         .trailer-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.84rem;
+            font-size: 0.82rem;
             font-weight: 800;
             color: #FFFFFF;
-            line-height: 1.25;
+            line-height: 1.24;
         }
 
         .trailer-desc {
-            font-size: 0.71rem;
+            font-size: 0.69rem;
             color: rgba(255, 255, 255, 0.78);
             line-height: 1.38;
         }
@@ -1447,16 +1521,21 @@
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.65rem;
+            gap: 0.68rem;
         }
 
         .audio-checks-list li {
-            font-size: 0.76rem;
+            font-size: 0.75rem;
             color: rgba(255, 255, 255, 0.88);
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.55rem;
-            line-height: 1.35;
+            line-height: 1.36;
+        }
+
+        .audio-checks-list li i {
+            margin-top: 0.18rem;
+            flex-shrink: 0;
         }
 
         .audio-checks-list li i {
@@ -2720,79 +2799,82 @@
 
                         <!-- Left Intro -->
                         <div class="audio-intro">
+                            <span class="audio-eyebrow"><span class="audio-live-dot"></span>Live TAG Library</span>
                             <h2>Your Guided Audio Experience</h2>
                             <p>
-                                Get instant access to a curated library of SOL REViBE<span class="tm-symbol">&trade;</span> audio guides. Each experience
-                                combines soothing soundscapes, supportive guidance, and immersive frequencies to help
-                                you relax, reset, and feel more balanced.
+                                Explore our Therapeutic Audio Guides (TAGs) in the live SOL REViBE<span class="tm-symbol">&trade;</span> Library. Start with your station orientation,
+                                stream live sessions now, or preview upcoming series across four wellness collections.
                             </p>
                             <a href="../tags/index.html" class="btn-audio-explore">
-                                Explore The Audio Library &rarr;
+                                Open TAG Library &rarr;
                             </a>
                         </div>
 
-                        <!-- Center: 4 Audio Trailer Cards (Coming Soon) -->
+                        <!-- Center: 4 Real TAG Library Showcase Cards -->
                         <div>
                             <div class="audio-trailers-row">
 
-                                <!-- Track 1 -->
-                                <div class="trailer-card coming-soon" aria-disabled="true">
+                                <!-- Track 1: Live Now -->
+                                <a href="../tags/index.html" class="trailer-card is-live">
                                     <div class="trailer-thumb">
-                                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500&auto=format&fit=crop&q=80"
-                                            alt="Mountain lake reflection">
-                                        <span class="trailer-coming-soon-badge">Coming Soon</span>
-                                        <span class="trailer-duration">12:40</span>
+                                        <img src="../assets/tag-thumb-thought-loop-person.jpg"
+                                            alt="TAG 1 - Thought Loop Clearing">
+                                        <span class="trailer-status-badge live"><span class="live-dot"></span>Ready to Play</span>
+                                        <span class="trailer-play-overlay" aria-hidden="true"><i class="fa-solid fa-play"></i></span>
+                                        <span class="trailer-duration">15:01</span>
                                     </div>
                                     <div class="trailer-body">
-                                        <div class="trailer-title">The SOL REViBE<span class="tm-symbol">&trade;</span> Experience</div>
-                                        <div class="trailer-desc">A complete 20-minute guided journey</div>
+                                        <div class="trailer-kicker">Thought Loop Series</div>
+                                        <div class="trailer-title">TAG 1 - Thought Loop Clearing</div>
+                                        <div class="trailer-desc">Guided reset + check-in to quiet mental noise and restore balance</div>
                                     </div>
-                                </div>
+                                </a>
 
-                                <!-- Track 2 -->
-                                <div class="trailer-card coming-soon" aria-disabled="true">
+                                <!-- Track 2: Live Now -->
+                                <a href="../tags/index.html" class="trailer-card is-live">
                                     <div class="trailer-thumb">
-                                        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=500&auto=format&fit=crop&q=80"
-                                            alt="Forest sunbeams">
-                                        <span class="trailer-coming-soon-badge">Coming Soon</span>
-                                        <span class="trailer-duration">08:24</span>
+                                        <img src="../assets/Thumbnail%20with%20no%20words.jpg"
+                                            alt="Rigging Future Echoes featuring Theo Wilson and Jason McBride">
+                                        <span class="trailer-status-badge live"><span class="live-dot"></span>Ready to Play</span>
+                                        <span class="trailer-play-overlay" aria-hidden="true"><i class="fa-solid fa-play"></i></span>
+                                        <span class="trailer-duration">12:50</span>
                                     </div>
                                     <div class="trailer-body">
-                                        <div class="trailer-title">Calm &amp; Centered</div>
-                                        <div class="trailer-desc">Guided audio to help you relax and shift your focus
-                                        </div>
+                                        <div class="trailer-kicker">Law of Action Series</div>
+                                        <div class="trailer-title">Rigging Future Echoes</div>
+                                        <div class="trailer-desc">With Theo Wilson &amp; Jason McBride &middot; Shadow Index reflection</div>
                                     </div>
-                                </div>
+                                </a>
 
-                                <!-- Track 3 -->
-                                <div class="trailer-card coming-soon" aria-disabled="true">
+                                <!-- Track 3: Upcoming Couples Collection -->
+                                <a href="../tags/index.html" class="trailer-card is-upcoming">
                                     <div class="trailer-thumb">
-                                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=80"
-                                            alt="Serene ocean sunset">
-                                        <span class="trailer-coming-soon-badge">Coming Soon</span>
-                                        <span class="trailer-duration">12:40</span>
+                                        <img src="../assets/tag-pillar-couples-bridge.jpg"
+                                            alt="Relational Somatics couples collection">
+                                        <span class="trailer-status-badge upcoming">Coming Soon</span>
+                                        <span class="trailer-duration">15:00</span>
                                     </div>
                                     <div class="trailer-body">
-                                        <div class="trailer-title">Restorative Sleep</div>
-                                        <div class="trailer-desc">A soothing experience to prepare your mind and body
-                                            for rest</div>
+                                        <div class="trailer-kicker">Relational Somatics</div>
+                                        <div class="trailer-title">The Unspoken Bridge</div>
+                                        <div class="trailer-desc">Couples &amp; Relational Reset &middot; Co-regulation and warmth</div>
                                     </div>
-                                </div>
+                                </a>
 
-                                <!-- Track 4 -->
-                                <div class="trailer-card coming-soon" aria-disabled="true">
+                                <!-- Track 4: Upcoming Sleep Collection -->
+                                <a href="../tags/index.html" class="trailer-card is-upcoming">
                                     <div class="trailer-thumb">
-                                        <img src="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=500&auto=format&fit=crop&q=80"
-                                            alt="Balanced zen stones">
-                                        <span class="trailer-coming-soon-badge">Coming Soon</span>
-                                        <span class="trailer-duration">10:15</span>
+                                        <img src="../assets/tag-thumb-delta-nightfall-person.jpg"
+                                            alt="Deep Delta Nightfall sleep recovery session">
+                                        <span class="trailer-status-badge upcoming">Coming Soon</span>
+                                        <span class="trailer-duration">22:30</span>
                                     </div>
                                     <div class="trailer-body">
-                                        <div class="trailer-title">Renewed Energy</div>
-                                        <div class="trailer-desc">A guided audio journey to help you feel refreshed and
-                                            restored</div>
+                                        <div class="trailer-kicker">Delta Recovery Series</div>
+                                        <div class="trailer-title">Deep Delta Nightfall</div>
+                                        <div class="trailer-desc">Sleep &amp; Recovery &middot; Slow delta downshift for deep rest</div>
                                     </div>
-                                </div>
+                                </a>
 
                             </div>
 
@@ -2825,16 +2907,14 @@
                         <!-- Right: Library Features -->
                         <div class="audio-checklist-col">
                             <a href="../tags/index.html" class="audio-checklist-heading">
-                                <span>View Full Audio Library</span>
+                                <span>View Full TAG Library</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </a>
                             <ul class="audio-checks-list">
-                                <li><i class="fa-solid fa-check"></i><span>Dozens of guided experiences</span></li>
-                                <li><i class="fa-solid fa-check"></i><span>Created for relaxation and renewal</span>
-                                </li>
-                                <li><i class="fa-solid fa-check"></i><span>Access on phone, tablet, or computer</span>
-                                </li>
-                                <li><i class="fa-solid fa-check"></i><span>New experiences added over time</span></li>
+                                <li><i class="fa-solid fa-check"></i><span>2 live TAGs + 04:47 station walkthrough</span></li>
+                                <li><i class="fa-solid fa-check"></i><span>4 collections: Mind, Couples, Transitions &amp; Sleep</span></li>
+                                <li><i class="fa-solid fa-check"></i><span>Guided post-session Check-Ins &amp; Shadow Index</span></li>
+                                <li><i class="fa-solid fa-check"></i><span>10 upcoming sessions across active series</span></li>
                             </ul>
                         </div>
 
