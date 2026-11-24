@@ -400,20 +400,31 @@ a{color:inherit}
 .fh-returning-link{
   display:inline-flex;
   align-items:center;
+  justify-content:center;
   gap:6px;
-  border:0;
-  background:transparent;
-  color:#6E573B;
+  min-height:40px;
+  padding:8px 16px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--surface);
+  color:#4A453E;
+  font-family:inherit;
   font-size:.82rem;
-  font-weight:700;
-  padding:4px 0;
+  font-weight:600;
+  text-decoration:none;
   cursor:pointer;
-  text-decoration:underline;
-  text-underline-offset:3px;
-  text-decoration-color:rgba(194,155,104,.55);
-  transition:color .18s ease;
+  box-shadow:0 2px 8px rgba(37,34,30,.05);
+  transition:all .18s ease;
 }
-.fh-returning-link:hover{color:#25221E}
+.fh-returning-link:hover,
+.fh-returning-link:focus-visible{
+  border-color:var(--gold);
+  color:var(--text);
+  background:#FFFFFF;
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(37,34,30,.1);
+  outline:none;
+}
 .fh-right{
   position:relative;
   z-index:2;
