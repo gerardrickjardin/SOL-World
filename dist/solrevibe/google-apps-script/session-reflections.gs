@@ -14,16 +14,15 @@
 
 const SPREADSHEET_ID = '11j0j2KF7ivB0h-6ExvT7qiIWdGGmtZCGJmmmooKh0Js';
 
-const SHADOW_HEADERS = [
+const GMI_HEADERS = [
   'Submitted At',
   'Session Date',
   'Station Location',
   'Video Title',
   'Vimeo ID',
-  'Identified Issue',
-  'Before Rating (1-4)',
-  'After Rating (1-4)',
-  'Point Drop',
+  'Before GMI (1-10)',
+  'After GMI (1-10)',
+  'Points Shifted',
   'Outcome Summary',
   'User Agent'
 ];
@@ -77,23 +76,25 @@ function doPost(e) {
     const submittedAt = String(data.submittedAt || new Date().toISOString());
     const sessionDate = formatSessionDate_(submittedAt);
 
-    if (String(data.formType || '') === 'shadow_index_assessment') {
-      const sheet = getOrInitSheet_(ss, 'Shadow Index', SHADOW_HEADERS);
+    if (String(data.formType || '') === 'shadow_index_assessment' || String(data.formType || '') === 'gmi_assessment') {
+      const sheet = getOrInitSheet_(ss, 'GMI Check-In', GMI_HEADERS);
+      const before = Number(data.openingNumber);
+      const after = Number(data.endingNumber);
+      const shift = data.pointShift !== undefined ? Number(data.pointShift) : (after - before);
       sheet.appendRow([
         submittedAt,
         sessionDate,
         String(data.stationLocation || ''),
         String(data.videoTitle || 'Rigging Future Echoes'),
         String(data.vimeoId || '1249260783'),
-        String(data.experienceDescription || data.loopAppearance || ''),
-        Number(data.openingNumber),
-        Number(data.endingNumber),
-        Number(data.pointDrop),
+        before,
+        after,
+        shift,
         String(data.encouragerTitle || ''),
         String(data.userAgent || '')
       ]);
       return ContentService
-        .createTextOutput(JSON.stringify({ ok: true, sheet: 'Shadow Index' }))
+        .createTextOutput(JSON.stringify({ ok: true, sheet: 'GMI Check-In' }))
         .setMimeType(ContentService.MimeType.JSON);
     }
 

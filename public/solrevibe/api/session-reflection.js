@@ -61,6 +61,7 @@ module.exports = async function handler(req, res) {
       endingNumber,
       scaleMax: Number(body.scaleMax) === 4 ? 4 : 10,
       pointDrop: openingNumber - endingNumber,
+      pointShift: body.pointShift !== undefined ? Number(body.pointShift) : (endingNumber - openingNumber),
       distance: Math.abs(openingNumber - endingNumber),
       encouragerTitle: String(body.encouragerTitle || '').slice(0, 240),
       experienceDescription: String(body.experienceDescription || body.loopAppearance || '').slice(0, 4000),
