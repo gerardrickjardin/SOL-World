@@ -1532,6 +1532,8 @@ footer b{font-style:normal;color:var(--text)}
   border-color:#C29B68;
   background:#FAF6EE;
 }
+.si-rate-btn:focus:not(:focus-visible){outline:none}
+.si-rate-btn:focus-visible{outline:2px solid #C29B68;outline-offset:2px}
 .si-rate-btn:active:not(:disabled){transform:scale(.96)}
 .si-rate-btn.is-locked-low,
 .si-rate-btn:disabled{
@@ -2933,8 +2935,8 @@ html.is-tablet .modal .m-box.survey-mode {
                 <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="pre" data-val="10"><span class="si-rate-num">10</span></button>
               </div>
               <div class="si-scale-anchors">
-                <div class="si-anchor low"><strong>1</strong><span>In park, parking brake engaged, going nowhere fast</span></div>
-                <div class="si-anchor high"><strong>10</strong><span>Full speed, pedal to the floor, going 90 miles an hour</span></div>
+                <div class="si-anchor low"><strong>1</strong><span>In park, brake engaged, going nowhere</span></div>
+                <div class="si-anchor high"><strong>10</strong><span>Full speed, locked in, making the move</span></div>
               </div>
             </div>
             <button type="button" class="si-cta" id="siLockPreBtn" disabled>Lock In My Rating</button>
@@ -2953,9 +2955,7 @@ html.is-tablet .modal .m-box.survey-mode {
           <div class="si-stage" id="siStagePostForm" hidden>
             <div class="si-kicker">After Your Reset</div>
             <h3 class="si-title">Let&rsquo;s see what&rsquo;s shifted</h3>
-            <p class="si-copy">Lift your eye mask back onto your forehead and bring that same task back to mind right now.</p>
-            <div class="si-q-label" id="siPostScaleLbl">Where is your GMI score now?</div>
-            <div class="si-q-sub" id="siPostStartNote" hidden></div>
+            <div class="si-q-label" id="siPostScaleLbl">Where&rsquo;s your GMI score now?</div>
             <div class="si-scale-wrap">
               <div class="si-scale-track" aria-hidden="true"></div>
               <div class="si-scale-row" id="siScalePost" role="radiogroup" aria-labelledby="siPostScaleLbl">
@@ -2971,10 +2971,11 @@ html.is-tablet .modal .m-box.survey-mode {
                 <button type="button" class="si-rate-btn" role="radio" aria-checked="false" data-si-stage="post" data-val="10"><span class="si-rate-num">10</span></button>
               </div>
               <div class="si-scale-anchors">
-                <div class="si-anchor low"><strong>1</strong><span>In park, parking brake engaged, going nowhere fast</span></div>
-                <div class="si-anchor high"><strong>10</strong><span>Full speed, pedal to the floor, going 90 miles an hour</span></div>
+                <div class="si-anchor low"><strong>1</strong><span>In park, brake engaged, going nowhere</span></div>
+                <div class="si-anchor high"><strong>10</strong><span>Full speed, locked in, making the move</span></div>
               </div>
             </div>
+            <div class="si-q-sub" id="siPostStartNote" hidden></div>
             <button type="button" class="si-cta" id="siLockPostBtn" disabled>Lock In My Final Score</button>
           </div>
 
@@ -3201,7 +3202,7 @@ html.is-tablet .modal .m-box.survey-mode {
       "1249260783": { preCueSeconds: 357, postCueSeconds: 620 } // Rigging Future Echoes (pre-exercise @ 5:57, post-exercise @ 10:20)
     },
     scaleLabels: {
-      1: "In park, parking brake engaged",
+      1: "In park, brake engaged, going nowhere",
       2: "Just shifting into gear",
       3: "Slow roll forward",
       4: "Building early traction",
@@ -3210,7 +3211,7 @@ html.is-tablet .modal .m-box.survey-mode {
       7: "Strong forward drive",
       8: "High momentum lane",
       9: "Nearly full throttle",
-      10: "Full speed, pedal to the floor"
+      10: "Full speed, locked in, making the move"
     },
     apiEndpoint: "../api/session-reflection"
   };
